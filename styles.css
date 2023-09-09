@@ -5,14 +5,14 @@ body {
     margin: 0;
     height: 100%;
     font-family: IMFellDoublePica;    
-    background-color: #000;
-    color: #fff;
+    background-color: #523e23;
+    color: #dab98c;
     
     background-repeat: no-repeat;
     background-size: cover;
 }
 a {
-    color: #fff;
+    color: #dab98c;
 }
 li {
     list-style:lower-greek;
