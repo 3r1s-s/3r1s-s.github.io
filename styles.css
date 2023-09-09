@@ -1,0 +1,33 @@
+html {
+    height: 100%;
+}
+body {
+    margin: 0;
+    height: 100%;
+    font-family: IMFellDoublePica;    
+    background-color: #000;
+    color: #fff;
+    
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+a {
+    color: #fff;
+}
+li {
+    list-style:lower-greek;
+}
+
+/*Fonts*/
+
+@font-face {
+    font-family: IMFellDoublePica;
+    src: url(fonts/IMFellDoublePica/IMFellDoublePica-Regular.ttf);
+    font-style: normal;
+}
+
+@font-face {
+    font-family: IMFellDoublePica;
+    src: url(fonts/IMFellDoublePica/IMFellDoublePica-Italic.ttf);
+    font-style: italic;
+}
