@@ -4,15 +4,17 @@ html {
 body {
     margin: 0;
     height: 100%;
-    font-family: IMFellDoublePica;    
-    background-color: #523e23;
-    color: #dab98c;
-    
-    background-repeat: no-repeat;
-    background-size: cover;
+    font-family: ImFellDoublePica;    
+    background-color: #000;
+    background-image: url(images/bg2.jpg);
+    color: #e3e3e3;
+    background-repeat: repeat-x;
+    /*background-repeat: no-repeat;*/
+    background-position: bottom;
+    background-attachment: fixed;
 }
 a {
-    color: #dab98c;
+    color: #e3e3e3;
 }
 li {
     list-style:lower-greek;
@@ -30,4 +32,9 @@ li {
     font-family: IMFellDoublePica;
     src: url(fonts/IMFellDoublePica/IMFellDoublePica-Italic.ttf);
     font-style: italic;
+}
+
+@font-face {
+    font-family: Hiragino Maru Gothic ProN;
+    src: url(fonts/HiraginoMaruGothicProN/Hiragino-Maru-Gothic-ProN-W4.otf);
 }
