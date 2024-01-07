@@ -1,0 +1,62 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    font-family: Arial;
+    background-color: #b190fe;
+    color: #513593;
+}
+
+@media (prefers-color-scheme: dark) {
+
+body {
+    background-color: #513593;
+    color: #b190fe;
+}
+
+}
+
+p {
+    margin: 0;
+}
+
+a {
+    color: inherit;
+}
+
+.main {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-inner {
+    display: block;
+}
+
+/*Fonts*/
+
+@font-face {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: normal;
+    src: url(fonts/arial/arial.ttf);
+}
+
+@font-face {
+    font-family: 'Arial Condensed';
+    font-style: normal;
+    font-weight: normal;
+    src: url(fonts/arial/Arialn.ttf);
+}
+
+@font-face {
+    font-family: 'Arial Condensed';
+    font-style: normal;
+    font-weight: lighter;
+    src: url(fonts/arial/ArialTh.ttf);
+}
