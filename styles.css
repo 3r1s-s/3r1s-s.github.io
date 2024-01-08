@@ -15,7 +15,7 @@ body {
 }
 
 p {
-    margin: 0;
+    margin: 0px;
 }
 
 a {
@@ -34,6 +34,10 @@ a {
 }
 
 .artist {
+    font-size: 20px;
+}
+
+.info {
     font-size: 20px;
 }
 
