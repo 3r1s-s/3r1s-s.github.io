@@ -1,17 +1,8 @@
 body {
     margin: 0;
     font-family: Arial;
-    background-color: #b190fe;
-    color: #513593;
-}
-
-@media (prefers-color-scheme: dark) {
-
-body {
     background-color: #513593;
     color: #b190fe;
-}
-
 }
 
 p {
