@@ -33,6 +33,12 @@ a {
     font-size: 20px;
 }
 
+.subheader {
+    font-size: 36px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
 /*Fonts*/
 
 @font-face {
