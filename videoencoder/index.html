@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Base64 Encoder</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+</head>
+<body>
+    <div class="main">
+        <h1>Video to Base64</h1>
+        <video id="video"></video>
+        <div class="video">
+            <canvas class="canvas" id="canvas1"></canvas>
+            <canvas class="canvas" id="canvas2"></canvas>
+        </div>
+        <div class="input">
+            <input type="file" id="input" accept="video/*"></input>
+            <button id="goButton">Go</button>
+        </div>
+        <script>
+            video.height = video.width = 0
+            width = 512
+            height = width
+            let cv1 = document.getElementById("canvas1");
+            let ctx1 = cv1.getContext('2d', {
+                willReadFrequently: true
+            });
+            let imgData = ctx1.createImageData(width, height);
+
+            let cv2 = document.getElementById("canvas2");
+            let ctx2 = cv2.getContext("2d", {
+                willReadFrequently: true
+            });
+            let imgData2 = ctx2.createImageData(width, height);
+        </script>
+        <div class="info">
+            <p class="id" id="F">Frame / </p>
+            <p class="id" id="S">Total size:</p>
+            <p class="id" id="P">Estimated size:</p>
+            <p class="id" id="R">0% Complete</p>
+        </div>
+        <div class="slider">
+            <p id="demo">Threshold: 128</p>
+            <input type="range" min="0" max="900" value="128" class="slider" id="threshhold" style="width: 700px;">
+        </div>
+        <div class="slider">
+            <p id="demo3">Framerate: 15</p>
+            <input type="range" min="1" max="60" value="15" class="slider" id="fps" style="width: 700px;">
+        </div>
+        <p id="demo4">Output</p>
+        <textarea class="output" id="text" name="output" rows="10" cols="87" style="width: 700px;" disabled="true"></textarea>
+        <div class="credits">
+            <a class="credit" href="https://eris.pages.dev/">My website &lt3</a><span class="credit"> / </span>
+            <a class="credit" href="credits.html">credits</a>
+        </div>
+    </div>
+    <script src="video.js"></script>
+</body>
+</html>

@@ -1,61 +1,162 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Base64 Encoder</title>
+    <title>eris' website!!!!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	<meta content="i AM eris" property="og:title" />
+	<meta content="henlo" property="og:description" />
+	<meta content="https://eris.pages.dev/" property="og:url" />
+	<meta property="og:image" content="https://eris.pages.dev/images/iconr.png" />
+	<meta charset="UTF-8">
+	<meta name="background-color" content="#b190fe">
+	<meta name="theme-color" content="#b190fe">	
+	<link rel="icon" href="images/iconr.png">
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="favicon.ico">
 </head>
 <body>
-    <div class="main">
-        <h1>Video to Base64</h1>
-        <video id="video"></video>
-        <div class="video">
-            <canvas class="canvas" id="canvas1"></canvas>
-            <canvas class="canvas" id="canvas2"></canvas>
-        </div>
-        <div class="input">
-            <input type="file" id="input" accept="video/*"></input>
-            <button id="goButton">Go</button>
-        </div>
-        <script>
-            video.height = video.width = 0
-            width = 512
-            height = width
-            let cv1 = document.getElementById("canvas1");
-            let ctx1 = cv1.getContext('2d', {
-                willReadFrequently: true
-            });
-            let imgData = ctx1.createImageData(width, height);
-
-            let cv2 = document.getElementById("canvas2");
-            let ctx2 = cv2.getContext("2d", {
-                willReadFrequently: true
-            });
-            let imgData2 = ctx2.createImageData(width, height);
-        </script>
-        <div class="info">
-            <p class="id" id="F">Frame / </p>
-            <p class="id" id="S">Total size:</p>
-            <p class="id" id="P">Estimated size:</p>
-            <p class="id" id="R">0% Complete</p>
-        </div>
-        <div class="slider">
-            <p id="demo">Threshold: 128</p>
-            <input type="range" min="0" max="900" value="128" class="slider" id="threshhold" style="width: 700px;">
-        </div>
-        <div class="slider">
-            <p id="demo3">Framerate: 15</p>
-            <input type="range" min="1" max="60" value="15" class="slider" id="fps" style="width: 700px;">
-        </div>
-        <p id="demo4">Output</p>
-        <textarea class="output" id="text" name="output" rows="10" cols="87" style="width: 700px;" disabled="true"></textarea>
-        <div class="credits">
-            <a class="credit" href="https://eris.pages.dev/">My website &lt3</a><span class="credit"> / </span>
-            <a class="credit" href="credits.html">credits</a>
+    <div class="main" id="intro">
+        <div class="main-inner">
+            <p style="font-size: 25px;">hi i'm</p>
+            <p style="font-size: 64px;">eris</p>
+            <p style="font-size: 25px;">or eri that works too</p>
         </div>
     </div>
-    <script src="video.js"></script>
+    <div class="main" id="about">
+        <div class="main-inner">
+            <p style="font-size: 48px;">about me</p>
+            <p class="info">born 30/9/07 at around 11pm</p>
+            <p class="info">introvert</p>
+            <p class="info">loves: cartography, graphic design, history, ipods, music, programming, photography, cats</p>
+            <p class="info">i'm good at numbers, management</p>
+            <p class="info">i'm bad at socializing, memory, quick decisions</p>
+        </div>
+    </div>
+    <div class="main" id="things">
+        <div class="main-inner">
+            <p style="font-size: 48px;">things i've done:</p>
+            <p style="font-size: 25px;"><a href="https://gnaw.pages.dev" target="_blank">gnaw</a> <font style="font-size: 16px;">frontend for scratch</font></p>
+            <p style="font-size: 25px;"><a href="https://3r1s-s.github.io/Markpad/#" target="_blank">markpad</a> <font style="font-size: 16px;">md/html editor</font></p>
+            <p style="font-size: 25px;"><a href="https://meo-32r.pages.dev/" target="_blank">meo</a> <font style="font-size: 16px;">mobiler meower client</font></p>
+            <p style="font-size: 25px;"><a href="https://streamilator.github.io/Streamilator/" target="_blank">streamilator</a> <font style="font-size: 16px;">streaming service</font></p>
+            <p style="font-size: 25px;"><a href="https://scratch.mit.edu/studios/34434379/" target="_blank">scratch stuff</a> <font style="font-size: 16px;">scratch stuff</font></p>
+        </div>
+    </div>
+    <div class="main" id="socials">
+        <div class="main-inner">
+            <p style="font-size: 48px;">socials:</p>
+            <p style="font-size: 25px;"><a href="mailto:eris@meower.org" target="_blank">email</a></p>
+            <p style="font-size: 25px;"><a href="https://discord.com/users/797570703419244594" target="_blank">discord</a></p>
+            <p style="font-size: 25px;"><a href="https://scratch.mit.edu/users/3r1s_s/" target="_blank">scratch</a></p>
+            <p style="font-size: 25px;"><a href="https://github.com/3r1s-s" target="_blank">github</a></p>
+            <p style="font-size: 25px;"><a href="https://t.me/eriiis" target="_blank">telegram</a></p>
+            <p style="font-size: 25px;"><a href="https://twitter.com/3r1s_s" target="_blank">twitter</a></p>
+            <p style="font-size: 25px;"><a href="https://app.meower.org/users/3r1s_s" target="_blank">meower</a></p>
+            <p style="font-size: 25px;"><a href="https://bsky.app/profile/eriiis.bsky.social" target="_blank">bsky</a></p>
+            <p style="font-size: 25px;"><a href="https://www.threads.net/@3r1s_s" target="_blank">threads</a></p>
+            <p style="font-size: 25px;"><a href="https://gamejolt.com/@3r1s_s" target="_blank">gamejolt</a></p>
+            <p style="font-size: 25px;"><a href="https://www.instagram.com/3r1s_s/" target="_blank">instagram</a></p>
+            <p style="font-size: 25px;"><a href="https://open.spotify.com/user/qm7a58bs0jmkbmfs35oj6u01f" target="_blank">spotify</a></p>
+            <p style="font-size: 25px;"><a href="https://steamcommunity.com/profiles/76561199230479533" target="_blank">steam</a></p>
+        </div>
+    </div>
+    <div class="main" id="langs">
+        <div class="main-inner">
+            <p style="font-size: 48px;">languages im good at</p>
+            <p style="font-size: 25px;">english</p>
+            <p style="font-size: 25px;">javascript<font style="font-size: 16px;">, html and css</font></p>
+            <p style="font-size: 25px;">java</p>
+            <p style="font-size: 25px;">scratch<font style="font-size: 16px;"> it's a real language suck it up</font></p>
+        </div>
+    </div>
+    <div class="main" id="artists">
+        <div class="main-inner">
+            <p style="font-size: 48px;">artists i like</p>
+            <p class="artist">ajr</p>
+            <p class="artist">alltta</p>
+            <p class="artist">the beatles</p>
+            <p class="artist">ben rector</p>
+            <p class="artist">bill wurtz</p>
+            <p class="artist">bo burnham</p>
+            <p class="artist">brandon flowers</p>
+            <p class="artist">chvrches</p>
+            <p class="artist">cojum dip</p>
+            <p class="artist">coldplay</p>
+            <p class="artist">collective soul</p>
+            <p class="artist">fun.</p>
+            <p class="artist">i dont know how but they found me</p>
+            <p class="artist">imagine dragons</p>
+            <p class="artist">jason mraz</p>
+            <p class="artist">joe hawley</p>
+            <p class="artist">khalid</p>
+            <p class="artist">the killers</p>
+            <p class="artist">lemaitre</p>
+            <p class="artist">lemon demon</p>
+            <p class="artist">lifehouse</p>
+            <p class="artist">marc broussard</p>
+            <p class="artist">maroon 5</p>
+            <p class="artist">matchbox twenty</p>
+            <p class="artist">matt nathanson</p>
+            <p class="artist">miracle musical</p>
+            <p class="artist">nate ruess</p>
+            <p class="artist">needtobreathe</p>
+            <p class="artist">ok go</p>
+            <p class="artist">oliver tree</p>
+            <p class="artist">posy</p>
+            <p class="artist">rob cantor</p>
+            <p class="artist">rob thomas</p>
+            <p class="artist">tally hall</p>
+            <p class="artist">third eye blind</p>
+            <p class="artist">tinted windows</p>
+            <p class="artist">the tories</p>
+            <p class="artist">under dog house</p>
+            <p class="artist">vance joy</p>
+            <p class="artist">welshly arms</p>
+            <p class="artist">wilder woods</p>
+            <p class="artist">windows 96</p>
+        </div>
+    </div>
+    <div class="main" id="collection">
+        <div class="main-inner">
+            <p style="font-size: 48px;">things i own</p>
+            <p class="subheader">ipods</p>
+            <p class="artist">ipod classic 4</p>
+            <p class="artist">ipod classic 5</p>
+            <p class="artist">ipod classic 6</p>
+            <p class="artist">ipod nano 2</p>
+            <p class="artist">ipod nano 4</p>
+            <p class="artist">ipod nano 7</p>
+            <p class="artist">ipod touch 1</p>
+            <p class="artist">ipod touch 3</p>
+            <p class="artist">ipod touch 4 (x8)</p>
+            <p class="artist">ipod touch 5</p>
+            <p class="artist">zune 30</p>
+            <p class="subheader">iphones</p>
+            <p class="artist">iphone 4</p>
+            <p class="artist">iphone 5c</p>
+            <p class="artist">iphone 7</p>
+            <p class="artist">iphone 13 mini</p>
+            <p class="subheader">nintendos</p>
+            <p class="artist">gameboy</p>
+            <p class="artist">gameboy advance sp</p>
+            <p class="artist">3ds</p>
+            <p class="artist">2ds</p>
+            <p class="artist">2ds xl</p>
+            <p class="artist">switch</p>
+        </div>
+    </div>
+    <div class="main">
+        <div class="main-inner">
+            <p style="font-size: 16px;">hi :)</p>
+            <p style="font-size: 12px;">
+                <a href="#intro">intro</a>
+                <a href="#about">about</a>
+                <a href="#things">things</a>
+                <a href="#langs">languages</a>
+                <a href="#artists">artists</a>
+                <a href="#collection">collection</a>
+            </p>
+        </div>
+    </div>
 </body>
 </html>
