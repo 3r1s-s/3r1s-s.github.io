@@ -23,7 +23,6 @@ a {
 .main-inner {
     display: block;
     padding: 30px;
-    min-width: 500px;
 }
 
 .artist {
