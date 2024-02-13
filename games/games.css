@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    font-family: Arial;
+    background-color: #223f28;
+    color: #8bffa3;
+}
+
+p {
+    margin: 0px;
+}
+
+a {
+    color: inherit;
+}
+
+.main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-inner {
+    display: block;
+    padding: 30px;
+    margin-top: 25vh;
+    margin-bottom: 25vh;
+}
+
+.artist {
+    font-size: 20px;
+}
+
+.info {
+    font-size: 20px;
+}
+
+.header {
+    font-size: 48px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.subheader {
+    font-size: 36px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #5c7ce8;
+}
+
+/*Fonts*/
+
+@font-face {
+    font-family: 'Arial';
+    font-style: normal;
+    font-weight: normal;
+    src: url(../fonts/arial/arial.ttf);
+}
+
+@font-face {
+    font-family: 'Arial Condensed';
+    font-style: normal;
+    font-weight: normal;
+    src: url(../fonts/arial/Arialn.ttf);
+}
+
+@font-face {
+    font-family: 'Arial Condensed';
+    font-style: normal;
+    font-weight: lighter;
+    src: url(../fonts/arial/ArialTh.ttf);
+}
