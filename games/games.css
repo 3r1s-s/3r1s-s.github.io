@@ -55,7 +55,23 @@ a {
     font-size: 36px;
     margin-top: 10px;
     margin-bottom: 5px;
-    color: #5c7ce8;
+    color: #8bffa3;
+}
+
+.nav-link {
+    color: inherit;
+    text-decoration: none;
+    background-position: 0 calc(1em + 3px);
+    background-image: linear-gradient(to right,#8bffa3,#8bffa3);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    display: inline;
+    padding-bottom: 3px;
+    transition: all cubic-bezier(.2,-.25,0,1.6) 0.5s;
+}
+
+.nav-link:hover {
+    background-size: 100% 1px;
 }
 
 /*Fonts*/

@@ -58,6 +58,22 @@ a {
     color: #5c7ce8;
 }
 
+.nav-link {
+    color: inherit;
+    text-decoration: none;
+    background-position: 0 calc(1em + 3px);
+    background-image: linear-gradient(to right,#5c7ce8,#5c7ce8);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    display: inline;
+    padding-bottom: 3px;
+    transition: all cubic-bezier(.2,-.25,0,1.6) 0.5s;
+}
+
+.nav-link:hover {
+    background-size: 100% 1px;
+}
+
 /*Fonts*/
 
 @font-face {
