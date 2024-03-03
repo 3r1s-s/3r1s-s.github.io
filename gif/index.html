@@ -35,24 +35,28 @@
             gifResult.style.display = 'none';
         });
 
-        document.getElementById('convertBtn').addEventListener('click', function () {
-            const video = document.getElementById('video');
-            const gifResult = document.getElementById('gifResult');
-            const gif = new GIF({
-                workers: 2,
-                quality: 10,
-                width: video.videoWidth,
-                height: video.videoHeight
-            });
+document.getElementById('convertBtn').addEventListener('click', function () {
+    const video = document.getElementById('video');
+    const gifResult = document.getElementById('gifResult');
 
-            gif.on('finished', function (blob) {
-                // Display the resulting GIF
-                gifResult.src = URL.createObjectURL(blob);
-                gifResult.style.display = 'block';
-            });
+    // Create a new GIF instance without specifying the worker path
+    const gif = new GIF({
+        workers: 2,
+        quality: 10,
+        width: video.videoWidth,
+        height: video.videoHeight
+    });
 
-            convertVideoToGif(video, gif);
-        });
+    // Use gif.js to add each video frame to the GIF
+    gif.on('finished', function (blob) {
+        // Display the resulting GIF
+        gifResult.src = URL.createObjectURL(blob);
+        gifResult.style.display = 'block';
+    });
+
+    // Start the conversion process
+    convertVideoToGif(video, gif);
+});
 
         function convertVideoToGif(video, gif) {
             const canvas = document.createElement('canvas');
