@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video to GIF Converter</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.rawgit.com/jnordberg/gif.js/master/dist/gif.js"></script>
+</head>
+<body>
+    <div class="main">
+        <h1>Video to GIF Converter</h1>
+        <div class="vidcont">
+            <video id="video" style="display:none;" controls></video>
+        </div>
+        <input type="file" id="videoin" accept="video/*">
+        <button id="convertBtn">Convert to GIF</button>
+        <div class="result">
+            <img id="gifResult" style="display:none;">
+        </div>
+    </div>
+    <div class="credits">
+        <a class="credit" href="https://eris.pages.dev/">My website &lt3</a>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('videoin').addEventListener('change', function (e) {
+            const video = document.getElementById('video');
+            const gifResult = document.getElementById('gifResult');
+
+            const file = e.target.files[0];
+            video.src = URL.createObjectURL(file);
+            video.style.display = 'block';
+
+            gifResult.style.display = 'none';
+        });
+
+        document.getElementById('convertBtn').addEventListener('click', function () {
+            const video = document.getElementById('video');
+            const gifResult = document.getElementById('gifResult');
+            const gif = new GIF({
+                workers: 2,
+                quality: 10,
+                width: video.videoWidth,
+                height: video.videoHeight
+            });
+
+            gif.on('finished', function (blob) {
+                // Display the resulting GIF
+                gifResult.src = URL.createObjectURL(blob);
+                gifResult.style.display = 'block';
+            });
+
+            convertVideoToGif(video, gif);
+        });
+
+        function convertVideoToGif(video, gif) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            const frameDuration = 100;
+
+            function addFrame() {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                gif.addFrame(ctx, { copy: true, delay: frameDuration });
+
+                if (video.currentTime < video.duration) {
+                    video.currentTime += frameDuration / 1000;
+                    requestAnimationFrame(addFrame);
+                } else {
+                    gif.render();
+                }
+            }
+
+            addFrame();
+        }
+    </script>
+</body>
+</html>
