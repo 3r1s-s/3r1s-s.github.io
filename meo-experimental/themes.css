@@ -1,0 +1,303 @@
+:root {
+    --primary: #714cc8;
+    --secondary: #b190fe;
+    --background-color: #1a1b1e;
+    --color: #fefefe;
+    --accent-color: #3a3d43;
+    --hov-accent-color: #323439;
+    --hov-color: #4a4d56;
+    --link-color: #00abd2;
+    --attachment-background-color: #3c286b;
+    --attachment-color: #b190fe;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #a5abb3;
+    --hov-button-color: #fefefe;
+    --modal-color: #3a3d43;
+    --modal-button-color: #4a4d56;
+    --hov-modal-button-color: #636774;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+    --transition: all 0.05s ease;
+    --border: none;
+    --border-radius: 5px;
+    --button-radius: 5px;
+    --margin: 10px;
+    --text-margin: 10px;
+    --padding: 10px;
+    --button-padding: 1em;
+    --button-margin: 10px;
+}
+
+.dark-theme {
+    --background-color: #1a1b1e;
+    --color: #fefefe;
+    --accent-color: #3a3d43;
+    --hov-accent-color: #323439;
+    --hov-color: #4a4d56;
+    --link-color: #00abd2;
+    --attachment-background-color: #3c286b;
+    --attachment-color: #b190fe;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #a5abb3;
+    --hov-button-color: #fefefe;
+    --modal-color: #3a3d43;
+    --modal-button-color: #4a4d56;
+    --hov-modal-button-color: #636774;
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
+.light-theme {
+    --background-color: #fefefe;
+    --color: #383a41;
+    --accent-color: #dbe0e8;
+    --hov-accent-color: #e7eaee;
+    --hov-color: #d2d6dd;
+    --link-color: #5023b6;
+    --attachment-background-color: #d4c1ff;
+    --attachment-color: #513593;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #676d7a;
+    --hov-button-color: #383a41;
+    --modal-color: #fefefe;
+    --modal-button-color: #dbe0e8;
+    --hov-modal-button-color: #c9cdd4;
+
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
+.blurple-theme {
+    --background-color: #15141a;
+    --color: #f5f8fb;
+    --accent-color: #24222f;
+    --hov-accent-color: #2e2b3a;
+    --hov-color: #2e2b3a;
+    --link-color: #00abd2;
+    --attachment-background-color: #1b1e49;
+    --attachment-color: #a0a4d1;
+    --attachment-background-color-hover: #5865f2;
+    --attachment-color-hover: #fefefe;
+    --button-color: #9792a9;
+    --hov-button-color: #f6f5fb;
+    --modal-color: #15141a;
+    --modal-button-color: #24222f;
+    --hov-modal-button-color: #302e3f;
+    
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
+.flamingo-theme {
+    --background-color: #0c0303;
+    --color: #f5f8fb;
+    --accent-color: #200a0f;
+    --hov-accent-color: #250c12;
+    --hov-color: #3a121c;
+    --link-color: #00abd2;
+    --attachment-background-color: #1b1e49;
+    --attachment-color: #a0a4d1;
+    --attachment-background-color-hover: #7236f9;
+    --attachment-color-hover: #fefefe;
+    --button-color: #7a2c3f;
+    --hov-button-color: #f6f5fb;
+    --modal-color: #0c0303;
+    --modal-button-color: #200a0f;
+    --hov-modal-button-color: #341019;
+    
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
+.oled-theme {
+    --background-color: #000;
+    --color: #fefefe;
+    --accent-color: #060707;
+    --hov-accent-color: #0d0e0f;
+    --hov-color: #0d0e0f;
+    --link-color: #00abd2;
+    --attachment-background-color: #3c286b;
+    --attachment-color: #b190fe;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #31363c;
+    --hov-button-color: #fefefe;
+    --modal-color: #000;
+    --modal-button-color: #0a0b0b;
+    --hov-modal-button-color: #060707;
+
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
+
+.cosmic-theme {
+    --background-color: #fff8e7;
+    --color: #413f38;
+    --accent-color: #f1ead9;
+    --hov-accent-color: #e3ddcd;
+    --hov-color: #e6ddc9;
+    --link-color: #ad8335;
+    --attachment-background-color: #e7d092;
+    --attachment-color: #9d7222;
+    --attachment-background-color-hover: #ad8335;
+    --attachment-color-hover: #fefefe;
+    --button-color: #8f8b7c;
+    --hov-button-color: #413f38;
+    --modal-color: #fff8e7;
+    --modal-button-color: #f1ead9;
+    --hov-modal-button-color: #e1daca;
+
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
+.roarer-theme {
+    --background-color: #020617;
+    --color: #e2e8f0;
+    --accent-color: #1e293b;
+    --hov-accent-color: #1e293b;
+    --hov-color: #1e293b;
+    --link-color: #38bdf8;
+    --attachment-background-color: #1e293b;
+    --attachment-color: #38bdf8;
+    --attachment-background-color-hover: #1e293b;
+    --attachment-color-hover: #e2e8f0;
+    --button-color: #e2e8f0;
+    --hov-button-color: #e2e8f0;
+    --modal-color: #020617;
+    --modal-button-color: #1e293b;
+    --border: none;
+    --border-radius: 0.75rem;
+    --button-radius: 0.75rem;
+    --margin: 0.5rem;
+    --text-margin: 0px;
+    --padding: 0.5rem;
+    --button-padding: 0.5rem;
+    --button-margin: 0.5rem;
+}
+
+.quake-pro-theme {
+    --border: none;
+    --border-radius: 5px;
+    --button-radius: 5px;
+    --margin: 0.5em;
+    --text-margin: 0.25em;
+    --padding: 0.25em;
+    --button-padding: 0.5em;
+    --button-margin: 0.5em;
+}
+
+.bsky-theme {
+    --primary: #5677bd;
+    --background-color: #050812;
+    --color: #fefefe;
+    --accent-color: #0c121e;
+    --hov-accent-color: #162035;
+    --hov-color: #162035;
+    --link-color: #7b9adc;
+    --attachment-background-color: #273656;
+    --attachment-color: #7b9adc;
+    --attachment-background-color-hover: #5677bd;
+    --attachment-color-hover: #fefefe;
+    --button-color: #5677bd;
+    --hov-button-color: #fefefe;
+    --modal-color: #0c121e;
+    --modal-button-color: #162035;
+    --hov-modal-button-color: #273656;
+
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+}
+
+/* Buttons (I know it's redundant)*/
+.theme-buttons-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: wrap;
+}
+
+.theme-button {
+    width: 8em;
+    height: 8em;
+    border-radius: 100%;
+    margin: 5px;
+}
+
+.dark-button {
+    background: #1a1b1e;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.light-button {
+    background: #fff;
+    color: #383a41;
+    border: 1px solid var(--background-color);
+}
+
+.cosmic-button {
+    background: #fff8e7;
+    color: #413f38;
+    border: 1px solid var(--background-color);
+}
+
+.blurple-button {
+    background: #15141a;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.flamingo-button {
+    background: #0c0303;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.oled-button {
+    background: #000;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.midnight-button {
+    background: #08070d;
+    color: #f5f8fb;
+    border: 1px solid var(--background-color);
+}
+
+.roarer-button {
+    background: #020617;
+    color: #e2e8f0;
+    border: 1px solid var(--background-color);
+}
+
+.bsky-button {
+    background: #050812;
+    color: #e2e8f0;
+    border: 1px solid var(--background-color);
+}
+
+.selected {
+    border: 3px solid var(--accent-color);
+}
