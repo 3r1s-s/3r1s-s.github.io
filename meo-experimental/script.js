@@ -764,7 +764,7 @@ function loadgeneral() {
             </div>
             <h3>About</h3>
             <div class="section">
-            <span>meo v1.20</span>
+            <span>meo v1.20 Prerelease</span>
             </div>
             </div>
             `;
