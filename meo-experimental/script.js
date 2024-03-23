@@ -1,3 +1,7 @@
+// yes its a mess
+// no i wont do anything about it
+// - Eris
+
 var end = false;
 var page = "login";
 var sidediv = document.querySelectorAll(".side");
@@ -101,7 +105,7 @@ function main() {
             
             if (postElement) {
                 var postMessage = sentdata.val.payload.p;
-                postElement.querySelector('p').innerText = postMessage;
+                postElement.querySelector('.post-content').innerHTML = finaliseParse(marked.parse(escapeHTML(postMessage)));;
                 console.log("Edited " + sentdata.val.payload._id);
             } else {
                 console.log(postId + " not found.");
@@ -234,11 +238,13 @@ function loadpost(p) {
 
     var postContentText = document.createElement("p");
     postContentText.className = "post-content";
-    
-    blist = ["", " ", "# ", "## ", "### ", "#### ", "##### ", "###### ", "\n"];
-    if (!blist.includes(content)) {
+// this is where the markdown parsing happens 
+// no its not great
+// i need hel
 
-        postContentText.innerHTML = parseMarkdown(content);
+//        postContentText.innerHTML = finaliseParse(marked.parse(escapeHTML(content)));
+//        postContentText.innerHTML = marked.parse(finaliseParse(escapeHTML(content)));
+        postContentText.innerHTML = md.render(content);
 
         postContentText.querySelectorAll('p a').forEach(link => {
             const url = link.getAttribute('href');
@@ -302,7 +308,6 @@ function loadpost(p) {
             });
         }
         
-    }
 
     loadPfp(user)
         .then(pfpElement => {
@@ -324,7 +329,7 @@ function loadpost(p) {
     }
 }
 
-function loadPfp(username) {
+function loadPfp(username, button) {
     return new Promise((resolve, reject) => {
         if (pfpCache[username]) {
             resolve(pfpCache[username].cloneNode(true));
@@ -341,7 +346,9 @@ function loadPfp(username) {
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
                         pfpElement.setAttribute("alt", "User Avatar");
-                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                        if (!button) {
+                            pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                        }
                         pfpElement.classList.add("avatar");
                         
                         if (userData.avatar_color) {
@@ -354,7 +361,9 @@ function loadPfp(username) {
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
                         pfpElement.setAttribute("alt", "User Avatar");
-                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                        if (!button) {
+                            pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                        }
                         pfpElement.classList.add("avatar");
                         pfpElement.classList.add("svg-avatar");
 
@@ -845,6 +854,7 @@ function loadpluginscript(scriptUrl) {
 
 async function fetchplugins() {
     try {
+    // remember to bring this back when final
     //    const response = await fetch('./plugins.json');
         const response = await fetch('https://meo-32r.pages.dev/plugins.json');
         const pluginsdata = await response.json();
@@ -1381,7 +1391,7 @@ async function loadreports() {
                     </li>
                     `;
                     
-                    loadPfp(report.content.u)
+                    loadPfp(report.content.u, 1)
                     .then(pfpElement => {
                         if (pfpElement) {
                             const rpfp = rprtbx.querySelector('.avatar');
@@ -1498,12 +1508,12 @@ async function loadmoduser(user) {
         <div class="mod-post">
         <div class="pfp">
             <img src="" alt="User Avatar" class="avatar" style="">
-            </div>
-            <div class="wrapper">
+        </div>
+        <div class="wrapper">
             <h3><span>${data._id}</span></h3>
             <p>${data.quote}</p>
-            </div>
-            </div>
+        </div>
+        </div>
             <span class="subheader">Alts</span>
             <ul id="alts">
             </ul>

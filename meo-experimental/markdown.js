@@ -1,38 +1,33 @@
-function parseMarkdown(content) {
+// dont be fooled 
+// theres more than just markdown stuff in here
+// im bad at naming things ok
+
+function escapeHTML(content) {
     var escapedinput = content
-        .replace(/&/g, '&amp;')
+    .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+        .replace(/'/g, '&#39;')
+    //    .replace(/\n/g, '<br>')
 
-    var textContent = escapedinput
-        .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
-        .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
-        .replace(/```([\s\S]*?)```/g, '<div class="code"><code>$1</code></div>')
-        .replace(/``([^`]+)``/g, '<code>$1</code>')
-        .replace(/`([^`]+)`/g, '<code>$1</code>')
-        .replace(/^#+ (.*?$)/gm, (match, group1) => {
-            const hash = match.match(/^#+/)[0].length;
-            return `<h${hash}>${group1}</h${hash}>`;
-        })
-        .replace(/^&gt; (.*?$)/gm, '<blockquote>$1</blockquote>')
-        .replace(/~~([\s\S]*?)~~/g, '<del>$1</del>')
-        .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function (url) {
-            return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
-        })
         .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
         .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
-        .replace(/\n/g, '<br>');
 
         var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}🫠❄️]+$/u.test(content);
 
-    if (isEmoji) {
-        textContent = '<span class="big">' + textContent + '</span>';
-    }
+        if (isEmoji) {
+            escapedinput = '<span class="big">' + escapedinput + '</span>';
+        }
 
-    return textContent;
+    return escapedinput;
+}
+
+function finaliseParse(content) {
+    var escapedinput = content
+    console.log(content);
+    
+    return escapedinput;
 }
 
 function embed(links) {
