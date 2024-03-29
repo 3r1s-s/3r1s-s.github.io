@@ -242,6 +242,7 @@ bridge {
 .wrapper {
     padding: var(--padding);
     width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
@@ -298,9 +299,14 @@ bridge {
     width: 100%;
     width: 54px;
     border-radius: 100px;
-    margin: var(--text-margin) 0 10px 0;
     box-sizing: border-box;
     aspect-ratio: 1;
+    box-shadow: 0px 1px 5px #00000050;
+}
+
+.avatar:active {
+    transform: translateY(2px);
+    box-shadow: none;
 }
 
 .avatar-big {
@@ -309,6 +315,7 @@ bridge {
     margin: 0 0 10px 0;
     box-sizing: border-box;
     aspect-ratio: 1;
+    box-shadow: 0px 1px 5px #00000050;
 }
 
 .svg-avatar {
@@ -319,7 +326,7 @@ bridge {
     padding: 0 var(--padding);
     align-items: center;
     display: flex;
-    height: 90px;
+    max-height: calc(var(--padding)*9);
 }
 
 .date {
@@ -498,7 +505,7 @@ possible future styling
     width: 80%;
     max-width: 400px;
     padding: var(--padding);
-    height: calc(60% + 55px);
+    height: calc(70% + 55px);
     z-index: 1;
     box-sizing: border-box;
     display: flex;
@@ -745,6 +752,10 @@ possible future styling
     margin-right: 5px;
 }
 
+.section-input:focus {
+    background-color: var(--hov-color);
+}
+
 .section-send {
     flex: 0.1;
     margin-left: 5px;
@@ -838,6 +849,7 @@ possible future styling
     --hov-modal-button-color: #ffffff30;
     --hov-color: #ffffff20;
     --hov-accent-color: #ffffff10;
+    --accent-color: #ffffff20;
     --color: #fefefe;
     color: var(--color);
 }
@@ -947,10 +959,6 @@ possible future styling
         overflow: scroll;
     }
 
-    .launch {
-        background: var(--secondary);
-    }
-
     .buttonContainer {
         display: none;
     }
@@ -1012,5 +1020,62 @@ possible future styling
     
     .mod-post:hover {
         background-color: var(--modal-button-color);
+    }
+
+    .modal-button:hover {
+        background-color: var(--modal-button-color);
+    }
+
+    .modal-back-btn:hover {
+        background-color: var(--modal-button-color);
+    }
+
+    .modal-close:hover {
+        background-color: var(--modal-button-color);
+    }
+
+    .ext-link:hover {
+        color: var(--attachment-color);
+        background-color: var(--attachment-background-color);
+        text-decoration: none;
+    }
+
+    .attachment:hover {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
+
+    .button:hover {
+        background-color: var(--accent-color);
+    }
+
+    .modal-button:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+    .modal-back-btn:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+    .modal-close:active {
+        background-color: var(--hov-modal-button-color);
+    }
+
+
+    .ext-link:active {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
+
+    .attachment:active {
+        color: var(--attachment-color-hover);
+        background-color: var(--attachment-background-color-hover);
+        text-decoration: none;
+    }
+
+    .button:active {
+        background-color: var(--hov-accent-color);
     }
 }

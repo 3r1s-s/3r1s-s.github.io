@@ -238,71 +238,19 @@ function loadpost(p) {
     // tysm tni <3
     md.disable(['image'])
     postContentText.innerHTML = erimd(md.render(content));
+    postContentText.innerHTML = buttonbadges(postContentText);
+    
+    if (content) {
+        wrapperDiv.appendChild(postContentText);
+    } 
 
-
-        postContentText.querySelectorAll('p a').forEach(link => {
-            link.setAttribute('target', '_blank');
-            const url = link.getAttribute('href');
-            const fileExtension = url.split('.').pop().toLowerCase().split('?')[0];
-            const fileDomain = url.includes('tenor.com/view');
-            
-            if ((['png', 'jpg', 'jpeg', 'webp', 'gif', 'mp4', 'webm', 'mov', 'm4v'].includes(fileExtension)) || fileDomain) {
-                link.classList.add('attachment');
-                link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
-            } else if (url === "https://meo-32r.pages.dev/" || url === "https://meo-32r.pages.dev") {
-                link.classList.add('attachment');
-                link.innerHTML = '<span class="ext-link-wrapper"><span class="link-icon-wrapper"><img width="14px" class="ext-icon" src="images/links/meo_1x.png"></span>meo</span>';
-            } else {
-                // find a better method to do this
-                const socregex = {
-                    'twitter': /twitter\.com\/@(\w+)/,
-                    'discord_user': /discord\.com\/users\/(\w+)/,
-                    'discord_channel': /discord\.com\/channels\/(\w+)/,
-                    'discord_server': /discord\.gg\/(\w+)/,
-                    'youtube': /youtube\.com\/@(\w+)/,
-                    'instagram': /instagram\.com\/(\w+)/,
-                    'facebook': /facebook\.com\/(\w+)/,
-                    'scratch': /scratch\.mit.edu\/users\/(\w+)/,
-                    'meower_user': /app.meower\.org\/users\/(\w+)/,
-                    'meower_share': /meo-32r\.pages\.dev\/share\?id=([\w-]+)/
-                };
-                
-                const socialmedicns = {
-                    'twitter': 'twitter_1x.png',
-                    'discord_user': 'discord_1x.png',
-                    'discord_channel': 'discord_1x.png',
-                    'discord_server': 'discord_1x.png',
-                    'youtube': 'youtube_1x.png',
-                    'instagram': 'instagram_1x.png',
-                    'facebook': 'facebook_1x.png',
-                    'scratch': 'scratch_1x.png',
-                    'meower_user': 'meo_1x.png',
-                    'meower_share': 'meo_1x.png'
-                };
-        
-                for (const [platform, regex] of Object.entries(socregex)) {
-                    const match = url.match(regex);
-                    if (match) {
-                        const username = match[1];
-                        link.classList.add('ext-link');
-                        const icon = socialmedicns[platform];
-                        link.innerHTML = `<span class="ext-link-wrapper"><span class="link-icon-wrapper"><img width="14px" class="ext-icon" src="images/links/${icon}"></span>${username}</span>`;
-                    }
-                }
-            }
+    var links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
+    const embd = embed(links);
+    if (embd) {
+        embd.forEach(embeddedElement => {
+            wrapperDiv.appendChild(embeddedElement);
         });
-        if (content) {
-            wrapperDiv.appendChild(postContentText);
-        } 
-
-        var links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
-        const embd = embed(links);
-        if (embd) {
-            embd.forEach(embeddedElement => {
-                wrapperDiv.appendChild(embeddedElement);
-            });
-        }
-        
+    }
 
     loadPfp(user)
         .then(pfpElement => {
@@ -600,16 +548,8 @@ function loadhome() {
         gcdiv.className = "gcs";
 
         groupsdiv.innerHTML = `<h1 class="groupheader">Chats</h1>`;
+        gcdiv.innerHTML += `<input type="button" class="navigation-button button" value="Home" onclick="loadhome()"></input>`;
 
-        const homebutton = document.createElement("input");
-        homebutton.type = "button";
-        homebutton.className = "navigation-button button";
-        homebutton.value = "Home";
-        homebutton.onclick = function() {
-            loadhome();
-        };
-        gcdiv.appendChild(homebutton);
-    
         response.autoget.forEach(chat => {
             const r = document.createElement("input");
             r.id = `submit`;
@@ -689,6 +629,7 @@ function loadchat(chatId) {
             postsarray.forEach(postId => {
                 loadpost(postId);
             });
+            
         };
         xhttpPosts.send();
     };
@@ -906,7 +847,7 @@ function loadappearance() {
         <div class="msgs"></div>
             <h2>Theme</h2>
 
-            <div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/jmYaED6f9fKddy2mB5eGb2Nr" alt="User Avatar" class="avatar" style="border: 3px solid rgb(0, 0, 0);"></div><div class="wrapper"><div class="buttonContainer">
+            <div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="User Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
             <div class="toolbarContainer">
                 <div class="toolButton">
                     <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -936,9 +877,8 @@ function loadappearance() {
             </div>
             <div class="theme-buttons-inner">
                 <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
-                <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-theme'>Blurple</button>
                 <button onclick='changetheme(\"bsky\", this)' class='theme-button bsky-theme'>Midnight</button>
-                <button onclick='changetheme(\"oled\", this)' class='theme-button oled-theme'>OLED</button>
+                <button onclick='changetheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
                 <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
             </div>
         </div>

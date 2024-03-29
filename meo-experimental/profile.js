@@ -26,7 +26,8 @@ function fetchprofile() {
             }
             
             md.disable(['image'])
-            const quote = md.render(data.quote);
+            const quote = md.render(data.quote)
+            .replace(/<a(.*?)>/g, '<a$1 target="_blank">');
 
             if (data._id === localStorage.getItem('uname')) {
                 profilecont.innerHTML += `
