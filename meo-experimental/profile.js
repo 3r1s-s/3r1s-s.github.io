@@ -19,7 +19,14 @@ function fetchprofile() {
                 profilecont.innerHTML = `
                 <img class="avatar-big svg-avatar" style="border: 6px solid #${data.avatar_color}"; src="images/avatars/icon_${data.pfp_data - 1}.svg"></img>
                 `
+            } else {                        
+                profilecont.innerHTML = `
+                <img class="avatar-big svg-avatar" style="border: 6px solid #000"; src="images/avatars/icon_-4.svg"></img>
+                `
             }
+            
+            md.disable(['image'])
+            const quote = md.render(data.quote);
 
             if (data._id === localStorage.getItem('uname')) {
                 profilecont.innerHTML += `
@@ -67,7 +74,7 @@ function fetchprofile() {
                 profilecont.innerHTML += `
                 <span class="subheader">Quote</span>
                 <div class="sec">
-                <span>${data.quote}</span>
+                <span class="profile-qt">${quote}</span>
                 </div>
                 `;
             }              

@@ -78,8 +78,11 @@ a:hover {
     text-decoration: underline;
 }
 
-code {
-    background-color: #00000020;
+pre {
+    background: #00000050;
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    overflow: scroll;
 }
 
 i {
@@ -170,9 +173,12 @@ bridge {
     margin-top: 200px;
 }
 
-
-.button:hover, .button:focus {
+.button:hover {
     background-color: var(--hov-color);
+}
+
+.button:active {
+    background-color: var(--hov-accent-color);
 }
 
 .posts, .settings, .login, .explore {
@@ -236,6 +242,7 @@ bridge {
 .wrapper {
     padding: var(--padding);
     width: 100%;
+    overflow: hidden;
 }
 
 .post {
@@ -515,6 +522,10 @@ possible future styling
     background-color: var(--hov-modal-button-color);
 }
 
+.modal-close:active {
+    background-color: var(--modal-button-color);
+}
+
 .modal-back-btn {
     background-color: var(--modal-button-color);
     width: 100%;
@@ -527,6 +538,10 @@ possible future styling
 
 .modal-back-btn:hover {
     background-color: var(--hov-modal-button-color);
+}
+
+.modal-back-btn:active {
+    background-color: var(--modal-button-color);
 }
 
 .modal-button {
@@ -544,6 +559,10 @@ possible future styling
 
 .modal-button:hover {
     background-color: var(--hov-modal-button-color);
+}
+
+.modal-button:active {
+    background-color: var(--modal-button-color);
 }
 
 .modal-select {
@@ -818,12 +837,9 @@ possible future styling
     --modal-button-color: #ffffff20;
     --hov-modal-button-color: #ffffff30;
     --hov-color: #ffffff20;
+    --hov-accent-color: #ffffff10;
     --color: #fefefe;
     color: var(--color);
-}
-
-@media screen and (max-width: 480px) {
-
 }
 
 .edit-txt {
@@ -836,6 +852,7 @@ possible future styling
     .modal {
         width: 100%;
         max-width: 100%;
+        height: 75%;
         position: fixed;
         padding-bottom: 50px;
         bottom: 0;

@@ -4,30 +4,23 @@
 
 function escapeHTML(content) {
     var escapedinput = content
-    .replace(/&/g, '&amp;')
+        .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;')
-    //    .replace(/\n/g, '<br>')
-
-        .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
-        .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
-
-        var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}🫠❄️]+$/u.test(content);
-
-        if (isEmoji) {
-            escapedinput = '<span class="big">' + escapedinput + '</span>';
-        }
 
     return escapedinput;
 }
 
-function finaliseParse(content) {
-    var escapedinput = content
-    console.log(content);
+function erimd(content) {
+    var text = content
     
-    return escapedinput;
+    .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+    .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+
+    
+    return text;
 }
 
 function embed(links) {
@@ -145,7 +138,7 @@ function createButtonContainer(p) {
     if (p.u === localStorage.getItem("uname")) {
         var nwbtn = document.createElement("div");
         nwbtn.classList.add("toolButton");
-        nwbtn.setAttribute("onclick", `editPost("${p._id}")`);
+        nwbtn.setAttribute("onclick", `openUpdate("Not finished yet :(")`);
         nwbtn.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg>
         `;

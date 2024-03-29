@@ -92,7 +92,10 @@ function main() {
             loadhome();
             console.log("Logged in!");
         } else if (sentdata.val == "E:110 | ID conflict") {
-            alert("ID conflict. You probably logged in on another client. Refresh the page and log back in to continue.");
+            openUpdate("You probably logged in on another client. Refresh the page and log back in to continue.");
+        } else if (sentdata.val == "I:011 | Invalid Password") {
+            logout(true);
+            openUpdate("Wrong Password!");
         } else if (sentdata.val.post_origin == page) {
             if (loggedin == true) {
                 loadpost(sentdata.val);
@@ -105,7 +108,7 @@ function main() {
             
             if (postElement) {
                 var postMessage = sentdata.val.payload.p;
-                postElement.querySelector('.post-content').innerHTML = finaliseParse(marked.parse(escapeHTML(postMessage)));;
+                postElement.querySelector('.post-content').innerHTML = md.render(postMessage);
                 console.log("Edited " + sentdata.val.payload._id);
             } else {
                 console.log(postId + " not found.");
@@ -149,11 +152,6 @@ function main() {
     }
     });
 
-}
-
-function removeUsrTyp() {
-    var typignIndc = document.getElementById("typing-indicator");
-    typignIndc.removeChild(typignIndc.firstChild);
 }
 
 function loadpost(p) {
@@ -235,18 +233,15 @@ function loadpost(p) {
     
         content = content.replace(match[0], '').trim();
     }
-
     var postContentText = document.createElement("p");
     postContentText.className = "post-content";
-// this is where the markdown parsing happens 
-// no its not great
-// i need hel
+    // tysm tni <3
+    md.disable(['image'])
+    postContentText.innerHTML = erimd(md.render(content));
 
-//        postContentText.innerHTML = finaliseParse(marked.parse(escapeHTML(content)));
-//        postContentText.innerHTML = marked.parse(finaliseParse(escapeHTML(content)));
-        postContentText.innerHTML = md.render(content);
 
         postContentText.querySelectorAll('p a').forEach(link => {
+            link.setAttribute('target', '_blank');
             const url = link.getAttribute('href');
             const fileExtension = url.split('.').pop().toLowerCase().split('?')[0];
             const fileDomain = url.includes('tenor.com/view');
@@ -258,8 +253,6 @@ function loadpost(p) {
                 link.classList.add('attachment');
                 link.innerHTML = '<span class="ext-link-wrapper"><span class="link-icon-wrapper"><img width="14px" class="ext-icon" src="images/links/meo_1x.png"></span>meo</span>';
             } else {
-            
-                
                 // find a better method to do this
                 const socregex = {
                     'twitter': /twitter\.com\/@(\w+)/,
@@ -298,8 +291,10 @@ function loadpost(p) {
                 }
             }
         });
+        if (content) {
+            wrapperDiv.appendChild(postContentText);
+        } 
 
-        wrapperDiv.appendChild(postContentText);
         var links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
         const embd = embed(links);
         if (embd) {
@@ -371,6 +366,20 @@ function loadPfp(username, button) {
                             pfpElement.style.border = `3px solid #${userData.avatar_color}`;
                         }
                     } else {
+                        const pfpurl = `images/avatars/icon_-4.svg`;
+                        
+                        pfpElement = document.createElement("img");
+                        pfpElement.setAttribute("src", pfpurl);
+                        pfpElement.setAttribute("alt", "User Avatar");
+                        if (!button) {
+                            pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                        }
+                        pfpElement.classList.add("avatar");
+                        pfpElement.classList.add("svg-avatar");
+                        
+                        pfpElement.style.border = `3px solid #fff`;
+                        pfpElement.style.backgroundColor = `#fff`;
+                        
                         console.error("No avatar or pfp_data available for: ", username);
                         resolve(null);
                     }
@@ -922,15 +931,15 @@ function loadappearance() {
 
             <div class="theme-buttons">
             <div class="theme-buttons-inner">
-                <button onclick='changetheme(\"light\", this)' class='theme-button light-button'>Light</button>
-                <button onclick='changetheme(\"dark\", this)' class='theme-button dark-button'>Dark</button>
+                <button onclick='changetheme(\"light\", this)' class='theme-button light-theme'>Light</button>
+                <button onclick='changetheme(\"dark\", this)' class='theme-button dark-theme'>Dark</button>
             </div>
             <div class="theme-buttons-inner">
-                <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-button'>Cosmic Latte</button>
-                <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-button'>Blurple</button>
-                <button onclick='changetheme(\"bsky\", this)' class='theme-button bsky-button'>Midnight</button>
-                <button onclick='changetheme(\"oled\", this)' class='theme-button oled-button'>OLED</button>
-                <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-button'>Roarer</button>
+                <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
+                <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-theme'>Blurple</button>
+                <button onclick='changetheme(\"bsky\", this)' class='theme-button bsky-theme'>Midnight</button>
+                <button onclick='changetheme(\"oled\", this)' class='theme-button oled-theme'>OLED</button>
+                <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
             </div>
         </div>
     <br>
@@ -1151,8 +1160,6 @@ function openModal(postId) {
                 const postDiv = document.getElementById(postId);
                 const usernameElement = postDiv.querySelector('#username').innerText;
 
-                console.log(usernameElement);
-
                 if (usernameElement === localStorage.getItem("uname")) {
                     mdlt.innerHTML += `
                     <button class="modal-button" onclick="deletePost('${postId}')"><div>Delete</div><div class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg></div></button>      
@@ -1233,6 +1240,7 @@ function reportModal(id) {
                     <option value="Scams, hacks, phishing or other malicious content">Scams, hacks, phishing or other malicious content</option>
                     <option value="Threatening violence or real world harm">Threatening violence or real world harm</option>
                     <option value="Illegal activity">Illegal activity</option><option value="Self-harm/suicide">Self-harm/suicide</option>
+                    <option value="Other">This person is too young to use Meower</option>
                     <option value="Other">Other</option>
                     </select>
                 <span class="subheader">Comment</span>
@@ -1309,7 +1317,7 @@ function openModModal() {
                 <span class="subheader">Moderate User (Case Sensitive)</span>
                 <div class="mod-goto">
                 <form class="section-form" onsubmit="modgotousr();">
-                <input type="text" class="mdl-inp" id="usrinp" placeholder="Username...">
+                <input type="text" class="mdl-inp" id="usrinpmd" placeholder="Username...">
                 <button class="md-inp-btn button">Go!</button>
                 </form>
                 </div>
@@ -1372,8 +1380,8 @@ async function loadreports() {
                             <img src="" alt="User Avatar" class="avatar" style="border: 3px solid rgb(15, 15, 15);">
                         </div>
                         <div class="wrapper">
-                        <h3><span class="username">${report.content.u}</span></h3>
-                        <p>${report.content.p}</p>
+                        <h3><span class="username">${escapeHTML(report.content.u)}</span></h3>
+                        <p>${escapeHTML(report.content.p)}</p>
                         </div>
                     </div>
                 `;
@@ -1524,10 +1532,17 @@ async function loadmoduser(user) {
             rpfp.src = `https://uploads.meower.org/icons/${data.avatar}`;
             rpfp.style.border = `3px solid #${data.avatar_color}`;
             rpfp.style.backgroundColor = `#${data.avatar_color}`;
-        } else {
+        } else if (data.pfp_data) {
             // legacy avatars
             rpfp.src = `images/avatars/icon_${data.pfp_data - 1}.svg`;
             rpfp.classList.add('svg-avatar');
+            rpfp.style.border = `3px solid #${data.avatar_color}`;
+            rpfp.style.backgroundColor = `#${data.avatar_color}`;
+        } else {
+            rpfp.src = `images/avatars/icon_-4.svg`;
+            rpfp.classList.add('svg-avatar');
+            rpfp.style.border = `3px solid #fff`;
+            rpfp.style.backgroundColor = `#fff`;
         }
 
         const altlist = modusr.querySelector('#alts');
@@ -1596,24 +1611,44 @@ async function loadmodpost(postid) {
                 .then(response => response.json())
                 .then(userData => {
                     if (userData) {
-                        const modpst = document.querySelector('.mod-posts');
-                        modpst.innerHTML = `
-                            <div class="mod-post">
-                                <div class="pfp">
-                                    <img src="" alt="User Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
-                                </div>
-                                <div class="wrapper">
-                                <div class="mdbtcntner">
-                                    <div class='toolButton' onclick='modDeletePost("${postid}")'>
-                                        <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+                        if (data.unfiltered_p) {
+                            const modpst = document.querySelector('.mod-posts');
+                            modpst.innerHTML = `
+                                <div class="mod-post">
+                                    <div class="pfp">
+                                        <img src="" alt="User Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
                                     </div>
-                                </div>    
-                                <h3><span id="username" onclick="modUserModal('${data.u}')">${data.u}</span></h3>
-                                    <p>${data.p}</p>
+                                    <div class="wrapper">
+                                    <div class="mdbtcntner">
+                                        <div class='toolButton' onclick='modDeletePost("${postid}")'>
+                                            <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+                                        </div>
+                                    </div>    
+                                    <h3><span id="username" onclick="modUserModal('${data.u}')">${data.u}</span></h3>
+                                        <p>${data.unfiltered_p}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        `;
-                        const rpfp = document.querySelector('.mod-post .avatar');
+                            `;
+                        } else {
+                            const modpst = document.querySelector('.mod-posts');
+                            modpst.innerHTML = `
+                                <div class="mod-post">
+                                    <div class="pfp">
+                                        <img src="" alt="User Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
+                                    </div>
+                                    <div class="wrapper">
+                                    <div class="mdbtcntner">
+                                        <div class='toolButton' onclick='modDeletePost("${postid}")'>
+                                            <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+                                        </div>
+                                    </div>    
+                                    <h3><span id="username" onclick="modUserModal('${data.u}')">${data.u}</span></h3>
+                                        <p>${data.p}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        const rpfp = document.querySelector('.mod-posts .avatar');
                         if (userData.avatar) {
                             rpfp.src = `https://uploads.meower.org/icons/${userData.avatar}`;
                             rpfp.style.border = `3px solid #${userData.avatar_color}`;
@@ -1623,6 +1658,7 @@ async function loadmodpost(postid) {
                             rpfp.src = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
                             rpfp.classList.add('svg-avatar');
                         }
+
                         fetch(`https://api.meower.org/admin/notes/${postid}`, {
                             method: "GET",
                             headers: {
@@ -1846,7 +1882,7 @@ function gotousr() {
 
 function modgotousr() {
     event.preventDefault(); 
-    modUserModal(document.getElementById("usrinp").value);
+    modUserModal(document.getElementById("usrinpmd").value);
 }
 
 async function loadstats() {
