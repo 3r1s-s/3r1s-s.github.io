@@ -25,14 +25,14 @@ function replsh(rpl) {
 
 function main() {
     page = "login";
-    webSocket = new WebSocket("wss://server.meower.org/");
+    meowerConnection = new WebSocket("wss://server.meower.org/");
     var loggedin = false;
 
-    webSocket.onclose = (event) => {
+    meowerConnection.onclose = (event) => {
         logout(true);
     };
     loadtheme();
-    webSocket.onmessage = (event) => {
+    meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
 
         var sentdata = JSON.parse(event.data);
@@ -45,7 +45,7 @@ function main() {
                 }
             };
 
-            webSocket.send(JSON.stringify(data));
+            meowerConnection.send(JSON.stringify(data));
             console.log("OUT: " + JSON.stringify(data));
 
             var data = {
@@ -53,31 +53,29 @@ function main() {
                 val: "meower"
             };
 
-            webSocket.send(JSON.stringify(data));
+            meowerConnection.send(JSON.stringify(data));
             console.log("OUT: " + JSON.stringify(data));
-
-            var pageContainer = document.getElementById("main");
-            pageContainer.innerHTML = 
-            `<div class='settings'>
-            <div class='login'>
-            <h1>Login</h1>
-            <input type='text' id='userinput' placeholder='Username' class='login-input text'>
-            <input type='password' id='passinput' placeholder='Password' class='login-input text'>
-            <input type='button' id='submit' value='Log in' class='login-input button' onclick='dowizard()'><input type='button' id='submit' value='Sign up' class='login-input button' onclick='doswizard()'>
-            <small>This client was made by eri :></small>
-            <div id='msgs'></div>
-            </div>
-            <div class='footer'>
-            <svg width="80" height="44.25" viewBox="0 0 321 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M124.695 17.2859L175.713 0.216682C184.63 -1.38586 192.437 6.14467 190.775 14.7463L177.15 68.2185C184.648 86.0893 187.163 104.122 187.163 115.032C187.163 143.057 174.929 178 95.4997 178C16.0716 178 3.83691 143.057 3.83691 115.032C3.83691 104.122 6.35199 86.0893 13.8498 68.2185L0.224791 14.7463C-1.43728 6.14467 6.3705 -1.38586 15.2876 0.216682L66.3051 17.2859C74.8856 14.6362 84.5688 13.2176 95.4997 13.429C106.431 13.2176 116.114 14.6362 124.695 17.2859ZM174.699 124.569H153.569V80.6255C153.569 75.6157 151.762 72.1804 146.896 72.1804C143.143 72.1804 139.529 74.6137 135.775 78.3353V124.569H114.785V80.6255C114.785 75.6157 112.977 72.1804 108.112 72.1804C104.22 72.1804 100.744 74.6137 96.9909 78.3353V124.569H76V54.4314H94.4887L96.0178 64.0216C102.134 57.5804 108.39 53 117.148 53C126.462 53 131.605 57.7235 134.107 64.0216C140.224 57.7235 146.896 53 155.376 53C168.026 53 174.699 61.1588 174.699 74.7569V124.569ZM247.618 89.3569C247.618 91.5039 247.479 93.7941 247.201 94.9392H206.331C207.443 105.961 213.838 110.255 223.012 110.255C230.519 110.255 237.887 107.392 245.393 102.955L247.479 118.127C240.111 122.994 231.075 126 220.371 126C199.936 126 185.34 114.835 185.34 89.7863C185.34 66.8843 198.963 53 217.452 53C238.304 53 247.618 69.0314 247.618 89.3569ZM227.6 83.0588C226.905 72.4667 223.29 67.0274 216.896 67.0274C211.057 67.0274 206.887 72.3235 206.192 83.0588H227.6ZM288.054 126C306.96 126 321 111.973 321 89.5C321 67.0274 307.099 53 288.193 53C269.426 53 255.525 67.1706 255.525 89.6431C255.525 112.116 269.287 126 288.054 126ZM288.193 70.749C296.256 70.749 300.704 78.3353 300.704 89.6431C300.704 100.951 296.256 108.537 288.193 108.537C280.269 108.537 275.821 100.808 275.821 89.5C275.821 78.049 280.13 70.749 288.193 70.749Z" fill="#FEFEFE"/>
-            </svg>
-            </div>
-            </div>
-            `;
             if (localStorage.getItem("token") != undefined && localStorage.getItem("uname") != undefined) {
-                document.getElementById("userinput").value = localStorage.getItem("uname");
-                document.getElementById("passinput").value = localStorage.getItem("token");
-                dowizard();
+                login(localStorage.getItem("uname"), localStorage.getItem("token"));
+            } else {
+                var pageContainer = document.getElementById("main");
+                pageContainer.innerHTML = 
+                `<div class='settings'>
+                <div class='login'>
+                <h1>Login</h1>
+                <input type='text' id='userinput' placeholder='Username' class='login-input text'>
+                <input type='password' id='passinput' placeholder='Password' class='login-input text'>
+                <input type='button' id='submit' value='Log in' class='login-input button' onclick='login(document.getElementById("userinput").value, document.getElementById("passinput").value)'><input type='button' id='submit' value='Sign up' class='login-input button' onclick='signup(document.getElementById("userinput").value, document.getElementById("passinput").value)'>
+                <small>This client was made by eri :></small>
+                <div id='msgs'></div>
+                </div>
+                <div class='footer'>
+                <svg width="80" height="44.25" viewBox="0 0 321 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M124.695 17.2859L175.713 0.216682C184.63 -1.38586 192.437 6.14467 190.775 14.7463L177.15 68.2185C184.648 86.0893 187.163 104.122 187.163 115.032C187.163 143.057 174.929 178 95.4997 178C16.0716 178 3.83691 143.057 3.83691 115.032C3.83691 104.122 6.35199 86.0893 13.8498 68.2185L0.224791 14.7463C-1.43728 6.14467 6.3705 -1.38586 15.2876 0.216682L66.3051 17.2859C74.8856 14.6362 84.5688 13.2176 95.4997 13.429C106.431 13.2176 116.114 14.6362 124.695 17.2859ZM174.699 124.569H153.569V80.6255C153.569 75.6157 151.762 72.1804 146.896 72.1804C143.143 72.1804 139.529 74.6137 135.775 78.3353V124.569H114.785V80.6255C114.785 75.6157 112.977 72.1804 108.112 72.1804C104.22 72.1804 100.744 74.6137 96.9909 78.3353V124.569H76V54.4314H94.4887L96.0178 64.0216C102.134 57.5804 108.39 53 117.148 53C126.462 53 131.605 57.7235 134.107 64.0216C140.224 57.7235 146.896 53 155.376 53C168.026 53 174.699 61.1588 174.699 74.7569V124.569ZM247.618 89.3569C247.618 91.5039 247.479 93.7941 247.201 94.9392H206.331C207.443 105.961 213.838 110.255 223.012 110.255C230.519 110.255 237.887 107.392 245.393 102.955L247.479 118.127C240.111 122.994 231.075 126 220.371 126C199.936 126 185.34 114.835 185.34 89.7863C185.34 66.8843 198.963 53 217.452 53C238.304 53 247.618 69.0314 247.618 89.3569ZM227.6 83.0588C226.905 72.4667 223.29 67.0274 216.896 67.0274C211.057 67.0274 206.887 72.3235 206.192 83.0588H227.6ZM288.054 126C306.96 126 321 111.973 321 89.5C321 67.0274 307.099 53 288.193 53C269.426 53 255.525 67.1706 255.525 89.6431C255.525 112.116 269.287 126 288.054 126ZM288.193 70.749C296.256 70.749 300.704 78.3353 300.704 89.6431C300.704 100.951 296.256 108.537 288.193 108.537C280.269 108.537 275.821 100.808 275.821 89.5C275.821 78.049 280.13 70.749 288.193 70.749Z" fill="#FEFEFE"/>
+                </svg>
+                </div>
+                </div>
+                `;
             };
         } else if (sentdata.val.mode == "auth") {
             loggedin = true;
@@ -87,8 +85,6 @@ function main() {
                 localStorage.setItem("token", sentdata.val.payload.token);
                 localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
             }
-
-            document.getElementById("msgs").innerHTML = "";
             loadhome();
             console.log("Logged in!");
         } else if (sentdata.val == "E:110 | ID conflict") {
@@ -156,15 +152,12 @@ function main() {
 
 function loadpost(p) {
     if (p.u == "Discord" || p.u == "SplashBridge") {
-        var rcon = p.p;
+        var rcon = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
         var parts = rcon.split(': ');
         var user = parts[0];
         var content = parts.slice(1).join(': ');
     } else {
-        var storedsettings = settingsstuff();
-        var swearfilterenabled = storedsettings.swearfilter;
-        var content = swearfilterenabled && p.unfiltered_p ? p.unfiltered_p : p.p;
-        
+        var content = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
         var user = p.u;
     }
     
@@ -199,7 +192,6 @@ function loadpost(p) {
     tsrb = Math.trunc(tsra);
     var ts = new Date();
     ts.setTime(tsrb);
-    sts = ts.toLocaleString()
     pstdte.innerText = new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
 
     var pstinf = document.createElement("h3");
@@ -372,7 +364,6 @@ async function loadreply(replyid) {
     }
 }
 
-
 function reply(event) {
     var postContainer = event.target.closest('.post');
     if (postContainer) {
@@ -424,37 +415,34 @@ function sharepost() {
     window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
 }
 
-function dowizard() {
-    console.log(document.getElementById('userinput').value);
+function login(user, pass) {
     var data = {
         cmd: "direct",
         val: {
             cmd: "authpswd",
             val: {
-                username: document.getElementById('userinput').value,
-                pswd: document.getElementById('passinput').value
+                username: user,
+                pswd: pass
             }
         }
     };
-    document.getElementById("msgs").innerHTML = '';
-    webSocket.send(JSON.stringify(data));
+    meowerConnection.send(JSON.stringify(data));
+    console.log(user);
     console.log("User is logging in, details will not be logged for security reasons.");
 }
 
-function doswizard() {
-    console.log(document.getElementById('userinput').value);
+function signup(user, pass) {
     var data = {
         cmd: "direct",
         val: {
             cmd: "gen_account",
             val: {
-                username: document.getElementById('userinput').value,
-                pswd: document.getElementById('passinput').value
+                username: user,
+                pswd: pass
             }
         }
     };
-    document.getElementById("msgs").innerHTML = '';
-    webSocket.send(JSON.stringify(data));
+    meowerConnection.send(JSON.stringify(data));
     console.log("User is signing up, details will not be logged for security reasons.");
 }
 
@@ -488,7 +476,18 @@ function loadhome() {
         <p id='info'></p>
     </div>
     <div class='message-container'>
+        <button class='message-tool button' id='submit' value='Attachments'>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37256 18.6274 0 12 0C5.37256 0 0 5.37256 0 12C0 18.6274 5.37256 24 12 24ZM18.7896 13.1978L13.2046 13.1982L13.2051 18.7832C13.2056 19.4453 12.6694 19.9814 12.0068 19.9814C11.3447 19.9814 10.8076 19.4443 10.8086 18.7832V13.1982L5.20996 13.1987C4.54785 13.1987 4.01123 12.6621 4.01123 12C4.01074 11.3384 4.54736 10.8018 5.20947 10.8018H10.8081L10.8086 5.2168C10.8081 4.79785 11.0229 4.4292 11.3486 4.21484C11.5376 4.09033 11.7637 4.01807 12.0068 4.01807C12.6685 4.01758 13.2056 4.55469 13.2051 5.21631L13.2046 10.8013H18.7896C19.4517 10.8008 19.9878 11.3369 19.9878 11.9995C19.9883 12.6616 19.4517 13.1982 18.7896 13.1978Z" fill="currentColor"/>
+            </svg>
+        </button>
         <textarea type='text' oninput="autoresize()" class='message-input text' id='msg' rows='1' autocomplete='false' placeholder='What&apos;s on your mind?'></textarea>
+        <button class='message-tool button emoji-button' id='submit' value='Emojis'>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 9.77778C4 9.77778 5.33333 10.2222 8 10.2222C10.6667 10.2222 12 9.77778 12 9.77778C12 9.77778 11.1111 11.5556 8 11.5556C4.88889 11.5556 4 9.77778 4 9.77778Z" fill="white"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16 8C16 12.4184 12.4183 16 8 16C3.58171 16 0 12.4184 0 8C0 3.5816 3.58171 0 8 0C12.4183 0 16 3.5816 16 8ZM8 9.33377C6.38976 9.33377 5.32134 9.14627 4 8.88932C3.69824 8.83116 3.11111 8.88932 3.11111 9.77821C3.11111 11.556 5.15332 13.7782 8 13.7782C10.8462 13.7782 12.8889 11.556 12.8889 9.77821C12.8889 8.88932 12.3018 8.83073 12 8.88932C10.6787 9.14627 9.61024 9.33377 8 9.33377ZM5.33333 7.55556C5.94699 7.55556 6.44444 6.85894 6.44444 6C6.44444 5.14106 5.94699 4.44444 5.33333 4.44444C4.71967 4.44444 4.22222 5.14106 4.22222 6C4.22222 6.85894 4.71967 7.55556 5.33333 7.55556ZM11.7778 6C11.7778 6.85894 11.2803 7.55556 10.6667 7.55556C10.053 7.55556 9.55556 6.85894 9.55556 6C9.55556 5.14106 10.053 4.44444 10.6667 4.44444C11.2803 4.44444 11.7778 5.14106 11.7778 6Z" fill="currentColor"/>
+            </svg>
+        </button>
         <button class='message-send button' id='submit' value='Post!' onclick='dopostwizard()'>
             <svg role='img' width='16' height='16' viewBox='0 0 16 16'>
                 <path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path>
@@ -548,17 +547,16 @@ function loadhome() {
         gcdiv.className = "gcs";
 
         groupsdiv.innerHTML = `<h1 class="groupheader">Chats</h1>`;
-        gcdiv.innerHTML += `<input type="button" class="navigation-button button" value="Home" onclick="loadhome()"></input>`;
+        gcdiv.innerHTML += `<button class="navigation-button button" onclick="loadhome()">Home</button>`;
 
         response.autoget.forEach(chat => {
-            const r = document.createElement("input");
+            const r = document.createElement("button");
             r.id = `submit`;
-            r.type = `button`;
             r.className = `navigation-button button`;
             r.onclick = function() {
                 loadchat(chat._id);
             };
-            r.value = chat.nickname || `DM with ${chat.members.find(v => v !== localStorage.getItem("uname"))}`;
+            r.innerHTML = escapeHTML(chat.nickname || `DM with ${chat.members.find(v => v !== localStorage.getItem("uname"))}`);
     
             gcdiv.appendChild(r);
         });
@@ -679,7 +677,7 @@ function loadinbox() {
 function logout(iskl) {
     if (iskl != true) {
         localStorage.clear();
-        webSocket.close();
+        meowerConnection.close();
     }
     end = true;
     document.getElementById("msgs").innerHTML = "";
@@ -1010,8 +1008,7 @@ function settingsstuff() {
     }
 
     return JSON.parse(storedsettings);
-}
-  
+} 
 
 function formattime(timestamp) {
     const now = new Date();
@@ -1040,7 +1037,7 @@ function formattime(timestamp) {
 }
 
 function ping() {
-    webSocket.send(JSON.stringify({
+    meowerConnection.send(JSON.stringify({
         cmd: "ping",
         val: ""
     }));
@@ -1209,7 +1206,7 @@ function sendReport(id) {
             }
         }
     };
-    webSocket.send(JSON.stringify(data));
+    meowerConnection.send(JSON.stringify(data));
     console.log("Report Sent!");
     closemodal("Report Sent!");
 }
@@ -1462,9 +1459,24 @@ async function loadmoduser(user) {
             <p>${data.quote}</p>
         </div>
         </div>
+            <span class="subheader">User Info</span>
+            <ul>
+            <li>UUID: ${data.uuid}</li>
+            <li>Flags: ${data.flags}</li>
+            <li>Permissions: ${data.permissions}</li>
+            <li>Pfp: ${data.pfp_data}</li>
+            </ul>
             <span class="subheader">Alts</span>
             <ul id="alts">
             </ul>
+            <span class="subheader">Recent IPs</span>
+            <div id="ips" class="mod-table">
+            <div class="table-section">
+                <div class="mod-td">IP Address</div>
+                <div class="mod-td">Last Used</div>
+                <div class="mod-td">Flags</div>
+            </div>
+            </table>
         `;
 
         const rpfp = document.querySelector('.mod-post .avatar');
@@ -1477,7 +1489,7 @@ async function loadmoduser(user) {
             rpfp.src = `images/avatars/icon_${data.pfp_data - 1}.svg`;
             rpfp.classList.add('svg-avatar');
             rpfp.style.border = `3px solid #${data.avatar_color}`;
-            rpfp.style.backgroundColor = `#${data.avatar_color}`;
+            rpfp.style.backgroundColor = `#fff`;
         } else {
             rpfp.src = `images/avatars/icon_-4.svg`;
             rpfp.classList.add('svg-avatar');
@@ -1486,6 +1498,7 @@ async function loadmoduser(user) {
         }
 
         const altlist = modusr.querySelector('#alts');
+        const iplist = modusr.querySelector('#ips');
 
         data.alts.forEach(item => {
             altlist.innerHTML += `
@@ -1494,13 +1507,22 @@ async function loadmoduser(user) {
             </li>
             `;
         });
+
+        data.recent_ips.forEach(item => {
+            iplist.innerHTML += `
+            <div class="table-section">
+                <div class="mod-td" onclick="openUpdate('${item.netinfo._id}')">${item.ip}</div>
+                <div class="mod-td">${createDate(item.last_used)}</div>
+                <div class="mod-td">${item.netinfo.vpn}</div>
+            </div>
+            `;
+        });
         
     })
     .catch(error => {
         console.error("Error loading post:", error);
     });
 }
-
 
 function modPostModal(postid) {
     document.documentElement.style.overflow = "hidden";
@@ -1888,6 +1910,16 @@ function lightenColour(hex, amount) {
 
     return nh;
 }
+
+function createDate(tsmp) {
+    var tsr = tsmp;
+    tsra = tsr * 1000;
+    tsrb = Math.trunc(tsra);
+    var ts = new Date();
+    ts.setTime(tsrb);
+    return new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
+}
+
 
 main();
 setInterval(ping, 5000);
