@@ -15,10 +15,41 @@ function escapeHTML(content) {
 
 function erimd(content) {
     var text = content
-    .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
-    .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+    .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" height="16px" class="emoji">')
+    .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" height="16px" class="emoji">')
     
     return text;
+}
+
+function loadinputs() {
+    const inputs = `
+    <div class='message-container'>
+        <button class='message-tool button' id='submit' value='Attachments'>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37256 18.6274 0 12 0C5.37256 0 0 5.37256 0 12C0 18.6274 5.37256 24 12 24ZM18.7896 13.1978L13.2046 13.1982L13.2051 18.7832C13.2056 19.4453 12.6694 19.9814 12.0068 19.9814C11.3447 19.9814 10.8076 19.4443 10.8086 18.7832V13.1982L5.20996 13.1987C4.54785 13.1987 4.01123 12.6621 4.01123 12C4.01074 11.3384 4.54736 10.8018 5.20947 10.8018H10.8081L10.8086 5.2168C10.8081 4.79785 11.0229 4.4292 11.3486 4.21484C11.5376 4.09033 11.7637 4.01807 12.0068 4.01807C12.6685 4.01758 13.2056 4.55469 13.2051 5.21631L13.2046 10.8013H18.7896C19.4517 10.8008 19.9878 11.3369 19.9878 11.9995C19.9883 12.6616 19.4517 13.1982 18.7896 13.1978Z" fill="currentColor"/>
+            </svg>
+        </button>
+        <textarea type='text' oninput="autoresize()" class='message-input text' id='msg' rows='1' autocomplete='false' placeholder='What&apos;s on your mind?'></textarea>
+        <button class='message-tool button emoji-button' id='submit' value='Emojis' onclick='togglePicker()'>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 9.77778C4 9.77778 5.33333 10.2222 8 10.2222C10.6667 10.2222 12 9.77778 12 9.77778C12 9.77778 11.1111 11.5556 8 11.5556C4.88889 11.5556 4 9.77778 4 9.77778Z" fill="white"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M16 8C16 12.4184 12.4183 16 8 16C3.58171 16 0 12.4184 0 8C0 3.5816 3.58171 0 8 0C12.4183 0 16 3.5816 16 8ZM8 9.33377C6.38976 9.33377 5.32134 9.14627 4 8.88932C3.69824 8.83116 3.11111 8.88932 3.11111 9.77821C3.11111 11.556 5.15332 13.7782 8 13.7782C10.8462 13.7782 12.8889 11.556 12.8889 9.77821C12.8889 8.88932 12.3018 8.83073 12 8.88932C10.6787 9.14627 9.61024 9.33377 8 9.33377ZM5.33333 7.55556C5.94699 7.55556 6.44444 6.85894 6.44444 6C6.44444 5.14106 5.94699 4.44444 5.33333 4.44444C4.71967 4.44444 4.22222 5.14106 4.22222 6C4.22222 6.85894 4.71967 7.55556 5.33333 7.55556ZM11.7778 6C11.7778 6.85894 11.2803 7.55556 10.6667 7.55556C10.053 7.55556 9.55556 6.85894 9.55556 6C9.55556 5.14106 10.053 4.44444 10.6667 4.44444C11.2803 4.44444 11.7778 5.14106 11.7778 6Z" fill="currentColor"/>
+            </svg>
+        </button>
+        <button class='message-send button' id='submit' value='Post!' onclick='sendpost()'>
+            <svg role='img' width='16' height='16' viewBox='0 0 16 16'>
+                <path d='M8.2738 8.49222L1.99997 9.09877L0.349029 14.3788C0.250591 14.691 0.347154 15.0322 0.595581 15.246C0.843069 15.4597 1.19464 15.5047 1.48903 15.3613L15.2384 8.7032C15.5075 8.57195 15.6781 8.29914 15.6781 8.00007C15.6781 7.70101 15.5074 7.4282 15.2384 7.29694L1.49839 0.634063C1.20401 0.490625 0.852453 0.535625 0.604941 0.749376C0.356493 0.963128 0.259941 1.30344 0.358389 1.61563L2.00932 6.89563L8.27093 7.50312C8.52405 7.52843 8.71718 7.74125 8.71718 7.99531C8.71718 8.24938 8.52406 8.46218 8.27093 8.4875L8.2738 8.49222Z' fill='currentColor'></path>
+            </svg>
+        </button>
+        <div id="emojipicker"></div>
+    </div>
+    <div class="sub-msg-cnt">
+    <span id="typing-indicator"></span>
+    <span id="edit-indicator"></span>
+    </div>
+    <div id='msgs' class='posts'></div>
+    `;
+    return inputs;
 }
 
 function buttonbadges(content) {
