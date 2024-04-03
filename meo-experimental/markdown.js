@@ -120,15 +120,18 @@ function embed(links) {
             if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(fileExtension)) {
                 var imgElement = document.createElement("img");
                 imgElement.setAttribute("src", baseURL);
-                imgElement.setAttribute("style", "max-width: 300px; max-height: 300px");
+                imgElement.setAttribute("onclick", `openImage('${baseURL}')`);
                 imgElement.classList.add("embed");
 
-                var imgLink = document.createElement("a");
-                imgLink.setAttribute("href", baseURL);
-                imgLink.setAttribute("target", "_blank");
-                imgLink.appendChild(imgElement);
+                //var imgLink = document.createElement("a");
+                //imgLink.setAttribute("href", baseURL);
+                //imgLink.setAttribute("target", "_blank");
+                //imgLink.appendChild(imgElement);
+                //embeddedElement = imgLink;
+                embeddedElement = imgElement;
 
-                embeddedElement = imgLink;
+
+                
             } else if (['mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg'].includes(fileExtension)) {
                 embeddedElement = document.createElement("video");
                 embeddedElement.setAttribute("src", baseURL);
@@ -248,4 +251,41 @@ function createButtonContainer(p) {
     }
 
     return buttonContainer;
+}
+
+function oldMarkdown(content) {
+    var escapedinput = content
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+    var textContent = escapedinput
+        .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
+        .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
+        .replace(/```([\s\S]*?)```/g, '<div class="code"><code>$1</code></div>')
+        .replace(/``([^`]+)``/g, '<code>$1</code>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/^#+ (.*?$)/gm, (match, group1) => {
+            const hash = match.match(/^#+/)[0].length;
+            return `<h${hash}>${group1}</h${hash}>`;
+        })
+        .replace(/^&gt; (.*?$)/gm, '<blockquote>$1</blockquote>')
+        .replace(/~~([\s\S]*?)~~/g, '<del>$1</del>')
+        .replace(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g, function (url) {
+            return `<a href="${url.replace(/<\/?blockquote>/g, '')}" target="_blank">${url}</a>`;
+        })
+        .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+        .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
+        .replace(/\n/g, '<br>');
+
+        var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}🫠❄️]+$/u.test(content);
+
+    if (isEmoji) {
+        textContent = '<span class="big">' + textContent + '</span>';
+    }
+
+    return textContent;
 }

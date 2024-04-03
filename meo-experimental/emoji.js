@@ -28,23 +28,8 @@ function addemoji(emoji) {
     var ogmsg = document.getElementById('msg').value
     document.getElementById('msg').value = `${ogmsg}${emoji} `;
     
-    if (!shiftKeyPressed) {
-        closepicker();
-    }
-    shiftKeyPressed = false;
+    closepicker();
 }
-
-document.addEventListener('keydown', function(event) {
-    if (event.shiftKey) {
-        shiftKeyPressed = true;
-    }
-});
-
-document.addEventListener('keyup', function(event) {
-    if (event.shiftKey) {
-        shiftKeyPressed = false;
-    }
-});
 
 function loadpicker() {
     pickerhtm();
@@ -58,6 +43,7 @@ function loadpicker() {
     } else {
         picker.innerHTML = `<div class="emojipicker">` + pickerhtm() + `</div>`
     }
+    document.getElementById("emojin").focus();
 }
 
 document.addEventListener('input', function(event) {
@@ -598,7 +584,7 @@ function pickerhtm() {
             <button class="emojibutton" title="grapes" onclick="addemoji('🍇')">🍇</button>
             <button class="emojibutton" title="melon" onclick="addemoji('🍈')">🍈</button>
             <button class="emojibutton" title="watermelon" onclick="addemoji('🍉')">🍉</button>
-            <button class="emojibutton" title="tangerine" onclick="addemoji('🍊')">🍊</button>
+            <button class="emojibutton" title="tangerine, orange" onclick="addemoji('🍊')">🍊</button>
             <button class="emojibutton" title="lemon" onclick="addemoji('🍋')">🍋</button>
             <button class="emojibutton" title="banana" onclick="addemoji('🍌')">🍌</button>
             <button class="emojibutton" title="pineapple" onclick="addemoji('🍍')">🍍</button>
@@ -1065,20 +1051,24 @@ function pickerhtm() {
             <h3>Symbols</h3>
         </div>
         <div class="emojisec" id="symbols">
-            <button class="emojibutton" title="heart with arrow" onclick="addemoji('💘')">💘</button>
             <button class="emojibutton" title="red heart" onclick="addemoji('❤️')">❤️</button>
+            <button class="emojibutton" title="orange heart" onclick="addemoji('🧡')">🧡</button>
+            <button class="emojibutton" title="yellow heart" onclick="addemoji('💛')">💛</button>
+            <button class="emojibutton" title="green heart" onclick="addemoji('💚')">💚</button>
+            <button class="emojibutton" title="light blue heart" onclick="addemoji('🩵')">🩵</button>
+            <button class="emojibutton" title="blue heart" onclick="addemoji('💙')">💙</button>
+            <button class="emojibutton" title="purple heart" onclick="addemoji('💜')">💜</button>
+            <button class="emojibutton" title="pink heart" onclick="addemoji('🩷')">🩷</button>
+            <button class="emojibutton" title="brown heart" onclick="addemoji('🤎')">🤎</button>
+            <button class="emojibutton" title="black heart" onclick="addemoji('🖤')">🖤</button>
+            <button class="emojibutton" title="two hearts" onclick="addemoji('💕')">💕</button>
+            <button class="emojibutton" title="revolving hearts" onclick="addemoji('💞')">💞</button>
+            <button class="emojibutton" title="heart with arrow" onclick="addemoji('💘')">💘</button>
             <button class="emojibutton" title="beating heart" onclick="addemoji('💓')">💓</button>
             <button class="emojibutton" title="broken heart" onclick="addemoji('💔')">💔</button>
-            <button class="emojibutton" title="two hearts" onclick="addemoji('💕')">💕</button>
             <button class="emojibutton" title="sparkling heart" onclick="addemoji('💖')">💖</button>
             <button class="emojibutton" title="growing heart" onclick="addemoji('💗')">💗</button>
-            <button class="emojibutton" title="blue heart" onclick="addemoji('💙')">💙</button>
-            <button class="emojibutton" title="green heart" onclick="addemoji('💚')">💚</button>
-            <button class="emojibutton" title="yellow heart" onclick="addemoji('💛')">💛</button>
-            <button class="emojibutton" title="purple heart" onclick="addemoji('💜')">💜</button>
-            <button class="emojibutton" title="black heart" onclick="addemoji('🖤')">🖤</button>
             <button class="emojibutton" title="heart with ribbon" onclick="addemoji('💝')">💝</button>
-            <button class="emojibutton" title="revolving hearts" onclick="addemoji('💞')">💞</button>
             <button class="emojibutton" title="heart decoration" onclick="addemoji('💟')">💟</button>
             <button class="emojibutton" title="heavy heart exclamation" onclick="addemoji('❣️')">❣️</button>
             <button class="emojibutton" title="ATM sign" onclick="addemoji('🏧')">🏧</button>

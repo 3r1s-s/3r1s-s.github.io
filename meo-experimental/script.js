@@ -3,7 +3,7 @@
 // - Eris
 
 var end = false;
-var page = "login";
+var page = "load";
 var sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
         sidediv.classList.add("hidden");
@@ -24,13 +24,19 @@ function replsh(rpl) {
 }
 
 function main() {
-    page = "login";
     meowerConnection = new WebSocket("wss://server.meower.org/");
     var loggedin = false;
-
+    
+    meowerConnection.addEventListener('error', function(event) {
+        if (!page==="load") {
+            launchscreen();
+        }
+    });
+    
     meowerConnection.onclose = (event) => {
         logout(true);
     };
+    page = "login";
     loadtheme();
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
@@ -77,21 +83,44 @@ function main() {
                 </div>
                 `;
             };
-        } else if (sentdata.val.mode == "auth") {
-            loggedin = true;
-            page = "home";
-            if (localStorage.getItem("token") == undefined || localStorage.getItem("uname") == undefined || localStorage.getItem("permissions") == undefined) {
-                localStorage.setItem("uname", sentdata.val.payload.username);
-                localStorage.setItem("token", sentdata.val.payload.token);
-                localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
+        } else if (sentdata.listener == "auth") {
+            if (sentdata.val.mode && sentdata.val.mode == "auth") {
+                loggedin = true;
+                page = "home";
+                if (localStorage.getItem("token") == undefined || localStorage.getItem("uname") == undefined || localStorage.getItem("permissions") == undefined) {
+                    localStorage.setItem("uname", sentdata.val.payload.username);
+                    localStorage.setItem("token", sentdata.val.payload.token);
+                    localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
+                }
+                loadhome();
+                console.log("Logged in!");
+            } else if (sentdata.cmd == "statuscode" && sentdata.val != "I:100 | OK") {
+                if ("token" in localStorage)
+                    logout(false);
+                switch (sentdata.val) {
+                    case "I:015 | Account exists":
+                        openUpdate("Username Already Taken!");
+                        break;
+                    case "E:103 | ID not found":
+                        openUpdate("Invalid Username!");
+                        break;
+                    case "I:011 | Invalid Password":
+                        openUpdate("Invalid Password!");
+                        break;
+                    case "E:018 | Account Banned":
+                        openUpdate("Account Banned!");
+                        break;
+                    case "E:025 | Deleted":
+                        openUpdate("Account Deleted!");
+                        break;
+                    case "E:110 | ID conflict":
+                        openUpdate("You probably logged in on another client. Refresh the page and log back in to continue.");
+                        break;
+                    default:
+                        openUpdate(`Unknown Login Status: ${sentdata.val}`);
+                        break;
+                }
             }
-            loadhome();
-            console.log("Logged in!");
-        } else if (sentdata.val == "E:110 | ID conflict") {
-            openUpdate("You probably logged in on another client. Refresh the page and log back in to continue.");
-        } else if (sentdata.val == "I:011 | Invalid Password") {
-            logout(true);
-            openUpdate("Wrong Password!");
         } else if (sentdata.val.post_origin == page) {
             if (loggedin == true) {
                 loadpost(sentdata.val);
@@ -228,9 +257,16 @@ function loadpost(p) {
     var postContentText = document.createElement("p");
     postContentText.className = "post-content";
     // tysm tni <3
-    md.disable(['image'])
-    postContentText.innerHTML = erimd(md.render(content));
-    postContentText.innerHTML = buttonbadges(postContentText);
+    if (typeof md !== 'undefined') {
+        md.disable(['image']);
+        postContentText.innerHTML = erimd(md.render(content));
+        postContentText.innerHTML = buttonbadges(postContentText);
+    } else {
+        // fallback for when md doenst work
+        // figure this issue OUT
+        postContentText.innerHTML = oldMarkdown(content);
+        console.error("Parsed with old markdown, fix later :)")
+    }    
     
     if (content) {
         wrapperDiv.appendChild(postContentText);
@@ -291,7 +327,13 @@ function loadPfp(username, button) {
                             pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
                         }
                     } else if (userData.pfp_data) {
-                        const pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
+                        //legacy avatar
+                        let pfpurl;
+                        if (userData.pfp_data > 0 && userData.pfp_data <= 37) {
+                            pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
+                        } else {
+                            pfpurl = `images/avatars/icon_err.svg`; // Default to icon_err if index is out of range
+                        }
                         
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
@@ -424,7 +466,8 @@ function login(user, pass) {
                 username: user,
                 pswd: pass
             }
-        }
+        },
+        listener: "auth"
     };
     meowerConnection.send(JSON.stringify(data));
     console.log(user);
@@ -440,7 +483,8 @@ function signup(user, pass) {
                 username: user,
                 pswd: pass
             }
-        }
+        },
+        listener: "auth"
     };
     meowerConnection.send(JSON.stringify(data));
     console.log("User is signing up, details will not be logged for security reasons.");
@@ -634,14 +678,17 @@ function loadinbox() {
 }
 
 function logout(iskl) {
-    if (iskl != true) {
+    if (!iskl) {
         localStorage.clear();
         meowerConnection.close();
     }
     end = true;
-    document.getElementById("msgs").innerHTML = "";
-    document.getElementById("nav").innerHTML = "";
-    document.getElementById("groups").innerHTML = "";
+    if (document.getElementById("msgs"))
+        document.getElementById("msgs").innerHTML = "";
+    if (document.getElementById("nav"))
+        document.getElementById("nav").innerHTML = "";
+    if (document.getElementById("groups"))
+        document.getElementById("groups").innerHTML = "";
     end = false;
     main();
 }
@@ -1002,6 +1049,25 @@ function ping() {
     }));
 }
 
+function launchscreen() {
+    page = "load";
+    const green = `<div class="launch">
+        <svg class="launch-logo" width="128" height="128" viewBox="0 0 512 512" fill="var(--color)" xmlns="http://www.w3.org/2000/svg">
+        <g>
+            <path d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"/>
+        </g>
+        </svg>
+    </div>`
+    const orange = document.getElementById("main");
+    orange.innerHTML = green;
+
+    var nv = document.getElementById("nav");
+    nv.innerHTML = ``;
+    var nv = document.getElementById("groups");
+    nv.innerHTML = ``;
+    meowerConnection.close();
+}
+
 function autoresize() {
     const textarea = document.getElementById('msg');
     textarea.style.height = 'auto';
@@ -1025,6 +1091,47 @@ async function deletePost(postid) {
         }
     } catch (error) {
         console.error("Error deleting post:", error);
+    }
+}
+
+function openImage(url) {
+    document.documentElement.style.overflow = "hidden";
+    var mdlbck = document.querySelector('.image-back');
+    
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        var mdl = mdlbck.querySelector('.image-mdl');
+        if (mdl) {
+            mdl.innerHTML = `
+            <img class='embed-large' src='${url}' onclick='preventClose(event)'>
+            <div class="img-links">
+            <span class="img-link-outer"><a onclick="closeImage()" class="img-link">close</a></span>
+            <span><a href="${url}" target="_blank" class="img-link">open in browser</a></span>
+            </div>
+            `;
+        }
+    }  
+}
+
+function preventClose(event) {
+    event.stopPropagation();
+}
+
+function closeImage() {
+    document.documentElement.style.overflow = "";
+    
+    var mdlbck = document.querySelector('.image-back');
+    
+    if (mdlbck) {
+        mdlbck.style.display = 'none';
+    }
+    
+    var mdl = document.querySelector('.image-mdl');
+    
+    if (mdlbck) {
+        mdl.style.background = '';
+        mdl.classList.remove('custom-bg');
     }
 }
 
@@ -1435,7 +1542,13 @@ async function loadmoduser(user) {
                 <div class="mod-td">Last Used</div>
                 <div class="mod-td">Flags</div>
             </div>
-            </table>
+            </div>
+            <span class="subheader">Note</span>
+            <textarea id="mod-post-note" class="mdl-txt"></textarea>
+            <button class="modal-button" onclick="updateNote('${data.uuid}')">Update Note</button>
+            <span class="subheader">Alert</span>
+            <textarea id="mod-user-alert" class="mdl-txt"></textarea>
+            <button class="modal-button" onclick="sendAlert('${data._id}')">Send Alert</button>
         `;
 
         const rpfp = document.querySelector('.mod-post .avatar');
@@ -1476,7 +1589,26 @@ async function loadmoduser(user) {
             </div>
             `;
         });
-        
+    
+        fetch(`https://api.meower.org/admin/notes/${data.uuid}`, {
+            method: "GET",
+            headers: {
+                "token": localStorage.getItem("token")
+            }
+        })
+        .then(response => response.json())
+        .then(noteData => {
+            if (noteData && noteData.notes) {
+                const mdpsnt = document.getElementById('mod-post-note');
+                mdpsnt.value = noteData.notes;
+            } else {
+                console.log("No data received from server, the note is probably blank");
+            }
+        })
+        .catch(error => {
+            console.error("Error loading note data:", error);
+        });
+    
     })
     .catch(error => {
         console.error("Error loading post:", error);
@@ -1589,8 +1721,8 @@ async function loadmodpost(postid) {
                         .then(response => response.json())
                         .then(noteData => {
                             if (noteData && noteData.notes) {
-                                const modPostNote = document.getElementById('mod-post-note');
-                                modPostNote.value = noteData.notes;
+                                const mdpsnt = document.getElementById('mod-post-note');
+                                mdpsnt.value = noteData.notes;
                             } else {
                                 console.log("No data received from server, the note is probably blank");
                             }
@@ -1635,7 +1767,7 @@ async function modDeletePost(postid) {
 }
 
 function updateNote(postid) {
-    const noteContent = document.getElementById('mod-post-note').value;
+    const note = document.getElementById('mod-post-note').value;
     
     fetch(`https://api.meower.org/admin/notes/${postid}`, {
         method: "PUT",
@@ -1644,7 +1776,7 @@ function updateNote(postid) {
             "token": localStorage.getItem("token")
         },
         body: JSON.stringify({
-            notes: noteContent
+            notes: note
         })
     })
     .then(response => response.json())
@@ -1653,6 +1785,28 @@ function updateNote(postid) {
     })
     .catch(error => {
         console.error("Error updating note:", error);
+    });
+}
+
+function sendAlert(userid) {
+    const note = document.getElementById('mod-user-alert').value;
+    
+    fetch(`https://api.meower.org/admin/users/${userid}/alert`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            content: note
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Alerted successfully:", data);
+    })
+    .catch(error => {
+        console.error("Error sending alert:", error);
     });
 }
 
@@ -1731,7 +1885,6 @@ document.addEventListener('click', function (event) {
         event.stopPropagation();
     }
 });
-
 
 function mdlreply(event) {
     var modalId = event.target.closest('.modal').id;
