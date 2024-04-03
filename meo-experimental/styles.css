@@ -157,8 +157,6 @@ bridge {
 .embed-large {
     max-width: 80vw;
     max-height: 80vh;
-    min-width: 200px;
-    min-height: 200px;
     animation: open cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
@@ -754,7 +752,7 @@ possible future styling
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    animation: fade cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+    animation: fadeimg cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
 .img-links {
@@ -797,6 +795,15 @@ possible future styling
 }
 
 @keyframes fade {
+    from {
+        background: rgba(0,0,0,0); 
+    }
+    to {
+        background: rgba(0,0,0,0.6); 
+    }
+}
+
+@keyframes fadeimg {
     from {
         background: rgba(0,0,0,0); 
     }
@@ -1096,6 +1103,15 @@ possible future styling
         }
         to {
             background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 80%, rgba(0,0,0,0) 100%); 
+        }
+    }
+
+    @keyframes fadeimg {
+        from {
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 80%, rgba(0,0,0,0) 100%); 
+        }
+        to {
+            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%,rgba(0,0,0,0.8) 95%, rgba(0,0,0,0) 100%); 
         }
     }
     
