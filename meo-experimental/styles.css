@@ -157,6 +157,8 @@ bridge {
 .embed-large {
     max-width: 80vw;
     max-height: 80vh;
+    min-width: 15vw;
+    min-height: 15vh;
     animation: open cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
@@ -732,7 +734,6 @@ possible future styling
 
 .table-section {
     display: flex;
-
 }
 
 .mod-td {
@@ -765,8 +766,10 @@ possible future styling
 }
 
 .img-link {
-    color: #fefefe;
+    color: #fefefe90;
     text-shadow: 0px 1px 10px #000;
+    padding: var(--padding);
+    transition: var(--transition);
 }
 
 .img-link:hover {
