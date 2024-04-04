@@ -2,14 +2,14 @@
 // no i wont do anything about it
 // - Eris
 
-var end = false;
-var page = "load";
-var sidediv = document.querySelectorAll(".side");
+let end = false;
+let page = "load";
+const sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
         sidediv.classList.add("hidden");
     });
-var lul = 0;
-var sul = "";
+let lul = 0;
+let sul = "";
 
 const pfpCache = {};
 
@@ -17,7 +17,7 @@ loadsavedplugins();
 loadcstmcss();
 
 function replsh(rpl) {
-    var trimmedString = rpl.length > 25 ?
+    const trimmedString = rpl.length > 25 ?
         rpl.substring(0, 22) + "..." :
         rpl;
     return trimmedString;
@@ -25,7 +25,7 @@ function replsh(rpl) {
 
 function main() {
     meowerConnection = new WebSocket("wss://server.meower.org/");
-    var loggedin = false;
+    let loggedin = false;
     
     meowerConnection.addEventListener('error', function(event) {
         if (!page==="load") {
@@ -41,9 +41,10 @@ function main() {
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
 
-        var sentdata = JSON.parse(event.data);
+        const sentdata = JSON.parse(event.data);
+        let data
         if (sentdata.val == "I:112 | Trusted Access enabled") {
-            var data = {
+            data = {
                 cmd: "direct",
                 val: {
                     cmd: "type",
@@ -54,7 +55,7 @@ function main() {
             meowerConnection.send(JSON.stringify(data));
             console.log("OUT: " + JSON.stringify(data));
 
-            var data = {
+            data = {
                 cmd: "direct",
                 val: "meower"
             };
@@ -64,7 +65,7 @@ function main() {
             if (localStorage.getItem("token") != undefined && localStorage.getItem("uname") != undefined) {
                 login(localStorage.getItem("uname"), localStorage.getItem("token"));
             } else {
-                var pageContainer = document.getElementById("main");
+                const pageContainer = document.getElementById("main");
                 pageContainer.innerHTML = 
                 `<div class='settings'>
                     <div class='login'>
@@ -128,18 +129,18 @@ function main() {
         } else if (end) {
             return 0;
         } else if (sentdata.val.mode == "update_post") {
-            var postId = sentdata.val.payload.post_id;
-            var postElement = document.getElementById(postId);
+            const postId = sentdata.val.payload.post_id;
+            const postElement = document.getElementById(postId);
             
             if (postElement) {
-                var postMessage = sentdata.val.payload.p;
+                const postMessage = sentdata.val.payload.p;
                 postElement.querySelector('.post-content').innerHTML = md.render(postMessage);
                 console.log("Edited " + sentdata.val.payload._id);
             } else {
                 console.log(postId + " not found.");
             }
         } else if (sentdata.cmd == "ulist") {
-            var iul = sentdata.val;
+            const iul = sentdata.val;
             sul = iul.trim().split(";");
             lul = sul.length - 1;
             
@@ -182,7 +183,7 @@ function main() {
     }
     });
     addEventListener("keydown", () => {
-        if (event.keyCode >= 48 && event.keyCode <= 90) {
+        if (!event.ctrlKey && event.keyCode >= 48 && event.keyCode <= 90) {
             console.log(document.activeElement);
             if (!document.activeElement || document.activeElement.tagName !== 'INPUT') {
                 document.getElementById("msg").focus();
@@ -193,29 +194,31 @@ function main() {
 }
 
 function loadpost(p) {
+    let user
+    let content
     if (p.u == "Discord" || p.u == "SplashBridge") {
-        var rcon = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
-        var parts = rcon.split(': ');
-        var user = parts[0];
-        var content = parts.slice(1).join(': ');
+        const rcon = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
+        const parts = rcon.split(': ');
+        user = parts[0];
+        content = parts.slice(1).join(': ');
     } else {
-        var content = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
-        var user = p.u;
+        content = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
+        user = p.u;
     }
     
-    var postContainer = document.createElement("div");
+    const postContainer = document.createElement("div");
     postContainer.id = p._id;
     postContainer.classList.add("post");
 
-    var wrapperDiv = document.createElement("div");
+    const wrapperDiv = document.createElement("div");
     wrapperDiv.classList.add("wrapper");
 
-    var pfpDiv = document.createElement("div");
+    const pfpDiv = document.createElement("div");
     pfpDiv.classList.add("pfp");
     
     wrapperDiv.appendChild(createButtonContainer(p));
     
-    var mobileButtonContainer = document.createElement("div");
+    const mobileButtonContainer = document.createElement("div");
     mobileButtonContainer.classList.add("mobileContainer");
     mobileButtonContainer.innerHTML = `
     <div class='toolbarContainer'>
@@ -227,20 +230,20 @@ function loadpost(p) {
     
     wrapperDiv.appendChild(mobileButtonContainer);
 
-    var pstdte = document.createElement("i");
+    const pstdte = document.createElement("i");
     pstdte.classList.add("date");
     tsr = p.t.e;
     tsra = tsr * 1000;
     tsrb = Math.trunc(tsra);
-    var ts = new Date();
+    const ts = new Date();
     ts.setTime(tsrb);
     pstdte.innerText = new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
 
-    var pstinf = document.createElement("h3");
+    const pstinf = document.createElement("h3");
     pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")'>${user}</span>`;
 
     if (p.u == "Discord" || p.u == "SplashBridge") {
-        var bridged = document.createElement("bridge");
+        const bridged = document.createElement("bridge");
         bridged.innerText = "Bridged";
         bridged.setAttribute("title", "This post has been bridged from another platform.");
         pstinf.appendChild(bridged);
@@ -249,11 +252,11 @@ function loadpost(p) {
     pstinf.appendChild(pstdte);
     wrapperDiv.appendChild(pstinf);
 
-    var replyregex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
-    var match = replyregex.exec(content);
+    const replyregex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
+    let match = replyregex.exec(content);
     if (match) {
-        var replyid = match[3];
-        var pageContainer = document.getElementById("msgs");
+        const replyid = match[3];
+        const pageContainer = document.getElementById("msgs");
     
         if (pageContainer.firstChild) {
             pageContainer.insertBefore(postContainer, pageContainer.firstChild);
@@ -267,7 +270,7 @@ function loadpost(p) {
     
         content = content.replace(match[0], '').trim();
     }
-    var postContentText = document.createElement("p");
+    let postContentText = document.createElement("p");
     postContentText.className = "post-content";
     // tysm tni <3
     if (typeof md !== 'undefined') {
@@ -285,7 +288,7 @@ function loadpost(p) {
         wrapperDiv.appendChild(postContentText);
     } 
 
-    var links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
+    const links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
     const embd = embed(links);
     if (embd) {
         embd.forEach(embeddedElement => {
@@ -305,7 +308,7 @@ function loadpost(p) {
         
     postContainer.appendChild(wrapperDiv);
 
-    var pageContainer = document.getElementById("msgs");
+    const pageContainer = document.getElementById("msgs");
     if (pageContainer.firstChild) {
         pageContainer.insertBefore(postContainer, pageContainer.firstChild);
     } else {
@@ -318,7 +321,7 @@ function loadPfp(username, button) {
         if (pfpCache[username]) {
             resolve(pfpCache[username].cloneNode(true));
         } else {
-            let pfpElement; //make pfp element EXIST
+            let pfpElement;
 
             fetch(`https://api.meower.org/users/${username}`)
                 .then(userResp => userResp.json())
@@ -403,10 +406,10 @@ async function loadreply(replyid) {
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
         if (replydata.u === "Discord" || replydata.u === "SplashBridge") {
-            var rcon = replydata.p;
-            var parts = rcon.split(': ');
-            var user = parts[0];
-            var content = parts.slice(1).join(': ');
+            const rcon = replydata.p;
+            const parts = rcon.split(': ');
+            const user = parts[0];
+            const content = parts.slice(1).join(': ');
             replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${user}</p><p style='margin: 10px 0 10px 0;'>${content}</p>`;
         } else {
             replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.u}</p><p style='margin: 10px 0 10px 0;'>${replydata.p}</p>`;
@@ -420,18 +423,18 @@ async function loadreply(replyid) {
 }
 
 function reply(event) {
-    var postContainer = event.target.closest('.post');
+    const postContainer = event.target.closest('.post');
     if (postContainer) {
-        var username = postContainer.querySelector('#username').innerText;
-        var postcont = postContainer.querySelector('p').innerText
+        const username = postContainer.querySelector('#username').innerText;
+        const postcont = postContainer.querySelector('p').innerText
         .replace(/\n/g, ' ')
         .replace(/@\w+/g, '')
         .split(' ')
         .slice(0, 6)
         .join(' ');
-        var ogmsg = document.getElementById('msg').value
+        const ogmsg = document.getElementById('msg').value
         
-        var postId = postContainer.id;
+        const postId = postContainer.id;
         document.getElementById('msg').value = `@${username} "${postcont}..." (${postId})\n${ogmsg}`;
         document.getElementById('msg').focus();
         autoresize();
@@ -439,9 +442,9 @@ function reply(event) {
 }
 
 function pingusr(event) {
-    var postContainer = event.target.closest('.post');
+    const postContainer = event.target.closest('.post');
     if (postContainer) {
-        var username = postContainer.querySelector('#username').innerText;
+        const username = postContainer.querySelector('#username').innerText;
 
         document.getElementById('msg').value = `@${username} `;
         document.getElementById('msg').focus();
@@ -466,12 +469,12 @@ function loadtheme() {
 }
 
 function sharepost() {
-    var postId = event.target.closest('.post').id;
+    const postId = event.target.closest('.post').id;
     window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
 }
 
 function login(user, pass) {
-    var data = {
+    const data = {
         cmd: "direct",
         val: {
             cmd: "authpswd",
@@ -488,7 +491,7 @@ function login(user, pass) {
 }
 
 function signup(user, pass) {
-    var data = {
+    const data = {
         cmd: "direct",
         val: {
             cmd: "gen_account",
@@ -504,7 +507,7 @@ function signup(user, pass) {
 }
 
 function sendpost() {
-    var message = document.getElementById('msg').value;
+    const message = document.getElementById('msg').value;
 
     if (!message.trim()) {
         console.log("The message is blank.");
@@ -526,9 +529,10 @@ function sendpost() {
 
 function loadhome() {
     page = "home";
-    var pageContainer = document.getElementById("main");
+    let pageContainer
+    pageContainer = document.getElementById("main");
     pageContainer.innerHTML = `<div class='info'><h1 class='header-top'>Home</h1><p id='info'></p></div>` + loadinputs();
-    var pageContainer = document.getElementById("nav");
+    pageContainer = document.getElementById("nav");
     pageContainer.innerHTML = `
     <div class='navigation'>
     <div class='nav-top'>
@@ -544,7 +548,7 @@ function loadhome() {
     </div>
     `;
     
-    var navlist = `
+    let navlist = `
     <input type='button' class='navigation-button button' id='submit' value='Profile' onclick='openUsrModal("${localStorage.getItem("uname")}")'>
     <input type='button' class='navigation-button button' id='submit' value='Explore' onclick='loadExplore();'>
     <input type='button' class='navigation-button button' id='submit' value='Inbox' onclick='loadinbox()'>
@@ -557,7 +561,7 @@ function loadhome() {
     navlist = `<input type='button' class='navigation-button button' id='submit' value='Moderate' onclick='openModModal()'>` + navlist;
     }
 
-    var mdmdl = document.getElementsByClassName('navigation')[0];
+    let mdmdl = document.getElementsByClassName('navigation')[0];
     mdmdl.innerHTML += navlist;
 
 
@@ -567,7 +571,7 @@ function loadhome() {
     char.open("GET", "https://api.meower.org/chats?autoget");
     char.setRequestHeader("token", localStorage.getItem('token'));
     char.onload = async () => {
-        var response = JSON.parse(char.response);
+        const response = JSON.parse(char.response);
         console.log(char.response);
     
         const groupsdiv = document.getElementById("groups");
@@ -596,8 +600,8 @@ function loadhome() {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", "https://api.meower.org/home?autoget");
     xhttp.onload = async () => {
-        var c = JSON.parse(xhttp.response);
-        var i = 24;
+        const c = JSON.parse(xhttp.response);
+        let i = 24;
         while (i != 0) {
             i -= 1;
             console.log("Loading post: " + i.toString());
@@ -605,7 +609,7 @@ function loadhome() {
         }
     };
     xhttp.send();
-    var sidediv = document.querySelectorAll(".side");
+    const sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
       sidediv.classList.remove("hidden");
   });
@@ -708,9 +712,9 @@ function logout(iskl) {
 
 function loadstgs() {
     page = "settings";
-    var gcsc = document.getElementById("groups");
+    const gcsc = document.getElementById("groups");
     gcsc.innerHTML = ""
-    var navc = document.getElementById("nav");
+    const navc = document.getElementById("nav");
     navc.innerHTML = `
     <div class='navigation'>
     <div class='nav-top'>
@@ -726,8 +730,8 @@ function loadstgs() {
 }
 
 function loadgeneral() {
-    var pageContainer = document.getElementById("main");
-    var settingsContent = `
+    const pageContainer = document.getElementById("main");
+    const settingsContent = `
         <div class="settings">
             <h1>General</h1>
             <h3>Chat</h3>
@@ -747,21 +751,21 @@ function loadgeneral() {
 
             pageContainer.innerHTML = settingsContent;
 
-            var swftcheckbox = document.getElementById("swearfilter");
+            const swftcheckbox = document.getElementById("swearfilter");
         
             swftcheckbox.addEventListener("change", function () {
                 localStorage.setItem('settings', JSON.stringify({ swearfilter: swftcheckbox.checked }));
             });
         
-            var storedsettings = JSON.parse(localStorage.getItem('settings')) || {};
-            var swearfiltersetting = storedsettings.swearfilter || false;
+            const storedsettings = JSON.parse(localStorage.getItem('settings')) || {};
+            const swearfiltersetting = storedsettings.swearfilter || false;
         
             swftcheckbox.checked = swearfiltersetting;
 }
 
 async function loadplugins() {
-    var pageContainer = document.getElementById("main");
-    var settingsContent = `
+    let pageContainer = document.getElementById("main");
+    let settingsContent = `
         <div class="settings">
             <h1>Plugins</h1>
             <h3>Usually requires a refresh</h3>
@@ -857,8 +861,8 @@ function customplugin() {
 }
 
 function loadappearance() {
-    var pageContainer = document.getElementById("main");
-    var settingsContent = `
+    let pageContainer = document.getElementById("main");
+    let settingsContent = `
     <div class="settings">
         <h1>Appearance</h1>
         <div class="msgs"></div>
@@ -1074,9 +1078,9 @@ function launchscreen() {
     const orange = document.getElementById("main");
     orange.innerHTML = green;
 
-    var nv = document.getElementById("nav");
+    let nv = document.getElementById("nav");
     nv.innerHTML = ``;
-    var nv = document.getElementById("groups");
+    nv = document.getElementById("groups");
     nv.innerHTML = ``;
     meowerConnection.close();
 }
@@ -1109,12 +1113,12 @@ async function deletePost(postid) {
 
 function openImage(url) {
     document.documentElement.style.overflow = "hidden";
-    var mdlbck = document.querySelector('.image-back');
+    const mdlbck = document.querySelector('.image-back');
     
     if (mdlbck) {
         mdlbck.style.display = 'flex';
         
-        var mdl = mdlbck.querySelector('.image-mdl');
+        const mdl = mdlbck.querySelector('.image-mdl');
         if (mdl) {
             mdl.innerHTML = `
             <img class='embed-large' src='${url}' onclick='preventClose(event)'>
@@ -1134,13 +1138,13 @@ function preventClose(event) {
 function closeImage() {
     document.documentElement.style.overflow = "";
     
-    var mdlbck = document.querySelector('.image-back');
+    const mdlbck = document.querySelector('.image-back');
     
     if (mdlbck) {
         mdlbck.style.display = 'none';
     }
     
-    var mdl = document.querySelector('.image-mdl');
+    const mdl = document.querySelector('.image-mdl');
     
     if (mdlbck) {
         mdl.style.background = '';
@@ -1150,21 +1154,21 @@ function closeImage() {
 
 function openModal(postId) {
     document.documentElement.style.overflow = "hidden";
-    var mdlbck = document.querySelector('.modal-back');
+    const mdlbck = document.querySelector('.modal-back');
     
     if (mdlbck) {
         mdlbck.style.display = 'flex';
         
-        var mdl = mdlbck.querySelector('.modal');
+        const mdl = mdlbck.querySelector('.modal');
         if (mdl) {
             mdl.id = postId;
-            var mdbt = mdl.querySelector('.modal-bottom');
+            let mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
                 <button class="modal-back-btn" onclick="openModModal();">back</button>
                 `;
             }
-            var mdlt = mdl.querySelector('.modal-top');
+            const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
                 <button class="modal-button" onclick="mdlreply(event)"><div>Reply</div><div class="modal-icon"><svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg></div></button>
@@ -1189,7 +1193,7 @@ function openModal(postId) {
                     `; 
                 }
             }
-            var mdbt = mdl.querySelector('.modal-bottom');
+            mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = ``;
             }
@@ -1200,13 +1204,13 @@ function openModal(postId) {
 function openUsrModal(uId) {
     document.documentElement.style.overflow = "hidden";
     
-    var mdlbck = document.querySelector('.modal-back');
+    const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        var mdl = mdlbck.querySelector('.modal');
+        const mdl = mdlbck.querySelector('.modal');
         if (mdl) {
-            var mdlt = mdl.querySelector('.modal-top');
+            const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
                 <iframe class="profile" src="users.html?u=${uId}"></iframe>
@@ -1225,7 +1229,7 @@ function openUsrModal(uId) {
                 .catch(error => console.error('Error fetching user profile:', error));
                 }
         }
-        var mdbt = mdl.querySelector('.modal-bottom');
+        const mdbt = mdl.querySelector('.modal-bottom');
         if (mdbt) {
             mdbt.innerHTML = ``;
         }
@@ -1235,14 +1239,14 @@ function openUsrModal(uId) {
 function reportModal(id) {
     document.documentElement.style.overflow = "hidden";
     
-    var mdlbck = document.querySelector('.modal-back');
+    const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
 
-        var mdl = mdlbck.querySelector('.modal');
+        const mdl = mdlbck.querySelector('.modal');
         if (mdl) {
-            var mdlt = mdl.querySelector('.modal-top');
+            const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>Report Post</h3>
@@ -1264,7 +1268,7 @@ function reportModal(id) {
                 <button class="modal-button" onclick="sendReport('${id}')">Send Report</button>
                 `;
             }
-            var mdbt = mdl.querySelector('.modal-bottom');
+            const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = ``;
             }
@@ -1273,7 +1277,7 @@ function reportModal(id) {
 }
 
 function sendReport(id) {
-    var data = {
+    const data = {
         cmd: "direct",
         val: {
             cmd: "report",
@@ -1293,13 +1297,13 @@ function sendReport(id) {
 async function closemodal(message) {
     document.documentElement.style.overflow = "";
     
-    var mdlbck = document.querySelector('.modal-back');
+    const mdlbck = document.querySelector('.modal-back');
     
     if (mdlbck) {
         mdlbck.style.display = 'none';
     }
     
-    var mdl = document.querySelector('.modal');
+    const mdl = document.querySelector('.modal');
     
     if (mdlbck) {
         mdl.id = '';
@@ -1317,15 +1321,15 @@ async function closemodal(message) {
 function openModModal() {
     document.documentElement.style.overflow = "hidden";
     
-    var mdlbck = document.querySelector('.modal-back');
+    const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
 
-        var mdl = mdlbck.querySelector('.modal');
+        const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-big';
         if (mdl) {
-            var mdlt = mdl.querySelector('.modal-top');
+            const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>Moderation Panel</h3>
@@ -1350,7 +1354,7 @@ function openModModal() {
                 `;
                 loadreports();
             }
-            var mdbt = mdl.querySelector('.modal-bottom');
+            const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = ``;
             }
@@ -1488,17 +1492,17 @@ async function loadreports() {
 function modUserModal(user) {
     document.documentElement.style.overflow = "hidden";
     
-    var mdlbck = document.querySelector('.modal-back');
+    const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
 
-        var mdl = mdlbck.querySelector('.modal');
+        const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-big';
         mdl.style.background = '';
         mdl.classList.remove('custom-bg');
         if (mdl) {
-            var mdlt = mdl.querySelector('.modal-top');
+            const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>Moderate ${user}</h3>
@@ -1507,7 +1511,7 @@ function modUserModal(user) {
                 `;
                 loadmoduser(user);
             }
-            var mdbt = mdl.querySelector('.modal-bottom');
+            const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
                 <button class="modal-back-btn" onclick="openModModal();">back</button>
@@ -1631,15 +1635,15 @@ async function loadmoduser(user) {
 function modPostModal(postid) {
     document.documentElement.style.overflow = "hidden";
     
-    var mdlbck = document.querySelector('.modal-back');
+    const mdlbck = document.querySelector('.modal-back');
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
 
-        var mdl = mdlbck.querySelector('.modal');
+        const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-big';
         if (mdl) {
-            var mdlt = mdl.querySelector('.modal-top');
+            const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>Moderate ${postid}</h3>
@@ -1653,7 +1657,7 @@ function modPostModal(postid) {
                 `;
                 loadmodpost(postid);
             }
-            var mdbt = mdl.querySelector('.modal-bottom');
+            const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
                 <button class="modal-back-btn" onclick="openModModal();">back</button>
@@ -1867,20 +1871,20 @@ function closeReport(postid, action) {
 function openUpdate(message) {
     document.documentElement.style.overflow = "hidden";
     
-    var mdlbck = document.querySelector('.modal-back');
+    const mdlbck = document.querySelector('.modal-back');
     if (mdlbck) {
         mdlbck.style.display = 'flex';
         
-        var mdl = mdlbck.querySelector('.modal');
+        const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
-            var mdlt = mdl.querySelector('.modal-top');
+            const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>${message}</h3>
                 `;
             }
-            var mdbt = mdl.querySelector('.modal-bottom');
+            const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = ``;
             }
@@ -1890,9 +1894,9 @@ function openUpdate(message) {
 }
 
 document.addEventListener('click', function (event) {
-    var modalButton = event.target.closest('.modal-button');
-    var modal = event.target.closest('.modal');
-    var isInsideModal = modal && modal.contains(event.target);
+    const modalButton = event.target.closest('.modal-button');
+    const modal = event.target.closest('.modal');
+    const isInsideModal = modal && modal.contains(event.target);
 
     if (modalButton && !isInsideModal) {
         event.stopPropagation();
@@ -1900,19 +1904,19 @@ document.addEventListener('click', function (event) {
 });
 
 function mdlreply(event) {
-    var modalId = event.target.closest('.modal').id;
-    var postContainer = document.getElementById(modalId);
+    const modalId = event.target.closest('.modal').id;
+    const postContainer = document.getElementById(modalId);
 
     if (postContainer) {
-        var username = postContainer.querySelector('#username').innerText;
-        var postContent = postContainer.querySelector('p').innerText
+        const username = postContainer.querySelector('#username').innerText;
+        const postContent = postContainer.querySelector('p').innerText
             .replace(/\n/g, ' ')
             .replace(/@\w+/g, '')
             .split(' ')
             .slice(0, 6)
             .join(' ');
 
-        var postId = postContainer.id;
+        const postId = postContainer.id;
         document.getElementById('msg').value = `@${username} "${postContent}..." (${postId})\n`;
         document.getElementById('msg').focus();
         autoresize();
@@ -1922,11 +1926,11 @@ function mdlreply(event) {
 }
 
 function mdlpingusr(event) {
-    var modalId = event.target.closest('.modal').id;
-    var postContainer = document.getElementById(modalId);
+    const modalId = event.target.closest('.modal').id;
+    const postContainer = document.getElementById(modalId);
 
     if (postContainer) {
-        var username = postContainer.querySelector('#username').innerText;
+        const username = postContainer.querySelector('#username').innerText;
         document.getElementById('msg').value = `@${username} `;
         document.getElementById('msg').focus();
         autoresize();
@@ -1936,7 +1940,7 @@ function mdlpingusr(event) {
 }
 
 function mdlshare(event) {
-    var postId = event.target.closest('.modal').id;
+    const postId = event.target.closest('.modal').id;
     window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
     closemodal();
 }
@@ -2037,10 +2041,10 @@ function lightenColour(hex, amount) {
 }
 
 function createDate(tsmp) {
-    var tsr = tsmp;
+    const tsr = tsmp;
     tsra = tsr * 1000;
     tsrb = Math.trunc(tsra);
-    var ts = new Date();
+    const ts = new Date();
     ts.setTime(tsrb);
     return new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
 }
