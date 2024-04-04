@@ -258,6 +258,14 @@ bridge {
     max-width: 75px;
 }
 
+.message-send:active > .sendicn {
+    transform: translateX(3px);
+}
+
+.sendicn {
+    transition: var(--transition);
+}
+
 .message-tool {
     flex: 0.1;
     margin: calc(var(--margin)/2);
@@ -326,8 +334,9 @@ bridge {
 }
 
 .avatar {
-    width: 100%;
     width: 54px;
+    height: 54px;
+    overflow: hidden;
     border-radius: 100px;
     box-sizing: border-box;
     aspect-ratio: 1;

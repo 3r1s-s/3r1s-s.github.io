@@ -173,9 +173,22 @@ function main() {
         } else if (event.key === "Enter" && event.shiftKey) {
         } else if (event.key === "Escape") {
             closemodal();
+            closeImage();
+            if (opened===1) {
+                closepicker();
+            }
+            document.getElementById("msg").blur();
         }
     }
     });
+    addEventListener("keydown", () => {
+        if (event.keyCode >= 48 && event.keyCode <= 90) {
+            console.log(document.activeElement);
+            if (!document.activeElement || document.activeElement.tagName !== 'INPUT') {
+                document.getElementById("msg").focus();
+            }
+        }
+      });
 
 }
 
@@ -316,7 +329,7 @@ function loadPfp(username, button) {
 
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", "User Avatar");
+                        pfpElement.setAttribute("alt", "Avatar");
                         if (!button) {
                             pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         }
@@ -337,7 +350,7 @@ function loadPfp(username, button) {
                         
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", "User Avatar");
+                        pfpElement.setAttribute("alt", "Avatar");
                         if (!button) {
                             pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         }
@@ -352,7 +365,7 @@ function loadPfp(username, button) {
                         
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", "User Avatar");
+                        pfpElement.setAttribute("alt", "Avatar");
                         if (!button) {
                             pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         }
@@ -851,7 +864,7 @@ function loadappearance() {
         <div class="msgs"></div>
             <h2>Theme</h2>
 
-            <div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="User Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+            <div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
             <div class="toolbarContainer">
                 <div class="toolButton">
                     <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -1380,7 +1393,7 @@ async function loadreports() {
                     
                     <div class="report-post" id="username" onclick="modPostModal('${report.content._id}')">
                         <div class="pfp">
-                            <img src="" alt="User Avatar" class="avatar" style="border: 3px solid rgb(15, 15, 15);">
+                            <img src="" alt="Avatar" class="avatar" style="border: 3px solid rgb(15, 15, 15);">
                         </div>
                         <div class="wrapper">
                         <h3><span class="username">${escapeHTML(report.content.u)}</span></h3>
@@ -1432,7 +1445,7 @@ async function loadreports() {
                     
                     <div class="report-user" id="username" onclick="modUserModal('${report.content._id}')">
                     <div class="pfp">
-                        <img src="" alt="User Avatar" class="avatar" style="border: 3px solid rgb(15, 15, 15);">
+                        <img src="" alt="Avatar" class="avatar" style="border: 3px solid rgb(15, 15, 15);">
                     </div>    
                     <div class="wrapper">
                         <h3><span>${report.content._id}</span></h3>
@@ -1518,7 +1531,7 @@ async function loadmoduser(user) {
         <span class="subheader">User Info</span>
         <div class="mod-post">
         <div class="pfp">
-            <img src="" alt="User Avatar" class="avatar" style="">
+            <img src="" alt="Avatar" class="avatar" style="">
         </div>
         <div class="wrapper">
             <h3><span>${data._id}</span></h3>
@@ -1669,7 +1682,7 @@ async function loadmodpost(postid) {
                             modpst.innerHTML = `
                                 <div class="mod-post">
                                     <div class="pfp">
-                                        <img src="" alt="User Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
+                                        <img src="" alt="Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
                                     </div>
                                     <div class="wrapper">
                                     <div class="mdbtcntner">
@@ -1687,7 +1700,7 @@ async function loadmodpost(postid) {
                             modpst.innerHTML = `
                                 <div class="mod-post">
                                     <div class="pfp">
-                                        <img src="" alt="User Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
+                                        <img src="" alt="Avatar" class="avatar" style="" onclick="modUserModal('${data.u}')">
                                     </div>
                                     <div class="wrapper">
                                     <div class="mdbtcntner">
