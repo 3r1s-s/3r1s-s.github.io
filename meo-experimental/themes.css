@@ -30,6 +30,7 @@
     --padding: 10px;
     --button-padding: 12px;
     --button-margin: 10px;
+    --color-scheme: dark;
 }
 
 .old-theme {
@@ -64,6 +65,7 @@
     --padding: 10px;
     --button-padding: 12px;
     --button-margin: 10px;
+    --color-scheme: dark;
 }
 
 .dark-theme {
@@ -89,6 +91,7 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --color-scheme: dark;
 }
 
 .light-theme {
@@ -112,6 +115,7 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --color-scheme: light;
 }
 
 .softblue-theme {
@@ -132,6 +136,7 @@
     --modal-color: #3a3d43;
     --modal-button-color: #4a4d56;
     --hov-modal-button-color: #636774;
+    --color-scheme: dark;
 }
 
 .blurple-theme {
@@ -155,6 +160,7 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --color-scheme: dark;
 }
 
 .oled-theme {
@@ -178,6 +184,7 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --color-scheme: dark;
 }
 
 .cosmic-theme {
@@ -201,6 +208,7 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --color-scheme: light;
 }
 
 .roarer-theme {
@@ -226,6 +234,7 @@
     --padding: 8px;
     --button-padding: 8px;
     --button-margin: 8px;
+    --color-scheme: dark;
 }
 
 .bsky-theme {
@@ -250,6 +259,7 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --color-scheme: dark;
 }
 
 .quake-pro-theme {
@@ -284,9 +294,9 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --color-scheme: dark;
 }
 
-/* Buttons (I know it's redundant)*/
 .theme-buttons-inner {
     display: flex;
     align-items: center;

@@ -1,65 +1,81 @@
-        html {
-            transition: none;
-            background-color: transparent;
-            scrollbar-width: none;
-        }
+html {
+    transition: none;
+    background-color: transparent;
+    scrollbar-width: none;
+}
 
-        hr {
-            color: var(--modal-button-color);
-        }
-        
-        .uname {
-            margin: 0;
-            flex: 1;
-        }
+p {
+    margin: var(--margin) 0;
+}
 
-        .dm-btn {
-            flex: 0.1;
-            background-color: transparent;
-        }
+h1 {
+    margin: var(--margin) 0;
+}
 
-        .mdl-sec {
-            width: 100%;
-            max-width: 480px;
-            border-radius: var(--border-radius);
-        }
+hr {
+    color: var(--modal-button-color);
+}
 
-        .usr-header {
-            display: flex;
-        }
-        
-        #avtr-clr {
-            width: 64px;
-        }
+.uname {
+    margin: 0;
+    flex: 1;
+}
 
-        #avtr-clr, #profile-photo {
-            background-color: transparent;
-            padding: 4px;
-        }
+.dm-btn {
+    flex: 0.1;
+    background-color: transparent;
+}
 
-        #profile-photo {
-            font-size: 12px;
-        }
+.mdl-sec {
+    width: 100%;
+    max-width: 480px;
+    border-radius: var(--border-radius);
+}
 
-        .svg-avatar {
-            background-color: #fff;
-        }
-        
-        .sec {
-            background-color: var(--modal-button-color);
-            display: flex;
-            align-items: center;
-            margin: var(--text-margin) 0 var(--text-margin) 0;
-            padding: var(--padding);
-            border-radius: var(--border-radius);
-            word-wrap: anywhere;
-        }
-                
-        .quote-edit {
-            font-size: 16px;
-            padding: var(--padding);
-        }
+.usr-header {
+    display: flex;
+}
 
-        .profile-qt, p {
-            margin: 0;
-        }
+#avtr-clr {
+    width: 64px;
+}
+
+#avtr-clr,
+#profile-photo {
+    background-color: transparent;
+    padding: 4px;
+}
+
+#profile-photo {
+    font-size: 12px;
+}
+
+.svg-avatar {
+    background-color: #fff;
+}
+
+.sec {
+    background-color: var(--modal-button-color);
+    display: flex;
+    align-items: center;
+    margin: var(--text-margin) 0 var(--text-margin) 0;
+    padding: var(--padding);
+    border-radius: var(--border-radius);
+    word-wrap: anywhere;
+}
+
+.quote-edit {
+    font-size: 16px;
+    padding: var(--padding);
+}
+
+.profile-qt,
+p {
+    margin: 0;
+}
+
+.custom-bg > button,
+.custom-bg > .mdl-txt,
+.custom-bg > .sec {
+    border: 1px solid #ffffff20;
+}

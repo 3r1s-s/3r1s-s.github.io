@@ -50,6 +50,28 @@ document.addEventListener('input', function(event) {
     if (opened === 1) {
         var searchQuery = document.getElementById('emojin').value.toLowerCase();
         var emojiButtons = document.querySelectorAll('.emojibutton');
+
+        if (searchQuery) {
+            const aa = document.querySelectorAll(".emojisec");
+            aa.forEach(function(bb) {
+                bb.style.display = "flex";
+                console.log(bb)
+            });
+            const ee = document.querySelectorAll(".emojiheader");
+            ee.forEach(function(ff) {
+                ff.style.display = "none";
+            });
+        } else {
+            const aa = document.querySelectorAll(".emojisec");
+            aa.forEach(function(bb) {
+                bb.style.removeProperty("display");
+            });
+            const ee = document.querySelectorAll(".emojiheader");
+            ee.forEach(function(ff) {
+                ff.style.removeProperty("display");
+            });
+            document.getElementById("people").style.display = "flex";
+        }
     
         emojiButtons.forEach(function(button) {
             var emojiTitle = button.getAttribute('title').toLowerCase();
@@ -64,121 +86,159 @@ document.addEventListener('input', function(event) {
     }
 });
 
+function emjpage(page) {
+    const cc = document.querySelectorAll(".emojisec");
+    cc.forEach(function(dd) {
+        dd.style.removeProperty("display")
+    });
+    document.getElementById(page).style.display = "flex";
+}
+
 function pickerhtm() {
     return `
     <div class="emojisidebar">
-        <button class="emojibuttonside">😀</button>
-        <button class="emojibuttonside">😺</button>
-        <button class="emojibuttonside">🍎</button>
-        <button class="emojibuttonside">🏠</button>
-        <button class="emojibuttonside">⚽</button>
-        <button class="emojibuttonside">📃</button>
-        <button class="emojibuttonside">❤️</button>
-        <button class="emojibuttonside">🏳️‍🌈</button>
+        <button class="emojibuttonside" onclick="emjpage('people')">😀</button>
+        <button class="emojibuttonside" onclick="emjpage('animals')">😺</button>
+        <button class="emojibuttonside" onclick="emjpage('food')">🍎</button>
+        <button class="emojibuttonside" onclick="emjpage('travel')">🏠</button>
+        <button class="emojibuttonside" onclick="emjpage('activities')">⚽</button>
+        <button class="emojibuttonside" onclick="emjpage('objects')">📃</button>
+        <button class="emojibuttonside" onclick="emjpage('symbols')">❤️</button>
+        <button class="emojibuttonside" onclick="emjpage('flags')">🏳️‍🌈</button>
+        <button class="emojibuttonside" onclick="emjpage('special')">✨</button>
     </div>
     <div class="emojicont">
         <div class="emojisearch">
         <input type="text" class="emjinpt" id="emojin" placeholder="Find the perfect emoji..." autofill="none">
         </div>
-        <div class="emojiheader">
-            <h3>People</h3>
-        </div>
         <div class="emojisec" id="people" style="display:flex;">
+            <div class="emojiheader">
+                <h3>People</h3>
+            </div>
             <button class="emojibutton" title="grinning face" onclick="addemoji('😀')">😀</button>
-            <button class="emojibutton" title="grinning face with smiling eyes" onclick="addemoji('😁')">😁</button>
-            <button class="emojibutton" title="face with tears of joy" onclick="addemoji('😂')">😂</button>
+            <button class="emojibutton" title="grinning face with big eyes" onclick="addemoji('😃')">😃</button>
+            <button class="emojibutton" title="grinning face with smiling eyes" onclick="addemoji('😄')">😄</button>
+            <button class="emojibutton" title="beaming face with smiling eyes" onclick="addemoji('😁')">😁</button>
+            <button class="emojibutton" title="grinning squinting face" onclick="addemoji('😆')">😆</button>
+            <button class="emojibutton" title="grinning face with sweat" onclick="addemoji('😅')">😅</button>
             <button class="emojibutton" title="rolling on the floor laughing" onclick="addemoji('🤣')">🤣</button>
-            <button class="emojibutton" title="smiling face with open mouth" onclick="addemoji('😃')">😃</button>
-            <button class="emojibutton" title="smiling face with open mouth &amp; smiling eyes" onclick="addemoji('😄')">😄</button>
-            <button class="emojibutton" title="smiling face with open mouth &amp; cold sweat" onclick="addemoji('😅')">😅</button>
-            <button class="emojibutton" title="smiling face with open mouth &amp; closed eyes" onclick="addemoji('😆')">😆</button>
+            <button class="emojibutton" title="face with tears of joy" onclick="addemoji('😂')">😂</button>
+            <button class="emojibutton" title="slightly smiling face" onclick="addemoji('🙂')">🙂</button>
             <button class="emojibutton" title="winking face" onclick="addemoji('😉')">😉</button>
             <button class="emojibutton" title="smiling face with smiling eyes" onclick="addemoji('😊')">😊</button>
-            <button class="emojibutton" title="face savouring delicious food" onclick="addemoji('😋')">😋</button>
-            <button class="emojibutton" title="smiling face with sunglasses" onclick="addemoji('😎')">😎</button>
+            <button class="emojibutton" title="smiling face with halo, innocent" onclick="addemoji('😇')">😇</button>
+            <button class="emojibutton" title="smiling face with hearts" onclick="addemoji('🥰')">🥰</button>
             <button class="emojibutton" title="smiling face with heart-eyes" onclick="addemoji('😍')">😍</button>
+            <button class="emojibutton" title="star-struck" onclick="addemoji('🤩')">🤩</button>
             <button class="emojibutton" title="face blowing a kiss" onclick="addemoji('😘')">😘</button>
             <button class="emojibutton" title="kissing face" onclick="addemoji('😗')">😗</button>
-            <button class="emojibutton" title="kissing face with smiling eyes" onclick="addemoji('😙')">😙</button>
-            <button class="emojibutton" title="kissing face with closed eyes" onclick="addemoji('😚')">😚</button>
             <button class="emojibutton" title="smiling face" onclick="addemoji('☺️')">☺️</button>
-            <button class="emojibutton" title="slightly smiling face" onclick="addemoji('🙂')">🙂</button>
-            <button class="emojibutton" title="hugging face" onclick="addemoji('🤗')">🤗</button>
+            <button class="emojibutton" title="kissing face with closed eyes" onclick="addemoji('😚')">😚</button>
+            <button class="emojibutton" title="kissing face with smiling eyes" onclick="addemoji('😙')">😙</button>
+            <button class="emojibutton" title="smiling face with tear" onclick="addemoji('🥲')">🥲</button>
+            <button class="emojibutton" title="smirking face" onclick="addemoji('😏')">😏</button>
+            <button class="emojibutton" title="face savoring food" onclick="addemoji('😋')">😋</button>
+            <button class="emojibutton" title="face with tongue" onclick="addemoji('😛')">😛</button>
+            <button class="emojibutton" title="winking face with tongue" onclick="addemoji('😜')">😜</button>
+            <button class="emojibutton" title="zany face" onclick="addemoji('🤪')">🤪</button>
+            <button class="emojibutton" title="squinting face with tongue" onclick="addemoji('😝')">😝</button>
+            <button class="emojibutton" title="smiling face with open hands" onclick="addemoji('🤗')">🤗</button>
+            <button class="emojibutton" title="face with hand over mouth" onclick="addemoji('🤭')">🤭</button>
+            <button class="emojibutton" title="face with open eyes and hand over mouth" onclick="addemoji('🫢')">🫢</button>
+            <button class="emojibutton" title="face with peeking eye" onclick="addemoji('🫣')">🫣</button>
+            <button class="emojibutton" title="shushing face" onclick="addemoji('🤫')">🤫</button>
             <button class="emojibutton" title="thinking face" onclick="addemoji('🤔')">🤔</button>
+            <button class="emojibutton" title="saluting face" onclick="addemoji('🫡')">🫡</button>
+            <button class="emojibutton" title="drooling face" onclick="addemoji('🤤')">🤤</button>
+            <button class="emojibutton" title="cowboy hat face" onclick="addemoji('🤠')">🤠</button>
+            <button class="emojibutton" title="partying face" onclick="addemoji('🥳')">🥳</button>
+            <button class="emojibutton" title="disguised face" onclick="addemoji('🥸')">🥸</button>
+            <button class="emojibutton" title="smiling face with sunglasses" onclick="addemoji('😎')">😎</button>
+            <button class="emojibutton" title="nerd face" onclick="addemoji('🤓')">🤓</button>
+            <button class="emojibutton" title="face with monocle" onclick="addemoji('🧐')">🧐</button>
+            <button class="emojibutton" title="upside-down face" onclick="addemoji('🙃')">🙃</button>
+            <button class="emojibutton" title="melting face" onclick="addemoji('🫠')">🫠</button>
+            <button class="emojibutton" title="zipper-mouth face" onclick="addemoji('🤐')">🤐</button>
+            <button class="emojibutton" title="face with raised eyebrow" onclick="addemoji('🤨')">🤨</button>
             <button class="emojibutton" title="neutral face" onclick="addemoji('😐')">😐</button>
             <button class="emojibutton" title="expressionless face" onclick="addemoji('😑')">😑</button>
             <button class="emojibutton" title="face without mouth" onclick="addemoji('😶')">😶</button>
-            <button class="emojibutton" title="face with rolling eyes" onclick="addemoji('🙄')">🙄</button>
-            <button class="emojibutton" title="smirking face" onclick="addemoji('😏')">😏</button>
-            <button class="emojibutton" title="persevering face" onclick="addemoji('😣')">😣</button>
-            <button class="emojibutton" title="disappointed but relieved face" onclick="addemoji('😥')">😥</button>
-            <button class="emojibutton" title="face with open mouth" onclick="addemoji('😮')">😮</button>
-            <button class="emojibutton" title="zipper-mouth face" onclick="addemoji('🤐')">🤐</button>
-            <button class="emojibutton" title="hushed face" onclick="addemoji('😯')">😯</button>
-            <button class="emojibutton" title="sleepy face" onclick="addemoji('😪')">😪</button>
-            <button class="emojibutton" title="tired face" onclick="addemoji('😫')">😫</button>
-            <button class="emojibutton" title="sleeping face" onclick="addemoji('😴')">😴</button>
-            <button class="emojibutton" title="relieved face" onclick="addemoji('😌')">😌</button>
-            <button class="emojibutton" title="nerd face" onclick="addemoji('🤓')">🤓</button>
-            <button class="emojibutton" title="face with stuck-out tongue" onclick="addemoji('😛')">😛</button>
-            <button class="emojibutton" title="face with stuck-out tongue &amp; winking eye" onclick="addemoji('😜')">😜</button>
-            <button class="emojibutton" title="face with stuck-out tongue &amp; closed eyes" onclick="addemoji('😝')">😝</button>
-            <button class="emojibutton" title="drooling face" onclick="addemoji('🤤')">🤤</button>
+            <button class="emojibutton" title="dotted line face" onclick="addemoji('🫥')">🫥</button>
+            <button class="emojibutton" title="face in clouds" onclick="addemoji('😶‍🌫️')">😶‍🌫️</button>
             <button class="emojibutton" title="unamused face" onclick="addemoji('😒')">😒</button>
-            <button class="emojibutton" title="face with cold sweat" onclick="addemoji('😓')">😓</button>
-            <button class="emojibutton" title="pensive face" onclick="addemoji('😔')">😔</button>
-            <button class="emojibutton" title="confused face" onclick="addemoji('😕')">😕</button>
-            <button class="emojibutton" title="upside-down face" onclick="addemoji('🙃')">🙃</button>
-            <button class="emojibutton" title="money-mouth face" onclick="addemoji('🤑')">🤑</button>
-            <button class="emojibutton" title="astonished face" onclick="addemoji('😲')">😲</button>
-            <button class="emojibutton" title="frowning face" onclick="addemoji('☹️')">☹️</button>
-            <button class="emojibutton" title="slightly frowning face" onclick="addemoji('🙁')">🙁</button>
-            <button class="emojibutton" title="confounded face" onclick="addemoji('😖')">😖</button>
-            <button class="emojibutton" title="disappointed face" onclick="addemoji('😞')">😞</button>
-            <button class="emojibutton" title="worried face" onclick="addemoji('😟')">😟</button>
-            <button class="emojibutton" title="face with steam from nose" onclick="addemoji('😤')">😤</button>
-            <button class="emojibutton" title="crying face, tear" onclick="addemoji('😢')">😢</button>
-            <button class="emojibutton" title="loudly crying face, sob" onclick="addemoji('😭')">😭</button>
-            <button class="emojibutton" title="frowning face with open mouth" onclick="addemoji('😦')">😦</button>
-            <button class="emojibutton" title="anguished face" onclick="addemoji('😧')">😧</button>
-            <button class="emojibutton" title="fearful face" onclick="addemoji('😨')">😨</button>
-            <button class="emojibutton" title="weary face" onclick="addemoji('😩')">😩</button>
+            <button class="emojibutton" title="face with rolling eyes" onclick="addemoji('🙄')">🙄</button>
             <button class="emojibutton" title="grimacing face" onclick="addemoji('😬')">😬</button>
-            <button class="emojibutton" title="face with open mouth &amp; cold sweat" onclick="addemoji('😰')">😰</button>
-            <button class="emojibutton" title="face screaming in fear" onclick="addemoji('😱')">😱</button>
-            <button class="emojibutton" title="flushed face" onclick="addemoji('😳')">😳</button>
-            <button class="emojibutton" title="dizzy face" onclick="addemoji('😵')">😵</button>
-            <button class="emojibutton" title="pouting face" onclick="addemoji('😡')">😡</button>
-            <button class="emojibutton" title="angry face" onclick="addemoji('😠')">😠</button>
-            <button class="emojibutton" title="smiling face with halo" onclick="addemoji('😇')">😇</button>
-            <button class="emojibutton" title="cowboy hat face" onclick="addemoji('🤠')">🤠</button>
-            <button class="emojibutton" title="clown face" onclick="addemoji('🤡')">🤡</button>
+            <button class="emojibutton" title="face exhaling" onclick="addemoji('😮‍💨')">😮‍💨</button>
             <button class="emojibutton" title="lying face" onclick="addemoji('🤥')">🤥</button>
+            <button class="emojibutton" title="shaking face" onclick="addemoji('🫨')">🫨</button>
+            <button class="emojibutton" title="relieved face" onclick="addemoji('😌')">😌</button>
+            <button class="emojibutton" title="pensive face" onclick="addemoji('😔')">😔</button>
+            <button class="emojibutton" title="sleepy face" onclick="addemoji('😪')">😪</button>
+            <button class="emojibutton" title="sleeping face" onclick="addemoji('😴')">😴</button>
             <button class="emojibutton" title="face with medical mask" onclick="addemoji('😷')">😷</button>
             <button class="emojibutton" title="face with thermometer" onclick="addemoji('🤒')">🤒</button>
             <button class="emojibutton" title="face with head-bandage" onclick="addemoji('🤕')">🤕</button>
             <button class="emojibutton" title="nauseated face" onclick="addemoji('🤢')">🤢</button>
+            <button class="emojibutton" title="face vomiting" onclick="addemoji('🤮')">🤮</button>
             <button class="emojibutton" title="sneezing face" onclick="addemoji('🤧')">🤧</button>
-            <button class="emojibutton" title="smiling face with horns" onclick="addemoji('😈')">😈</button>
+            <button class="emojibutton" title="hot face" onclick="addemoji('🥵')">🥵</button>
+            <button class="emojibutton" title="cold face" onclick="addemoji('🥶')">🥶</button>
+            <button class="emojibutton" title="woozy face" onclick="addemoji('🥴')">🥴</button>
+            <button class="emojibutton" title="face with crossed-out eyes" onclick="addemoji('😵')">😵</button>
+            <button class="emojibutton" title="face with spiral eyes" onclick="addemoji('😵‍💫')">😵‍💫</button>
+            <button class="emojibutton" title="exploding head" onclick="addemoji('🤯')">🤯</button>
+            <button class="emojibutton" title="yawning face" onclick="addemoji('🥱')">🥱</button>
+            <button class="emojibutton" title="confused face" onclick="addemoji('😕')">😕</button>
+            <button class="emojibutton" title="face with diagonal mouth" onclick="addemoji('🫤')">🫤</button>
+            <button class="emojibutton" title="worried face" onclick="addemoji('😟')">😟</button>
+            <button class="emojibutton" title="slightly frowning face" onclick="addemoji('🙁')">🙁</button>
+            <button class="emojibutton" title="frowning face" onclick="addemoji('☹️')">☹️</button>
+            <button class="emojibutton" title="face with open mouth" onclick="addemoji('😮')">😮</button>
+            <button class="emojibutton" title="hushed face" onclick="addemoji('😯')">😯</button>
+            <button class="emojibutton" title="astonished face" onclick="addemoji('😲')">😲</button>
+            <button class="emojibutton" title="flushed face" onclick="addemoji('😳')">😳</button>
+            <button class="emojibutton" title="pleading face" onclick="addemoji('🥺')">🥺</button>
+            <button class="emojibutton" title="face holding back tears" onclick="addemoji('🥹')">🥹</button>
+            <button class="emojibutton" title="frowning face with open mouth" onclick="addemoji('😦')">😦</button>
+            <button class="emojibutton" title="anguished face" onclick="addemoji('😧')">😧</button>
+            <button class="emojibutton" title="fearful face" onclick="addemoji('😨')">😨</button>
+            <button class="emojibutton" title="anxious face with sweat" onclick="addemoji('😰')">😰</button>
+            <button class="emojibutton" title="sad but relieved face" onclick="addemoji('😥')">😥</button>
+            <button class="emojibutton" title="crying face" onclick="addemoji('😢')">😢</button>
+            <button class="emojibutton" title="sobbing face" onclick="addemoji('😭')">😭</button>
+            <button class="emojibutton" title="face screaming in fear" onclick="addemoji('😱')">😱</button>
+            <button class="emojibutton" title="confounded face" onclick="addemoji('😖')">😖</button>
+            <button class="emojibutton" title="persevering face" onclick="addemoji('😣')">😣</button>
+            <button class="emojibutton" title="disappointed face" onclick="addemoji('😞')">😞</button>
+            <button class="emojibutton" title="downcast face with sweat" onclick="addemoji('😓')">😓</button>
+            <button class="emojibutton" title="weary face" onclick="addemoji('😩')">😩</button>
+            <button class="emojibutton" title="tired face" onclick="addemoji('😫')">😫</button>
+            <button class="emojibutton" title="face with steam from nose" onclick="addemoji('😤')">😤</button>
+            <button class="emojibutton" title="enraged face" onclick="addemoji('😡')">😡</button>
+            <button class="emojibutton" title="angry face" onclick="addemoji('😠')">😠</button>
+            <button class="emojibutton" title="face with symbols on mouth" onclick="addemoji('🤬')">🤬</button>
             <button class="emojibutton" title="angry face with horns" onclick="addemoji('👿')">👿</button>
-            <button class="emojibutton" title="ogre" onclick="addemoji('👹')">👹</button>
-            <button class="emojibutton" title="goblin" onclick="addemoji('👺')">👺</button>
+            <button class="emojibutton" title="devil smiling" onclick="addemoji('😈')">😈</button>
+            <button class="emojibutton" title="angry devil" onclick="addemoji('👿')">👿</button>
             <button class="emojibutton" title="skull" onclick="addemoji('💀')">💀</button>
             <button class="emojibutton" title="skull and crossbones" onclick="addemoji('☠️')">☠️</button>
+            <button class="emojibutton" title="pile of poo" onclick="addemoji('💩')">💩</button>
+            <button class="emojibutton" title="clown face" onclick="addemoji('🤡')">🤡</button>
+            <button class="emojibutton" title="ogre" onclick="addemoji('👹')">👹</button>
+            <button class="emojibutton" title="goblin" onclick="addemoji('👺')">👺</button>
             <button class="emojibutton" title="ghost" onclick="addemoji('👻')">👻</button>
             <button class="emojibutton" title="alien" onclick="addemoji('👽')">👽</button>
-            <button class="emojibutton" title="alien monster" onclick="addemoji('👾')">👾</button>
-            <button class="emojibutton" title="robot face" onclick="addemoji('🤖')">🤖</button>
-            <button class="emojibutton" title="pile of poo" onclick="addemoji('💩')">💩</button>
-            <button class="emojibutton" title="smiling cat face with open mouth" onclick="addemoji('😺')">😺</button>
-            <button class="emojibutton" title="grinning cat face with smiling eyes" onclick="addemoji('😸')">😸</button>
-            <button class="emojibutton" title="cat face with tears of joy" onclick="addemoji('😹')">😹</button>
-            <button class="emojibutton" title="smiling cat face with heart-eyes" onclick="addemoji('😻')">😻</button>
-            <button class="emojibutton" title="cat face with wry smile" onclick="addemoji('😼')">😼</button>
-            <button class="emojibutton" title="kissing cat face with closed eyes" onclick="addemoji('😽')">😽</button>
-            <button class="emojibutton" title="weary cat face" onclick="addemoji('🙀')">🙀</button>
-            <button class="emojibutton" title="crying cat face" onclick="addemoji('😿')">😿</button>
-            <button class="emojibutton" title="pouting cat face" onclick="addemoji('😾')">😾</button>
+            <button class="emojibutton" title="space invader" onclick="addemoji('👾')">👾</button>
+            <button class="emojibutton" title="robot" onclick="addemoji('🤖')">🤖</button>
+            <button class="emojibutton" title="grinning cat" onclick="addemoji('😺')">😺</button>
+            <button class="emojibutton" title="grinning cat with smiling eyes" onclick="addemoji('😸')">😸</button>
+            <button class="emojibutton" title="cat with tears of joy" onclick="addemoji('😹')">😹</button>
+            <button class="emojibutton" title="smiling cat with heart-eyes" onclick="addemoji('😻')">😻</button>
+            <button class="emojibutton" title="cat with wry smile" onclick="addemoji('😼')">😼</button>
+            <button class="emojibutton" title="kissing cat" onclick="addemoji('😽')">😽</button>
+            <button class="emojibutton" title="weary cat" onclick="addemoji('🙀')">🙀</button>
+            <button class="emojibutton" title="crying cat" onclick="addemoji('😿')">😿</button>
+            <button class="emojibutton" title="pouting cat" onclick="addemoji('😾')">😾</button>
             <button class="emojibutton" title="see-no-evil monkey" onclick="addemoji('🙈')">🙈</button>
             <button class="emojibutton" title="hear-no-evil monkey" onclick="addemoji('🙉')">🙉</button>
             <button class="emojibutton" title="speak-no-evil monkey" onclick="addemoji('🙊')">🙊</button>
@@ -416,10 +476,10 @@ function pickerhtm() {
             <button class="emojibutton" title="ring" onclick="addemoji('💍')">💍</button>
             <button class="emojibutton" title="gem stone" onclick="addemoji('💎')">💎</button>
         </div>
-        <div class="emojiheader">
-            <h3>Animals & Nature</h3>
-        </div>
         <div class="emojisec" id="animals">
+            <div class="emojiheader">
+                <h3>Animals & Nature</h3>
+            </div>
             <button class="emojibutton" title="monkey face" onclick="addemoji('🐵')">🐵</button>
             <button class="emojibutton" title="monkey" onclick="addemoji('🐒')">🐒</button>
             <button class="emojibutton" title="gorilla" onclick="addemoji('🦍')">🦍</button>
@@ -577,10 +637,10 @@ function pickerhtm() {
             <button class="emojibutton" title="dashing away" onclick="addemoji('💨')">💨</button>
             <button class="emojibutton" title="dizzy" onclick="addemoji('💫')">💫</button>           
         </div>
-        <div class="emojiheader">
-            <h3>Food & Drink</h3>
-        </div>
         <div class="emojisec" id="food">
+            <div class="emojiheader">
+                <h3>Food & Drink</h3>
+            </div>
             <button class="emojibutton" title="grapes" onclick="addemoji('🍇')">🍇</button>
             <button class="emojibutton" title="melon" onclick="addemoji('🍈')">🍈</button>
             <button class="emojibutton" title="watermelon" onclick="addemoji('🍉')">🍉</button>
@@ -671,10 +731,10 @@ function pickerhtm() {
             <button class="emojibutton" title="kitchen knife" onclick="addemoji('🔪')">🔪</button>
             <button class="emojibutton" title="amphora" onclick="addemoji('🏺')">🏺</button>
         </div>
-        <div class="emojiheader">
-            <h3>Travel</h3>
-        </div>
         <div class="emojisec" id="travel">
+            <div class="emojiheader">
+                <h3>Travel</h3>
+            </div>
             <button class="emojibutton" title="globe showing Europe-Africa" onclick="addemoji('🌍')">🌍</button>
             <button class="emojibutton" title="globe showing Americas" onclick="addemoji('🌎')">🌎</button>
             <button class="emojibutton" title="globe showing Asia-Australia" onclick="addemoji('🌏')">🌏</button>
@@ -815,10 +875,10 @@ function pickerhtm() {
             <button class="emojibutton" title="timer clock" onclick="addemoji('⏲️')">⏲️</button>
             <button class="emojibutton" title="mantelpiece clock" onclick="addemoji('🕰️')">🕰️</button>            
         </div>
-        <div class="emojiheader">
-            <h3>Activities</h3>
-        </div>
         <div class="emojisec" id="activities">
+            <div class="emojiheader">
+                <h3>Activities</h3>
+            </div>
             <button class="emojibutton" title="jack-o-lantern" onclick="addemoji('🎃')">🎃</button>
             <button class="emojibutton" title="Christmas tree" onclick="addemoji('🎄')">🎄</button>
             <button class="emojibutton" title="fireworks" onclick="addemoji('🎆')">🎆</button>
@@ -878,10 +938,10 @@ function pickerhtm() {
             <button class="emojibutton" title="mahjong red dragon" onclick="addemoji('🀄')">🀄</button>
             <button class="emojibutton" title="flower playing cards" onclick="addemoji('🎴')">🎴</button>            
         </div>
-        <div class="emojiheader">
-            <h3>Objects</h3>
-        </div>
         <div class="emojisec" id="objects">
+            <div class="emojiheader">
+                <h3>Objects</h3>
+            </div>
             <button class="emojibutton" title="loudspeaker" onclick="addemoji('📢')">📢</button>
             <button class="emojibutton" title="megaphone" onclick="addemoji('📣')">📣</button>
             <button class="emojibutton" title="postal horn" onclick="addemoji('📯')">📯</button>
@@ -1047,10 +1107,10 @@ function pickerhtm() {
             <button class="emojibutton" title="collision" onclick="addemoji('💥')">💥</button>
             <button class="emojibutton" title="hole" onclick="addemoji('🕳️')">🕳️</button>
         </div>
-        <div class="emojiheader">
-            <h3>Symbols</h3>
-        </div>
         <div class="emojisec" id="symbols">
+            <div class="emojiheader">
+                <h3>Symbols</h3>
+            </div>
             <button class="emojibutton" title="red heart" onclick="addemoji('❤️')">❤️</button>
             <button class="emojibutton" title="orange heart" onclick="addemoji('🧡')">🧡</button>
             <button class="emojibutton" title="yellow heart" onclick="addemoji('💛')">💛</button>
@@ -1205,6 +1265,16 @@ function pickerhtm() {
             <button class="emojibutton" title="copyright" onclick="addemoji('©️')">©️</button>
             <button class="emojibutton" title="registered" onclick="addemoji('®️')">®️</button>
             <button class="emojibutton" title="trade mark" onclick="addemoji('™️')">™️</button>
+            <button class="emojibutton" title="keycap 0" onclick="addemoji('0️⃣')">0️⃣</button>
+            <button class="emojibutton" title="keycap 1" onclick="addemoji('1️⃣')">1️⃣</button>
+            <button class="emojibutton" title="keycap 2" onclick="addemoji('2️⃣')">2️⃣</button>
+            <button class="emojibutton" title="keycap 3" onclick="addemoji('3️⃣')">3️⃣</button>
+            <button class="emojibutton" title="keycap 4" onclick="addemoji('4️⃣')">4️⃣</button>
+            <button class="emojibutton" title="keycap 5" onclick="addemoji('5️⃣')">5️⃣</button>
+            <button class="emojibutton" title="keycap 6" onclick="addemoji('6️⃣')">6️⃣</button>
+            <button class="emojibutton" title="keycap 7" onclick="addemoji('7️⃣')">7️⃣</button>
+            <button class="emojibutton" title="keycap 8" onclick="addemoji('8️⃣')">8️⃣</button>
+            <button class="emojibutton" title="keycap 9" onclick="addemoji('9️⃣')">9️⃣</button>            
             <button class="emojibutton" title="keycap 10" onclick="addemoji('🔟')">🔟</button>
             <button class="emojibutton" title="100 points" onclick="addemoji('💯')">💯</button>
             <button class="emojibutton" title="input latin uppercase" onclick="addemoji('🔠')">🔠</button>
@@ -1267,7 +1337,12 @@ function pickerhtm() {
             <button class="emojibutton" title="white circle" onclick="addemoji('⚪')">⚪</button>
             <button class="emojibutton" title="black circle" onclick="addemoji('⚫')">⚫</button>
             <button class="emojibutton" title="red circle" onclick="addemoji('🔴')">🔴</button>
+            <button class="emojibutton" title="orange circle" onclick="addemoji('🟠')">🟠</button>
+            <button class="emojibutton" title="yellow circle" onclick="addemoji('🟡')">🟡</button>
+            <button class="emojibutton" title="green circle" onclick="addemoji('🟢')">🟢</button>
             <button class="emojibutton" title="blue circle" onclick="addemoji('🔵')">🔵</button>
+            <button class="emojibutton" title="purple circle" onclick="addemoji('🟣')">🟣</button>
+            <button class="emojibutton" title="brown circle" onclick="addemoji('🟤')">🟤</button>
             <button class="emojibutton" title="speech balloon" onclick="addemoji('💬')">💬</button>
             <button class="emojibutton" title="left speech bubble" onclick="addemoji('🗨️')">🗨️</button>
             <button class="emojibutton" title="right anger bubble" onclick="addemoji('🗯️')">🗯️</button>
@@ -1297,10 +1372,10 @@ function pickerhtm() {
             <button class="emojibutton" title="eleven o'clock" onclick="addemoji('🕚')">🕚</button>
             <button class="emojibutton" title="eleven-thirty" onclick="addemoji('🕦')">🕦</button>
         </div>
-        <div class="emojiheader">
-            <h3>Flags</h3>
-        </div>
         <div class="emojisec" id="flags">
+            <div class="emojiheader">
+                <h3>Flags</h3>
+            </div>
             <button class="emojibutton" title="chequered flag" onclick="addemoji('🏁')">🏁</button>
             <button class="emojibutton" title="triangular flag" onclick="addemoji('🚩')">🚩</button>
             <button class="emojibutton" title="crossed flags" onclick="addemoji('🎌')">🎌</button>
@@ -1566,6 +1641,27 @@ function pickerhtm() {
             <button class="emojibutton" title="Zambia" onclick="addemoji('🇿🇲')">🇿🇲</button>
             <button class="emojibutton" title="Zimbabwe" onclick="addemoji('🇿🇼')">🇿🇼</button>            
         </div>
+        <div class="emojisec" id="special">
+            <div class="emojiheader">
+                <h3>Special</h3>
+            </div>
+            <button class="emojibutton" title="think" onclick="addemoji('<:think:1226311619064234086>')"><img src="https://cdn.discordapp.com/emojis/1226311619064234086.webp?size=96&amp;quality=lossless" alt="think" height="32px"></button>
+            <button class="emojibutton" title="amog os" onclick="addemoji('<:amogos:1226314396377288726>')"><img src="https://cdn.discordapp.com/emojis/1226314396377288726.webp?size=96&amp;quality=lossless" alt="amogos" height="32px"></button>
+            <button class="emojibutton" title="luna" onclick="addemoji('<:luna:1221632755851591740>')"><img src="https://cdn.discordapp.com/emojis/1221632755851591740.webp?size=96&amp;quality=lossless" alt="luna" height="32px"></button>
+            <button class="emojibutton" title="me" onclick="addemoji('<:me:1221628997025267752>')"><img src="https://cdn.discordapp.com/emojis/1221628997025267752.webp?size=96&amp;quality=lossless" alt="me" height="32px"></button>
+            <button class="emojibutton" title="atticus" onclick="addemoji('<:atticu:1221630557369405440>')"><img src="https://cdn.discordapp.com/emojis/1221630557369405440.webp?size=96&amp;quality=lossless" alt="atticu" height="32px"></button>
+            <button class="emojibutton" title=":3" onclick="addemoji('<:33:1226320165302571087>')"><img src="https://cdn.discordapp.com/emojis/1226320165302571087.webp?size=44&quality=lossless" alt=":3" height="32px"></button>
+            <button class="emojibutton" title="Cydia" onclick="addemoji('<:Cydia:1226320451278602290>')"><img src="https://cdn.discordapp.com/emojis/1226320451278602290.webp?size=44&quality=lossless" alt="Cydia" height="32px"></button>
+            <button class="emojibutton" title="DebugMan" onclick="addemoji('<:DebugMan2:1226320526037880916>')"><img src="https://cdn.discordapp.com/emojis/1226320526037880916.webp?size=44&quality=lossless" alt="DebugMan" height="32px"></button>
+            <button class="emojibutton" title="blobheart" onclick="addemoji('<:blobheart:1226319886867763240>')"><img src="https://cdn.discordapp.com/emojis/1226319886867763240.webp?size=44&quality=lossless" alt="blobheart" height="32px"></button>
+            <button class="emojibutton" title="demonetized" onclick="addemoji('<:demonetized:1226320307673894953>')"><img src="https://cdn.discordapp.com/emojis/1226320307673894953.webp?size=44&quality=lossless" alt="demonetized" height="32px"></button>
+            <button class="emojibutton" title="yippe" onclick="addemoji('<a:yippe:1226318495147495505>')"><img src="https://cdn.discordapp.com/emojis/1226318495147495505.gif?size=48&quality=lossless&name=yippe" alt="yippe" height="32px"></button>
+            <button class="emojibutton" title="boogie" onclick="addemoji('<a:boogie:1226311710818959401>')"><img src="https://cdn.discordapp.com/emojis/1226311710818959401.gif?size=96&amp;quality=lossless" alt="boogie" height="32px"></button>
+            <button class="emojibutton" title="ameowdundundun" onclick="addemoji('<a:ameowdundundun:1226319768236331140>')"><img src="https://cdn.discordapp.com/emojis/1226319768236331140.gif?size=48&quality=lossless&name=ameowdundundun" alt="ameowdundundun" height="32px"></button>
+            <button class="emojibutton" title="Misc_Hundred" onclick="addemoji('<a:Misc_Hundred:1226319950570983434>')"><img src="https://cdn.discordapp.com/emojis/1226319950570983434.gif?size=48&quality=lossless&name=Misc_Hundred" alt="Misc_Hundred" height="32px"></button>
+        
+        </div>
+    </div>    
     </div>    
 `;
 }

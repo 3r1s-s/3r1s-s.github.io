@@ -105,6 +105,11 @@
 }
 
 @font-face {
+    font-family: SerenityOS Emoji;
+    src: url(fonts/serenityos/SerenityOS-Emoji.ttf) format('truetype');
+}
+
+@font-face {
     font-family: Rubik;
     font-style: normal;
     src: url(fonts/Rubik/Rubik-VariableFont_wght.ttf) format('truetype');

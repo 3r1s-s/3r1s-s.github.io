@@ -1,5 +1,3 @@
-// mostly from tenor but i modified it a little
-
 if (!false) {
   var __ry_imported = true;
   (function() {

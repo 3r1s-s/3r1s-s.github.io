@@ -15,9 +15,9 @@ function escapeHTML(content) {
 
 function erimd(content) {
     var text = content
-    .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" height="16px" class="emoji">')
-    .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" height="16px" class="emoji">')
-    
+        .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" class="emoji">')
+        .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" class="emoji">');
+
     return text;
 }
 
@@ -156,7 +156,7 @@ function embed(links) {
                 embeddedElement.setAttribute("height", "315");
                 embeddedElement.setAttribute("style", "max-width:500px;");
                 embeddedElement.setAttribute("class", "embed");
-                embeddedElement.setAttribute("src", "https://www.youtube.com/embed/" + videoId);
+                embeddedElement.setAttribute("src", "https://www.youtube-nocookie.com/embed/" + videoId);
                 embeddedElement.setAttribute("title", "YouTube video player");
                 embeddedElement.setAttribute("frameborder", "0");
                 embeddedElement.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
@@ -232,7 +232,7 @@ function createButtonContainer(p) {
     if (p.u === localStorage.getItem("uname")) {
         var nwbtn = document.createElement("div");
         nwbtn.classList.add("toolButton");
-        nwbtn.setAttribute("onclick", `openUpdate("Not finished yet :(")`);
+        nwbtn.setAttribute("onclick", `editPost('${p.post_origin}', '${p._id}')`);
         nwbtn.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg>
         `;

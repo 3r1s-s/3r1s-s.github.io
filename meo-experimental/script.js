@@ -11,7 +11,15 @@ const sidediv = document.querySelectorAll(".side");
 let lul = 0;
 let sul = "";
 
+let ipBlocked = false;
+
+const communityDiscordLink = "https://discord.com/invite/THgK9CgyYJ";
+const forumLink = "https://forums.meower.org";
+const server = "wss://server.meower.org/";
+
 const pfpCache = {};
+const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
+const chatCache = {}; // {chatId: chat}
 
 loadsavedplugins();
 loadcstmcss();
@@ -24,7 +32,7 @@ function replsh(rpl) {
 }
 
 function main() {
-    meowerConnection = new WebSocket("wss://server.meower.org/");
+    meowerConnection = new WebSocket(server);
     let loggedin = false;
     
     meowerConnection.addEventListener('error', function(event) {
@@ -122,22 +130,39 @@ function main() {
                         break;
                 }
             }
-        } else if (sentdata.val.post_origin == page) {
-            if (loggedin == true) {
-                loadpost(sentdata.val);
+        } else if (loggedin && sentdata.val.post_origin) {
+            let postOrigin = sentdata.val.post_origin;
+            if (postCache[postOrigin]) {
+                postCache[postOrigin].push(sentdata.val);
+
+                if (page === postOrigin) {
+                    loadpost(sentdata.val);
+                } else if (postCache[postOrigin].length >= 24) {
+                    postCache[postOrigin].shift();
+                }
             }
         } else if (end) {
             return 0;
         } else if (sentdata.val.mode == "update_post") {
-            const postId = sentdata.val.payload.post_id;
-            const postElement = document.getElementById(postId);
-            
-            if (postElement) {
-                const postMessage = sentdata.val.payload.p;
-                postElement.querySelector('.post-content').innerHTML = md.render(postMessage);
-                console.log("Edited " + sentdata.val.payload._id);
-            } else {
-                console.log(postId + " not found.");
+            let postOrigin = sentdata.val.payload.post_origin;
+            if (postCache[postOrigin]) {
+                index = postCache[postOrigin].findIndex(post => post._id === sentdata.val.payload._id);
+                if (index !== -1) {
+                    postCache[postOrigin][index] = Object.assign(
+                        postCache[postOrigin][index],
+                        sentdata.val.payload
+                    );
+                }
+            }
+            if (document.getElementById(sentdata.val.payload.post_id)) {
+                loadpost(sentdata.val.payload);
+            }
+        } else if (sentdata.val.mode == "update_chat") {
+            if (sentdata.val.payload._id in chatCache) {
+                chatCache[sentdata.val.payload._id] = Object.assign(
+                    postCache[sentdata.val.payload._id],
+                    sentdata.val.payload
+                );
             }
         } else if (sentdata.cmd == "ulist") {
             const iul = sentdata.val;
@@ -154,14 +179,33 @@ function main() {
                 document.getElementById("info").innerText = lul + " users online (" + sul + ")";
             }
         } else if (sentdata.val.mode == "delete") {
-          console.log("Received delete command for ID:", sentdata.val.id);
-          const divToDelete = document.getElementById(sentdata.val.id);
-          if (divToDelete) {
-            divToDelete.parentNode.removeChild(divToDelete);
-            console.log(sentdata.val.id, "deleted successfully.");
-          } else {
-            console.warn(sentdata.val.id, "not found.");
-          }
+            console.log("Received delete command for ID:", sentdata.val.id);
+
+            if (chatCache[sentdata.val.id]) {
+                delete chatCache[sentdata.val.id];
+            }
+            if (postCache[sentdata.val.id]) {
+                delete postCache[sentdata.val.id];
+            }
+            for (const key in postCache) {
+                const index = postCache[key].findIndex(post => post._id === sentdata.val.id);
+                if (index !== -1) {
+                    postCache[key].splice(index, 1);
+                    break;
+                }
+            }
+
+            const divToDelete = document.getElementById(sentdata.val.id);
+            if (divToDelete) {
+                divToDelete.parentNode.removeChild(divToDelete);
+                if (page === sentdata.val.id) {
+                    openUpdate("You have been removed from the chat you were in.");
+                    loadhome();
+                }
+                console.log(sentdata.val.id, "deleted successfully.");
+            } else {
+                console.warn(sentdata.val.id, "not found.");
+            }
         }
     };
     document.addEventListener("keydown", function(event) {    
@@ -178,18 +222,24 @@ function main() {
             if (opened===1) {
                 closepicker();
             }
+            const editIndicator = document.getElementById("edit-indicator");
+            if (editIndicator.hasAttribute("data-postid")) {
+                editIndicator.removeAttribute("data-postid");
+                editIndicator.innerText = "";
+                document.getElementById('msg').value = "";
+                autoresize();
+            }
             document.getElementById("msg").blur();
         }
     }
     });
-    addEventListener("keydown", () => {
+    addEventListener("keydown", (event) => {
         if (!event.ctrlKey && event.keyCode >= 48 && event.keyCode <= 90) {
-            console.log(document.activeElement);
             if (!document.activeElement || document.activeElement.tagName !== 'INPUT') {
                 document.getElementById("msg").focus();
             }
         }
-      });
+    });
 
 }
 
@@ -206,9 +256,16 @@ function loadpost(p) {
         user = p.u;
     }
     
-    const postContainer = document.createElement("div");
-    postContainer.id = p._id;
-    postContainer.classList.add("post");
+    let postContainer = document.getElementById(p._id);
+    if (!postContainer) {
+        postContainer = document.createElement("div");
+        postContainer.id = p._id;
+        postContainer.classList.add("post");
+    }
+
+    while (postContainer.firstChild) {
+        postContainer.firstChild.remove();
+    }
 
     const wrapperDiv = document.createElement("div");
     wrapperDiv.classList.add("wrapper");
@@ -264,7 +321,7 @@ function loadpost(p) {
             pageContainer.appendChild(postContainer);
         }
     
-        loadreply(replyid).then(replycontainer => {
+        loadreply(p.post_origin, replyid).then(replycontainer => {
             wrapperDiv.insertBefore(replycontainer, wrapperDiv.querySelector(".post-content"));
         });
     
@@ -282,7 +339,12 @@ function loadpost(p) {
         // figure this issue OUT
         postContentText.innerHTML = oldMarkdown(content);
         console.error("Parsed with old markdown, fix later :)")
-    }    
+    }
+    const emojiRgx = /^(?:\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/gi;
+    const discordRgx = /^<(a)?:\w+:\d+>$/gi;
+    if (emojiRgx.test(content) || discordRgx.test(content)) {
+        postContentText.classList.add('big');
+    }
     
     if (content) {
         wrapperDiv.appendChild(postContentText);
@@ -308,11 +370,13 @@ function loadpost(p) {
         
     postContainer.appendChild(wrapperDiv);
 
-    const pageContainer = document.getElementById("msgs");
-    if (pageContainer.firstChild) {
-        pageContainer.insertBefore(postContainer, pageContainer.firstChild);
-    } else {
-        pageContainer.appendChild(postContainer);
+    if (!document.getElementById(p._id)) {
+        const pageContainer = document.getElementById("msgs");
+        if (pageContainer.firstChild) {
+            pageContainer.insertBefore(postContainer, pageContainer.firstChild);
+        } else {
+            pageContainer.appendChild(postContainer);
+        }
     }
 }
 
@@ -396,12 +460,17 @@ function loadPfp(username, button) {
     });
 }
 
-async function loadreply(replyid) {
+async function loadreply(postOrigin, replyid) {
+    const replyregex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
+    // replace(match[0], '').trim(); add reply regex removal 
     try {
-        const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`, {
-            headers: {token: localStorage.getItem("token")}
-        });
-        const replydata = await replyresp.json();
+        let replydata = postCache[postOrigin].find(post => post._id === replyid);
+        if (!replydata) {
+            const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`, {
+                headers: {token: localStorage.getItem("token")}
+            });
+            replydata = await replyresp.json();
+        }
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
@@ -410,9 +479,9 @@ async function loadreply(replyid) {
             const parts = rcon.split(': ');
             const user = parts[0];
             const content = parts.slice(1).join(': ');
-            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${user}</p><p style='margin: 10px 0 10px 0;'>${content}</p>`;
+            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
         } else {
-            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${replydata.u}</p><p style='margin: 10px 0 10px 0;'>${replydata.p}</p>`;
+            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(replydata.u)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(replydata.p)}</p>`;
         }
         
         return replycontainer;
@@ -514,14 +583,28 @@ function sendpost() {
         return;
     }
 
-    fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            token: localStorage.getItem("token")
-        },
-        body: JSON.stringify({content: message})
-    });
+    const editIndicator = document.getElementById("edit-indicator");
+    if (editIndicator.hasAttribute("data-postid")) {
+        fetch(`https://api.meower.org/posts?id=${editIndicator.getAttribute("data-postid")}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                token: localStorage.getItem("token")
+            },
+            body: JSON.stringify({content: message})
+        });
+        editIndicator.removeAttribute("data-postid");
+        editIndicator.innerText = "";
+    } else {
+        fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                token: localStorage.getItem("token")
+            },
+            body: JSON.stringify({content: message})
+        });
+    }
 
     document.getElementById('msg').value = "";
     autoresize();
@@ -582,8 +665,10 @@ function loadhome() {
         gcdiv.innerHTML += `<button class="navigation-button button" onclick="loadhome()">Home</button>`;
 
         response.autoget.forEach(chat => {
+            chatCache[chat._id] = chat;
+
             const r = document.createElement("button");
-            r.id = `submit`;
+            r.id = chat._id;
             r.className = `navigation-button button`;
             r.onclick = function() {
                 loadchat(chat._id);
@@ -597,61 +682,100 @@ function loadhome() {
     };
     char.send();
     
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "https://api.meower.org/home?autoget");
-    xhttp.onload = async () => {
-        const c = JSON.parse(xhttp.response);
-        let i = 24;
-        while (i != 0) {
-            i -= 1;
-            console.log("Loading post: " + i.toString());
-            await loadpost(c["autoget"][i]);
-        }
-    };
-    xhttp.send();
+    if (postCache["home"]) {
+        postCache["home"].forEach(post => {
+            loadpost(post);
+        });
+    } else {
+        const xhttpPosts = new XMLHttpRequest();
+        xhttpPosts.open("GET", "https://api.meower.org/home?autoget");
+        xhttpPosts.onload = () => {
+            const postsData = JSON.parse(xhttpPosts.response);
+            const postsarray = postsData.autoget || [];
+
+            postsarray.reverse();
+            postCache["home"] = postsarray;
+            postsarray.forEach(post => {
+                loadpost(post);
+            });
+        };
+        xhttpPosts.send();
+    }
+
     const sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
-      sidediv.classList.remove("hidden");
-  });
+        sidediv.classList.remove("hidden");
+    });
 }
 
-function loadchat(chatId) {
-    page = chatId;
+function opendm(username) {
+    fetch(`https://api.meower.org/users/${username}/dm`, {
+        method: 'GET',
+        headers: {
+            'token': localStorage.getItem("token")
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+        chatCache[data._id] = data;
+        parent.loadchat(data._id);
+        parent.closemodal();
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
 
-    const xhttp = new XMLHttpRequest();
-    const chaturl = `https://api.meower.org/chats/${chatId}`;
-    const posturl = `https://api.meower.org/posts/${chatId}?autoget`;
+function loadchat(chatid) {
+    page = chatid;
 
-    xhttp.open("GET", chaturl);
-    xhttp.setRequestHeader("token", localStorage.getItem('token'));
-    xhttp.onload = () => {
-        const data = JSON.parse(xhttp.response);
-        const nickname = data.nickname;
-        const mainContainer = document.getElementById("main");
-        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'></h1><p id='info'></p></div>` + loadinputs();
-        const nicknameElement = document.getElementById('nickname');
-        nicknameElement.textContent = nickname;
+    const data = chatCache[chatid];
+    const mainContainer = document.getElementById("main");
+    if (data.nickname) {
+        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${escapeHTML(data.nickname)}<i class="subtitle">${chatid}</i></h1><p id='info'></p></div>` + loadinputs();
+        const ulinf = document.getElementById('info');
+        data.members.forEach((user, index) => {
+            if (index === data.members.length - 1) {
+                ulinf.innerHTML += `<div class='ulmember'><span id='ulmnl'>${user}</span></div>`;
+            } else {
+                ulinf.innerHTML += `<div class='ulmember'><span id='ulmnl'>${user}</span>, </div>`;
+            }
+        });
+        ulinf.innerHTML += `
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.00027 0C6.38172 0 5.88027 0.501441 5.88027 1.12V5.88013H1.12C0.501441 5.88013 0 6.38158 0 7.00013C0 7.61869 0.501441 8.12013 1.12 8.12013H5.88027V12.88C5.88027 13.4986 6.38171 14 7.00027 14C7.61883 14 8.12027 13.4986 8.12027 12.88V8.12013H12.88C13.4986 8.12014 14 7.61869 14 7.00013C14 6.38157 13.4986 5.88013 12.88 5.88013H8.12027V1.12C8.12027 0.501441 7.61883 0 7.00027 0Z" fill="currentColor"/>
+        </svg>            
+        `;
+    } else {
+        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${data.members.find(v => v !== localStorage.getItem("uname"))}<i class="subtitle">${chatid}</i></h1><p id='info'></p></div>` + loadinputs();
+    }
 
-        const sidedivs = document.querySelectorAll(".side");
-        sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
-
+    if (postCache[chatid]) {
+        postCache[chatid].forEach(post => {
+            loadpost(post);
+        });
+    } else {
         const xhttpPosts = new XMLHttpRequest();
-        xhttpPosts.open("GET", posturl);
+        xhttpPosts.open("GET", `https://api.meower.org/posts/${chatid}?autoget`);
         xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
         xhttpPosts.onload = () => {
             const postsData = JSON.parse(xhttpPosts.response);
             const postsarray = postsData.autoget || [];
 
             postsarray.reverse();
-
-            postsarray.forEach(postId => {
-                loadpost(postId);
+            postCache[chatid] = postsarray;
+            postsarray.forEach(post => {
+                loadpost(post);
             });
-            
         };
         xhttpPosts.send();
-    };
-    xhttp.send();
+    }
 }
 
 function loadinbox() {
@@ -904,22 +1028,6 @@ function loadappearance() {
             </div>
         </div>
     <br>
-    <h2 style="display:none;">Icons</h2>
-    <div class="icons" style="display:none;">
-        <button class="icon-button"><img class="icon" src="images/Meo.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Blue Gradient.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Blue Solid.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Enceladus.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Mars.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Orange Gradient.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Orange Solid.png" width="64px"></button>
-
-        <button class="icon-button"><img class="icon" src="images/Meower iOS Stripe.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Meower iOS.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Revolt.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Flamingo.png" width="64px"></button>
-        <button class="icon-button"><img class="icon" src="images/Blurple.png" width="64px"></button>
-    </div>
     <h2>Custom CSS</h2>
     <div class='customcss'>
         <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
@@ -976,30 +1084,6 @@ function loadcstmcss() {
     }
 
     customstyle.textContent = css || '';
-}
-
-function changecon(index) {
-
-    const icons = [
-        'Meo.png',
-        'Blue Gradient.png',
-        'Blue Solid.png',
-        'Enceladus.png',
-        'Mars.png',
-        'Orange Gradient.png',
-        'Orange Solid.png',
-        'Meower iOS Stripe.png',
-        'Meower iOS.png',
-        'Revolt.png',
-        'Flamingo.png',
-        'Blurple.png'
-    ];
-
-    const iconLink = document.querySelector('link[rel="apple-touch-icon"]');
-    if (iconLink) {
-        iconLink.href = `images/${icons[index]}`;
-        localStorage.setItem('selectedIcon', index);
-    }
 }
 
 function changetheme(theme, button) {
@@ -1111,6 +1195,36 @@ async function deletePost(postid) {
     }
 }
 
+function editPost(postOrigin, postid) {
+    const post = postCache[postOrigin].find(post => post._id === postid);
+    if (!post) return;
+
+    const editIndicator = document.getElementById("edit-indicator");
+    editIndicator.setAttribute("data-postid", postid);
+    editIndicator.innerHTML = `
+    <span class="edit-info">Editing post ${postid}</span>
+    <span onclick="cancelEdit()">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.05026 11.9497C4.78394 14.6834 9.21607 14.6834 11.9497 11.9497C14.6834 9.21607 14.6834 4.78394 11.9497 2.05026C9.21607 -0.683419 4.78394 -0.683419 2.05026 2.05026C-0.683419 4.78394 -0.683419 9.21607 2.05026 11.9497ZM9.3065 10.2946L7.00262 7.99112L4.69914 10.295C4.42624 10.5683 3.98395 10.5683 3.71065 10.295C3.43754 10.0219 3.43754 9.5788 3.71065 9.3065L6.01432 7.00282L3.7048 4.69371C3.4317 4.4206 3.4317 3.97791 3.7048 3.7048C3.97751 3.4317 4.4202 3.4317 4.6933 3.7048L7.00262 6.01412L9.3065 3.71065C9.4791 3.53764 9.71978 3.4742 9.94253 3.52012C10.0718 3.5467 10.1949 3.61014 10.2952 3.71044C10.5683 3.98315 10.5683 4.42624 10.2952 4.69894L7.99132 7.00242L10.295 9.30609C10.5683 9.579 10.5683 10.0213 10.295 10.2946C10.0221 10.5679 9.5794 10.5679 9.3065 10.2946Z" fill="currentColor"/>
+    </svg>
+    </span>
+`;
+
+    const msgbox = document.getElementById("msg");
+    msgbox.value = post.unfiltered_p || post.p;
+    msgbox.focus();
+
+    closemodal();
+}
+
+function cancelEdit() {
+    const editIndicator = document.getElementById("edit-indicator");
+    editIndicator.removeAttribute("data-postid");
+    editIndicator.innerText = "";
+    document.getElementById('msg').value = "";
+    autoresize();
+}
+
 function openImage(url) {
     document.documentElement.style.overflow = "hidden";
     const mdlbck = document.querySelector('.image-back');
@@ -1183,7 +1297,7 @@ function openModal(postId) {
                 if (usernameElement === localStorage.getItem("uname")) {
                     mdlt.innerHTML += `
                     <button class="modal-button" onclick="deletePost('${postId}')"><div>Delete</div><div class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg></div></button>      
-                    <button class="modal-button" onclick="editPost('${postId}')"><div>Edit</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg></div></button>      
+                    <button class="modal-button" onclick="editPost('${page}', '${postId}')"><div>Edit</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg></div></button>      
                     `; 
                 }
 
@@ -1890,7 +2004,33 @@ function openUpdate(message) {
             }
         }
     }
-    
+}
+// credit: theotherhades
+function ipBlockedModal() {
+    console.log("Showing IP blocked modal");
+    document.documentElement.style.overflow = "hidden";
+
+    let modalback = document.querySelector(".modal-back");
+
+    if (modalback) {
+        modalback.style.display = "flex";
+
+        let modal = modalback.querySelector(".modal");
+        if (modal) {
+            let modaltop = modal.querySelector(".modal-top");
+            if (modaltop) {
+                modaltop.innerHTML = `
+                <h3>IP Blocked</h3>
+                <hr class="mdl-hr">
+                <span class="subheader">Your current IP address is blocked from accessing Meower.<br /><br />If you think this is a mistake, please contact the moderation team via <a href="${communityDiscordLink}" target="_blank">Discord</a> or email us <a href="${forumLink}" target="_blank">${forumLink}</a>, or try a different network.</span>
+                `
+            }
+        }
+        const mdbt = modalback.querySelector('.modal-bottom');
+        if (mdbt) {
+            mdbt.innerHTML = ``;
+        }
+    }
 }
 
 document.addEventListener('click', function (event) {

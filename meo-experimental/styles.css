@@ -5,6 +5,7 @@ html {
     font-family: var(--font);
     transition: background-color 0.2s ease-in-out;
     scrollbar-gutter: stable;
+    color-scheme: var(--color-scheme);
 }
 
 body {
@@ -152,12 +153,17 @@ bridge {
     cursor: pointer;
     max-width: 300px;
     max-height: 300px;
+    color-scheme: auto;
 }
 
 .embed-large {
     max-width: 80vw;
     max-height: 80vh;
-    animation: open cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+    animation: open cubic-bezier(.2,-.25,0,1.3) 0.2s forwards;
+}
+
+#content {
+    margin: 0 !important;
 }
 
 .info {
@@ -170,6 +176,10 @@ bridge {
     cursor: pointer;
 }
 
+.subtitle {
+    margin-left: var(--margin);
+}
+
 .header-top {
     margin: 0;
     padding-top: 0.67em;
@@ -178,6 +188,18 @@ bridge {
 
 #info {
     margin-top: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.ulmember {
+    margin-right: 5px;
+}
+
+#ulmnl:hover {
+    text-decoration: line-through;
+    cursor: pointer;
 }
 
 #page {
@@ -237,11 +259,23 @@ bridge {
 }
 
 .sub-msg-cnt {
-    padding-left: calc(var(--padding) / 2);
+    padding: 0 calc(var(--padding)/2);
     font-size: 14px;
     height: auto;
     overflow: hidden;
     transition: all 0.1s ease-out;
+    position: sticky;
+    top: 50px;
+    background: var(--background-color);
+    margin: 0 calc(var(--margin)/2);
+}
+
+#edit-indicator {
+    display: flex;
+}
+
+.edit-info {
+    width: 100%;
 }
 
 .message-input {
@@ -521,8 +555,6 @@ possible future styling
 
 .big {
     font-size: 48px;
-    margin-top: 16px;
-    margin-bottom: 16px;
 }
 
 .nav-top {
@@ -773,7 +805,7 @@ possible future styling
 }
 
 .img-link {
-    color: #fefefe90;
+    color: #fefefed0;
     text-shadow: 0px 1px 10px #000;
     padding: var(--padding);
     transition: var(--transition);
@@ -970,10 +1002,22 @@ possible future styling
     color: var(--color);
 }
 
+.custom-bg > button {
+    border: 1px solid #ffffff20;
+}
+
 .edit-txt {
     font-size: 16px;
     display: flex;
     align-items: center;
+}
+
+.emoji {
+    height: 16px;
+}
+
+.big > p > .emoji {
+    height: 46px;
 }
 
 .emojisidebar {
@@ -1000,15 +1044,19 @@ possible future styling
     animation: slidedown cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
+.emojiheader {
+    width: 100%;
+}
+
 .emojisec {
-    display: flex;
+    display: none;
     flex-wrap: wrap;
 }
 
 .emojicont {
     padding-left: var(--padding);
     overflow-y: scroll;
-    max-height: 430px;
+    max-height: 460px;
     scrollbar-width: none;
     width: 100%;
 }
@@ -1019,15 +1067,23 @@ possible future styling
 
 .emojibutton {
     background-color: var(--modal-button-color);
-    font-size: 24px;
-    padding: var(--padding);
+    font-size: 32px;
+    padding: 0;
     margin: calc(var(--margin)/2);
     width: 52.95px;
     height: 52.95px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font);
 }
 
 .emojibutton:hover {
     background-color: var(--hov-modal-button-color);
+}
+
+.emojibutton:active {
+    background-color: var(--modal-button-color);
 }
 
 .emojibuttonside {
@@ -1035,6 +1091,10 @@ possible future styling
     font-size: 16px;
     padding: var(--padding);
     margin: calc(var(--margin)/2);
+}
+
+.emojibuttonside:hover {
+    background-color: var(--hov-modal-button-color);
 }
 
 .emojisearch {
@@ -1193,8 +1253,8 @@ possible future styling
         color: var(--color);
     }
 
-    .groupheader {
-        display: none;
+    #groups {
+        height: calc(100vh - 50px);
     }
 
     .mobileContainer {
@@ -1234,7 +1294,7 @@ possible future styling
         left: 0;
         width: 100%;
         height: 100px;
-        background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 80%, rgba(0,0,0,0) 100%); 
+        background-color: #00000090; 
     }
     
     .img-link {
