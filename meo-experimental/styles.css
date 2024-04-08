@@ -5,7 +5,6 @@ html {
     font-family: var(--font);
     transition: background-color 0.2s ease-in-out;
     scrollbar-gutter: stable;
-    color-scheme: var(--color-scheme);
 }
 
 body {
@@ -124,6 +123,10 @@ ul {
     margin: var(--text-margin);
 }
 
+iframe {
+    color-scheme: light;
+}
+
 bridge {
     background-color: var(--primary);
     border-radius: 25px;
@@ -153,7 +156,6 @@ bridge {
     cursor: pointer;
     max-width: 300px;
     max-height: 300px;
-    color-scheme: auto;
 }
 
 .embed-large {
