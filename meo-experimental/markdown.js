@@ -3,7 +3,7 @@
 // im bad at naming things ok
 
 function escapeHTML(content) {
-    var escapedinput = content
+    const escapedinput = content
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
@@ -14,9 +14,9 @@ function escapeHTML(content) {
 }
 
 function erimd(content) {
-    var text = content
-        .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" class="emoji">')
-        .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" class="emoji">');
+    const text = content
+        .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" title="$1" class="emoji">')
+        .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" title="$1" class="emoji">');
 
     return text;
 }
@@ -110,15 +110,15 @@ function buttonbadges(content) {
 
 function embed(links) {
     if (links) {
-        var embeddedElements = [];
+        let embeddedElements = [];
 
         links.forEach(link => {
-            var baseURL = link.split('?')[0];
-            var fileExtension = baseURL.split('.').pop().toLowerCase();
-            var embeddedElement;
+            const baseURL = link.split('?')[0];
+            const fileExtension = baseURL.split('.').pop().toLowerCase();
+            let embeddedElement;
 
             if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(fileExtension)) {
-                var imgElement = document.createElement("img");
+                let imgElement = document.createElement("img");
                 imgElement.setAttribute("src", baseURL);
                 imgElement.setAttribute("onclick", `openImage('${baseURL}')`);
                 imgElement.classList.add("embed");
@@ -140,16 +140,17 @@ function embed(links) {
                 embeddedElement.classList.add("embed");
             }
 
-            var youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            var youtubeMobRegex = /^(https?:\/\/)?(www\.)?(m\.youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const youtubeMobRegex = /^(https?:\/\/)?(www\.)?(m\.youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
             if (youtubeRegex.test(link) || youtubeMobRegex.test(link)) {
+                let match
                 if (youtubeRegex.test(link)) {
-                    var match = link.match(youtubeRegex);
+                    match = link.match(youtubeRegex);
                 } else {
-                    var match = link.match(youtubeMobRegex);
+                    match = link.match(youtubeMobRegex);
                 }
                 
-                var videoId = match[4];
+                const videoId = match[4];
 
                 embeddedElement = document.createElement("iframe");
                 embeddedElement.setAttribute("width", "100%");
@@ -162,10 +163,10 @@ function embed(links) {
                 embeddedElement.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
                 embeddedElement.setAttribute("allowfullscreen", "");
             } else if (link.includes('open.spotify.com')) {
-                var spotifyRegex = /track\/([a-zA-Z0-9]+)/;
-                var match = link.match(spotifyRegex);
+                const spotifyRegex = /track\/([a-zA-Z0-9]+)/;
+                const match = link.match(spotifyRegex);
                 if (match) {
-                    var trackId = match[1];
+                    const trackId = match[1];
 
                     embeddedElement = document.createElement("iframe");
                     embeddedElement.setAttribute("style", "border-radius: 12px;max-width:500px;");
@@ -180,9 +181,9 @@ function embed(links) {
                     embeddedElement.classList.add("embed");
                 }
             } else if (link.includes('tenor.com')) {
-                var tenorRegex = /\d+$/;
-                var tenorMatch = link.match(tenorRegex);
-                var postId = tenorMatch ? tenorMatch[0] : null;
+                const tenorRegex = /\d+$/;
+                const tenorMatch = link.match(tenorRegex);
+                const postId = tenorMatch ? tenorMatch[0] : null;
 
                 if (postId) {
                     embeddedElement = document.createElement('div');
@@ -193,7 +194,7 @@ function embed(links) {
 
                     embeddedElement.classList.add("embed");
 
-                    var scriptTag = document.createElement('script');
+                    let scriptTag = document.createElement('script');
                     scriptTag.setAttribute('type', 'text/javascript');
                     scriptTag.setAttribute('src', 'embed.js');
                     embeddedElement.appendChild(scriptTag);
@@ -210,7 +211,7 @@ function embed(links) {
 }
 
 function createButtonContainer(p) {
-    var buttonContainer = document.createElement("div");
+    let buttonContainer = document.createElement("div");
     buttonContainer.classList.add("buttonContainer");
     buttonContainer.innerHTML = `
     <div class='toolbarContainer'>
@@ -228,16 +229,16 @@ function createButtonContainer(p) {
         </div>
     </div>
     `;
-    
+    let nwbtn
     if (p.u === localStorage.getItem("uname")) {
-        var nwbtn = document.createElement("div");
+        nwbtn = document.createElement("div");
         nwbtn.classList.add("toolButton");
         nwbtn.setAttribute("onclick", `editPost('${p.post_origin}', '${p._id}')`);
         nwbtn.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg>
         `;
         buttonContainer.querySelector('.toolbarContainer').prepend(nwbtn);
-        var nwbtn = document.createElement("div");
+        nwbtn = document.createElement("div");
         nwbtn.classList.add("toolButton");
         nwbtn.setAttribute("onclick", `deletePost("${p._id}")`);
         nwbtn.innerHTML = `
@@ -247,7 +248,7 @@ function createButtonContainer(p) {
     }
 
     if (localStorage.getItem("permissions") === "1") {
-        var nwbtn = document.createElement("div");
+        nwbtn = document.createElement("div");
         nwbtn.classList.add("toolButton");
         nwbtn.setAttribute("onclick", `modPostModal("${p._id}")`);
         nwbtn.innerHTML = `
@@ -260,14 +261,14 @@ function createButtonContainer(p) {
 }
 
 function oldMarkdown(content) {
-    var escapedinput = content
+    const escapedinput = content
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 
-    var textContent = escapedinput
+    const textContent = escapedinput
         .replace(/\*\*\*\*(.*?[^\*])\*\*\*\*/g, '$1')
         .replace(/\*\*(.*?[^\*])\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?[^\*])\*/g, '<em>$1</em>')
@@ -287,7 +288,7 @@ function oldMarkdown(content) {
         .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" width="16px" class="emoji">')
         .replace(/\n/g, '<br>');
 
-        var isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}🫠❄️]+$/u.test(content);
+        const isEmoji = /^[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}🫠❄️]+$/u.test(content);
 
     if (isEmoji) {
         textContent = '<span class="big">' + textContent + '</span>';

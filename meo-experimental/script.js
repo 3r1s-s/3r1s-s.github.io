@@ -401,18 +401,23 @@ function loadPfp(username, button) {
                             pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         }
                         pfpElement.classList.add("avatar");
-                        
+
                         if (userData.avatar_color) {
                             pfpElement.style.border = `3px solid #${userData.avatar_color}`;
                             pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
                         }
+                        
+                        pfpElement.addEventListener('error', () => {
+                            pfpElement.setAttribute("src", `${pfpurl}.png`);
+                            pfpCache[username].setAttribute("src", `${pfpurl}.png`);
+                        });
+
                     } else if (userData.pfp_data) {
-                        //legacy avatar
                         let pfpurl;
                         if (userData.pfp_data > 0 && userData.pfp_data <= 37) {
                             pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
                         } else {
-                            pfpurl = `images/avatars/icon_err.svg`; // Default to icon_err if index is out of range
+                            pfpurl = `images/avatars/icon_err.svg`;
                         }
                         
                         pfpElement = document.createElement("img");
@@ -427,6 +432,7 @@ function loadPfp(username, button) {
                         if (userData.avatar_color) {
                             pfpElement.style.border = `3px solid #${userData.avatar_color}`;
                         }
+                        
                     } else {
                         const pfpurl = `images/avatars/icon_-4.svg`;
                         

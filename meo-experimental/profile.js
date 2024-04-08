@@ -24,6 +24,7 @@ function fetchprofile() {
                 <img class="avatar-big svg-avatar" style="border: 6px solid #000"; src="images/avatars/icon_-4.svg"></img>
                 `
             }
+
             let quote;
             if (typeof md !== 'undefined') {
                 md.disable(['image'])
@@ -70,7 +71,7 @@ function fetchprofile() {
                     profilecont.innerHTML += `
                     <div class="usr-header">
                     <h2 class="uname">${data._id}</h2>
-                    <button class="button dm-btn" onclick="parent.opendm('${data._id}');">
+                    <button class="button dm-btn" onclick="popendm('${data._id}');">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg>
                     </button>
                     </div>
@@ -97,6 +98,11 @@ function fetchprofile() {
             }                    
             
             document.getElementById('page').appendChild(profilecont);
+
+            const avtimg = document.querySelector('.avatar-big');
+            avtimg.addEventListener('error', function() {
+                avtimg.src = avtimg.src + '.png';
+            });
         })
         .catch(error => console.error('Error fetching user profile:', error));
 

@@ -3,6 +3,7 @@
 <head>
     <title>meo</title>
     <link rel="icon" href="images/meo96.png">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" sizes="180x180" href="images/meo.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#307ce7">
@@ -17,10 +18,10 @@
 
     </div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-    <script type="module">
-      import markdownIt from 'https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/+esm';
-      window.md = new markdownIt("default", {
+    <script>
+      window.md = new markdownit("default", {
         breaks: true,
         linkify: true,
         typographer: true,

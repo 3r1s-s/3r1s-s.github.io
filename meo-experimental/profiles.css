@@ -15,6 +15,9 @@ h1 {
 hr {
     color: var(--modal-button-color);
 }
+#page {
+    overflow-x: hidden !important;
+}
 
 .uname {
     margin: 0;

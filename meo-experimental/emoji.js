@@ -14,31 +14,31 @@ function togglePicker() {
 }
 
 function closepicker() {
-    var picker = document.getElementById("emojipicker");
+    let picker = document.getElementById("emojipicker");
     picker.style.display = "none";
-    var mdlback = document.querySelector(".emoji-back");
+    const mdlback = document.querySelector(".emoji-back");
     mdlback.style.display = "none";
-    var picker = document.querySelector(".emojipicker");
+    picker = document.querySelector(".emojipicker");
     picker.innerHTML = ``;
     opened = 0;
 }
 
 function addemoji(emoji) {
     
-    var ogmsg = document.getElementById('msg').value
+    const ogmsg = document.getElementById('msg').value
     document.getElementById('msg').value = `${ogmsg}${emoji} `;
-    
+    autoresize();
     closepicker();
 }
 
 function loadpicker() {
     pickerhtm();
-    var picker = document.getElementById("emojipicker");
+    let picker = document.getElementById("emojipicker");
     picker.style.display = "flex";
-    var mdlback = document.querySelector(".emoji-back");
+    const mdlback = document.querySelector(".emoji-back");
     mdlback.style.display = "block";
     if (document.querySelector(".emojipicker")) {
-        var picker = document.querySelector(".emojipicker");
+        picker = document.querySelector(".emojipicker");
         picker.innerHTML = pickerhtm()
     } else {
         picker.innerHTML = `<div class="emojipicker">` + pickerhtm() + `</div>`
@@ -48,8 +48,8 @@ function loadpicker() {
 
 document.addEventListener('input', function(event) {
     if (opened === 1) {
-        var searchQuery = document.getElementById('emojin').value.toLowerCase();
-        var emojiButtons = document.querySelectorAll('.emojibutton');
+        const searchQuery = document.getElementById('emojin').value.toLowerCase();
+        const emojiButtons = document.querySelectorAll('.emojibutton');
 
         if (searchQuery) {
             const aa = document.querySelectorAll(".emojisec");
@@ -74,8 +74,8 @@ document.addEventListener('input', function(event) {
         }
     
         emojiButtons.forEach(function(button) {
-            var emojiTitle = button.getAttribute('title').toLowerCase();
-            var emojiEmoji = button.innerText.toLowerCase();
+            const emojiTitle = button.getAttribute('title').toLowerCase();
+            const emojiEmoji = button.innerText.toLowerCase();
     
             if (emojiTitle.includes(searchQuery) || emojiEmoji.includes(searchQuery)) {
                 button.style.display = 'inline-block';
