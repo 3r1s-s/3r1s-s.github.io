@@ -11,9 +11,9 @@
     "orientation": "portrait",
     "theme_color": "#1c1c26",
     "icons": [{
-      "src": "/images/meo-144.png",
+      "src": "/images/meo_192.png",
       "type": "image/png",
-      "sizes": "144x144",
+      "sizes": "192x192",
       "purpose": "any"
     }, {
         "src": "/images/meo.svg",
