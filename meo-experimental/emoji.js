@@ -1650,11 +1650,12 @@ function pickerhtm() {
             </div>
             <button class="emojibutton" title="think" onclick="addemoji('<:think:1226311619064234086>')"><img src="https://cdn.discordapp.com/emojis/1226311619064234086.webp?size=96&amp;quality=lossless" alt="think" height="32px"></button>
             <button class="emojibutton" title="amog os" onclick="addemoji('<:amogos:1226314396377288726>')"><img src="https://cdn.discordapp.com/emojis/1226314396377288726.webp?size=96&amp;quality=lossless" alt="amogos" height="32px"></button>
-            <button class="emojibutton" title="luna" onclick="addemoji('<:toasty:1227089807897792605>')"><img src="https://cdn.discordapp.com/emojis/1227089807897792605.webp?size=96&quality=lossless" alt="toasty" height="32px"></button>
+            <button class="emojibutton" title="toasty" onclick="addemoji('<:toasty:1227089807897792605>')"><img src="https://cdn.discordapp.com/emojis/1227089807897792605.webp?size=96&quality=lossless" alt="toasty" height="32px"></button>
             <button class="emojibutton" title="luna" onclick="addemoji('<:luna:1221632755851591740>')"><img src="https://cdn.discordapp.com/emojis/1221632755851591740.webp?size=96&amp;quality=lossless" alt="luna" height="32px"></button>
+            <button class="emojibutton" title="noodle" onclick="addemoji('<:noodle:1227131494183473233>')"><img src="https://cdn.discordapp.com/emojis/1227131494183473233.webp?size=96&quality=lossless" alt="noodle" height="32px"></button>
             <button class="emojibutton" title="me" onclick="addemoji('<:me:1221628997025267752>')"><img src="https://cdn.discordapp.com/emojis/1221628997025267752.webp?size=96&amp;quality=lossless" alt="me" height="32px"></button>
-            <button class="emojibutton" title="me" onclick="addemoji('<:oswal:1226912603931148338>')"><img src="https://cdn.discordapp.com/emojis/1226912603931148338.webp?size=96&quality=lossless" alt="oswal" height="32px"></button>
-            <button class="emojibutton" title="me" onclick="addemoji('<:cta:1226913189590073494>')"><img src="https://cdn.discordapp.com/emojis/1226913189590073494.webp?size=96&quality=lossless" alt="cta" height="32px"></button>
+            <button class="emojibutton" title="oswal" onclick="addemoji('<:oswal:1226912603931148338>')"><img src="https://cdn.discordapp.com/emojis/1226912603931148338.webp?size=96&quality=lossless" alt="oswal" height="32px"></button>
+            <button class="emojibutton" title="cta" onclick="addemoji('<:cta:1226913189590073494>')"><img src="https://cdn.discordapp.com/emojis/1226913189590073494.webp?size=96&quality=lossless" alt="cta" height="32px"></button>
             <button class="emojibutton" title="atticus" onclick="addemoji('<:atticu:1221630557369405440>')"><img src="https://cdn.discordapp.com/emojis/1221630557369405440.webp?size=96&amp;quality=lossless" alt="atticu" height="32px"></button>
             <button class="emojibutton" title=":3" onclick="addemoji('<:33:1226320165302571087>')"><img src="https://cdn.discordapp.com/emojis/1226320165302571087.webp?size=44&quality=lossless" alt=":3" height="32px"></button>
             <button class="emojibutton" title="Cydia" onclick="addemoji('<:Cydia:1226320451278602290>')"><img src="https://cdn.discordapp.com/emojis/1226320451278602290.webp?size=44&quality=lossless" alt="Cydia" height="32px"></button>
@@ -1665,7 +1666,6 @@ function pickerhtm() {
             <button class="emojibutton" title="boogie" onclick="addemoji('<a:boogie:1226311710818959401>')"><img src="https://cdn.discordapp.com/emojis/1226311710818959401.gif?size=96&amp;quality=lossless" alt="boogie" height="32px"></button>
             <button class="emojibutton" title="ameowdundundun" onclick="addemoji('<a:ameowdundundun:1226319768236331140>')"><img src="https://cdn.discordapp.com/emojis/1226319768236331140.gif?size=48&quality=lossless&name=ameowdundundun" alt="ameowdundundun" height="32px"></button>
             <button class="emojibutton" title="Misc_Hundred" onclick="addemoji('<a:Misc_Hundred:1226319950570983434>')"><img src="https://cdn.discordapp.com/emojis/1226319950570983434.gif?size=48&quality=lossless&name=Misc_Hundred" alt="Misc_Hundred" height="32px"></button>
-        
         </div>
     </div>    
     </div>    
