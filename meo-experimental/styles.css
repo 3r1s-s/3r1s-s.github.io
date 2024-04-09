@@ -161,7 +161,7 @@ bridge {
 .embed-large {
     max-width: 80vw;
     max-height: 80vh;
-    animation: open cubic-bezier(.2,-.25,0,1.3) 0.2s forwards;
+    animation: open cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
 #content {
@@ -388,6 +388,15 @@ bridge {
     width: 96px;
     border-radius: 100px;
     margin: 0 0 10px 0;
+    box-sizing: border-box;
+    aspect-ratio: 1;
+    box-shadow: 0px 1px 5px #00000050;
+}
+
+.avatar-small {
+    width: 36px;
+    border-radius: 100px;
+    margin: 0 10px 0 0;
     box-sizing: border-box;
     aspect-ratio: 1;
     box-shadow: 0px 1px 5px #00000050;
@@ -711,6 +720,7 @@ possible future styling
 .mdl-inp {
     background-color: var(--modal-button-color);
     flex: 1;
+    width: 100%;
     padding: var(--button-padding);
     border-radius: var(--border-radius);
     margin: var(--margin) 0;
@@ -1131,6 +1141,55 @@ possible future styling
     height: 100vh;
 }
 
+.ubtn {
+    padding: 0;
+    margin-bottom: var(--button-margin);
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.qc-bts-sc {
+    display: flex;
+}
+
+.qbtn {
+    padding: var(--button-padding);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-bottom: var(--button-margin);
+}
+
+.qbtn:first-child {
+    margin-right: calc(var(--button-margin) / 2);
+}
+
+.qbtn:nth-child(2) {
+    margin-left: calc(var(--button-margin) / 2);
+}
+
+.ubtnsa {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: var(--button-padding);
+}
+
+.ubtnsb {
+    margin-right: 5px;
+    padding: var(--button-padding);
+}
+
+.start-users-online {
+    display: flex;
+    flex-direction: column;
+    height: 60vh;
+    overflow-y: scroll;
+    margin-bottom: var(--button-margin);
+}
+
 @media screen and (max-width: 480px) {
     .modal {
         width: 100%;
@@ -1218,6 +1277,10 @@ possible future styling
         scroll-snap-align: center;
         overflow: scroll;
         height: 100vh;
+    }
+
+    .settings {
+        margin-bottom: 60px;
     }
 
     #msgs {

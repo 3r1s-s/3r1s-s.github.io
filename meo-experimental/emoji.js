@@ -19,16 +19,19 @@ function closepicker() {
     const mdlback = document.querySelector(".emoji-back");
     mdlback.style.display = "none";
     picker = document.querySelector(".emojipicker");
-    picker.innerHTML = ``;
-    opened = 0;
+    if (picker) {
+        picker.innerHTML = ``;
+        opened = 0;
+    }
 }
 
 function addemoji(emoji) {
-    
     const ogmsg = document.getElementById('msg').value
     document.getElementById('msg').value = `${ogmsg}${emoji} `;
     autoresize();
-    closepicker();
+    if (!event.shiftKey) { // Check if shift key is not pressed
+        closepicker();
+    }
 }
 
 function loadpicker() {
@@ -1647,8 +1650,11 @@ function pickerhtm() {
             </div>
             <button class="emojibutton" title="think" onclick="addemoji('<:think:1226311619064234086>')"><img src="https://cdn.discordapp.com/emojis/1226311619064234086.webp?size=96&amp;quality=lossless" alt="think" height="32px"></button>
             <button class="emojibutton" title="amog os" onclick="addemoji('<:amogos:1226314396377288726>')"><img src="https://cdn.discordapp.com/emojis/1226314396377288726.webp?size=96&amp;quality=lossless" alt="amogos" height="32px"></button>
+            <button class="emojibutton" title="luna" onclick="addemoji('<:toasty:1227089807897792605>')"><img src="https://cdn.discordapp.com/emojis/1227089807897792605.webp?size=96&quality=lossless" alt="toasty" height="32px"></button>
             <button class="emojibutton" title="luna" onclick="addemoji('<:luna:1221632755851591740>')"><img src="https://cdn.discordapp.com/emojis/1221632755851591740.webp?size=96&amp;quality=lossless" alt="luna" height="32px"></button>
             <button class="emojibutton" title="me" onclick="addemoji('<:me:1221628997025267752>')"><img src="https://cdn.discordapp.com/emojis/1221628997025267752.webp?size=96&amp;quality=lossless" alt="me" height="32px"></button>
+            <button class="emojibutton" title="me" onclick="addemoji('<:oswal:1226912603931148338>')"><img src="https://cdn.discordapp.com/emojis/1226912603931148338.webp?size=96&quality=lossless" alt="oswal" height="32px"></button>
+            <button class="emojibutton" title="me" onclick="addemoji('<:cta:1226913189590073494>')"><img src="https://cdn.discordapp.com/emojis/1226913189590073494.webp?size=96&quality=lossless" alt="cta" height="32px"></button>
             <button class="emojibutton" title="atticus" onclick="addemoji('<:atticu:1221630557369405440>')"><img src="https://cdn.discordapp.com/emojis/1221630557369405440.webp?size=96&amp;quality=lossless" alt="atticu" height="32px"></button>
             <button class="emojibutton" title=":3" onclick="addemoji('<:33:1226320165302571087>')"><img src="https://cdn.discordapp.com/emojis/1226320165302571087.webp?size=44&quality=lossless" alt=":3" height="32px"></button>
             <button class="emojibutton" title="Cydia" onclick="addemoji('<:Cydia:1226320451278602290>')"><img src="https://cdn.discordapp.com/emojis/1226320451278602290.webp?size=44&quality=lossless" alt="Cydia" height="32px"></button>

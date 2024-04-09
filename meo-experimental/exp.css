@@ -43,7 +43,7 @@ body {
 .post,
 .emojipicker,
 .modal {
-    backdrop-filter: blur(50px) saturate(1.5);
+    backdrop-filter: blur(50px) saturate(30);
     border: var(--glass-border);
     border-radius: 15px;
     box-shadow: 0px 10px 25px #00000050;

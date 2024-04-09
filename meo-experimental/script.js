@@ -9,6 +9,7 @@ const sidediv = document.querySelectorAll(".side");
         sidediv.classList.add("hidden");
     });
 let lul = 0;
+let eul;
 let sul = "";
 
 let ipBlocked = false;
@@ -78,9 +79,10 @@ function main() {
                 `<div class='settings'>
                     <div class='login'>
                         <h1>Login</h1>
-                        <input type='text' id='userinput' placeholder='Username' class='login-input text'>
-                        <input type='password' id='passinput' placeholder='Password' class='login-input text'>
-                        <input type='button' id='submit' value='Log in' class='login-input button' onclick='login(document.getElementById("userinput").value, document.getElementById("passinput").value)'><input type='button' id='submit' value='Sign up' class='login-input button' onclick='signup(document.getElementById("userinput").value, document.getElementById("passinput").value)'>
+                        <input type='text' id='userinput' placeholder='Username' class='login-input text' aria-label="username input">
+                        <input type='password' id='passinput' placeholder='Password' class='login-input text' aria-label="password input">
+                        <input type='button' id='login' value='Log in' class='login-input button' onclick='login(document.getElementById("userinput").value, document.getElementById("passinput").value)' aria-label="sign up">
+                        <input type='button' id='signup' value='Sign up' class='login-input button' onclick='signup(document.getElementById("userinput").value, document.getElementById("passinput").value)' aria-label="log in">
                         <small>This client was made by eri :></small>
                         <div id='msgs'></div>
                         </div>
@@ -95,13 +97,17 @@ function main() {
         } else if (sentdata.listener == "auth") {
             if (sentdata.val.mode && sentdata.val.mode == "auth") {
                 loggedin = true;
-                page = "home";
                 if (localStorage.getItem("token") == undefined || localStorage.getItem("uname") == undefined || localStorage.getItem("permissions") == undefined) {
                     localStorage.setItem("uname", sentdata.val.payload.username);
                     localStorage.setItem("token", sentdata.val.payload.token);
                     localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
                 }
-                loadhome();
+                sidebars();
+                if (!settingsstuff().homepage) {
+                    loadstart();
+                } else {
+                    loadhome();
+                }
                 console.log("Logged in!");
             } else if (sentdata.cmd == "statuscode" && sentdata.val != "I:100 | OK") {
                 if ("token" in localStorage)
@@ -143,6 +149,20 @@ function main() {
             }
         } else if (end) {
             return 0;
+        } else if (sentdata.val.mode == "update_profile") {
+            let username = sentdata.val.payload._id;
+            if (pfpCache[username]) {
+                delete pfpCache[username];
+                loadPfp(username, 0)
+                    .then(pfpElement => {
+                        if (pfpElement) {
+                            for (const elem of document.getElementsByClassName("avatar")) {
+                                if (elem.getAttribute("data-username") !== username) continue;
+                                elem.replaceWith(pfpElement);
+                            }
+                        }
+                    });
+            }
         } else if (sentdata.val.mode == "update_post") {
             let postOrigin = sentdata.val.payload.post_origin;
             if (postCache[postOrigin]) {
@@ -167,6 +187,7 @@ function main() {
         } else if (sentdata.cmd == "ulist") {
             const iul = sentdata.val;
             sul = iul.trim().split(";");
+            eul = sul;
             lul = sul.length - 1;
             
             if (sul.length > 1) {
@@ -358,7 +379,7 @@ function loadpost(p) {
         });
     }
 
-    loadPfp(user)
+    loadPfp(user, 0)
         .then(pfpElement => {
             if (pfpElement) {
                 pfpDiv.appendChild(pfpElement);
@@ -390,18 +411,19 @@ function loadPfp(username, button) {
             fetch(`https://api.meower.org/users/${username}`)
                 .then(userResp => userResp.json())
                 .then(userData => {
-
                     if (userData.avatar) {
                         const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
 
+                        
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", "Avatar");
+                        pfpElement.setAttribute("alt", username);
+                        pfpElement.setAttribute("data-username", username);
+                        pfpElement.classList.add("avatar");
                         if (!button) {
                             pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         }
-                        pfpElement.classList.add("avatar");
-
+                        
                         if (userData.avatar_color) {
                             pfpElement.style.border = `3px solid #${userData.avatar_color}`;
                             pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
@@ -422,11 +444,12 @@ function loadPfp(username, button) {
                         
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", "Avatar");
+                        pfpElement.setAttribute("alt", username);
+                        pfpElement.setAttribute("data-username", username);
+                        pfpElement.classList.add("avatar");
                         if (!button) {
                             pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         }
-                        pfpElement.classList.add("avatar");
                         pfpElement.classList.add("svg-avatar");
 
                         if (userData.avatar_color) {
@@ -438,7 +461,8 @@ function loadPfp(username, button) {
                         
                         pfpElement = document.createElement("img");
                         pfpElement.setAttribute("src", pfpurl);
-                        pfpElement.setAttribute("alt", "Avatar");
+                        pfpElement.setAttribute("alt", username);
+                        pfpElement.setAttribute("data-username", username);
                         if (!button) {
                             pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
                         }
@@ -466,28 +490,113 @@ function loadPfp(username, button) {
     });
 }
 
+function loadPfpstraight(username, button) {
+    return new Promise((resolve, reject) => {
+        let pfpElement;
+
+        fetch(`https://api.meower.org/users/${username}`)
+            .then(userResp => userResp.json())
+            .then(userData => {
+                if (userData.avatar) {
+                    const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
+
+                    pfpElement = document.createElement("img");
+                    pfpElement.setAttribute("src", pfpurl);
+                    pfpElement.setAttribute("alt", username);
+                    pfpElement.setAttribute("data-username", username);
+                    pfpElement.classList.add("avatar-small");
+                    if (!button) {
+                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                    }
+
+                    if (userData.avatar_color) {
+                        pfpElement.style.border = `3px solid #${userData.avatar_color}`;
+                        pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
+                    }
+
+                    pfpElement.addEventListener('error', () => {
+                        pfpElement.setAttribute("src", `${pfpurl}.png`);
+                    });
+
+                } else if (userData.pfp_data) {
+                    let pfpurl;
+                    if (userData.pfp_data > 0 && userData.pfp_data <= 37) {
+                        pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
+                    } else {
+                        pfpurl = `images/avatars/icon_err.svg`;
+                    }
+
+                    pfpElement = document.createElement("img");
+                    pfpElement.setAttribute("src", pfpurl);
+                    pfpElement.setAttribute("alt", username);
+                    pfpElement.setAttribute("data-username", username);
+                    pfpElement.classList.add("avatar-small");
+                    if (!button) {
+                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                    }
+                    pfpElement.classList.add("svg-avatar");
+
+                    if (userData.avatar_color) {
+                        pfpElement.style.border = `3px solid #${userData.avatar_color}`;
+                    }
+
+                } else {
+                    const pfpurl = `images/avatars/icon_-4.svg`;
+
+                    pfpElement = document.createElement("img");
+                    pfpElement.setAttribute("src", pfpurl);
+                    pfpElement.setAttribute("alt", username);
+                    pfpElement.setAttribute("data-username", username);
+                    if (!button) {
+                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
+                    }
+                    pfpElement.classList.add("avatar");
+                    pfpElement.classList.add("svg-avatar");
+
+                    pfpElement.style.border = `3px solid #fff`;
+                    pfpElement.style.backgroundColor = `#fff`;
+
+                    console.error("No avatar or pfp_data available for: ", username);
+                    resolve(null);
+                }
+
+                resolve(pfpElement);
+            })
+            .catch(error => {
+                console.error("Failed to fetch:", error);
+                resolve(null);
+            });
+    });
+}
+
 async function loadreply(postOrigin, replyid) {
-    const replyregex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
-    // replace(match[0], '').trim(); add reply regex removal 
+    const replyregex = /^@[^ ]+ (.+?) \(([^)]+)\)/;
     try {
         let replydata = postCache[postOrigin].find(post => post._id === replyid);
         if (!replydata) {
             const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`, {
-                headers: {token: localStorage.getItem("token")}
+                headers: { token: localStorage.getItem("token") }
             });
             replydata = await replyresp.json();
         }
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
+        let replyContent = replydata.p;
+        
+        const match = replydata.p.replace(replyregex, "").trim();
+        if (match) {
+            replyContent = match;
+        }
+        
         if (replydata.u === "Discord" || replydata.u === "SplashBridge") {
-            const rcon = replydata.p;
+            const rcon = replyContent;
             const parts = rcon.split(': ');
             const user = parts[0];
             const content = parts.slice(1).join(': ');
             replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
         } else {
-            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(replydata.u)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(replydata.p)}</p>`;
+            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(replydata.u)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(replyContent)}</p>`;
         }
         
         return replycontainer;
@@ -614,6 +723,7 @@ function sendpost() {
 
     document.getElementById('msg').value = "";
     autoresize();
+    closepicker();
 }
 
 function loadhome() {
@@ -621,11 +731,38 @@ function loadhome() {
     let pageContainer
     pageContainer = document.getElementById("main");
     pageContainer.innerHTML = `<div class='info'><h1 class='header-top'>Home</h1><p id='info'></p></div>` + loadinputs();
+    document.getElementById("info").innerText = lul + " users online (" + sul + ")";
+    
+    sidebars();
+    
+    if (postCache["home"]) {
+        postCache["home"].forEach(post => {
+            loadpost(post);
+        });
+    } else {
+        const xhttpPosts = new XMLHttpRequest();
+        xhttpPosts.open("GET", "https://api.meower.org/home?autoget");
+        xhttpPosts.onload = () => {
+            const postsData = JSON.parse(xhttpPosts.response);
+            const postsarray = postsData.autoget || [];
+
+            postsarray.reverse();
+            postCache["home"] = postsarray;
+            postsarray.forEach(post => {
+                loadpost(post);
+            });
+        };
+        xhttpPosts.send();
+    }
+}
+
+function sidebars() {
+    let pageContainer
     pageContainer = document.getElementById("nav");
     pageContainer.innerHTML = `
     <div class='navigation'>
     <div class='nav-top'>
-    <button class='trans' id='submit' value='Home' onclick='loadhome()'>
+    <button class='trans' id='submit' value='Home' onclick='loadstart()' aria-label="Home">
         <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
             <g>
                 <path fill="currentColor" d="M468.42 20.5746L332.997 65.8367C310.218 58.8105 284.517 55.049 255.499 55.6094C226.484 55.049 200.78 58.8105 178.004 65.8367L42.5803 20.5746C18.9102 16.3251 -1.81518 36.2937 2.5967 59.1025L38.7636 200.894C18.861 248.282 12.1849 296.099 12.1849 325.027C12.1849 399.343 44.6613 492 255.499 492C466.339 492 498.815 399.343 498.815 325.027C498.815 296.099 492.139 248.282 472.237 200.894L508.404 59.1025C512.814 36.2937 492.09 16.3251 468.42 20.5746Z"/>
@@ -633,29 +770,25 @@ function loadhome() {
         </svg>
     </button>
     </div>
-
     </div>
     `;
     
     let navlist = `
-    <input type='button' class='navigation-button button' id='submit' value='Profile' onclick='openUsrModal("${localStorage.getItem("uname")}")'>
-    <input type='button' class='navigation-button button' id='submit' value='Explore' onclick='loadExplore();'>
-    <input type='button' class='navigation-button button' id='submit' value='Inbox' onclick='loadinbox()'>
-    <input type='button' class='navigation-button button' id='submit' value='Settings' onclick='loadstgs()'>
-    <input type='button' class='navigation-button button' id='submit' value='Logout' onclick='logout(false)'>
+    <input type='button' class='navigation-button button' id='profile' value='Profile' onclick='openUsrModal("${localStorage.getItem("uname")}")' aria-label="profile">
+    <input type='button' class='navigation-button button' id='explore' value='Explore' onclick='loadExplore();' aria-label="explore">
+    <input type='button' class='navigation-button button' id='inbox' value='Inbox' onclick='loadinbox()' aria-label="inbox">
+    <input type='button' class='navigation-button button' id='settings' value='Settings' onclick='loadstgs()' aria-label="settings">
+    <input type='button' class='navigation-button button' id='logout' value='Logout' onclick='logout(false)' aria-label="logout">
     `;
 
     if (localStorage.getItem("permissions") === "1") {
     console.log(localStorage.getItem("permissions"));
-    navlist = `<input type='button' class='navigation-button button' id='submit' value='Moderate' onclick='openModModal()'>` + navlist;
+    navlist = `<input type='button' class='navigation-button button' id='moderation' value='Moderate' onclick='openModModal()' aria-label="moderate">` + navlist;
     }
 
     let mdmdl = document.getElementsByClassName('navigation')[0];
     mdmdl.innerHTML += navlist;
 
-
-    document.getElementById("info").innerText = lul + " users online (" + sul + ")";
-    
     const char = new XMLHttpRequest();
     char.open("GET", "https://api.meower.org/chats?autoget");
     char.setRequestHeader("token", localStorage.getItem('token'));
@@ -687,31 +820,65 @@ function loadhome() {
         groupsdiv.appendChild(gcdiv);
     };
     char.send();
-    
-    if (postCache["home"]) {
-        postCache["home"].forEach(post => {
-            loadpost(post);
-        });
-    } else {
-        const xhttpPosts = new XMLHttpRequest();
-        xhttpPosts.open("GET", "https://api.meower.org/home?autoget");
-        xhttpPosts.onload = () => {
-            const postsData = JSON.parse(xhttpPosts.response);
-            const postsarray = postsData.autoget || [];
-
-            postsarray.reverse();
-            postCache["home"] = postsarray;
-            postsarray.forEach(post => {
-                loadpost(post);
-            });
-        };
-        xhttpPosts.send();
-    }
 
     const sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
         sidediv.classList.remove("hidden");
     });
+}
+
+function loadstart() {
+    page = "start";
+    sidebars();
+    pageContainer = document.getElementById("main");
+    pageContainer.innerHTML = `
+    <div class="info"><h1>Start</h1></div>
+    <div class="explore">
+        <h3>Online - ${lul}</h3>
+        <div class="start-users-online">
+        
+        </div>
+        <div class="quick-btns">
+        <div class="qc-bts-sc">
+        <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">Create Chat</button>
+        <button class="qbtn button" aria-label="create chat" onclick="loadhome();">Go Home</button>
+        </div>
+        <div class="qc-bts-sc">
+        <button class="qbtn button" aria-label="create chat" onclick="loadExplore();">Explore</button>
+        <button class="qbtn button" aria-label="create chat" onclick="opendm('Eris')">DM Me :)</button>
+        </div>
+    </div>
+    `;
+    fetch('https://api.meower.org/ulist?autoget')
+    .then(response => response.json())
+    .then(data => {
+        data.autoget.forEach(item => {
+            const gr = item._id.trim();
+            if (gr !== localStorage.getItem("uname")) {
+                const profilecont = document.createElement('div');
+                profilecont.classList.add('mdl-sec');
+                if (item.avatar_color !== "!color" && data.avatar_color) {
+                    profilecont.classList.add('custom-bg');
+                }
+                if (item.avatar) {
+                    profilecont.innerHTML = `
+                        <img class="avatar-small" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color};" src="https://uploads.meower.org/icons/${item.avatar}" alt="${item._id}" title="${item._id}"></img>
+                    `;
+                } else if (item.pfp_data) {
+                    profilecont.innerHTML = `
+                        <img class="avatar-small svg-avatar" style="border: 3px solid #${item.avatar_color}"; src="images/avatars/icon_${item.pfp_data - 1}.svg" alt="${item._id}" title="${item._id}"></img>
+                    `;
+                } else {
+                    profilecont.innerHTML = `
+                        <img class="avatar-small svg-avatar" style="border: 3px solid #000"; src="images/avatars/icon_-4.svg" alt="${item._id}" title="${item._id}"></img>
+                    `;
+                }
+                const pl = `<button class="ubtn button" aria-label="${gr}"><div class="ubtnsa" onclick="openUsrModal('${gr}')">${profilecont.outerHTML}${gr}</div><div class="ubtnsb" onclick="opendm('${gr}')" id="username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg></div></button>`;
+                document.querySelector(".start-users-online").innerHTML += pl;
+            }
+        });
+    });
+
 }
 
 function opendm(username) {
@@ -872,6 +1039,13 @@ function loadgeneral() {
             <input type="checkbox" id="swearfilter">
             </label>
             </div>
+            <br>
+            <div class="section">
+            <label>
+            Auto-navigate to Home
+            <input type="checkbox" id="homepage">
+            </label>
+            </div>
             <h3>About</h3>
             <div class="section">
             <span>meo v1.20</span>
@@ -881,16 +1055,22 @@ function loadgeneral() {
 
             pageContainer.innerHTML = settingsContent;
 
+            const chbxs = document.querySelectorAll("input[type='checkbox']");
             const swftcheckbox = document.getElementById("swearfilter");
+            const homepagecheckbox = document.getElementById("homepage");
         
-            swftcheckbox.addEventListener("change", function () {
-                localStorage.setItem('settings', JSON.stringify({ swearfilter: swftcheckbox.checked }));
+            chbxs.forEach(function(checkbox) {
+                checkbox.addEventListener("change", function () {
+                    localStorage.setItem('settings', JSON.stringify({ swearfilter: swftcheckbox.checked, homepage: homepagecheckbox.checked }));
+                });
             });
         
             const storedsettings = JSON.parse(localStorage.getItem('settings')) || {};
             const swearfiltersetting = storedsettings.swearfilter || false;
+            const homepagesetting = storedsettings.homepage || false;
         
             swftcheckbox.checked = swearfiltersetting;
+            homepagecheckbox.checked = homepagesetting;
 }
 
 async function loadplugins() {
@@ -1232,6 +1412,9 @@ function cancelEdit() {
 }
 
 function openImage(url) {
+    const baseURL = url.split('?')[0];
+    const fileName = baseURL.split('/').pop();
+    
     document.documentElement.style.overflow = "hidden";
     const mdlbck = document.querySelector('.image-back');
     
@@ -1241,7 +1424,7 @@ function openImage(url) {
         const mdl = mdlbck.querySelector('.image-mdl');
         if (mdl) {
             mdl.innerHTML = `
-            <img class='embed-large' src='${url}' onclick='preventClose(event)'>
+            <img class='embed-large' src='${url}' alt="${fileName}" onclick='preventClose(event)'>
             <div class="img-links">
             <span class="img-link-outer"><a onclick="closeImage()" class="img-link">close</a></span>
             <span><a href="${url}" target="_blank" class="img-link">open in browser</a></span>
@@ -2007,6 +2190,33 @@ function openUpdate(message) {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = ``;
+            }
+        }
+    }
+}
+
+function createChatModal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>Create Chat</h3>
+                <input class="mdl-inp" placeholder="nickname">
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="">create</button>
+                `;
             }
         }
     }
