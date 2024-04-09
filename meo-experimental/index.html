@@ -93,22 +93,5 @@
         });
       }
     </script>
-
-    <script
-      src="https://browser.sentry-cdn.com/7.109.0/bundle.tracing.min.js"
-      integrity="sha384-FyHLiOgn1wcBUetfKq3+RF+aukePV5acbpdkgdYJRWepBQ8AMoNNEucU/6+JYRuJ"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://browser.sentry-cdn.com/7.109.0/captureconsole.min.js"
-      integrity="sha384-+2LALLUj+SdJI0yuBLkqecbgRJv6LuNZpSkbMFGFN3Tb+bTEWnGyKpK27VkjRHak"
-      crossorigin="anonymous"
-    ></script>
-    <script>
-      Sentry.init({
-        dsn: "https://4d1a85ac906e4d869d36477387c78c67@glitchtip.tnix.dev/2",
-        integrations: [Sentry.captureConsoleIntegration({levels: ['log', 'info', 'warn', 'error', 'debug', 'assert']})],
-      });
-  </script>
 </body>
 </html>

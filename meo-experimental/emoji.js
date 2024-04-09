@@ -1667,6 +1667,11 @@ function pickerhtm() {
             <button class="emojibutton" title="boogie" onclick="addemoji('<a:boogie:1226311710818959401>')"><img src="https://cdn.discordapp.com/emojis/1226311710818959401.gif?size=96&amp;quality=lossless" alt="boogie" height="32px"></button>
             <button class="emojibutton" title="ameowdundundun" onclick="addemoji('<a:ameowdundundun:1226319768236331140>')"><img src="https://cdn.discordapp.com/emojis/1226319768236331140.gif?size=48&quality=lossless&name=ameowdundundun" alt="ameowdundundun" height="32px"></button>
             <button class="emojibutton" title="Misc_Hundred" onclick="addemoji('<a:Misc_Hundred:1226319950570983434>')"><img src="https://cdn.discordapp.com/emojis/1226319950570983434.gif?size=48&quality=lossless&name=Misc_Hundred" alt="Misc_Hundred" height="32px"></button>
+            
+            <button class="emojibutton" title="shake" onclick="addemoji('<a:shake:1227279789472354435>')"><img src="https://cdn.discordapp.com/emojis/1227279789472354435.gif?size=48&quality=lossless&name=shake" alt="shake" height="32px"></button>
+            <button class="emojibutton" title="sphere" onclick="addemoji('<a:sphere:1227279796715917362>')"><img src="https://cdn.discordapp.com/emojis/1227279796715917362.gif?size=48&quality=lossless&name=sphere" alt="sphere" height="32px"></button>
+            <button class="emojibutton" title="spin" onclick="addemoji('<a:spin:1227279798015889498>')"><img src="https://cdn.discordapp.com/emojis/1227279798015889498.gif?size=48&quality=lossless&name=spin" alt="spin" height="32px"></button>
+            <button class="emojibutton" title="squish" onclick="addemoji('<a:squish:1227279787072946189>')"><img src="https://cdn.discordapp.com/emojis/1227279787072946189.gif?size=48&quality=lossless&name=squish" alt="squish" height="32px"></button>
         </div>
     </div>    
     </div>    
