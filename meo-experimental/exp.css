@@ -30,7 +30,7 @@
 }
 
 body {
-    background-image: url(https://512pixels.net/downloads/macos-wallpapers/11-0-Night.jpg);
+    background-image: url();
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -43,7 +43,7 @@ body {
 .post,
 .emojipicker,
 .modal {
-    backdrop-filter: blur(50px) saturate(30);
+    backdrop-filter: blur(50px) saturate(1.5);
     border: var(--glass-border);
     border-radius: 15px;
     box-shadow: 0px 10px 25px #00000050;

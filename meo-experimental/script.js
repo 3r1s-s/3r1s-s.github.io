@@ -156,9 +156,10 @@ function main() {
                 loadPfp(username, 0)
                     .then(pfpElement => {
                         if (pfpElement) {
+                            pfpCache[username] = pfpElement.cloneNode(true);
                             for (const elem of document.getElementsByClassName("avatar")) {
                                 if (elem.getAttribute("data-username") !== username) continue;
-                                elem.replaceWith(pfpElement);
+                                elem.replaceWith(pfpElement.cloneNode(true));
                             }
                         }
                     });
@@ -997,6 +998,9 @@ function logout(iskl) {
         meowerConnection.close();
     }
     end = true;
+    pfpCache = {};
+    postCache = {};
+    chatCache = {};
     if (document.getElementById("msgs"))
         document.getElementById("msgs").innerHTML = "";
     if (document.getElementById("nav"))
