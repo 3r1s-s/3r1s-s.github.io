@@ -1,11 +1,11 @@
 {
     "name": "meo ex",
     "short_name": "meo",
-    "start_url": "/",
+    "start_url": "/meo-experimental",
     "display": "standalone",
     "background_color": "#1c1c26",
     "lang": "en",
-    "scope": "/",
+    "scope": "//meo-experimental",
     "description": "Neo + Meower",
     "categories": ["communication", "chat", "messaging"],
     "orientation": "portrait",
