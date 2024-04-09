@@ -998,9 +998,9 @@ function logout(iskl) {
         meowerConnection.close();
     }
     end = true;
-    pfpCache = {};
-    postCache = {};
-    chatCache = {};
+    for (const key in pfpCache) delete pfpCache[key];
+    for (const key in postCache) delete postCache[key];
+    for (const key in chatCache) delete chatCache[key];
     if (document.getElementById("msgs"))
         document.getElementById("msgs").innerHTML = "";
     if (document.getElementById("nav"))
@@ -1356,6 +1356,7 @@ function launchscreen() {
     nv.innerHTML = ``;
     nv = document.getElementById("groups");
     nv.innerHTML = ``;
+    // this should be launching the launch screen not vice versa
     meowerConnection.close();
 }
 
@@ -1456,6 +1457,7 @@ function closeImage() {
     if (mdlbck) {
         mdl.style.background = '';
         mdl.classList.remove('custom-bg');
+        mdl.innerHTML = '';
     }
 }
 
