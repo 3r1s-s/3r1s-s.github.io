@@ -5,13 +5,13 @@
     <link rel="icon" href="images/meo96.png">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="apple-mobile-web-app-title" content="meo">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/meo_ex.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/meo.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="description" content="Neo + Meower">
     <meta name="theme-color" content="#1c1c26">
     <meta name="background-color" content="#1c1c26">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta class="special" property="og:image" content="images/meo_ex.png">
+    <meta class="special" property="og:image" content="images/meo.png">
 
     <!--Splash Screens for iOS Devices-->
     <link href="images/splash/iphone5.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
@@ -80,5 +80,19 @@
     <script src="script.js"></script>
     <script src="markdown.js"></script>
     <script src="emoji.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('Service Worker registered successfully:', registration);
+            })
+            .catch(error => {
+              console.error('Service Worker registration failed:', error);
+            });
+        });
+      }
+    </script>
+    
 </body>
 </html>
