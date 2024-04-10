@@ -24,6 +24,7 @@ const chatCache = {}; // {chatId: chat}
 
 loadsavedplugins();
 loadcstmcss();
+loadcsttme();
 
 function replsh(rpl) {
     const trimmedString = rpl.length > 25 ?
@@ -31,15 +32,13 @@ function replsh(rpl) {
         rpl;
     return trimmedString;
 }
-
+// make it so when reconnect happens it goes back to the prev screen and not the start page
 function main() {
     meowerConnection = new WebSocket(server);
     let loggedin = false;
     
     meowerConnection.addEventListener('error', function(event) {
-        if (!page==="load") {
-            launchscreen();
-        }
+        //launch screen
     });
     
     meowerConnection.onclose = (event) => {
@@ -645,7 +644,7 @@ function loadtheme() {
     }
     
     const rootStyles = window.getComputedStyle(document.documentElement);
-    const rootBackgroundColor = rootStyles.getPropertyValue('--background-color');
+    const rootBackgroundColor = rootStyles.getPropertyValue('--background');
     
     const metaThemeColor = document.querySelector("meta[name=theme-color]");
     if (metaThemeColor) {
@@ -1206,44 +1205,123 @@ function loadappearance() {
             </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div>
 
             <div class="theme-buttons">
-            <div class="theme-buttons-inner">
-                <button onclick='changetheme(\"light\", this)' class='theme-button light-theme'>Light</button>
-                <button onclick='changetheme(\"dark\", this)' class='theme-button dark-theme'>Dark</button>
+                <div class="theme-buttons-inner">
+                    <button onclick='changetheme(\"light\", this)' class='theme-button light-theme'>Light</button>
+                    <button onclick='changetheme(\"dark\", this)' class='theme-button dark-theme'>Dark</button>
+                </div>
+                <div class="theme-buttons-inner">
+                    <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
+                    <button onclick='changetheme(\"bsky\", this)' class='theme-button bsky-theme'>Midnight</button>
+                    <button onclick='changetheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
+                    <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
+                </div>
+                <div class="theme-buttons-inner">
+                    <button onclick='changetheme(\"custom\", this)' class='theme-button custom-theme'>Custom</button>
+                </div>
             </div>
-            <div class="theme-buttons-inner">
-                <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
-                <button onclick='changetheme(\"bsky\", this)' class='theme-button bsky-theme'>Midnight</button>
-                <button onclick='changetheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
-                <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
+            <br>
+            <h2>Custom CSS</h2>
+            <div class='customcss'>
+                <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
             </div>
+            <h2>Custom Theme</h2>
+            <div class="custom-theme-in section">
+                <div class="cstmeinp">
+                <label for="primary">Primary Color:</label>
+                <input type="color" id="primary" name="primary" value="#15a4c1">
+                </div>    
+                <div class="cstmeinp">
+                <label for="primary">Secondary Color:</label>
+                <input type="color" id="secondary" name="secondary" value="#0f788e">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Background Color:</label>
+                <input type="color" id="background" name="background" value="#1c1f26">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Text Color:</label>
+                <input type="color" id="color" name="color" value="#fefefe">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Accent Color:</label>
+                <input type="color" id="accent-color" name="accent-color" value="#2f3540">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Accent Hover Color:</label>
+                <input type="color" id="hov-accent-color" name="hov-accent-color" value="#414959">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Secondary Hover Color:</label>
+                <input type="color" id="hov-color" name="hov-color" value="#353b49">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Link Color:</label>
+                <input type="color" id="link-color" name="link-color" value="#00abd2">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Attachment Background Color:</label>
+                <input type="color" id="attachment-background-color" name="attachment-background-color" value="#094c5b">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Attachment Text Color:</label>
+                <input type="color" id="attachment-color" name="attachment-color" value="#15a4c1">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Attachment Hover Background Color:</label>
+                <input type="color" id="attachment-background-color-hover" name="attachment-background-color-hover" value="#15a4c1">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Attachment Hover Text Color:</label>
+                <input type="color" id="attachment-color-hover" name="attachment-color-hover" value="#fefefe">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Post Button Color:</label>
+                <input type="color" id="button-color" name="button-color" value="#a5abb3">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Post Button Hover Color:</label>
+                <input type="color" id="hov-button-color" name="hov-button-color" value="#fefefe">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Modal Background Color:</label>
+                <input type="color" id="modal-color" name="modal-color" value="#3a3d43">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Modal Button Color:</label>
+                <input type="color" id="modal-button-color" name="modal-button-color" value="#4a4d56">
+                </div>
+                <div class="cstmeinp">
+                <label for="primary">Modal Button Hover Color:</label>
+                <input type="color" id="hov-modal-button-color" name="hov-modal-button-color" value="#636774">
+                </div>
+        
+        
+                <button onclick="applycsttme()" class="cstpgbt">Apply</button>
         </div>
-    <br>
-    <h2>Custom CSS</h2>
-    <div class='customcss'>
-        <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
     </div>
     `
 
     pageContainer.innerHTML = settingsContent;
 
-    const selectedTheme = localStorage.getItem("theme");
-    const themeButtons = document.querySelectorAll('.theme-button');
-    themeButtons.forEach((btn) => {
-        if (btn.textContent.toLowerCase().includes(selectedTheme)) {
-            btn.classList.add('selected');
-        }
-    });
+    const customThemeCSS = localStorage.getItem('customThemeCSS');
 
-    const storedIconIndex = localStorage.getItem('selectedIcon');
-    if (storedIconIndex !== null) {
-        changecon(parseInt(storedIconIndex, 10));
+    if (customThemeCSS) {
+        const regex = /--(.*?):(.*?);/g;
+        let match;
+        while ((match = regex.exec(customThemeCSS)) !== null) {
+            const propertyName = match[1].trim();
+            const propertyValue = match[2].trim();
+
+            const inputElement = document.getElementById(propertyName);
+            if (inputElement) {
+                inputElement.value = propertyValue;
+            }
+        }
     }
 
     const css = localStorage.getItem('customCSS');
-
     const cstmcsstxt = document.getElementById('customcss');
     cstmcsstxt.value = css || '';
-
 
     cstmcsstxt.addEventListener('input', function () {
         const newCustomCSS = cstmcsstxt.value;
@@ -1259,8 +1337,32 @@ function loadappearance() {
         
         localStorage.setItem('customCSS', newCustomCSS);
     });
-    
+}
 
+function applycsttme() {
+    const customThemeParameters = document.querySelectorAll('.custom-theme-in input[type="color"]');
+    let customThemeCSS = '';
+
+    customThemeParameters.forEach(input => {
+        const propertyName = input.name;
+        const propertyValue = input.value;
+        customThemeCSS += `--${propertyName}: ${propertyValue};`;
+    });
+
+    const customThemeStyle = document.createElement('style');
+    customThemeStyle.textContent = `.custom-theme { ${customThemeCSS} }`;
+    document.head.appendChild(customThemeStyle);
+
+    localStorage.setItem('customThemeCSS', customThemeCSS);
+}
+
+function loadcsttme() {
+    const customThemeCSS = localStorage.getItem('customThemeCSS');
+    if (customThemeCSS) {
+        const customThemeStyle = document.createElement('style');
+        customThemeStyle.textContent = `.custom-theme { ${customThemeCSS} }`;
+        document.head.appendChild(customThemeStyle);
+    }
 }
 
 function loadcstmcss() {
@@ -1287,7 +1389,7 @@ function changetheme(theme, button) {
     localStorage.setItem("theme", selectedTheme);
 
     const themeColorMetaTag = document.querySelector('meta[name="theme-color"]');
-    themeColorMetaTag.setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue('--background-color'));
+    themeColorMetaTag.setAttribute('content', getComputedStyle(document.documentElement).getPropertyValue('--background'));
 
     const themeButtons = document.querySelectorAll('.theme-button');
     themeButtons.forEach((btn) => btn.classList.remove('selected'));

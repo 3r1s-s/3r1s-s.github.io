@@ -12,6 +12,7 @@
     <meta name="background-color" content="#1c1c26">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta class="special" property="og:image" content="images/meo_ex.png">
+    <link rel="canonical" href="https://meo-32r.pages.dev/"/>
 
     <!--Splash Screens for iOS Devices-->
     <link href="images/splash/iphone5.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
@@ -31,6 +32,28 @@
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="plugins.css">
     <link rel="stylesheet" href="scheme.css">
+    <style id="customtheme">
+      .custom-theme {
+          --primary: #15a4c1;
+          --secondary: #0f788e;
+          --background: #1c1f26;
+          --color: #fefefe;
+          --accent-color: #2f3540;
+          --hov-accent-color: #353b49;
+          --hov-color: #414959;
+          --link-color: #00abd2;
+          --attachment-background-color: #094c5b;
+          --attachment-color: #15a4c1;
+          --attachment-background-color-hover: #15a4c1;
+          --attachment-color-hover: #fefefe;
+          --button-color: #a5abb3;
+          --hov-button-color: #fefefe;
+          --modal-color: #3a3d43;
+          --modal-button-color: #4a4d56;
+          --hov-modal-button-color: #636774;
+          --color-scheme: dark;
+      }
+    </style>
     <style id="customstyle"></style>
 </head>
 <body>
@@ -81,17 +104,31 @@
     <script src="markdown.js"></script>
     <script src="emoji.js"></script>
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js')
-            .then(registration => {
-              console.log('Service Worker registered successfully:', registration);
-            })
-            .catch(error => {
-              console.error('Service Worker registration failed:', error);
-            });
-        });
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("sw.js")
+          .then(function (registration) {
+            // Registration was successful
+            console.log(
+              "ServiceWorker registration successful with scope: ",
+              registration.scope
+            );
+          })
+          .catch(function (err) {
+            // registration failed :(
+            console.log("ServiceWorker registration failed: ", err);
+          });
       }
+      window.addEventListener("beforeinstallprompt", function (e) {
+        e.userChoice.then(function (choiceResult) {
+          console.log(choiceResult.outcome);
+          if (choiceResult.outcome == "dismissed") {
+            console.log("User cancelled home screen install");
+          } else {
+            console.log("User added to home screen");
+          }
+        });
+      });
     </script>
 </body>
 </html>
