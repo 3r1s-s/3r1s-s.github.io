@@ -45,6 +45,7 @@ function fetchprofile() {
                 `
                 profilecont.innerHTML += `
                 <span class="subheader">Quote</span>
+                <br>
                 <textarea class="quote-edit mdl-txt" id="quote">${data.quote}</textarea>
                 <span class="subheader">Personalization</span>
                 <div class="sec"><span>Profile Colour:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input>

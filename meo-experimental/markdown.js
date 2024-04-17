@@ -125,7 +125,7 @@ function embed(links) {
                 imgElement.setAttribute("onclick", `openImage('${link}')`);
                 imgElement.setAttribute("alt", fileName);
                 imgElement.classList.add("embed");
-
+                
                 //var imgLink = document.createElement("a");
                 //imgLink.setAttribute("href", baseURL);
                 //imgLink.setAttribute("target", "_blank");
@@ -133,9 +133,9 @@ function embed(links) {
                 //embeddedElement = imgLink;
                 embeddedElement = imgElement;
 
-
                 
-            } else if (['mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg'].includes(fileExtension)) {
+                
+            } else if (['mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg', 'mkv'].includes(fileExtension)) {
                 embeddedElement = document.createElement("video");
                 embeddedElement.setAttribute("src", baseURL);
                 embeddedElement.setAttribute("controls", "controls");
@@ -155,7 +155,7 @@ function embed(links) {
                 }
                 
                 const videoId = match[4];
-
+                
                 embeddedElement = document.createElement("iframe");
                 embeddedElement.setAttribute("width", "100%");
                 embeddedElement.setAttribute("height", "315");
@@ -181,7 +181,7 @@ function embed(links) {
                     embeddedElement.setAttribute("allowfullscreen", "");
                     embeddedElement.setAttribute("allow", "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture");
                     embeddedElement.setAttribute("loading", "lazy");
-
+                    
                     embeddedElement.classList.add("embed");
                 }
             } else if (link.includes('tenor.com')) {
@@ -195,9 +195,9 @@ function embed(links) {
                     embeddedElement.setAttribute('data-postid', postId);
                     embeddedElement.setAttribute('data-share-method', 'host');
                     embeddedElement.setAttribute('data-style', 'width: 100%; height: 100%; border-radius: 5px; max-width: 400px; aspect-ratio: 1 / 1; max-height: 400px;');
-
+                    
                     embeddedElement.classList.add("embed");
-
+                    
                     let scriptTag = document.createElement('script');
                     scriptTag.setAttribute('type', 'text/javascript');
                     scriptTag.setAttribute('src', 'embed.js');
@@ -209,7 +209,6 @@ function embed(links) {
                 embeddedElements.push(embeddedElement);
             }
         });
-
         return embeddedElements;
     }
 }

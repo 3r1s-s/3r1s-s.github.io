@@ -188,6 +188,7 @@
 }
 
 .cosmic-theme {
+    --primary: #8f8b7c;
     --background: #fff8e7;
     --color: #413f38;
     --accent-color: #f1ead9;
@@ -226,6 +227,7 @@
     --hov-button-color: #e2e8f0;
     --modal-color: #020617;
     --modal-button-color: #1e293b;
+    --hov-modal-button-color: #1e293b;
     --border: none;
     --border-radius: 12px;
     --button-radius: 12px;
@@ -300,20 +302,21 @@
 .theme-buttons-inner {
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-flow: wrap;
 }
 
 .theme-button {
-    width: 8em;
-    height: 8em;
+    width: 6em;
+    height: 6em;
     border-radius: 100%;
     margin: 5px;
     color: var(--color);
     border: 1px solid var(--background);
     background: var(--background);
+    box-shadow: 0px 5px 10px #00000050;
 }
 
 .selected {
     border: 3px solid var(--accent-color);
+    box-shadow: none;
 }

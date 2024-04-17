@@ -26,7 +26,6 @@
     <link href="images/splash/ipadpro3.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
     <link href="images/splash/ipadpro2.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
 
-
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="themes.css">
     <link rel="stylesheet" href="fonts.css">
@@ -48,9 +47,9 @@
           --attachment-color-hover: #fefefe;
           --button-color: #a5abb3;
           --hov-button-color: #fefefe;
-          --modal-color: #3a3d43;
-          --modal-button-color: #4a4d56;
-          --hov-modal-button-color: #636774;
+          --modal-color: #2f3540;
+          --modal-button-color: #414959;
+          --hov-modal-button-color: #4d576a;
           --color-scheme: dark;
       }
     </style>
@@ -90,20 +89,21 @@
     </div>
     </div>
     <div class="emoji-back" onclick="closepicker()"></div>
+    <div class="qs-back" onclick="closeswitcher()"></div>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
       window.md = new markdownit("default", {
         breaks: true,
         linkify: true,
         typographer: true,
       });
     </script>
-    <script src="script.js"></script>
-    <script src="markdown.js"></script>
-    <script src="emoji.js"></script>
-    <script>
+    <script src="script.js" type="text/javascript"></script>
+    <script src="markdown.js" type="text/javascript"></script>
+    <script src="emoji.js" type="text/javascript"></script>
+    <script type="text/javascript">
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("sw.js")
@@ -130,5 +130,19 @@
         });
       });
     </script>
+    <script type="text/javascript">
+      var element = new Image;
+      var devtoolsOpen = false;
+      element.__defineGetter__("id", function() {
+          devtoolsOpen = true;
+      });
+      setInterval(function() {
+          devtoolsOpen = false;
+          if (!settingsstuff().consolewarnings) {
+            console.log("%c" + "Warning!!", "font-size: 24px; color: red; font-weight: bold;");
+            console.log("Pasting anything in here is dangerous, there be dragons.");
+          }
+      }, 3000);
+  </script>
 </body>
 </html>

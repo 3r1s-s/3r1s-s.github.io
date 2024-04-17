@@ -1,7 +1,7 @@
 html {
     background: var(--background);
     color: var(--color);
-    --font: Whitney;
+    --font: Whitney, sans-serif;
     font-family: var(--font);
     transition: background-color 0.2s ease-in-out;
     scrollbar-gutter: stable;
@@ -83,6 +83,15 @@ pre {
     padding: var(--padding);
     border-radius: var(--border-radius);
     overflow: scroll;
+    font-size: 12px;
+}
+
+code {
+    background: #00000025;
+}
+
+pre > code {
+    background-color: transparent;
 }
 
 i {
@@ -125,6 +134,14 @@ ul {
 
 iframe {
     color-scheme: light;
+}
+
+ul, ol {
+    padding-left: 15px;
+}
+
+li::marker, code, kbd, samp, pre {
+    font-family: Reddit Mono, monospace;
 }
 
 bridge {
@@ -482,6 +499,8 @@ bridge {
     margin-bottom: var(--button-margin);
     padding: var(--button-padding);
     text-align: left;
+    display: flex;
+    align-items: center;
 }
 /*
 .navigation {
@@ -896,6 +915,15 @@ possible future styling
     padding: var(--padding);
 }
 
+.stg-section {
+    background-color: var(--accent-color);
+    color: var(--color);
+    border: none;
+    border-radius: var(--button-radius);
+    padding: var(--padding);
+    margin: var(--margin) 0;
+}
+
 .section-form {
     width: 100%;
     display: flex;
@@ -1201,6 +1229,61 @@ possible future styling
     margin: calc(var(--margin)/2);
 }
 
+.titlebar {
+    position: fixed;
+    left: env(titlebar-area-x, 0);
+    top: env(titlebar-area-y, 0);
+    width: env(titlebar-area-width, 100%);
+    height: env(titlebar-area-height, 33px);
+    -webkit-app-region: drag;
+    app-region: drag;
+}
+  
+.search-input {
+    margin: var(--margin);
+    padding: var(--button-padding) 20px;
+    width: 70%;
+    box-sizing: border-box;
+    border-radius: 100px;
+    background-color: var(--accent-color);
+}
+
+.search-input:focus {
+    background-color: var(--hov-color);
+}
+
+.gcname {
+    padding: 10px var(--button-padding);
+}
+
+.gcbtn {
+    padding: 4px 10px;
+}
+
+.homebuttonsvg {
+    margin: 0 10px 0 0;
+}
+
+.settingstoggle {
+    float: right;
+}
+
+.subsubheader {
+    font-size: 12px;
+    user-select: none;
+    opacity: 0.8;
+    margin: 2px 0;
+}
+
+.example-msg {
+    padding: 25px;
+    height: 200px;
+    overflow: hidden;
+    border: 1px solid var(--accent-color);
+    border-radius: var(--border-radius);
+    user-select: none;
+}
+
 @media screen and (max-width: 480px) {
     .modal {
         width: 100%;
@@ -1215,6 +1298,7 @@ possible future styling
         border-bottom-right-radius: 0;
         transform: translateY(-50%);
         animation: popup cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+        padding: var(--padding);
     }
 
     .modal-back-btn {

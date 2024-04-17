@@ -1,5 +1,5 @@
 html {
-    background-color: var(--background-color);
+    background: var(--background);
     color: var(--color);
     font-family: Whitney;
     transition: background-color 0.25s ease-in-out;
@@ -10,7 +10,7 @@ body {
 }
 
 bridge {
-    background-color: #714cc8;
+    background-color: var(--primary);
     border-radius: 25px;
     font-size: 12px;
     margin-left: 5px;
@@ -147,6 +147,14 @@ textarea {
     margin-bottom: 16px;
 }
 
+.emoji {
+    height: 16px;
+}
+
+.big > p > .emoji {
+    height: 46px;
+}
+
 .wrapper {
     padding: var(--padding);
     width: 100%;
@@ -159,6 +167,7 @@ textarea {
     word-wrap: anywhere;
     border: var(--border);
     display: flex;
+    user-select: none;
 }
 
 .shell {
@@ -184,18 +193,20 @@ textarea {
 
 .reply {
     margin: 5px;
-    border: 1px solid var(--background-color);
+    border: 1px solid var(--background);
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 5px;
 }
 
 .avatar {
-    width: 100%;
     width: 54px;
+    height: 54px;
+    overflow: hidden;
     border-radius: 100px;
-    margin: var(--text-margin) 0 10px 0;
     box-sizing: border-box;
+    aspect-ratio: 1;
+    box-shadow: 0px 1px 5px #00000050;
 }
 
 .pfp {

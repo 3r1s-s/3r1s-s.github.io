@@ -23,6 +23,18 @@
         </a>
     </div>
 </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/default.min.css">
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+<script>
+    window.md = new markdownit("default", {
+        breaks: true,
+        linkify: true,
+        typographer: true,
+    });
+</script>
 <script src="share.js"></script>
+<script src="markdown.js"></script>
+<script src="emoji.js"></script>
 </body>
 </html>

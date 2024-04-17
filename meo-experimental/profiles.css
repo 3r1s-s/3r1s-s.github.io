@@ -70,6 +70,7 @@ hr {
 .quote-edit {
     font-size: 16px;
     padding: var(--padding);
+    border: 2px dashed;
 }
 
 .profile-qt,
@@ -81,4 +82,8 @@ p {
 .custom-bg > .mdl-txt,
 .custom-bg > .sec {
     border: 1px solid #ffffff20;
+}
+
+.custom-bg > .quote-edit {
+    border: 2px dashed #ffffff20;
 }

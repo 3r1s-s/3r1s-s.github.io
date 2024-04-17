@@ -11,6 +11,7 @@ const sidediv = document.querySelectorAll(".side");
 let lul = 0;
 let eul;
 let sul = "";
+let pre = "";
 
 let ipBlocked = false;
 
@@ -22,7 +23,7 @@ const pfpCache = {};
 const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
 const chatCache = {}; // {chatId: chat}
 
-loadsavedplugins();
+//loadsavedplugins();
 loadcstmcss();
 loadcsttme();
 
@@ -36,7 +37,7 @@ function replsh(rpl) {
 function main() {
     meowerConnection = new WebSocket(server);
     let loggedin = false;
-    
+
     meowerConnection.addEventListener('error', function(event) {
         //launch screen
     });
@@ -46,6 +47,11 @@ function main() {
     };
     page = "login";
     loadtheme();
+    
+    if ('windowControlsOverlay' in navigator) {
+        console.log("PWA!!!!");
+    }
+      
     meowerConnection.onmessage = (event) => {
         console.log("INC: " + event.data);
 
@@ -102,7 +108,19 @@ function main() {
                     localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
                 }
                 sidebars();
-                if (!settingsstuff().homepage) {
+                
+                // work on this
+                if (pre !== "") {
+                    if (pre === "home") {
+                        loadhome();
+                    } else if (pre === "explore") {
+                        loadexplore();
+                    } else if (pre === "start") {
+                        loadstart();
+                    } else {
+                        loadchat(pre);
+                    }                
+                } else if (!settingsstuff().homepage) {
                     loadstart();
                 } else {
                     loadhome();
@@ -177,12 +195,60 @@ function main() {
             if (document.getElementById(sentdata.val.payload.post_id)) {
                 loadpost(sentdata.val.payload);
             }
+        } else if (sentdata.val.mode == "create_chat") {
+            const chat = sentdata.val.payload;
+            chatCache[chat._id] = chat;
+
+            const r = document.createElement("button");
+            r.id = chat._id;
+            r.className = `navigation-button button gcbtn`;
+            r.onclick = function() {
+                loadchat(chat._id);
+            };
+            if (chat.type === 1) {
+                console.log(loadPfp(chat.members.find(v => v !== localStorage.getItem("uname"))).src);
+            }
+
+            const chatIconElem = document.createElement("img");
+            chatIconElem.classList.add("avatar-small");
+            if (chat.type === 0) {
+                chatIconElem.src = "images/GC.svg";
+            } else {
+                loadPfp(chat.members.find(v => v !== localStorage.getItem("uname")))
+                .then(pfpElem => {
+                    chatIconElem.src = pfpElem.src;
+                });
+            }
+            r.appendChild(chatIconElem);
+
+            const chatNameElem = document.createElement("span");
+            chatNameElem.classList.add("gcname");
+            chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("uname"))}`;
+            r.appendChild(chatNameElem);
+    
+            const gcs = document.getElementsByClassName("gcs");
+            if (gcs.length > 0) {
+                gcs[0].appendChild(r);
+            }
         } else if (sentdata.val.mode == "update_chat") {
-            if (sentdata.val.payload._id in chatCache) {
-                chatCache[sentdata.val.payload._id] = Object.assign(
-                    postCache[sentdata.val.payload._id],
+            const chatId = sentdata.val.payload._id;
+
+            if (chatId in chatCache) {
+                chatCache[chatId] = Object.assign(
+                    chatCache[chatId],
                     sentdata.val.payload
                 );
+            }
+
+            if (sentdata.val.payload.nickname) {
+                const newNickname = sentdata.val.payload.nickname;
+                document.getElementById(chatId).innerText = newNickname;
+                if (page === sentdata.val.payload._id) {
+                    const nicknameElem = document.getElementById("nickname");
+                    const chatIdElem = nicknameElem.childNodes[1].cloneNode(true);
+                    nicknameElem.innerText = newNickname;
+                    nicknameElem.appendChild(chatIdElem);
+                }
             }
         } else if (sentdata.cmd == "ulist") {
             const iul = sentdata.val;
@@ -221,7 +287,11 @@ function main() {
                 divToDelete.parentNode.removeChild(divToDelete);
                 if (page === sentdata.val.id) {
                     openUpdate("You have been removed from the chat you were in.");
-                    loadhome();
+                    if (!settingsstuff().homepage) {
+                        loadstart();
+                    } else {
+                        loadhome();
+                    }
                 }
                 console.log(sentdata.val.id, "deleted successfully.");
             } else {
@@ -230,12 +300,19 @@ function main() {
         }
     };
     document.addEventListener("keydown", function(event) {    
-        if (page !== "settings" && page !== "explore" && page !== "login") {
+        if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
             if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
-            sendpost();
-            const textarea = document.getElementById('msg');
-            textarea.style.height = 'auto';
+                event.preventDefault();
+                if (document.getElementById('msg') === document.activeElement) {
+                    sendpost();
+                    const textarea = document.getElementById('msg');
+                    textarea.style.height = 'auto';
+                } else {
+                    if (opened === 1) {
+                        fstemj();
+                        document.getElementById("msg").focus();
+                    }
+                }
         } else if (event.key === "Enter" && event.shiftKey) {
         } else if (event.key === "Escape") {
             closemodal();
@@ -256,12 +333,29 @@ function main() {
     });
     addEventListener("keydown", (event) => {
         if (!event.ctrlKey && event.keyCode >= 48 && event.keyCode <= 90) {
-            if (!document.activeElement || document.activeElement.tagName !== 'INPUT') {
+            if (!document.activeElement || (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA')) {
+                document.getElementById("msg").focus();
+            }
+        } else if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+            if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
+                event.preventDefault();
+                togglePicker();
+            }
+        } else if ((event.ctrlKey || event.metaKey) && event.key === 'e') {
+            if (postCache[page]) {
+                event.preventDefault();
+
+                const post = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("uname"));
+                if (post) {
+                    editPost(page, post._id);
+                }
+            }
+        } else if ((event.ctrlKey || event.metaKey) && event.key === 'v') {
+            if (!document.activeElement || (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA')) {
                 document.getElementById("msg").focus();
             }
         }
     });
-
 }
 
 function loadpost(p) {
@@ -425,6 +519,11 @@ function loadPfp(username, button) {
                         }
                         
                         if (userData.avatar_color) {
+//                            if (userData.avatar_color === "!color") {
+//                                pfpElement.style.border = `3px solid #f00`;
+//                                pfpElement.style.backgroundColor = `#f00`;
+//                            } else {
+//                            }
                             pfpElement.style.border = `3px solid #${userData.avatar_color}`;
                             pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
                         }
@@ -537,7 +636,13 @@ function loadPfpstraight(username, button) {
                     pfpElement.classList.add("svg-avatar");
 
                     if (userData.avatar_color) {
-                        pfpElement.style.border = `3px solid #${userData.avatar_color}`;
+                        if (userData.avatar_color === "!color") {
+                            pfpElement.style.border = `3px solid #f00`;
+                            pfpElement.style.backgroundColor = `#f00`;
+                        } else {
+                            pfpElement.style.border = `3px solid #${userData.avatar_color}`;
+                            pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
+                        }
                     }
 
                 } else {
@@ -728,6 +833,7 @@ function sendpost() {
 
 function loadhome() {
     page = "home";
+    pre = "home";
     let pageContainer
     pageContainer = document.getElementById("main");
     pageContainer.innerHTML = `<div class='info'><h1 class='header-top'>Home</h1><p id='info'></p></div>` + loadinputs();
@@ -775,14 +881,13 @@ function sidebars() {
     
     let navlist = `
     <input type='button' class='navigation-button button' id='profile' value='Profile' onclick='openUsrModal("${localStorage.getItem("uname")}")' aria-label="profile">
-    <input type='button' class='navigation-button button' id='explore' value='Explore' onclick='loadExplore();' aria-label="explore">
+    <input type='button' class='navigation-button button' id='explore' value='Explore' onclick='loadexplore();' aria-label="explore">
     <input type='button' class='navigation-button button' id='inbox' value='Inbox' onclick='loadinbox()' aria-label="inbox">
     <input type='button' class='navigation-button button' id='settings' value='Settings' onclick='loadstgs()' aria-label="settings">
     <input type='button' class='navigation-button button' id='logout' value='Logout' onclick='logout(false)' aria-label="logout">
     `;
 
     if (localStorage.getItem("permissions") === "1") {
-    console.log(localStorage.getItem("permissions"));
     navlist = `<input type='button' class='navigation-button button' id='moderation' value='Moderate' onclick='openModModal()' aria-label="moderate">` + navlist;
     }
 
@@ -800,19 +905,52 @@ function sidebars() {
         const gcdiv = document.createElement("div");
         gcdiv.className = "gcs";
 
-        groupsdiv.innerHTML = `<h1 class="groupheader">Chats</h1>`;
-        gcdiv.innerHTML += `<button class="navigation-button button" onclick="loadhome()">Home</button>`;
+        groupsdiv.innerHTML = `
+        <h1 class="groupheader">Chats</h1>
+        <input type="text" class="search-input" id="search" placeholder="Search" rows="1" autocomplete="false">
+        `;
+        gcdiv.innerHTML += `<button class="navigation-button button gcbtn" onclick="loadhome()">
+        <svg width="36" height="26" class="homebuttonsvg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8334 21.6667V15.1667H15.1667V21.6667H20.5834V13H23.8334L13.0001 3.25L2.16675 13H5.41674V21.6667H10.8334Z" fill="currentColor"/></svg>
+        <span class="gcname">Home</span></button>`;
 
         response.autoget.forEach(chat => {
             chatCache[chat._id] = chat;
 
             const r = document.createElement("button");
             r.id = chat._id;
-            r.className = `navigation-button button`;
+            r.className = `navigation-button button gcbtn`;
             r.onclick = function() {
                 loadchat(chat._id);
             };
-            r.innerHTML = escapeHTML(chat.nickname || `DM with ${chat.members.find(v => v !== localStorage.getItem("uname"))}`);
+            if (chat.type === 1) {
+                console.log(loadPfp(chat.members.find(v => v !== localStorage.getItem("uname"))).src);
+            }
+
+            const chatIconElem = document.createElement("img");
+            chatIconElem.classList.add("avatar-small");
+            if (chat.type === 0) {
+                chatIconElem.src = "images/GC.svg";
+                chatIconElem.style.border = "3px solid #1f5831";
+            } else {
+                // this is so hacky :p
+                // - Tnix
+                loadPfp(chat.members.find(v => v !== localStorage.getItem("uname")))
+                .then(pfpElem => {
+                    if (pfpElem) {
+                        chatIconElem.src = pfpElem.src;
+                        chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px");
+                        if (pfpElem.classList.contains("svg-avatar")) {
+                            chatIconElem.classList.add("svg-avatar");
+                        }
+                    }
+                });
+            }
+            r.appendChild(chatIconElem);
+
+            const chatNameElem = document.createElement("span");
+            chatNameElem.classList.add("gcname");
+            chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("uname"))}`;
+            r.appendChild(chatNameElem);
     
             gcdiv.appendChild(r);
         });
@@ -829,6 +967,7 @@ function sidebars() {
 
 function loadstart() {
     page = "start";
+    pre = "start";
     sidebars();
     pageContainer = document.getElementById("main");
     pageContainer.innerHTML = `
@@ -844,7 +983,7 @@ function loadstart() {
         <button class="qbtn button" aria-label="create chat" onclick="loadhome();">Go Home</button>
         </div>
         <div class="qc-bts-sc">
-        <button class="qbtn button" aria-label="create chat" onclick="loadExplore();">Explore</button>
+        <button class="qbtn button" aria-label="create chat" onclick="loadexplore();">Explore</button>
         <button class="qbtn button" aria-label="create chat" onclick="opendm('Eris')">DM Me :)</button>
         </div>
     </div>
@@ -895,7 +1034,6 @@ function opendm(username) {
         return response.json();
     })
     .then(data => {
-        console.log(data);
         chatCache[data._id] = data;
         parent.loadchat(data._id);
         parent.closemodal();
@@ -907,8 +1045,38 @@ function opendm(username) {
 
 function loadchat(chatid) {
     page = chatid;
+    pre = chatid;
 
+    if (!chatCache[chatid]) {
+        fetch(`https://api.meower.org/chats/${chatid}`, {
+            headers: {token: localStorage.getItem("token")}
+        })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error("Chat not found");
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }
+            return response.json();
+        })
+        .then(data => {
+            chatCache[chatid] = data;
+            loadchat(chatid);
+        })
+        .catch(e => {
+            openUpdate(`Unable to open chat: ${e}`);
+            if (!settingsstuff().homepage) {
+                loadstart();
+            } else {
+                loadhome();
+            }
+        });
+        return;
+    }
     const data = chatCache[chatid];
+
     const mainContainer = document.getElementById("main");
     if (data.nickname) {
         mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${escapeHTML(data.nickname)}<i class="subtitle">${chatid}</i></h1><p id='info'></p></div>` + loadinputs();
@@ -953,6 +1121,7 @@ function loadchat(chatid) {
 
 function loadinbox() {
     page = "inbox"
+    pre = "inbox"
     const inboxUrl = 'https://api.meower.org/inbox?autoget=1';
 
     const xhttp = new XMLHttpRequest();
@@ -1012,15 +1181,13 @@ function logout(iskl) {
 
 function loadstgs() {
     page = "settings";
-    const gcsc = document.getElementById("groups");
-    gcsc.innerHTML = ""
+    pre = "settings";
     const navc = document.getElementById("nav");
     navc.innerHTML = `
     <div class='navigation'>
     <div class='nav-top'>
     <input type='button' class='navigation-button button' id='submit' value='General' onclick='loadgeneral()'>
     <input type='button' class='navigation-button button' id='submit' value='Appearance' onclick='loadappearance()'>
-    <input type='button' class='navigation-button button' id='submit' value='Plugins' onclick='loadplugins()'>
     </div>
     <input type='button' class='navigation-button button' id='submit' value='Go Home' onclick='loadhome()'>
     </div>
@@ -1036,21 +1203,29 @@ function loadgeneral() {
             <h1>General</h1>
             <h3>Chat</h3>
             <div class="msgs"></div>
-            <div class='section'>
+            <div class='stg-section'>
             <label>
             Disable swear filter
-            <input type="checkbox" id="swearfilter">
+            <input type="checkbox" id="swearfilter" class="settingstoggle">
+            <p class="subsubheader">This should just be enabled by default</p>
             </label>
             </div>
-            <br>
-            <div class="section">
+            <div class="stg-section">
             <label>
             Auto-navigate to Home
-            <input type="checkbox" id="homepage">
+            <input type="checkbox" id="homepage" class="settingstoggle">
+            <p class="subsubheader">Instead of showing you the Start Page you get directly taken to home</p>
+            </label>
+            </div>
+            <div class="stg-section">
+            <label>
+            Disable console warning
+            <input type="checkbox" id="consolewarnings" class="settingstoggle">
+            <p class="subsubheader">Hides warning message from console</p>
             </label>
             </div>
             <h3>About</h3>
-            <div class="section">
+            <div class="stg-section">
             <span>meo v1.20</span>
             </div>
             </div>
@@ -1061,19 +1236,22 @@ function loadgeneral() {
             const chbxs = document.querySelectorAll("input[type='checkbox']");
             const swftcheckbox = document.getElementById("swearfilter");
             const homepagecheckbox = document.getElementById("homepage");
+            const consolewarningscheckbox = document.getElementById("consolewarnings");
         
             chbxs.forEach(function(checkbox) {
                 checkbox.addEventListener("change", function () {
-                    localStorage.setItem('settings', JSON.stringify({ swearfilter: swftcheckbox.checked, homepage: homepagecheckbox.checked }));
+                    localStorage.setItem('settings', JSON.stringify({ swearfilter: swftcheckbox.checked, homepage: homepagecheckbox.checked, consolewarnings: consolewarningscheckbox.checked }));
                 });
             });
         
             const storedsettings = JSON.parse(localStorage.getItem('settings')) || {};
             const swearfiltersetting = storedsettings.swearfilter || false;
             const homepagesetting = storedsettings.homepage || false;
+            const consolewarningssetting = storedsettings.homepage || false;
         
             swftcheckbox.checked = swearfiltersetting;
             homepagecheckbox.checked = homepagesetting;
+            consolewarningscheckbox.checked = consolewarningssetting;
 }
 
 async function loadplugins() {
@@ -1178,53 +1356,112 @@ function loadappearance() {
     let settingsContent = `
     <div class="settings">
         <h1>Appearance</h1>
-        <div class="msgs"></div>
-            <h2>Theme</h2>
-
-            <div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
-            <div class="toolbarContainer">
-                <div class="toolButton">
-                    <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
-                </div>
-                <div class="toolButton">
-                    <svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>
-                </div>
-                <div class="toolButton">
-                    <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg>
-                </div>
-                <div class="toolButton">
-                    <svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg>
-                </div>
+        <div class="msgs example-msg">
+        <div id="example" class="post" style="margin-top: -2.8em;"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton">
+                            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg>
+                        </div>
+                    </div>
+                    </div><div class="mobileContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton mobileButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
+                        </div>
+                    </div>
+                    </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton">
+                            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg>
+                        </div>
+                    </div>
+                    </div><div class="mobileContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton mobileButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
+                        </div>
+                    </div>
+                    </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton">
+                            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg>
+                        </div>
+                    </div>
+                    </div><div class="mobileContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton mobileButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
+                        </div>
+                    </div>
+                    </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton">
+                            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg class="icon" height="24" width="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.486 2 2 6.486 2 12C2 17.515 6.486 22 12 22C14.039 22 15.993 21.398 17.652 20.259L16.521 18.611C15.195 19.519 13.633 20 12 20C7.589 20 4 16.411 4 12C4 7.589 7.589 4 12 4C16.411 4 20 7.589 20 12V12.782C20 14.17 19.402 15 18.4 15L18.398 15.018C18.338 15.005 18.273 15 18.209 15H18C17.437 15 16.6 14.182 16.6 13.631V12C16.6 9.464 14.537 7.4 12 7.4C9.463 7.4 7.4 9.463 7.4 12C7.4 14.537 9.463 16.6 12 16.6C13.234 16.6 14.35 16.106 15.177 15.313C15.826 16.269 16.93 17 18 17L18.002 16.981C18.064 16.994 18.129 17 18.195 17H18.4C20.552 17 22 15.306 22 12.782V12C22 6.486 17.514 2 12 2ZM12 14.599C10.566 14.599 9.4 13.433 9.4 11.999C9.4 10.565 10.566 9.399 12 9.399C13.434 9.399 14.6 10.565 14.6 11.999C14.6 13.433 13.434 14.599 12 14.599Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z"></path></svg>
+                        </div>
+                        <div class="toolButton">
+                            <svg class="icon_d1ac81" width="24" height="24" viewBox="0 0 24 24"><path d="M10 8.26667V4L3 11.4667L10 18.9333V14.56C15 14.56 18.5 16.2667 21 20C20 14.6667 17 9.33333 10 8.26667Z" fill="currentColor"></path></svg>
+                        </div>
+                    </div>
+                    </div><div class="mobileContainer">
+                    <div class="toolbarContainer">
+                        <div class="toolButton mobileButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
+                        </div>
+                    </div>
+                    </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div>
             </div>
-            </div><div class="mobileContainer">
-            <div class="toolbarContainer">
-                <div class="toolButton mobileButton">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
-                </div>
-            </div>
-            </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div>
-
-            <div class="theme-buttons">
+        <div class="theme-buttons">
+            <h3>Theme</h3>
                 <div class="theme-buttons-inner">
                     <button onclick='changetheme(\"light\", this)' class='theme-button light-theme'>Light</button>
                     <button onclick='changetheme(\"dark\", this)' class='theme-button dark-theme'>Dark</button>
                 </div>
+            <h3>Special Themes</h3>
                 <div class="theme-buttons-inner">
                     <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
                     <button onclick='changetheme(\"bsky\", this)' class='theme-button bsky-theme'>Midnight</button>
                     <button onclick='changetheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
                     <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
                 </div>
+            <h3>Custom Theme</h3>
                 <div class="theme-buttons-inner">
                     <button onclick='changetheme(\"custom\", this)' class='theme-button custom-theme'>Custom</button>
                 </div>
             </div>
             <br>
-            <h2>Custom CSS</h2>
-            <div class='customcss'>
-                <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
-            </div>
-            <h2>Custom Theme</h2>
             <div class="custom-theme-in section">
                 <div class="cstmeinp">
                 <label for="primary">Primary Color:</label>
@@ -1284,19 +1521,23 @@ function loadappearance() {
                 </div>
                 <div class="cstmeinp">
                 <label for="primary">Modal Background Color:</label>
-                <input type="color" id="modal-color" name="modal-color" value="#3a3d43">
+                <input type="color" id="modal-color" name="modal-color" value="#2f3540">
                 </div>
                 <div class="cstmeinp">
                 <label for="primary">Modal Button Color:</label>
-                <input type="color" id="modal-button-color" name="modal-button-color" value="#4a4d56">
+                <input type="color" id="modal-button-color" name="modal-button-color" value="#414959">
                 </div>
                 <div class="cstmeinp">
                 <label for="primary">Modal Button Hover Color:</label>
-                <input type="color" id="hov-modal-button-color" name="hov-modal-button-color" value="#636774">
+                <input type="color" id="hov-modal-button-color" name="hov-modal-button-color" value="#4d576a">
                 </div>
         
         
                 <button onclick="applycsttme()" class="cstpgbt">Apply</button>
+        </div>
+        <h3>Custom CSS</h3>
+        <div class='customcss'>
+            <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
         </div>
     </div>
     `
@@ -1337,6 +1578,10 @@ function loadappearance() {
         
         localStorage.setItem('customCSS', newCustomCSS);
     });
+
+    const themeButtons = document.querySelectorAll('.theme-button');
+    themeButtons.forEach((btn) => btn.classList.remove('selected'));
+    document.querySelector('.theme-buttons .' + localStorage.getItem('theme') + '-theme').classList.add('selected');
 }
 
 function applycsttme() {
@@ -1497,7 +1742,7 @@ function editPost(postOrigin, postid) {
     editIndicator.innerHTML = `
     <span class="edit-info">Editing post ${postid}</span>
     <span onclick="cancelEdit()">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" clip-rule="evenodd" d="M2.05026 11.9497C4.78394 14.6834 9.21607 14.6834 11.9497 11.9497C14.6834 9.21607 14.6834 4.78394 11.9497 2.05026C9.21607 -0.683419 4.78394 -0.683419 2.05026 2.05026C-0.683419 4.78394 -0.683419 9.21607 2.05026 11.9497ZM9.3065 10.2946L7.00262 7.99112L4.69914 10.295C4.42624 10.5683 3.98395 10.5683 3.71065 10.295C3.43754 10.0219 3.43754 9.5788 3.71065 9.3065L6.01432 7.00282L3.7048 4.69371C3.4317 4.4206 3.4317 3.97791 3.7048 3.7048C3.97751 3.4317 4.4202 3.4317 4.6933 3.7048L7.00262 6.01412L9.3065 3.71065C9.4791 3.53764 9.71978 3.4742 9.94253 3.52012C10.0718 3.5467 10.1949 3.61014 10.2952 3.71044C10.5683 3.98315 10.5683 4.42624 10.2952 4.69894L7.99132 7.00242L10.295 9.30609C10.5683 9.579 10.5683 10.0213 10.295 10.2946C10.0221 10.5679 9.5794 10.5679 9.3065 10.2946Z" fill="currentColor"/>
     </svg>
     </span>
@@ -1506,7 +1751,7 @@ function editPost(postOrigin, postid) {
     const msgbox = document.getElementById("msg");
     msgbox.value = post.unfiltered_p || post.p;
     msgbox.focus();
-
+    autoresize();
     closemodal();
 }
 
@@ -1561,6 +1806,37 @@ function closeImage() {
         mdl.classList.remove('custom-bg');
         mdl.innerHTML = '';
     }
+}
+
+function createChat() {
+    const nickname = document.getElementById("chat-nick-input").value.trim();
+    if (nickname.length < 1) {
+        openUpdate("Chat nickname too short!");
+        return;
+    } else if (nickname.length > 20) {
+        openUpdate("Chat nickname too long!");
+        return;
+    }
+    fetch("https://api.meower.org/chats", {
+        method: "POST",
+        headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ nickname })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        chatCache[data._id] = data;
+        loadchat(data._id);
+        closemodal();
+    })
+    .catch(e => {
+        openUpdate(`Failed to create chat: ${e}`);
+    });
 }
 
 function openModal(postId) {
@@ -2239,7 +2515,6 @@ function sendAlert(userid) {
 }
 
 function closeReport(postid, action) {
-    console.log(postid);
     if (action) {
         fetch(`https://api.meower.org/admin/reports/${postid}`, {
             method: "PATCH",
@@ -2317,13 +2592,13 @@ function createChatModal() {
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>Create Chat</h3>
-                <input class="mdl-inp" placeholder="nickname">
+                <input id="chat-nick-input" class="mdl-inp" placeholder="nickname" minlength="1" maxlength="20">
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="">create</button>
+                <button class="modal-back-btn" onclick="createChat()">create</button>
                 `;
             }
         }
@@ -2409,8 +2684,9 @@ function mdlshare(event) {
     closemodal();
 }
 
-function loadExplore() {
+function loadexplore() {
     page = "explore";
+    pre = "explore";
     document.getElementById("main").innerHTML = `
     <div class="explore">
     <h1>Explore</h1>
