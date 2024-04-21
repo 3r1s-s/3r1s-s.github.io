@@ -299,6 +299,34 @@
     --color-scheme: dark;
 }
 
+.glight-theme {
+    --accent-color: #dddddd50;
+    --hov-accent-color: #dddddd80;
+    --hov-color: #dddddd80;
+    --background: #ffffff80;
+    --button-color: #efefefb6;
+    --modal-color: #efefef47;
+    --modal-button-color: #dddddd80;
+    --hov-modal-button-color: #dddddd80;
+    --border-radius: 15px;
+    --button-radius: 15px;
+    --glass-border: 1px solid #ffffff80;
+}
+
+.gdark-theme {
+    --accent-color: #3c3c3c50;
+    --hov-accent-color: #4f4f4f50;
+    --hov-color: #3c3c3c80;
+    --background: #ffffff20;
+    --button-color: #ffffff73;
+    --modal-color: #4f4f4f50;
+    --modal-button-color: #4f4f4f50;
+    --hov-modal-button-color: #4f4f4f50;
+    --border-radius: 15px;
+    --button-radius: 15px;
+    --glass-border: 1px solid #ffffff20;
+}
+
 .theme-buttons-inner {
     display: flex;
     align-items: center;

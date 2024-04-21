@@ -23,7 +23,7 @@ const pfpCache = {};
 const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
 const chatCache = {}; // {chatId: chat}
 
-//loadsavedplugins();
+loadsavedplugins();
 loadcstmcss();
 loadcsttme();
 
@@ -836,7 +836,9 @@ function loadhome() {
     pre = "home";
     let pageContainer
     pageContainer = document.getElementById("main");
-    pageContainer.innerHTML = `<div class='info'><h1 class='header-top'>Home</h1><p id='info'></p></div>` + loadinputs();
+    pageContainer.innerHTML = `
+        <div class='info'><h1 class='header-top'>Home</h1><p id='info'></p>
+        </div>` + loadinputs();
     document.getElementById("info").innerText = lul + " users online (" + sul + ")";
     
     sidebars();
@@ -1188,6 +1190,7 @@ function loadstgs() {
     <div class='nav-top'>
     <input type='button' class='navigation-button button' id='submit' value='General' onclick='loadgeneral()'>
     <input type='button' class='navigation-button button' id='submit' value='Appearance' onclick='loadappearance()'>
+    <input type="button" class="navigation-button button" id="submit" value="Plugins" onclick="loadplugins()">
     </div>
     <input type='button' class='navigation-button button' id='submit' value='Go Home' onclick='loadhome()'>
     </div>
@@ -1456,6 +1459,12 @@ function loadappearance() {
                     <button onclick='changetheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
                     <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
                 </div>
+            <h3>Glass Themes</h3>
+                <div class="theme-buttons-inner">
+                    <button onclick='changetheme(\"glight\", this)' class='theme-button glight-theme'>Light</button>
+                    <button onclick='changetheme(\"gdark\", this)' class='theme-button gdark-theme'>Dark</button>
+                    <button onclick='imagemodal()' class='theme-button upload-button'>Add Image</button>
+                </div>
             <h3>Custom Theme</h3>
                 <div class="theme-buttons-inner">
                     <button onclick='changetheme(\"custom\", this)' class='theme-button custom-theme'>Custom</button>
@@ -1639,6 +1648,11 @@ function changetheme(theme, button) {
     const themeButtons = document.querySelectorAll('.theme-button');
     themeButtons.forEach((btn) => btn.classList.remove('selected'));
     button.classList.add('selected');
+    const lightThemeBody = document.querySelector('body');
+    if (lightThemeBody) {
+        lightThemeBody.style.backgroundImage = ``;
+    }
+    loadBG();
 }
 
 function settingsstuff() {
@@ -2604,6 +2618,70 @@ function createChatModal() {
         }
     }
 }
+
+function imagemodal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>Background Image Link</h3>
+                <input id="bg-image-input" class="mdl-inp" placeholder="https://512pixels.net/downloads/macos-wallpapers/10-3.png">
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="updateBG()">update</button>
+                `;
+            }
+        }
+    }
+}
+
+function loadBG() {
+    const bgImageURL = localStorage.getItem('backgroundImageURL');
+    console.log(bgImageURL)
+    if (bgImageURL) {
+        const lightThemeBody = document.querySelector('.glight-theme body');
+        if (lightThemeBody) {
+            lightThemeBody.style.backgroundImage = `url('${bgImageURL}')`;
+        }
+
+        const darkThemeBody = document.querySelector('.gdark-theme body');
+        if (darkThemeBody) {
+            darkThemeBody.style.backgroundImage = `url('${bgImageURL}')`;
+        }
+    }
+}
+
+function updateBG() {
+    const bgImageInput = document.getElementById('bg-image-input');
+    if (bgImageInput) {
+        const bgImageURL = bgImageInput.value;
+
+        localStorage.setItem('backgroundImageURL', bgImageURL);
+
+        const lightThemeBody = document.querySelector('.glight-theme body');
+        if (lightThemeBody) {
+            lightThemeBody.style.backgroundImage = `url('${bgImageURL}')`;
+        }
+
+        const darkThemeBody = document.querySelector('.gdark-theme body');
+        if (darkThemeBody) {
+            darkThemeBody.style.backgroundImage = `url('${bgImageURL}')`;
+        }
+    }
+    closemodal();
+}
+
 // credit: theotherhades
 function ipBlockedModal() {
     console.log("Showing IP blocked modal");
