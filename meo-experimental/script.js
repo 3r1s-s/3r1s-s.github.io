@@ -884,7 +884,6 @@ function sidebars() {
     <input type='button' class='navigation-button button' id='explore' value='Explore' onclick='loadexplore();' aria-label="explore">
     <input type='button' class='navigation-button button' id='inbox' value='Inbox' onclick='loadinbox()' aria-label="inbox">
     <input type='button' class='navigation-button button' id='settings' value='Settings' onclick='loadstgs()' aria-label="settings">
-    <input type='button' class='navigation-button button' id='logout' value='Logout' onclick='logout(false)' aria-label="logout">
     <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("uname")}")' aria-label="profile">
         <img class="avatar-small" id="uav" src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" style="border: 3px solid #b190fe;">
         <span class="gcname">${localStorage.getItem("uname")}</span></div>
@@ -1209,11 +1208,11 @@ function loadstgs() {
     pre = "settings";
     const navc = document.querySelector(".nav-top");
     navc.innerHTML = `
-    <input type='button' class='navigation-button button' id='submit' value='General' onclick='loadgeneral()'>
-    <input type='button' class='navigation-button button' id='submit' value='Appearance' onclick='loadappearance()'>
-    <input type="button" class="navigation-button button" id="submit" value="Plugins" onclick="loadplugins()">
+    <input type='button' class='navigation-button button' id='submit' value='General' onclick='loadgeneral()' aria-label="general">
+    <input type='button' class='navigation-button button' id='submit' value='Appearance' onclick='loadappearance()' aria-label="appearance">
+    <input type="button" class="navigation-button button" id="submit" value="Plugins" onclick="loadplugins()" aria-label="plugins">
+    <input type='button' class='navigation-button button' id='logout' value='Logout' onclick='logout(false)' aria-label="logout">
     `;
-
     loadgeneral();
 }
 
