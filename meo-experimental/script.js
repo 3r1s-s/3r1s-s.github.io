@@ -117,6 +117,8 @@ function main() {
                         loadexplore();
                     } else if (pre === "start") {
                         loadstart();
+                    } else if (pre === "settings") {
+                        loadstgs();
                     } else {
                         loadchat(pre);
                     }                
@@ -570,9 +572,6 @@ function loadPfp(username, button) {
                         
                         pfpElement.style.border = `3px solid #fff`;
                         pfpElement.style.backgroundColor = `#fff`;
-                        
-                        console.error("No avatar or pfp_data available for: ", username);
-                        resolve(null);
                     }
 
                     if (pfpElement) {
@@ -882,12 +881,27 @@ function sidebars() {
     `;
     
     let navlist = `
-    <input type='button' class='navigation-button button' id='profile' value='Profile' onclick='openUsrModal("${localStorage.getItem("uname")}")' aria-label="profile">
     <input type='button' class='navigation-button button' id='explore' value='Explore' onclick='loadexplore();' aria-label="explore">
     <input type='button' class='navigation-button button' id='inbox' value='Inbox' onclick='loadinbox()' aria-label="inbox">
     <input type='button' class='navigation-button button' id='settings' value='Settings' onclick='loadstgs()' aria-label="settings">
     <input type='button' class='navigation-button button' id='logout' value='Logout' onclick='logout(false)' aria-label="logout">
+    <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("uname")}")' aria-label="profile">
+        <img class="avatar-small" id="uav" src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" style="border: 3px solid #b190fe;">
+        <span class="gcname">${localStorage.getItem("uname")}</span></div>
+    </button>
     `;
+
+    loadPfp(localStorage.getItem("uname"))
+    .then(pfpElem => {
+        if (pfpElem) {
+            const userAvatar = document.getElementById("uav");
+            userAvatar.src = pfpElem.src;
+            userAvatar.style.border = pfpElem.style.border.replace("3px", "3px");
+            if (pfpElem.classList.contains("svg-avatar")) {
+                userAvatar.classList.add("svg-avatar");
+            }
+        }
+    });
 
     if (localStorage.getItem("permissions") === "1") {
     navlist = `<input type='button' class='navigation-button button' id='moderation' value='Moderate' onclick='openModModal()' aria-label="moderate">` + navlist;
@@ -910,10 +924,12 @@ function sidebars() {
         groupsdiv.innerHTML = `
         <h1 class="groupheader">Chats</h1>
         <input type="text" class="search-input" id="search" placeholder="Search" rows="1" autocomplete="false">
+        
         `;
         gcdiv.innerHTML += `<button class="navigation-button button gcbtn" onclick="loadhome()">
         <svg width="36" height="26" class="homebuttonsvg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8334 21.6667V15.1667H15.1667V21.6667H20.5834V13H23.8334L13.0001 3.25L2.16675 13H5.41674V21.6667H10.8334Z" fill="currentColor"/></svg>
-        <span class="gcname">Home</span></button>`;
+        <span class="gcname">Home</span></button>
+        `;
 
         response.autoget.forEach(chat => {
             chatCache[chat._id] = chat;
@@ -945,8 +961,11 @@ function sidebars() {
                             chatIconElem.classList.add("svg-avatar");
                         }
                     }
+                    console.log(pfpElem);
                 });
             }
+            console.log(chatIconElem)
+
             r.appendChild(chatIconElem);
 
             const chatNameElem = document.createElement("span");
@@ -956,8 +975,9 @@ function sidebars() {
     
             gcdiv.appendChild(r);
         });
-    
+
         groupsdiv.appendChild(gcdiv);
+
     };
     char.send();
 
@@ -1077,6 +1097,9 @@ function loadchat(chatid) {
         });
         return;
     }
+
+    sidebars();
+
     const data = chatCache[chatid];
 
     const mainContainer = document.getElementById("main");
@@ -1184,16 +1207,11 @@ function logout(iskl) {
 function loadstgs() {
     page = "settings";
     pre = "settings";
-    const navc = document.getElementById("nav");
+    const navc = document.querySelector(".nav-top");
     navc.innerHTML = `
-    <div class='navigation'>
-    <div class='nav-top'>
     <input type='button' class='navigation-button button' id='submit' value='General' onclick='loadgeneral()'>
     <input type='button' class='navigation-button button' id='submit' value='Appearance' onclick='loadappearance()'>
     <input type="button" class="navigation-button button" id="submit" value="Plugins" onclick="loadplugins()">
-    </div>
-    <input type='button' class='navigation-button button' id='submit' value='Go Home' onclick='loadhome()'>
-    </div>
     `;
 
     loadgeneral();
@@ -1542,10 +1560,8 @@ function loadappearance() {
                 <label for="primary">Modal Button Hover Color:</label>
                 <input type="color" id="hov-modal-button-color" name="hov-modal-button-color" value="#4d576a">
                 </div>
-        
-        
-                <button onclick="applycsttme()" class="cstpgbt">Apply</button>
-        </div>
+            </div>
+            <button onclick="applycsttme()" class="cstpgbt">Apply</button>
         <h3>Custom CSS</h3>
         <div class='customcss'>
             <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>

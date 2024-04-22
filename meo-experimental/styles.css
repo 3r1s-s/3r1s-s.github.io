@@ -1288,6 +1288,15 @@ possible future styling
     user-select: none;
 }
 
+.user-area {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--button-margin);
+    border-radius: var(--button-radius);
+    background-color: var(--accent-color);
+    padding: calc(var(--button-padding)/2) var(--button-padding);
+}
+
 @media screen and (max-width: 480px) {
     .modal {
         width: 100%;
