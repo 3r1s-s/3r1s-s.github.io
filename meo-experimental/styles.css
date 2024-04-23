@@ -1258,6 +1258,11 @@ possible future styling
 
 .gcname {
     padding: 10px var(--button-padding);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100%;
+    box-sizing: border-box;
+    text-wrap: nowrap;
 }
 
 .gcbtn {
@@ -1295,6 +1300,27 @@ possible future styling
     border-radius: var(--button-radius);
     background-color: var(--accent-color);
     padding: calc(var(--button-padding)/2) var(--button-padding);
+}
+
+.plugins {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -5px;
+}
+
+.plugin {
+    margin: 5px;
+}
+
+.cstpgbt {
+    padding: 1em;
+    margin-top: 5px;
+    max-width: 100px;
+}
+
+.customcss {
+    display: flex;
+    flex-direction: column;
 }
 
 @media screen and (max-width: 480px) {

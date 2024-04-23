@@ -1290,7 +1290,7 @@ async function loadplugins() {
         const isEnabled = localStorage.getItem(plugin.name) === 'true';
 
         settingsContent += `
-            <div class='plugin'>
+            <div class='section plugin'>
                 <h3>${plugin.name}</h3>
                 <i class='desc'>Created by <a href='https://github.com/${plugin.creator}'>${plugin.creator}</a></i>
                 <p class='desc'>${plugin.description}</p>
@@ -1306,9 +1306,9 @@ async function loadplugins() {
         </div>
             <h1>Custom Plugin</h1>
             <h3>Caution: can be very dangerous</h3>
-            <div class='customplugin'>
+            <div class='customcss'>
                 <textarea class="editor" id='customplugininput' placeholder="// you put stuff here"></textarea>
-                <input class='cstpgbt' type='button' value='Run' onclick="customplugin()">
+                <button class='cstpgbt button' onclick="customplugin()">Run</button>
             </div>
         </div>
     `;
@@ -1560,7 +1560,7 @@ function loadappearance() {
                 <input type="color" id="hov-modal-button-color" name="hov-modal-button-color" value="#4d576a">
                 </div>
             </div>
-            <button onclick="applycsttme()" class="cstpgbt">Apply</button>
+            <button onclick="applycsttme()" class="cstpgbt button">Apply</button>
         <h3>Custom CSS</h3>
         <div class='customcss'>
             <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
