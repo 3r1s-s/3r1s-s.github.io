@@ -257,6 +257,8 @@ bridge {
     padding-left: 10px;
     padding-right: 10px;
     border-radius: var(--border-radius);
+    max-height: 100px;
+    overflow: hidden;
 }
 
 .login {
@@ -755,6 +757,24 @@ possible future styling
 }
 
 .mdl-inp:focus {
+    background-color: var(--hov-modal-button-color);
+}
+
+.big-mdl-inp {
+    background-color: var(--modal-button-color);
+    flex: 1;
+    width: 100%;
+    padding: 15px;
+    border-radius: var(--border-radius);
+    text-align: left;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    transition: var(--transition);
+    font-size: 16px;
+}
+
+.big-mdl-inp:focus {
     background-color: var(--hov-modal-button-color);
 }
 
@@ -1342,6 +1362,7 @@ possible future styling
         border-bottom-right-radius: 0;
         transform: translateY(-50%);
         animation: popup cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+        border: none !important;
     }
 
     .modal-back-btn {

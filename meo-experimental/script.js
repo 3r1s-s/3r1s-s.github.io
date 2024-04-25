@@ -304,8 +304,8 @@ function main() {
     document.addEventListener("keydown", function(event) {    
         if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
             if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
                 if (document.getElementById('msg') === document.activeElement) {
+                    event.preventDefault();
                     sendpost();
                     const textarea = document.getElementById('msg');
                     textarea.style.height = 'auto';
@@ -363,6 +363,9 @@ function main() {
                 event.preventDefault();
                 uploadImage();
             }
+        } else if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+            event.preventDefault();
+            goAnywhere();
         }
     });
 }
@@ -1387,7 +1390,7 @@ function loadappearance() {
     <div class="settings">
         <h1>Appearance</h1>
         <div class="msgs example-msg">
-        <div id="example" class="post" style="margin-top: -2.8em;"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+        <div id="example" class="post" style="margin-top: -2.8em;"><div class="pfp"><img src="https://uploads.meower.org/icons/o1KPbrqDXKV6BeqmbwLvZurG" alt="Avatar" class="avatar" style="border: 3px solid #ad3e00;"></div><div class="wrapper"><div class="buttonContainer">
                     <div class="toolbarContainer">
                         <div class="toolButton">
                             <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -1408,7 +1411,7 @@ function loadappearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    </div><h3><span id="username">melt</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">04/06/24, 11:49 pm</i></h3><p>pal was so eepy she couldn't even finish speaking!! 😹</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
                     <div class="toolbarContainer">
                         <div class="toolButton">
                             <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -1429,7 +1432,7 @@ function loadappearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    </div><h3><span id="username">Eris</span><i class="date">04/06/24, 11:12 pm</i></h3><p>get ready for this</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
                     <div class="toolbarContainer">
                         <div class="toolButton">
                             <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -1450,7 +1453,7 @@ function loadappearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
+                    </div><h3><span id="username">Eris</span><i class="date">04/06/24, 11:12 pm</i></h3><p>so ur scared of helpful advice</p></div></div><div id="example" class="post"><div class="pfp"><img src="https://uploads.meower.org/icons/09M4f10bxn4AbvadnNCKZCiP" alt="Avatar" class="avatar" style="border: 3px solid #b190fe;"></div><div class="wrapper"><div class="buttonContainer">
                     <div class="toolbarContainer">
                         <div class="toolButton">
                             <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path d="M12.9297 3.25007C12.7343 3.05261 12.4154 3.05226 12.2196 3.24928L11.5746 3.89824C11.3811 4.09297 11.3808 4.40733 11.5739 4.60245L16.5685 9.64824C16.7614 9.84309 16.7614 10.1569 16.5685 10.3517L11.5739 15.3975C11.3808 15.5927 11.3811 15.907 11.5746 16.1017L12.2196 16.7507C12.4154 16.9477 12.7343 16.9474 12.9297 16.7499L19.2604 10.3517C19.4532 10.1568 19.4532 9.84314 19.2604 9.64832L12.9297 3.25007Z"></path><path d="M8.42616 4.60245C8.6193 4.40733 8.61898 4.09297 8.42545 3.89824L7.78047 3.24928C7.58466 3.05226 7.26578 3.05261 7.07041 3.25007L0.739669 9.64832C0.5469 9.84314 0.546901 10.1568 0.739669 10.3517L7.07041 16.7499C7.26578 16.9474 7.58465 16.9477 7.78047 16.7507L8.42545 16.1017C8.61898 15.907 8.6193 15.5927 8.42616 15.3975L3.43155 10.3517C3.23869 10.1569 3.23869 9.84309 3.43155 9.64824L8.42616 4.60245Z"></path></svg>
@@ -1471,7 +1474,7 @@ function loadappearance() {
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M4 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd" class=""></path></svg>
                         </div>
                     </div>
-                    </div><h3><span id="username">Eris</span><bridge title="This post has been bridged from another platform.">Bridged</bridge><i class="date">06/03/2024, 3:36:53 pm</i></h3><p>Hi</p></div></div>
+                    </div><h3><span id="username">Eris</span><i class="date">04/04/24, 10:49 pm</i></h3><p><a href="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" target="_blank" class="attachment"><svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span></a></p><img src="https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif" onclick="openImage('https://uploads.meower.org/attachments/oMZqXLbqOjb9fbkRN3VDYmI0/togif.gif')" alt="togif.gif" class="embed"></div></div>
             </div>
         <div class="theme-buttons">
             <h3>Theme</h3>
@@ -1488,10 +1491,16 @@ function loadappearance() {
                     <button onclick='changetheme(\"flamingo\", this)' class='theme-button flamingo-theme'>Flamingo</button>
                     <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-theme'>Blurple</button>
                     <button onclick='changetheme(\"grain\", this)' class='theme-button grain-theme'>Grain</button>
+                    <button onclick='changetheme(\"grip\", this)' class='theme-button grip-theme'>9rip</button>
                 </div>
             <h3>Accessible Themes</h3>
                 <div class="theme-buttons-inner">
                     <button onclick='changetheme(\"contrast\", this)' class='theme-button contrast-theme'>High Contrast</button>
+                </div>
+            <h3>Original Themes</h3>
+                <div class="theme-buttons-inner">
+                    <button onclick='changetheme(\"oldlight\", this)' class='theme-button oldlight-theme'>Old Light</button>
+                    <button onclick='changetheme(\"old\", this)' class='theme-button old-theme'>Old Dark</button>
                 </div>
             <h3>Glass Themes</h3>
                 <div class="theme-buttons-inner">
@@ -2901,6 +2910,49 @@ function createDate(tsmp) {
 
 function uploadImage() {
     openUpdate("Placeholder!");
+}
+
+function goAnywhere() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+            <form class="section-form" onsubmit="goTo();">
+                <input type="text" id="goanywhere" class="big-mdl-inp" placeholder="Where would you like to go?" autocomplete="off">
+            </form>   
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="goTo()">go!</button>
+                `;
+            }
+        }
+    }
+    document.getElementById("goanywhere").focus();
+
+}
+
+function goTo() {
+    event.preventDefault();
+    const place = document.getElementById("goanywhere").value;
+    closemodal();
+    if (place.charAt(0) === "@") {
+        opendm(place.substring(1));
+    } else if (place === "home") {
+        loadhome();
+    } else if (place === "start") {
+        loadstart();
+    }
 }
 
 main();
