@@ -1324,6 +1324,10 @@ possible future styling
 }
 
 @media screen and (max-width: 480px) {
+    html {
+        scrollbar-gutter: none;
+    }
+
     .modal {
         width: 100%;
         max-width: 100%;
@@ -1409,7 +1413,7 @@ possible future styling
         flex: none;
         width: 100vw;
         scroll-snap-align: center;
-        overflow: scroll;
+        overflow-y: scroll;
         height: 100vh;
     }
 
@@ -1433,7 +1437,7 @@ possible future styling
         align-items: normal;
         height: calc(100vh - 60px);
         justify-content: flex-start;
-        overflow: scroll;
+        overflow-y: scroll;
     }
 
     .buttonContainer {

@@ -1,6 +1,6 @@
 :root {
     --primary: #714cc8;
-    --secondary: #b595ff;
+    --secondary: #5d6092;
     --background: #1c1c26;
     --color: #fefefe;
     --accent-color: #2f3040;
@@ -70,7 +70,7 @@
 
 .dark-theme {
     --primary: #714cc8;
-    --secondary: #b595ff;
+    --secondary: #5d6092;
     --background: #1c1c26;
     --color: #fefefe;
     --accent-color: #2f3040;
@@ -185,6 +185,58 @@
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
+    --color-scheme: dark;
+}
+
+.contrast-theme {
+    --primary: #00f;
+    
+    --background: #0c0c0c;
+    --color: #f0f0f0;
+    --accent-color: #0c0c0c;
+    --hov-accent-color: #0c0c0c;
+    --hov-color: #00f;
+    --link-color: #0ff;
+    --attachment-background-color: #0c0c0c;
+    --attachment-color: #0ff;
+    --attachment-background-color-hover: #0c0c0c;
+    --attachment-color-hover: #fff;
+    --button-color: #f0f0f0;
+    --hov-button-color: #f0f0f0;
+    --modal-color: #0c0c0c;
+    --modal-button-color: #0c0c0c;
+    --hov-modal-button-color: #00f;
+
+    --blue: #0ff;
+    --green: #0f0;
+    --red: #f00;
+    --magenta: #f0f;
+    --color-scheme: dark;
+}
+
+.grain-theme {
+    --primary: #776d67;
+    
+    --background: #0b0b0b;
+    --color: #f0f0f0;
+    --accent-color: #111;
+    --hov-accent-color: #222;
+    --hov-color: #252525;
+    --link-color: #0ff;
+    --attachment-background-color: #413d3a;
+    --attachment-color: #afa7a1;
+    --attachment-background-color-hover: #776d67;
+    --attachment-color-hover: #fff;
+    --button-color: #f0f0f0;
+    --hov-button-color: #f0f0f0;
+    --modal-color: #111;
+    --modal-button-color: #222;
+    --hov-modal-button-color: #252525;
+
+    --blue: #0ff;
+    --green: #0f0;
+    --red: #f00;
+    --magenta: #f0f;
     --color-scheme: dark;
 }
 
