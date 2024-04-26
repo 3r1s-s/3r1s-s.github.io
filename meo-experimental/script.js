@@ -1233,7 +1233,7 @@ function loadgeneral() {
             <h1>General</h1>
             <h3>Chat</h3>
             <div class="msgs"></div>
-            <div class='stg-section'>
+            <div class='stg-section' style='display:none;'>
             <label>
             Disable swear filter
             <input type="checkbox" id="swearfilter" class="settingstoggle">
