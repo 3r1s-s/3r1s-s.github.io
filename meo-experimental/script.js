@@ -383,17 +383,10 @@ function loadpost(p) {
         user = p.u;
     }
     
-    let postContainer = document.getElementById(p._id);
-    if (!postContainer) {
-        postContainer = document.createElement("div");
-        postContainer.id = p._id;
-        postContainer.classList.add("post");
-        postContainer.setAttribute("tabindex", "0");
-    }
-
-    while (postContainer.firstChild) {
-        postContainer.firstChild.remove();
-    }
+    const postContainer = document.createElement("div");
+    postContainer.id = p._id;
+    postContainer.classList.add("post");
+    postContainer.setAttribute("tabindex", "0");
 
     const wrapperDiv = document.createElement("div");
     wrapperDiv.classList.add("wrapper");
@@ -486,6 +479,8 @@ function loadpost(p) {
         });
     }
 
+    postContainer.appendChild(wrapperDiv);
+
     loadPfp(user, 0)
         .then(pfpElement => {
             if (pfpElement) {
@@ -496,15 +491,17 @@ function loadpost(p) {
             }
         });
         
-    postContainer.appendChild(wrapperDiv);
+    
 
-    if (!document.getElementById(p._id)) {
-        const pageContainer = document.getElementById("msgs");
-        if (pageContainer.firstChild) {
-            pageContainer.insertBefore(postContainer, pageContainer.firstChild);
-        } else {
-            pageContainer.appendChild(postContainer);
-        }
+    const pageContainer = document.getElementById("msgs");
+    const existingPost = document.getElementById(postContainer.id);
+    if (existingPost) {
+        pageContainer.insertBefore(postContainer, existingPost);
+        existingPost.remove();
+    } else if (pageContainer.firstChild) {
+        pageContainer.insertBefore(postContainer, pageContainer.firstChild);
+    } else {
+        pageContainer.appendChild(postContainer);
     }
 }
 
