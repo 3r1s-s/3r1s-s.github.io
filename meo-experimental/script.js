@@ -3022,6 +3022,7 @@ function populateSearch() {
             item.id = 'srchuser';
             item.onclick = function() {
                 opendm(username);
+                closemodal();
             };
             searchPopulation.appendChild(item);
         });
@@ -3033,6 +3034,7 @@ function populateSearch() {
             item.id = 'srchchat';
             item.onclick = function() {
                 loadchat(chat._id);
+                closemodal();
             };
             searchPopulation.appendChild(item);
         });
