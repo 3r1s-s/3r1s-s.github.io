@@ -2950,7 +2950,9 @@ function goAnywhere() {
             }
         }
     }
-    document.getElementById("goanywhere").focus();
+    if (!window.innerWidth >= 480) {
+        document.getElementById("goanywhere").focus();
+    }
 }
 
 function goTo() {
