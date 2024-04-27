@@ -1266,7 +1266,7 @@ function loadgeneral() {
             </div>
             <h3>About</h3>
             <div class="stg-section">
-            <span>meo v1.20</span>
+            <span>meo v1.2.0</span>
             </div>
             </div>
             `;
@@ -2932,9 +2932,13 @@ function goAnywhere() {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
-            <form class="section-form" onsubmit="goTo();">
-                <input type="text" id="goanywhere" class="big-mdl-inp" placeholder="Where would you like to go?" autocomplete="off">
-            </form>   
+                    <form class="section-form" onsubmit="goTo();">
+                        <input type="text" id="goanywhere" class="big-mdl-inp" placeholder="Where would you like to go?" autocomplete="off">
+                    </form>
+                    <div class="search-population">
+                        <div class="searchitem">Search for anything!</div>
+                        <div class="searchitem">Use <span id="scil" title="Profile"> !</span><span id="scil" title="DM"> @</span><span id="scil" title="Chat"> #</span> for something specific.</div>            
+                    </div>
                 `;
                 const goanywhereInput = mdlt.querySelector('#goanywhere');
                 goanywhereInput.addEventListener('input', populateSearch);
@@ -2942,15 +2946,12 @@ function goAnywhere() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <div class="search-population">
-                
-                </div>
                 <button class="modal-back-btn" onclick="goTo()">go!</button>
                 `;
             }
         }
     }
-    if (!window.innerWidth >= 480) {
+    if (window.innerWidth >= 480) {
         document.getElementById("goanywhere").focus();
     }
 }
@@ -2967,7 +2968,7 @@ function goTo() {
         }
     } else if (place.charAt(0) === "@") {
         opendm(place.substring(1));
-    } else if (place.charAt(0) === "-") {
+    } else if (place.charAt(0) === "!") {
         openUsrModal(place.substring(1));
     } else if (place === "home") {
         loadhome();
@@ -3008,9 +3009,39 @@ function searchChats(nickname) {
   
 
 function populateSearch() {
+    const query = document.getElementById("goanywhere").value.toLowerCase();
     const searchPopulation = document.querySelector('.search-population');
-    
-    searchPopulation.innerHTML = '';
+    if (query !== '') {
+        searchPopulation.innerHTML = '';
+        const usernames = Object.keys(pfpCache).filter(username => username.toLowerCase().includes(query));
+        const groupChats = Object.values(chatCache).filter(chat => chat.nickname && chat.nickname.toLowerCase().includes(query));
+        usernames.forEach(username => {        
+            const item = document.createElement('div');
+            item.innerText = '@' + username
+            item.classList.add('searchitem');
+            item.id = 'srchuser';
+            item.onclick = function() {
+                opendm(username);
+            };
+            searchPopulation.appendChild(item);
+        });
+        
+        groupChats.forEach(chat => {        
+            const item = document.createElement('div');
+            item.innerText = chat.nickname
+            item.classList.add('searchitem');
+            item.id = 'srchchat';
+            item.onclick = function() {
+                loadchat(chat._id);
+            };
+            searchPopulation.appendChild(item);
+        });
+    } else {
+        searchPopulation.innerHTML = `
+        <div class="searchitem">Search for anything!</div>
+        <div class="searchitem">Use <span id="scil" title="Profile"> !</span><span id="scil" title="DM"> @</span><span id="scil" title="Chat"> #</span> for something specific.</div>
+        `;
+    }
 }
 
 main();
