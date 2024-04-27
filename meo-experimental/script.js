@@ -384,7 +384,6 @@ function loadpost(p) {
     }
     
     const postContainer = document.createElement("div");
-    postContainer.id = p._id;
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
 
@@ -441,9 +440,10 @@ function loadpost(p) {
         } else {
             pageContainer.appendChild(postContainer);
         }
-    
+        
         loadreply(p.post_origin, replyid).then(replycontainer => {
-            wrapperDiv.insertBefore(replycontainer, wrapperDiv.querySelector(".post-content"));
+            pstinf.after(replycontainer);
+            //wrapperDiv.appendChild(replycontainer);
         });
     
         content = content.replace(match[0], '').trim();
@@ -490,14 +490,12 @@ function loadpost(p) {
                 postContainer.insertBefore(pfpDiv, wrapperDiv);
             }
         });
-        
-    
 
     const pageContainer = document.getElementById("msgs");
-    const existingPost = document.getElementById(postContainer.id);
+    const existingPost = document.getElementById(p._id);
+    postContainer.id = p._id;
     if (existingPost) {
-        pageContainer.insertBefore(postContainer, existingPost);
-        existingPost.remove();
+        existingPost.replaceWith(postContainer);
     } else if (pageContainer.firstChild) {
         pageContainer.insertBefore(postContainer, pageContainer.firstChild);
     } else {
@@ -852,6 +850,9 @@ function loadhome() {
     
     if (postCache["home"]) {
         postCache["home"].forEach(post => {
+            if (page !== "home") {
+                return;
+            }
             loadpost(post);
         });
     } else {
@@ -864,6 +865,9 @@ function loadhome() {
             postsarray.reverse();
             postCache["home"] = postsarray;
             postsarray.forEach(post => {
+                if (page !== "home") {
+                    return;
+                }
                 loadpost(post);
             });
         };
@@ -932,7 +936,7 @@ function sidebars() {
 
         groupsdiv.innerHTML = `
         <h1 class="groupheader">Chats</h1>
-        <input type="text" class="search-input" id="search" placeholder="Search" rows="1" autocomplete="false">
+        <button class="search-input button" id="search" aria-label="search" onclick="goAnywhere();"><span class="srchtx">Search</span></button
         
         `;
         gcdiv.innerHTML += `<button class="navigation-button button gcbtn" onclick="loadhome()">
@@ -1074,12 +1078,12 @@ function opendm(username) {
     });
 }
 
-function loadchat(chatid) {
-    page = chatid;
-    pre = chatid;
+function loadchat(chatId) {
+    page = chatId;
+    pre = chatId;
 
-    if (!chatCache[chatid]) {
-        fetch(`https://api.meower.org/chats/${chatid}`, {
+    if (!chatCache[chatId]) {
+        fetch(`https://api.meower.org/chats/${chatId}`, {
             headers: {token: localStorage.getItem("token")}
         })
         .then(response => {
@@ -1093,8 +1097,8 @@ function loadchat(chatid) {
             return response.json();
         })
         .then(data => {
-            chatCache[chatid] = data;
-            loadchat(chatid);
+            chatCache[chatId] = data;
+            loadchat(chatId);
         })
         .catch(e => {
             openUpdate(`Unable to open chat: ${e}`);
@@ -1109,11 +1113,11 @@ function loadchat(chatid) {
 
     sidebars();
 
-    const data = chatCache[chatid];
+    const data = chatCache[chatId];
 
     const mainContainer = document.getElementById("main");
     if (data.nickname) {
-        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${escapeHTML(data.nickname)}<i class="subtitle">${chatid}</i></h1><p id='info'></p></div>` + loadinputs();
+        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${escapeHTML(data.nickname)}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
         const ulinf = document.getElementById('info');
         data.members.forEach((user, index) => {
             if (index === data.members.length - 1) {
@@ -1128,24 +1132,30 @@ function loadchat(chatid) {
         </svg>            
         `;
     } else {
-        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${data.members.find(v => v !== localStorage.getItem("uname"))}<i class="subtitle">${chatid}</i></h1><p id='info'></p></div>` + loadinputs();
+        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${data.members.find(v => v !== localStorage.getItem("uname"))}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
     }
 
-    if (postCache[chatid]) {
-        postCache[chatid].forEach(post => {
+    if (postCache[chatId]) {
+        postCache[chatId].forEach(post => {
+            if (page !== chatId) {
+                return;
+            }
             loadpost(post);
         });
     } else {
         const xhttpPosts = new XMLHttpRequest();
-        xhttpPosts.open("GET", `https://api.meower.org/posts/${chatid}?autoget`);
+        xhttpPosts.open("GET", `https://api.meower.org/posts/${chatId}?autoget`);
         xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
         xhttpPosts.onload = () => {
             const postsData = JSON.parse(xhttpPosts.response);
             const postsarray = postsData.autoget || [];
 
             postsarray.reverse();
-            postCache[chatid] = postsarray;
+            postCache[chatId] = postsarray;
             postsarray.forEach(post => {
+                if (page !== chatId) {
+                    return;
+                }
                 loadpost(post);
             });
         };
@@ -1233,7 +1243,7 @@ function loadgeneral() {
             <h1>General</h1>
             <h3>Chat</h3>
             <div class="msgs"></div>
-            <div class='stg-section' style='display:none;'>
+            <div class='stg-section' style="display:none;">
             <label>
             Disable swear filter
             <input type="checkbox" id="swearfilter" class="settingstoggle">
@@ -2917,7 +2927,7 @@ function goAnywhere() {
         mdlbck.style.display = 'flex';
         
         const mdl = mdlbck.querySelector('.modal');
-        mdl.id = 'mdl-uptd';
+        mdl.id = 'mdl-qkshr';
         if (mdl) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
@@ -2926,30 +2936,79 @@ function goAnywhere() {
                 <input type="text" id="goanywhere" class="big-mdl-inp" placeholder="Where would you like to go?" autocomplete="off">
             </form>   
                 `;
+                const goanywhereInput = mdlt.querySelector('#goanywhere');
+                goanywhereInput.addEventListener('input', populateSearch);
             }
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
+                <div class="search-population">
+                
+                </div>
                 <button class="modal-back-btn" onclick="goTo()">go!</button>
                 `;
             }
         }
     }
     document.getElementById("goanywhere").focus();
-
 }
 
 function goTo() {
     event.preventDefault();
     const place = document.getElementById("goanywhere").value;
     closemodal();
-    if (place.charAt(0) === "@") {
+    if (place.charAt(0) === "#") {
+        const nickname = place.substring(1);
+        const chatId = searchChats(nickname);
+        if (chatId) {
+            loadchat(chatId);
+        }
+    } else if (place.charAt(0) === "@") {
         opendm(place.substring(1));
+    } else if (place.charAt(0) === "-") {
+        openUsrModal(place.substring(1));
     } else if (place === "home") {
         loadhome();
     } else if (place === "start") {
         loadstart();
+    } else if (place === "settings") {
+        loadstgs();
+        loadgeneral();
+    } else if (place === "general") {
+        loadstgs();
+        loadgeneral();
+    } else if (place === "appearance") {
+        loadstgs();
+        loadappearance();
+    } else if (place === "plugins") {
+        loadstgs();
+        loadplugins();
+    } else if (place === "explore") {
+        loadexplore();
+    } else if (place === "inbox") {
+        loadinbox();
     }
+}
+
+function searchChats(nickname) {
+    for (const chatId in chatCache) {
+      if (chatCache.hasOwnProperty(chatId)) {
+        const chat = chatCache[chatId];
+        if (chat.nickname) {
+          if (chat.nickname.toLowerCase() === nickname.toLowerCase()) {
+            return chat._id;
+          }
+        }
+      }
+    }
+    return null;
+  }
+  
+
+function populateSearch() {
+    const searchPopulation = document.querySelector('.search-population');
+    
+    searchPopulation.innerHTML = '';
 }
 
 main();
