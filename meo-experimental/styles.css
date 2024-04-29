@@ -1250,17 +1250,6 @@ possible future styling
     margin-bottom: var(--button-margin);
 }
 
-.custom-theme-in {
-    display: flex;
-    flex-direction: column;
-}
-
-.cstmeinp {
-    display: flex;
-    align-items: center;
-    margin: calc(var(--margin)/2);
-}
-
 .titlebar {
     position: fixed;
     left: env(titlebar-area-x, 0);
@@ -1380,6 +1369,73 @@ possible future styling
 .customcss {
     display: flex;
     flex-direction: column;
+}
+
+.custom-label {
+    font-size: 14px;
+    width: 100%;
+    opacity: 0.8;
+    margin: 5px;
+}
+
+.custom-theme-in {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.cstmeinp {
+    display: flex;
+    align-items: center;
+    margin: calc(var(--margin)/2);
+}
+
+.cstcolinpc {
+    border: none;
+    outline: none;
+    width: 75px;
+    padding: 0;
+    margin: 0;
+}
+
+.cstcolinpc::-webkit-color-swatch {
+    border: none;
+}
+
+.post.blocked {
+    position: relative;
+    overflow: hidden;
+}
+  
+.post.blocked::before {
+    content: "hover to view message";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--accent-color);
+    z-index: 0;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.post.blocked:hover::before {
+    opacity: 0;
+}  
+
+.blockeduser {
+    padding: 10px var(--button-padding);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    text-wrap: nowrap;
+    background: var(--accent-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 5px;
+    font-size: 12px;
+    text-align: left;
 }
 
 @media screen and (max-width: 480px) {

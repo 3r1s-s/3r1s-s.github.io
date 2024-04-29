@@ -22,6 +22,7 @@ const server = "wss://server.meower.org/";
 const pfpCache = {};
 const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
 const chatCache = {}; // {chatId: chat}
+const blockedUsers = {}; // {user, user}
 
 loadsavedplugins();
 loadcstmcss();
@@ -101,11 +102,17 @@ function main() {
             };
         } else if (sentdata.listener == "auth") {
             if (sentdata.val.mode && sentdata.val.mode == "auth") {
+                sentdata.val.payload.relationships.forEach((relationship) => {
+                    if (relationship.state === 2) {
+                        blockedUsers[relationship.username] = true;
+                    }
+                });
                 loggedin = true;
                 if (localStorage.getItem("token") == undefined || localStorage.getItem("uname") == undefined || localStorage.getItem("permissions") == undefined) {
                     localStorage.setItem("uname", sentdata.val.payload.username);
                     localStorage.setItem("token", sentdata.val.payload.token);
                     localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
+
                 }
                 sidebars();
                 
@@ -373,6 +380,7 @@ function main() {
 function loadpost(p) {
     let user
     let content
+
     if (p.u == "Discord" || p.u == "SplashBridge") {
         const rcon = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
         const parts = rcon.split(': ');
@@ -386,6 +394,15 @@ function loadpost(p) {
     const postContainer = document.createElement("div");
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
+
+    
+    if (blockedUsers.hasOwnProperty(user)) {
+        if (settingsstuff().blockedmessages) {
+            postContainer.setAttribute("style", "display:none;");
+        } else {
+            postContainer.classList.add("blocked");
+        }
+    }
 
     const wrapperDiv = document.createElement("div");
     wrapperDiv.classList.add("wrapper");
@@ -1266,6 +1283,17 @@ function loadgeneral() {
             <p class="subsubheader">Hides warning message from console</p>
             </label>
             </div>
+            <div class="stg-section">
+            <label>
+            Hide blocked user messages
+            <input type="checkbox" id="blockedmessages" class="settingstoggle">
+            <p class="subsubheader">Show a warning or hide messages completely</p>
+            </label>
+            </div>
+            <h3>Blocked Users</h3>
+            <div class="blockedusers customcss">
+            <button class="blockeduser button" onclick="blockUserSel()">Block User</button>
+            </div>
             <h3>About</h3>
             <div class="stg-section">
             <span>meo v1.2.0</span>
@@ -1279,21 +1307,46 @@ function loadgeneral() {
             const swftcheckbox = document.getElementById("swearfilter");
             const homepagecheckbox = document.getElementById("homepage");
             const consolewarningscheckbox = document.getElementById("consolewarnings");
+            const blockedmessagescheckbox = document.getElementById("blockedmessages");
         
             chbxs.forEach(function(checkbox) {
                 checkbox.addEventListener("change", function () {
-                    localStorage.setItem('settings', JSON.stringify({ swearfilter: swftcheckbox.checked, homepage: homepagecheckbox.checked, consolewarnings: consolewarningscheckbox.checked }));
+                    localStorage.setItem('settings', JSON.stringify({
+                        swearfilter: swftcheckbox.checked,
+                        homepage: homepagecheckbox.checked,
+                        consolewarnings: consolewarningscheckbox.checked,
+                        blockedmessages: blockedmessagescheckbox.checked
+                    }));
                 });
             });
         
             const storedsettings = JSON.parse(localStorage.getItem('settings')) || {};
             const swearfiltersetting = storedsettings.swearfilter || false;
             const homepagesetting = storedsettings.homepage || false;
-            const consolewarningssetting = storedsettings.homepage || false;
+            const consolewarningssetting = storedsettings.consolewarnings || false;
+            const blockedmessagessetting = storedsettings.blockedmessages || false;
         
             swftcheckbox.checked = swearfiltersetting;
             homepagecheckbox.checked = homepagesetting;
             consolewarningscheckbox.checked = consolewarningssetting;
+            blockedmessagescheckbox.checked = blockedmessagessetting;
+
+        const cont = document.querySelector('.blockedusers');
+
+        for (var user in blockedUsers) {
+            if (blockedUsers.hasOwnProperty(user)) {
+                const item = document.createElement('button');
+                
+                item.innerText = '@' + user;
+                
+                item.classList.add('blockeduser');
+                item.classList.add('button');
+                
+                item.setAttribute("onclick", `blockUserModal('${user}')`);
+                
+                cont.appendChild(item);
+            }
+        }
 }
 
 async function loadplugins() {
@@ -1301,7 +1354,6 @@ async function loadplugins() {
     let settingsContent = `
         <div class="settings">
             <h1>Plugins</h1>
-            <h3>Usually requires a refresh</h3>
             <div class="msgs"></div>
             <div class='plugins'>
     `;
@@ -1326,8 +1378,8 @@ async function loadplugins() {
 
     settingsContent += `
         </div>
-            <h1>Custom Plugin</h1>
-            <h3>Caution: can be very dangerous</h3>
+            <h3>Custom Plugin</h3>
+            <p>Caution: can be very dangerous</p>
             <div class='customcss'>
                 <textarea class="editor" id='customplugininput' placeholder="// you put stuff here"></textarea>
                 <button class='cstpgbt button' onclick="customplugin()">Run</button>
@@ -1523,77 +1575,79 @@ function loadappearance() {
                 </div>
             </div>
             <br>
-            <div class="custom-theme-in section">
-                <div class="cstmeinp">
-                <label for="primary">Primary Color:</label>
-                <input type="color" id="primary" name="primary" value="#15a4c1">
-                </div>    
-                <div class="cstmeinp">
-                <label for="primary">Secondary Color:</label>
-                <input type="color" id="secondary" name="secondary" value="#0f788e">
+            <div class="customcss">
+                <div class="custom-theme-in section">
+                    <div class="cstmeinp">
+                    <label for="primary" class="custom-label">Primary Color:</label>
+                    <input type="color" class="cstcolinpc" id="primary" name="primary" value="#15a4c1">
+                    </div>    
+                    <div class="cstmeinp">
+                    <label for="secondary" class="custom-label">Secondary Color:</label>
+                    <input type="color" class="cstcolinpc" id="secondary" name="secondary" value="#0f788e">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="background" class="custom-label">Background Color:</label>
+                    <input type="color" class="cstcolinpc" id="background" name="background" value="#1c1f26">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="color" class="custom-label">Text Color:</label>
+                    <input type="color" class="cstcolinpc" id="color" name="color" value="#fefefe">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="accent-color" class="custom-label">Accent Color:</label>
+                    <input type="color" class="cstcolinpc" id="accent-color" name="accent-color" value="#2f3540">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="hov-accent-color" class="custom-label">Accent Hover Color:</label>
+                    <input type="color" class="cstcolinpc" id="hov-accent-color" name="hov-accent-color" value="#414959">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="hov-color" class="custom-label">Secondary Hover Color:</label>
+                    <input type="color" class="cstcolinpc" id="hov-color" name="hov-color" value="#353b49">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="link-color" class="custom-label">Link Color:</label>
+                    <input type="color" class="cstcolinpc" id="link-color" name="link-color" value="#00abd2">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="attachment-background-color" class="custom-label">Attachment Background Color:</label>
+                    <input type="color" class="cstcolinpc" id="attachment-background-color" name="attachment-background-color" value="#094c5b">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="attachment-color" class="custom-label">Attachment Text Color:</label>
+                    <input type="color" class="cstcolinpc" id="attachment-color" name="attachment-color" value="#15a4c1">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="attachment-background-color-hover" class="custom-label">Attachment Hover Background Color:</label>
+                    <input type="color" class="cstcolinpc" id="attachment-background-color-hover" name="attachment-background-color-hover" value="#15a4c1">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="attachment-color-hover" class="custom-label">Attachment Hover Text Color:</label>
+                    <input type="color" class="cstcolinpc" id="attachment-color-hover" name="attachment-color-hover" value="#fefefe">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="button-color" class="custom-label">Post Button Color:</label>
+                    <input type="color" class="cstcolinpc" id="button-color" name="button-color" value="#a5abb3">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="hov-button-color" class="custom-label">Post Button Hover Color:</label>
+                    <input type="color" class="cstcolinpc" id="hov-button-color" name="hov-button-color" value="#fefefe">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="modal-color" class="custom-label">Modal Background Color:</label>
+                    <input type="color" class="cstcolinpc" id="modal-color" name="modal-color" value="#2f3540">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="modal-button-color" class="custom-label">Modal Button Color:</label>
+                    <input type="color" class="cstcolinpc" id="modal-button-color" name="modal-button-color" value="#414959">
+                    </div>
+                    <div class="cstmeinp">
+                    <label for="hov-modal-button-color" class="custom-label">Modal Button Hover Color:</label>
+                    <input type="color" class="cstcolinpc" id="hov-modal-button-color" name="hov-modal-button-color" value="#4d576a">
+                    </div>
                 </div>
-                <div class="cstmeinp">
-                <label for="primary">Background Color:</label>
-                <input type="color" id="background" name="background" value="#1c1f26">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Text Color:</label>
-                <input type="color" id="color" name="color" value="#fefefe">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Accent Color:</label>
-                <input type="color" id="accent-color" name="accent-color" value="#2f3540">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Accent Hover Color:</label>
-                <input type="color" id="hov-accent-color" name="hov-accent-color" value="#414959">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Secondary Hover Color:</label>
-                <input type="color" id="hov-color" name="hov-color" value="#353b49">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Link Color:</label>
-                <input type="color" id="link-color" name="link-color" value="#00abd2">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Attachment Background Color:</label>
-                <input type="color" id="attachment-background-color" name="attachment-background-color" value="#094c5b">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Attachment Text Color:</label>
-                <input type="color" id="attachment-color" name="attachment-color" value="#15a4c1">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Attachment Hover Background Color:</label>
-                <input type="color" id="attachment-background-color-hover" name="attachment-background-color-hover" value="#15a4c1">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Attachment Hover Text Color:</label>
-                <input type="color" id="attachment-color-hover" name="attachment-color-hover" value="#fefefe">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Post Button Color:</label>
-                <input type="color" id="button-color" name="button-color" value="#a5abb3">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Post Button Hover Color:</label>
-                <input type="color" id="hov-button-color" name="hov-button-color" value="#fefefe">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Modal Background Color:</label>
-                <input type="color" id="modal-color" name="modal-color" value="#2f3540">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Modal Button Color:</label>
-                <input type="color" id="modal-button-color" name="modal-button-color" value="#414959">
-                </div>
-                <div class="cstmeinp">
-                <label for="primary">Modal Button Hover Color:</label>
-                <input type="color" id="hov-modal-button-color" name="hov-modal-button-color" value="#4d576a">
-                </div>
+                <button onclick="applycsttme()" class="cstpgbt button">Apply</button>
             </div>
-            <button onclick="applycsttme()" class="cstpgbt button">Apply</button>
         <h3>Custom CSS</h3>
         <div class='customcss'>
             <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
@@ -2669,6 +2723,65 @@ function createChatModal() {
     }
 }
 
+function blockUserSel() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                    mdlt.innerHTML = `
+                    <h3>Block a user (case sensitive)</h3>
+                    <input id="block-user-input" class="mdl-inp" placeholder="JoshAtticus">
+                    `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="blockUserModal(document.getElementById('block-user-input').value)">block</button>
+                `;
+            }
+        }
+    }
+}
+
+function blockUserModal(user) {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                if (blockedUsers.hasOwnProperty(user)) {
+                    mdlt.innerHTML = `
+                    <h3>Unblock ${user}?</h3>
+                    `;
+                } else {
+                    mdlt.innerHTML = `
+                    <h3>Block ${user}?</h3>
+                    `;
+                }
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="blockUser('${user}')">yes</button>
+                `;
+            }
+        }
+    }
+}
+
 function imagemodal() {
     document.documentElement.style.overflow = "hidden";
     
@@ -2960,7 +3073,7 @@ function goAnywhere() {
 
 function goTo() {
     event.preventDefault();
-    const place = document.getElementById("goanywhere").value;
+    const place = document.getElementById("goanywhere").value.toLowerCase();
     closemodal();
     if (place.charAt(0) === "#") {
         const nickname = place.substring(1);
@@ -3046,6 +3159,39 @@ function populateSearch() {
         <div class="searchitem">Use <span id="scil" title="Profile"> !</span><span id="scil" title="DM"> @</span><span id="scil" title="Chat"> #</span> for something specific.</div>
         `;
     }
+}
+
+function blockUser(user) {
+    let toggle;
+    if (blockedUsers.hasOwnProperty(user)) {
+        toggle = 0;
+        delete blockedUsers[user];
+    } else {
+        toggle = 2;
+        blockedUsers[user] = true;
+    }
+    
+    fetch(`https://api.meower.org/users/${user}/relationship`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "token": localStorage.getItem("token")
+        },
+        body: JSON.stringify({
+            state: toggle
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("sent", data);
+    })
+    .catch(error => {
+        console.error("error:", error);
+    });
+    if (page = 'settings') {
+        loadstgs();
+    }
+    closemodal();
 }
 
 main();
