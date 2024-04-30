@@ -2,6 +2,29 @@
 // theres more than just markdown stuff in here
 // im bad at naming things ok
 
+let whitelist = [
+    "https://uploads.meower.org/",
+    "https://meower.org/",
+    "https://http.meower.org/",
+    "https://assets.meower.org/",
+    "https://forums.meower.org/",
+    "https://go.meower.org/",
+    "https://hedgedoc.meower.org/",
+    "https://docs.meower.org/",
+    "https://i.ibb.co/",
+    "https://u.cubeupload.com/",
+    "https://cubeupload.com/",
+    "https://media.tenor.com/",
+    "https://tenor.com/",
+    "https://c.tenor.com/",
+    "https://assets.scratch.mit.edu/",
+    "https://cdn2.scratch.mit.edu/",
+    "https://cdn.scratch.mit.edu/",
+    "https://uploads.scratch.mit.edu/",
+    "https://cdn.discordapp.com/",
+    "https://media.discordapp.net/",
+];
+
 function escapeHTML(content) {
     const escapedinput = content
         .replace(/&/g, '&amp;')
@@ -113,6 +136,11 @@ function embed(links) {
         let embeddedElements = [];
 
         links.forEach(link => {
+            const source = whitelist.some(source => link.includes(source) || settingsstuff().imagewhitelist);
+            if (!source) {
+                return;
+            }
+            
             const baseURL = link.split('?')[0];
             const fileExtension = baseURL.split('.').pop().toLowerCase();
             const fileName = baseURL.split('/').pop();

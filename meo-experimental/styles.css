@@ -660,6 +660,11 @@ possible future styling
     background-color: var(--modal-button-color);
 }
 
+.modal-back-btn:disabled {
+    background-color: var(--modal-button-color);
+    opacity: 0.5;
+}
+
 .modal-button {
     background-color: var(--modal-button-color);
     width: 100%;
@@ -1361,8 +1366,8 @@ possible future styling
 }
 
 .cstpgbt {
-    padding: 1em;
-    margin-top: 5px;
+    padding: var(--button-padding);
+    margin-top: var(--button-margin);
     max-width: 100px;
 }
 
@@ -1374,7 +1379,6 @@ possible future styling
 .custom-label {
     font-size: 14px;
     width: 100%;
-    opacity: 0.8;
     margin: 5px;
 }
 
@@ -1392,6 +1396,7 @@ possible future styling
 .cstcolinpc {
     border: none;
     outline: none;
+    height: 24px;
     width: 75px;
     padding: 0;
     margin: 0;
@@ -1722,4 +1727,12 @@ possible future styling
     .emoji-button {
         display: none;
     }
+
+    .post.blocked::before {
+        content: "tap to view message";
+    }
+
+    .post.blocked:focus::before {
+        opacity: 0;
+    }  
 }

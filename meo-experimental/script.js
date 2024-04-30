@@ -24,6 +24,8 @@ const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inacti
 const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
 
+let lastTyped = 0;
+
 loadsavedplugins();
 loadcstmcss();
 loadcsttme();
@@ -306,39 +308,48 @@ function main() {
             } else {
                 console.warn(sentdata.val.id, "not found.");
             }
+        } else if (sentdata.listener == "chpw") {
+            if (sentdata.val === 'I:100 | OK') {
+                closemodal("Your password has been updated!")
+            }
         }
     };
-    document.addEventListener("keydown", function(event) {    
+    document.addEventListener("keydown", function(event) {
         if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
+            const textarea = document.getElementById("msg");
             if (event.key === "Enter" && !event.shiftKey) {
-                if (document.getElementById('msg') === document.activeElement) {
+                if (textarea === document.activeElement) {
                     event.preventDefault();
                     sendpost();
-                    const textarea = document.getElementById('msg');
                     textarea.style.height = 'auto';
                 } else {
                     if (opened === 1) {
                         fstemj();
-                        document.getElementById("msg").focus();
+                        textarea.focus();
                     }
                 }
-        } else if (event.key === "Enter" && event.shiftKey) {
-        } else if (event.key === "Escape") {
-            closemodal();
-            closeImage();
-            if (opened===1) {
-                closepicker();
+            } else if (event.key === "Escape") {
+                closemodal();
+                closeImage();
+                if (opened===1) {
+                    closepicker();
+                }
+                const editIndicator = document.getElementById("edit-indicator");
+                if (editIndicator.hasAttribute("data-postid")) {
+                    editIndicator.removeAttribute("data-postid");
+                    editIndicator.innerText = "";
+                    textarea.value = "";
+                    autoresize();
+                }
+                textarea.blur();
+            } else if (event.keyCode >= 48 && event.keyCode <= 90 && textarea === document.activeElement && !settingsstuff().invtyping && lastTyped+3000 < Date.now()) {
+                lastTyped = Date.now();
+                fetch(`https://api.meower.org/${page === "home" ? "" : "chats/"}${page}/typing`, {
+                    method: "POST",
+                    headers: { token: localStorage.getItem("token") }
+                });
             }
-            const editIndicator = document.getElementById("edit-indicator");
-            if (editIndicator.hasAttribute("data-postid")) {
-                editIndicator.removeAttribute("data-postid");
-                editIndicator.innerText = "";
-                document.getElementById('msg').value = "";
-                autoresize();
-            }
-            document.getElementById("msg").blur();
         }
-    }
     });
     addEventListener("keydown", (event) => {
         if (!event.ctrlKey && event.keyCode >= 48 && event.keyCode <= 90) {
@@ -937,7 +948,7 @@ function sidebars() {
 
     let mdmdl = document.getElementsByClassName('navigation')[0];
     mdmdl.innerHTML += navlist;
-
+//make it check if the list already exists, if so dont do this
     const char = new XMLHttpRequest();
     char.open("GET", "https://api.meower.org/chats?autoget");
     char.setRequestHeader("token", localStorage.getItem('token'));
@@ -970,9 +981,6 @@ function sidebars() {
             r.onclick = function() {
                 loadchat(chat._id);
             };
-            if (chat.type === 1) {
-                console.log(loadPfp(chat.members.find(v => v !== localStorage.getItem("uname"))).src);
-            }
 
             const chatIconElem = document.createElement("img");
             chatIconElem.classList.add("avatar-small");
@@ -996,8 +1004,6 @@ function sidebars() {
                     console.log(pfpElem);
                 });
             }
-            console.log(chatIconElem)
-
             r.appendChild(chatIconElem);
 
             const chatNameElem = document.createElement("span");
@@ -1034,11 +1040,14 @@ function loadstart() {
         <div class="quick-btns">
         <div class="qc-bts-sc">
         <button class="qbtn button" aria-label="create chat" onclick="createChatModal()">Create Chat</button>
-        <button class="qbtn button" aria-label="create chat" onclick="loadhome();">Go Home</button>
+        <button class="qbtn button" aria-label="home" onclick="loadhome();">Go Home</button>
         </div>
         <div class="qc-bts-sc">
-        <button class="qbtn button" aria-label="create chat" onclick="loadexplore();">Explore</button>
-        <button class="qbtn button" aria-label="create chat" onclick="opendm('Eris')">DM Me :)</button>
+        <button class="qbtn button" aria-label="explore" onclick="loadexplore();">Explore</button>
+        <button class="qbtn button" aria-label="dm me" onclick="opendm('Eris')">DM Me :)</button>
+        </div>
+        <div class="qc-bts-sc">
+        <button class="qbtn button" aria-label="share" onclick="shareModal()">Invite People</button>
         </div>
     </div>
     `;
@@ -1151,7 +1160,7 @@ function loadchat(chatId) {
         </svg>            
         `;
     } else {
-        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${data.members.find(v => v !== localStorage.getItem("uname"))}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
+        mainContainer.innerHTML = `<div class='info'><h1 id='username' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("uname"))}')">${data.members.find(v => v !== localStorage.getItem("uname"))}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
     }
 
     if (postCache[chatId]) {
@@ -1232,6 +1241,7 @@ function logout(iskl) {
     for (const key in pfpCache) delete pfpCache[key];
     for (const key in postCache) delete postCache[key];
     for (const key in chatCache) delete chatCache[key];
+    for (const key in blockedUsers) delete blockedUsers[key];
     if (document.getElementById("msgs"))
         document.getElementById("msgs").innerHTML = "";
     if (document.getElementById("nav"))
@@ -1263,37 +1273,55 @@ function loadgeneral() {
             <h3>Chat</h3>
             <div class="msgs"></div>
             <div class='stg-section' style="display:none;">
-            <label>
-            Disable swear filter
-            <input type="checkbox" id="swearfilter" class="settingstoggle">
-            <p class="subsubheader">This should just be enabled by default</p>
-            </label>
+                <label>
+                    Disable swear filter
+                    <input type="checkbox" id="swearfilter" class="settingstoggle">
+                    <p class="subsubheader">This should just be enabled by default</p>
+                </label>
             </div>
             <div class="stg-section">
-            <label>
-            Auto-navigate to Home
-            <input type="checkbox" id="homepage" class="settingstoggle">
-            <p class="subsubheader">Instead of showing you the Start Page you get directly taken to home</p>
-            </label>
+                <label>
+                    Auto-navigate to Home
+                    <input type="checkbox" id="homepage" class="settingstoggle">
+                    <p class="subsubheader">Instead of showing you the Start Page you get directly taken to home</p>
+                </label>
             </div>
             <div class="stg-section">
-            <label>
-            Disable console warning
-            <input type="checkbox" id="consolewarnings" class="settingstoggle">
-            <p class="subsubheader">Hides warning message from console</p>
-            </label>
+                <label>
+                    Invisible Typing
+                    <input type="checkbox" id="invtyping" class="settingstoggle">
+                    <p class="subsubheader">Other users won't see you typing</p>
+                </label>
             </div>
             <div class="stg-section">
-            <label>
-            Hide blocked user messages
-            <input type="checkbox" id="blockedmessages" class="settingstoggle">
-            <p class="subsubheader">Show a warning or hide messages completely</p>
-            </label>
+                <label>
+                    Allow images from any source
+                    <input type="checkbox" id="imagewhitelist" class="settingstoggle">
+                    <p class="subsubheader">This allows any site to see your IP, use responsibly</p>
+                </label>
             </div>
-            <h3>Blocked Users</h3>
+            <div class="stg-section">
+                <label>
+                    Disable console warning
+                    <input type="checkbox" id="consolewarnings" class="settingstoggle">
+                    <p class="subsubheader">Hides warning message from console</p>
+                </label>
+            </div>
+            <div class="stg-section">
+                <label>
+                    Hide blocked user messages
+                    <input type="checkbox" id="blockedmessages" class="settingstoggle">
+                    <p class="subsubheader">Show a warning or hide messages completely</p>
+                </label>
+            </div>
+            <h3>Blocks</h3>
             <div class="blockedusers customcss">
             <button class="blockeduser button" onclick="blockUserSel()">Block User</button>
             </div>
+            <h3>Account</h3>
+            <button onclick="deleteTokensModal()" class="button blockeduser">Clear Tokens</button>
+            <button onclick="changePasswordModal()" class="button blockeduser">Change Password</button>
+            <button onclick="DeleteAccountModal1()" class="button blockeduser" style="background:var(--red);color:#fefefe;">Delete Account</button>
             <h3>About</h3>
             <div class="stg-section">
             <span>meo v1.2.0</span>
@@ -1303,33 +1331,34 @@ function loadgeneral() {
 
             pageContainer.innerHTML = settingsContent;
 
-            const chbxs = document.querySelectorAll("input[type='checkbox']");
-            const swftcheckbox = document.getElementById("swearfilter");
-            const homepagecheckbox = document.getElementById("homepage");
-            const consolewarningscheckbox = document.getElementById("consolewarnings");
-            const blockedmessagescheckbox = document.getElementById("blockedmessages");
+            const settings = {
+                swearfilter: document.getElementById("swearfilter"),
+                homepage: document.getElementById("homepage"),
+                consolewarnings: document.getElementById("consolewarnings"),
+                blockedmessages: document.getElementById("blockedmessages"),
+                invtyping: document.getElementById("invtyping"),
+                imagewhitelist: document.getElementById("imagewhitelist")
+            };
         
-            chbxs.forEach(function(checkbox) {
-                checkbox.addEventListener("change", function () {
+            Object.values(settings).forEach((checkbox) => {
+                checkbox.addEventListener("change", () => {
                     localStorage.setItem('settings', JSON.stringify({
-                        swearfilter: swftcheckbox.checked,
-                        homepage: homepagecheckbox.checked,
-                        consolewarnings: consolewarningscheckbox.checked,
-                        blockedmessages: blockedmessagescheckbox.checked
+                        swearfilter: settings.swearfilter.checked,
+                        homepage: settings.homepage.checked,
+                        consolewarnings: settings.consolewarnings.checked,
+                        blockedmessages: settings.blockedmessages.checked,
+                        invtyping: settings.invtyping.checked,
+                        imagewhitelist: settings.imagewhitelist.checked
                     }));
                 });
             });
         
-            const storedsettings = JSON.parse(localStorage.getItem('settings')) || {};
-            const swearfiltersetting = storedsettings.swearfilter || false;
-            const homepagesetting = storedsettings.homepage || false;
-            const consolewarningssetting = storedsettings.consolewarnings || false;
-            const blockedmessagessetting = storedsettings.blockedmessages || false;
-        
-            swftcheckbox.checked = swearfiltersetting;
-            homepagecheckbox.checked = homepagesetting;
-            consolewarningscheckbox.checked = consolewarningssetting;
-            blockedmessagescheckbox.checked = blockedmessagessetting;
+            const storedSettings = JSON.parse(localStorage.getItem('settings')) || {};
+            Object.entries(storedSettings).forEach(([setting, value]) => {
+                if (settings[setting]) {
+                    settings[setting].checked = value;
+                }
+            });
 
         const cont = document.querySelector('.blockedusers');
 
@@ -1816,13 +1845,12 @@ function launchscreen() {
     </div>`
     const orange = document.getElementById("main");
     orange.innerHTML = green;
-
-    let nv = document.getElementById("nav");
-    nv.innerHTML = ``;
-    nv = document.getElementById("groups");
-    nv.innerHTML = ``;
-    // this should be launching the launch screen not vice versa
-    meowerConnection.close();
+    if (document.getElementById("msgs"))
+    document.getElementById("msgs").innerHTML = "";
+    if (document.getElementById("nav"))
+    document.getElementById("nav").innerHTML = "";
+    if (document.getElementById("groups"))
+    document.getElementById("groups").innerHTML = "";
 }
 
 function autoresize() {
@@ -3192,6 +3220,130 @@ function blockUser(user) {
         loadstgs();
     }
     closemodal();
+}
+
+function deleteTokensModal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>Delete Tokens?</h3>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="deleteTokens()">clear tokens</button>
+                `;
+            }
+        }
+    }
+}
+
+function changePasswordModal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>Change Password</h3>
+                <input id="oldpass-input" class="mdl-inp" placeholder="Old Password" type="password">
+                <input id="newpass-input" class="mdl-inp" placeholder="New Password" type="password" minlength="8">
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="changePassword()" id="changepw">change password</button>
+                `;
+            }
+        }
+    }
+}
+
+function shareModal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>Share</h3>
+                <input id="share" class="mdl-inp" type="text" value="https://meo-32r.pages.dev/" readonly>
+                <input id="share" class="mdl-inp" type="text" value="https://eris.pages.dev/meo-experimental/" readonly>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                `;
+            }
+        }
+    }
+}
+
+function changePassword() {
+    const data = {
+        cmd: "change_pswd",
+        val: {
+            old: document.getElementById("oldpass-input").value,
+            new: document.getElementById("newpass-input").value
+        },
+        listener: "chpw"
+    };
+    meowerConnection.send(JSON.stringify(data));
+    document.getElementById("changepw").disabled = true;
+}
+
+function deleteTokens() {
+    closemodal();
+    launchscreen();
+    const data = {
+        cmd: "direct",
+        val: {
+            cmd: "del_tokens",
+            val: ""
+        }
+    };
+    meowerConnection.send(JSON.stringify(data));
+    logout(true);
+    closemodal("Tokens deleted, you will need to log back in");
+}
+
+function deleteAccount() {
+    const data = {
+        cmd: "direct",
+        val: {
+            cmd: "del_account",
+            val: "" //blank for now dont want my account deleted, this is usually password
+        }
+    };
+    meowerConnection.send(JSON.stringify(data));
+    closemodal("Account scheduled for deletion");
 }
 
 main();
