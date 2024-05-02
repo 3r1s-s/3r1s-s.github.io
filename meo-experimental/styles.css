@@ -160,6 +160,12 @@ bridge {
     padding-bottom: 1px;
     font-weight: bold;
     color: #fff;
+    user-select: none;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
 }
 
 .launch {
@@ -440,6 +446,7 @@ bridge {
 
 .date {
     margin-left: 5px;
+    user-select: none;
 }
 
 .link {
@@ -1441,6 +1448,10 @@ possible future styling
     margin-bottom: 5px;
     font-size: 12px;
     text-align: left;
+}
+
+.credit {
+    margin: 5px;
 }
 
 @media screen and (max-width: 480px) {

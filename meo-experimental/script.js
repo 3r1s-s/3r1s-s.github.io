@@ -1326,6 +1326,16 @@ function loadgeneral() {
             <div class="stg-section">
             <span>meo v1.2.0</span>
             </div>
+            <h3>Credits</h3>
+            <div class="stg-section">
+                <div class="list">
+                    <span class="credit">Tnix</span>
+                    <span class="credit">melt, for the original webhook code</span>
+                    <span class="credit">theotherhades</span>
+                    <span class="credit">You, ${localStorage.getItem("uname")}, for using the client</span>
+                    <span class="credit">All the contributors</span>
+                </div>
+            </div>
             </div>
             `;
 
@@ -1574,7 +1584,8 @@ function loadappearance() {
                 </div>
             <h3>Special Themes</h3>
                 <div class="theme-buttons-inner">
-                    <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
+                <button onclick='changetheme(\"cosmic\", this)' class='theme-button cosmic-theme'>Cosmic Latte</button>
+                <button onclick='changetheme(\"lime\", this)' class='theme-button lime-theme'>Lime</button>
                     <button onclick='changetheme(\"bsky\", this)' class='theme-button bsky-theme'>Midnight</button>
                     <button onclick='changetheme(\"oled\", this)' class='theme-button oled-theme'>Black</button>
                     <button onclick='changetheme(\"roarer\", this)' class='theme-button roarer-theme'>Roarer</button>
@@ -1582,6 +1593,7 @@ function loadappearance() {
                     <button onclick='changetheme(\"blurple\", this)' class='theme-button blurple-theme'>Blurple</button>
                     <button onclick='changetheme(\"grain\", this)' class='theme-button grain-theme'>Grain</button>
                     <button onclick='changetheme(\"grip\", this)' class='theme-button grip-theme'>9rip</button>
+                    <button onclick='changetheme(\"sage\", this)' class='theme-button sage-theme'>Sage</button>
                 </div>
             <h3>Accessible Themes</h3>
                 <div class="theme-buttons-inner">
@@ -3236,7 +3248,9 @@ function deleteTokensModal() {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
-                <h3>Delete Tokens?</h3>
+                <h3>Clear Tokens?</h3>
+                <hr class="mdl-hr">
+                <span class="subheader">This will log you out everywhere.</span>
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
