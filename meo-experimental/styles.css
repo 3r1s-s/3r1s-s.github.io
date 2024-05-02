@@ -1437,7 +1437,7 @@ possible future styling
     opacity: 0;
 }  
 
-.blockeduser {
+.blockeduser, .blockedword {
     padding: 10px var(--button-padding);
     overflow: hidden;
     text-overflow: ellipsis;

@@ -24,6 +24,14 @@ const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inacti
 const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
 
+let blockedWords;
+
+if (localStorage.getItem("blockedWords")) {
+    blockedWords = JSON.parse(localStorage.getItem("blockedWords"));
+} else {
+    blockedWords = {};
+}
+
 let lastTyped = 0;
 
 loadsavedplugins();
@@ -406,6 +414,23 @@ function loadpost(p) {
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
 
+    const ba = Object.keys(blockedWords);
+    const bc = ba.some(word => {
+        const regex = new RegExp('\\b' + word + '\\b', 'i');
+        return regex.test(content);
+    });
+
+    if (bc) {
+        if (settingsstuff().censorwords) {
+            content = content.replace(new RegExp('\\b(' + ba.join('|') + ')\\b', 'gi'), match => '*'.repeat(match.length));
+        } else {
+            if (settingsstuff().blockedmessages) {
+                postContainer.setAttribute("style", "display:none;");
+            } else {
+                postContainer.classList.add("blocked");
+            }
+        }
+    }
     
     if (blockedUsers.hasOwnProperty(user)) {
         if (settingsstuff().blockedmessages) {
@@ -619,91 +644,6 @@ function loadPfp(username, button) {
                     resolve(null);
                 });
         }
-    });
-}
-
-function loadPfpstraight(username, button) {
-    return new Promise((resolve, reject) => {
-        let pfpElement;
-
-        fetch(`https://api.meower.org/users/${username}`)
-            .then(userResp => userResp.json())
-            .then(userData => {
-                if (userData.avatar) {
-                    const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
-
-                    pfpElement = document.createElement("img");
-                    pfpElement.setAttribute("src", pfpurl);
-                    pfpElement.setAttribute("alt", username);
-                    pfpElement.setAttribute("data-username", username);
-                    pfpElement.classList.add("avatar-small");
-                    if (!button) {
-                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
-                    }
-
-                    if (userData.avatar_color) {
-                        pfpElement.style.border = `3px solid #${userData.avatar_color}`;
-                        pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
-                    }
-
-                    pfpElement.addEventListener('error', () => {
-                        pfpElement.setAttribute("src", `${pfpurl}.png`);
-                    });
-
-                } else if (userData.pfp_data) {
-                    let pfpurl;
-                    if (userData.pfp_data > 0 && userData.pfp_data <= 37) {
-                        pfpurl = `images/avatars/icon_${userData.pfp_data - 1}.svg`;
-                    } else {
-                        pfpurl = `images/avatars/icon_err.svg`;
-                    }
-
-                    pfpElement = document.createElement("img");
-                    pfpElement.setAttribute("src", pfpurl);
-                    pfpElement.setAttribute("alt", username);
-                    pfpElement.setAttribute("data-username", username);
-                    pfpElement.classList.add("avatar-small");
-                    if (!button) {
-                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
-                    }
-                    pfpElement.classList.add("svg-avatar");
-
-                    if (userData.avatar_color) {
-                        if (userData.avatar_color === "!color") {
-                            pfpElement.style.border = `3px solid #f00`;
-                            pfpElement.style.backgroundColor = `#f00`;
-                        } else {
-                            pfpElement.style.border = `3px solid #${userData.avatar_color}`;
-                            pfpElement.style.backgroundColor = `#${userData.avatar_color}`;
-                        }
-                    }
-
-                } else {
-                    const pfpurl = `images/avatars/icon_-4.svg`;
-
-                    pfpElement = document.createElement("img");
-                    pfpElement.setAttribute("src", pfpurl);
-                    pfpElement.setAttribute("alt", username);
-                    pfpElement.setAttribute("data-username", username);
-                    if (!button) {
-                        pfpElement.setAttribute("onclick", `openUsrModal('${username}')`);
-                    }
-                    pfpElement.classList.add("avatar");
-                    pfpElement.classList.add("svg-avatar");
-
-                    pfpElement.style.border = `3px solid #fff`;
-                    pfpElement.style.backgroundColor = `#fff`;
-
-                    console.error("No avatar or pfp_data available for: ", username);
-                    resolve(null);
-                }
-
-                resolve(pfpElement);
-            })
-            .catch(error => {
-                console.error("Failed to fetch:", error);
-                resolve(null);
-            });
     });
 }
 
@@ -925,7 +865,7 @@ function sidebars() {
     <input type='button' class='navigation-button button' id='inbox' value='Inbox' onclick='loadinbox()' aria-label="inbox">
     <input type='button' class='navigation-button button' id='settings' value='Settings' onclick='loadstgs()' aria-label="settings">
     <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("uname")}")' aria-label="profile">
-        <img class="avatar-small" id="uav" src="">
+        <img class="avatar-small" id="uav" src="" alt="Avatar">
         <span class="gcname">${localStorage.getItem("uname")}</span></div>
     </button>
     `;
@@ -984,6 +924,7 @@ function sidebars() {
 
             const chatIconElem = document.createElement("img");
             chatIconElem.classList.add("avatar-small");
+            chatIconElem.setAttribute("alt", "Avatar");;
             if (chat.type === 0) {
                 chatIconElem.src = "images/GC.svg";
                 chatIconElem.style.border = "3px solid #1f5831";
@@ -1064,15 +1005,15 @@ function loadstart() {
                 }
                 if (item.avatar) {
                     profilecont.innerHTML = `
-                        <img class="avatar-small" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color};" src="https://uploads.meower.org/icons/${item.avatar}" alt="${item._id}" title="${item._id}"></img>
+                        <img class="avatar-small" style="border: 3px solid #${item.avatar_color}; background-color:#${item.avatar_color};" src="https://uploads.meower.org/icons/${item.avatar}" alt="Avatar" title="${item._id}"></img>
                     `;
                 } else if (item.pfp_data) {
                     profilecont.innerHTML = `
-                        <img class="avatar-small svg-avatar" style="border: 3px solid #${item.avatar_color}"; src="images/avatars/icon_${item.pfp_data - 1}.svg" alt="${item._id}" title="${item._id}"></img>
+                        <img class="avatar-small svg-avatar" style="border: 3px solid #${item.avatar_color}"; src="images/avatars/icon_${item.pfp_data - 1}.svg" alt="Avatar" title="${item._id}"></img>
                     `;
                 } else {
                     profilecont.innerHTML = `
-                        <img class="avatar-small svg-avatar" style="border: 3px solid #000"; src="images/avatars/icon_-4.svg" alt="${item._id}" title="${item._id}"></img>
+                        <img class="avatar-small svg-avatar" style="border: 3px solid #000"; src="images/avatars/icon_-4.svg" alt="Avatar" title="${item._id}"></img>
                     `;
                 }
                 const pl = `<button class="ubtn button" aria-label="${gr}"><div class="ubtnsa" onclick="openUsrModal('${gr}')">${profilecont.outerHTML}${gr}</div><div class="ubtnsb" onclick="opendm('${gr}')" id="username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg></div></button>`;
@@ -1314,13 +1255,25 @@ function loadgeneral() {
                     <p class="subsubheader">Show a warning or hide messages completely</p>
                 </label>
             </div>
+            <div class="stg-section">
+                <label>
+                    Censor blacklisted words
+                    <input type="checkbox" id="censorwords" class="settingstoggle">
+                    <p class="subsubheader">Censors words instead of treating them like a blocked message</p>
+                </label>
+            </div>
             <h3>Blocks</h3>
             <div class="blockedusers customcss">
             <button class="blockeduser button" onclick="blockUserSel()">Block User</button>
             </div>
+            <h3>Blacklisted Words</h3>
+            <div class="blockedwords customcss">
+            <button class="blockedword button" onclick="blockWordSel()">Blacklist Word</button>
+            </div>
             <h3>Account</h3>
             <button onclick="deleteTokensModal()" class="button blockeduser">Clear Tokens</button>
             <button onclick="changePasswordModal()" class="button blockeduser">Change Password</button>
+            <button onclick="clearLocalstorageModal()" class="button blockeduser">Clear Localstorage</button>
             <button onclick="DeleteAccountModal1()" class="button blockeduser" style="background:var(--red);color:#fefefe;">Delete Account</button>
             <h3>About</h3>
             <div class="stg-section">
@@ -1347,7 +1300,8 @@ function loadgeneral() {
                 consolewarnings: document.getElementById("consolewarnings"),
                 blockedmessages: document.getElementById("blockedmessages"),
                 invtyping: document.getElementById("invtyping"),
-                imagewhitelist: document.getElementById("imagewhitelist")
+                imagewhitelist: document.getElementById("imagewhitelist"),
+                censorwords: document.getElementById("censorwords")
             };
         
             Object.values(settings).forEach((checkbox) => {
@@ -1358,7 +1312,8 @@ function loadgeneral() {
                         consolewarnings: settings.consolewarnings.checked,
                         blockedmessages: settings.blockedmessages.checked,
                         invtyping: settings.invtyping.checked,
-                        imagewhitelist: settings.imagewhitelist.checked
+                        imagewhitelist: settings.imagewhitelist.checked,
+                        censorwords: settings.censorwords.checked
                     }));
                 });
             });
@@ -1386,6 +1341,24 @@ function loadgeneral() {
                 cont.appendChild(item);
             }
         }
+
+        const bwcont = document.querySelector('.blockedwords');
+
+        for (const word in blockedWords) {
+            if (blockedWords.hasOwnProperty(word)) {
+                const item = document.createElement('button');
+                
+                item.innerText = word;
+                
+                item.classList.add('blockedword');
+                item.classList.add('button');
+                
+                item.setAttribute("onclick", `unblockWord('${word}')`);
+                
+                bwcont.appendChild(item);
+            }
+        }
+
 }
 
 async function loadplugins() {
@@ -2763,6 +2736,33 @@ function createChatModal() {
     }
 }
 
+function blockWordSel() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                    mdlt.innerHTML = `
+                    <h3>Blacklist a Word</h3>
+                    <input id="block-word-input" class="mdl-inp" placeholder="Word">
+                    `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="blockWord(document.getElementById('block-word-input').value)">block</button>
+                `;
+            }
+        }
+    }
+}
+
 function blockUserSel() {
     document.documentElement.style.overflow = "hidden";
     
@@ -3201,6 +3201,24 @@ function populateSearch() {
     }
 }
 
+function blockWord(word) {
+    blockedWords[word] = true;
+    localStorage.setItem("blockedWords", JSON.stringify(blockedWords));
+    if (page === 'settings') {
+        loadstgs();
+    }
+    closemodal();
+}
+
+function unblockWord(word) {
+    delete blockedWords[word];
+    localStorage.setItem("blockedWords", JSON.stringify(blockedWords));
+    if (page === 'settings') {
+        loadstgs();
+    }
+    closemodal();
+}
+
 function blockUser(user) {
     let toggle;
     if (blockedUsers.hasOwnProperty(user)) {
@@ -3292,6 +3310,35 @@ function changePasswordModal() {
     }
 }
 
+function clearLocalstorageModal() {
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>Clear Localstorage?</h3>
+                <hr class="mdl-hr">
+                <span class="subheader">This will log you out.</span>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="clearLocalstorage()" id="clearls">clear</button>
+                `;
+            }
+        }
+    }
+}
+
 function shareModal() {
     document.documentElement.style.overflow = "hidden";
     
@@ -3358,6 +3405,12 @@ function deleteAccount() {
     };
     meowerConnection.send(JSON.stringify(data));
     closemodal("Account scheduled for deletion");
+}
+
+function clearLocalstorage() {
+    localStorage.clear();
+    logout(true);
+    closemodal('Cleared!');
 }
 
 main();
