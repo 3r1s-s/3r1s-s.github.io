@@ -628,7 +628,6 @@ possible future styling
     flex-direction: column;
     align-items: center;
     border-radius: var(--border-radius);
-    transform: scale(0.5);
     animation: open cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
@@ -892,6 +891,15 @@ possible future styling
     cursor: pointer;
 }
 
+@keyframes reduced-motion {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 @keyframes popup {
     from {
         transform: translateY(100%);
@@ -1124,7 +1132,6 @@ possible future styling
     max-width: 629px;
     overflow: auto;
     resize: horizontal;
-    transform: translateY(0px);
     animation: slidedown cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
@@ -1345,7 +1352,7 @@ possible future styling
 }
 
 .example-msg {
-    padding: 25px;
+    padding: 25px 15px;
     height: 200px;
     overflow: hidden;
     border: 1px solid var(--accent-color);
@@ -1471,7 +1478,6 @@ possible future styling
         border-top-right-radius: 15px;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
-        transform: translateY(-50%);
         animation: popup cubic-bezier(.2,-.25,0,1) 0.2s forwards;
         border: none !important;
     }
@@ -1746,4 +1752,8 @@ possible future styling
     .post.blocked:focus::before {
         opacity: 0;
     }  
+}
+
+.reduced-ani.modal, .reduced-ani.image-mdl > .embed-large {
+    animation: reduced-motion cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }

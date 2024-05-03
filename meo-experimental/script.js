@@ -34,9 +34,10 @@ if (localStorage.getItem("blockedWords")) {
 
 let lastTyped = 0;
 
-loadsavedplugins();
-loadcstmcss();
-loadcsttme();
+setAccessibilitySettings()
+loadSavedPlugins();
+loadCustomCss();
+loadCustomTheme();
 
 function replsh(rpl) {
     const trimmedString = rpl.length > 25 ?
@@ -1229,7 +1230,7 @@ function loadgeneral() {
             </div>
             <div class="stg-section">
                 <label>
-                    Invisible Typing
+                    Invisible typing
                     <input type="checkbox" id="invtyping" class="settingstoggle">
                     <p class="subsubheader">Other users won't see you typing</p>
                 </label>
@@ -1262,6 +1263,26 @@ function loadgeneral() {
                     <p class="subsubheader">Censors words instead of treating them like a blocked message</p>
                 </label>
             </div>
+            <h3>Accessibility</h3>
+            <div class="stg-section">
+                <label>
+                    Reduce motion
+                    <input type="checkbox" id="reducemotion" class="settingstoggle">
+                    <p class="subsubheader">Reduce the intensity of animations and other moving effects</p>
+                </label>
+            </div>
+            <div class="stg-section">
+                <label>
+                    Always underline links
+                    <input type="checkbox" id="underlinelinks" class="settingstoggle">
+                    <p class="subsubheader">Make links to websites and other pages stand out more by underlining them</p>
+                </label>
+            </div>
+            <h3>Account</h3>
+            <button onclick="deleteTokensModal()" class="button blockeduser">Clear Tokens</button>
+            <button onclick="changePasswordModal()" class="button blockeduser">Change Password</button>
+            <button onclick="clearLocalstorageModal()" class="button blockeduser">Clear Localstorage</button>
+            <button onclick="DeleteAccountModal1()" class="button blockeduser" style="background:var(--red);color:#fefefe;">Delete Account</button>
             <h3>Blocks</h3>
             <div class="blockedusers customcss">
             <button class="blockeduser button" onclick="blockUserSel()">Block User</button>
@@ -1270,11 +1291,6 @@ function loadgeneral() {
             <div class="blockedwords customcss">
             <button class="blockedword button" onclick="blockWordSel()">Blacklist Word</button>
             </div>
-            <h3>Account</h3>
-            <button onclick="deleteTokensModal()" class="button blockeduser">Clear Tokens</button>
-            <button onclick="changePasswordModal()" class="button blockeduser">Change Password</button>
-            <button onclick="clearLocalstorageModal()" class="button blockeduser">Clear Localstorage</button>
-            <button onclick="DeleteAccountModal1()" class="button blockeduser" style="background:var(--red);color:#fefefe;">Delete Account</button>
             <h3>About</h3>
             <div class="stg-section">
             <span>meo v1.2.0</span>
@@ -1301,7 +1317,9 @@ function loadgeneral() {
                 blockedmessages: document.getElementById("blockedmessages"),
                 invtyping: document.getElementById("invtyping"),
                 imagewhitelist: document.getElementById("imagewhitelist"),
-                censorwords: document.getElementById("censorwords")
+                censorwords: document.getElementById("censorwords"),
+                reducemotion: document.getElementById("reducemotion"),
+                underlinelinks: document.getElementById("underlinelinks")
             };
         
             Object.values(settings).forEach((checkbox) => {
@@ -1313,8 +1331,11 @@ function loadgeneral() {
                         blockedmessages: settings.blockedmessages.checked,
                         invtyping: settings.invtyping.checked,
                         imagewhitelist: settings.imagewhitelist.checked,
-                        censorwords: settings.censorwords.checked
+                        censorwords: settings.censorwords.checked,
+                        reducemotion: settings.reducemotion.checked,
+                        underlinelinks: settings.underlinelinks.checked
                     }));
+                    setAccessibilitySettings();
                 });
             });
         
@@ -1433,7 +1454,7 @@ async function fetchplugins() {
     }
 }
 
-async function loadsavedplugins() {
+async function loadSavedPlugins() {
     const pluginsdata = await fetchplugins();
     pluginsdata.forEach(plugin => {
         const isEnabled = localStorage.getItem(plugin.name) === 'true';
@@ -1660,7 +1681,7 @@ function loadappearance() {
                     <input type="color" class="cstcolinpc" id="hov-modal-button-color" name="hov-modal-button-color" value="#4d576a">
                     </div>
                 </div>
-                <button onclick="applycsttme()" class="cstpgbt button">Apply</button>
+                <button onclick="applyCustomTheme()" class="cstpgbt button">Apply</button>
             </div>
         <h3>Custom CSS</h3>
         <div class='customcss'>
@@ -1711,7 +1732,7 @@ function loadappearance() {
     document.querySelector('.theme-buttons .' + localStorage.getItem('theme') + '-theme').classList.add('selected');
 }
 
-function applycsttme() {
+function applyCustomTheme() {
     const customThemeParameters = document.querySelectorAll('.custom-theme-in input[type="color"]');
     let customThemeCSS = '';
 
@@ -1728,7 +1749,7 @@ function applycsttme() {
     localStorage.setItem('customThemeCSS', customThemeCSS);
 }
 
-function loadcsttme() {
+function loadCustomTheme() {
     const customThemeCSS = localStorage.getItem('customThemeCSS');
     if (customThemeCSS) {
         const customThemeStyle = document.createElement('style');
@@ -1737,7 +1758,7 @@ function loadcsttme() {
     }
 }
 
-function loadcstmcss() {
+function loadCustomCss() {
     const css = localStorage.getItem('customCSS');
 
     let customstyle = document.getElementById('customstyle');
@@ -3346,7 +3367,6 @@ function shareModal() {
 
     if (mdlbck) {
         mdlbck.style.display = 'flex';
-        
         const mdl = mdlbck.querySelector('.modal');
         mdl.id = 'mdl-uptd';
         if (mdl) {
@@ -3411,6 +3431,19 @@ function clearLocalstorage() {
     localStorage.clear();
     logout(true);
     closemodal('Cleared!');
+}
+
+function setAccessibilitySettings() {
+// reduce motion
+const b = document.querySelector('.modal');
+const c = document.querySelector('.image-mdl');
+if (settingsstuff().reducemotion) {
+    b.classList.add("reduced-ani");
+    c.classList.add("reduced-ani");
+} else {
+    b.classList.remove("reduced-ani");
+    c.classList.remove("reduced-ani");
+}
 }
 
 main();
