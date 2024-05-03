@@ -1787,7 +1787,7 @@ function loadCustomTheme() {
 function saveCustomTheme() {
     const themeCSS = document.getElementById('customtheme');
     if (themeCSS) {
-        const blob = new Blob([themeCSS.innerText], { type: 'text/css' });
+        const blob = new Blob([themeCSS.innerText.replace(/^\.custom-theme\s*{\s*|\s*}$/g, '')], { type: 'text/css' });
         const url = URL.createObjectURL(blob);
         
         const a = document.createElement('a');
