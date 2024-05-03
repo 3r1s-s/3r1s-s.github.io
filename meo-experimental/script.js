@@ -1294,11 +1294,11 @@ function loadgeneral() {
             <button onclick="clearLocalstorageModal()" class="button blockeduser">Clear Localstorage</button>
             <button onclick="DeleteAccountModal1()" class="button blockeduser" style="background:var(--red);color:#fefefe;">Delete Account</button>
             <h3>Blocks</h3>
-            <div class="blockedusers customcss">
+            <div class="blockedusers list">
             <button class="blockeduser button" onclick="blockUserSel()">Block User</button>
             </div>
             <h3>Blacklisted Words</h3>
-            <div class="blockedwords customcss">
+            <div class="blockedwords list">
             <button class="blockedword button" onclick="blockWordSel()">Blacklist Word</button>
             </div>
             <h3>About</h3>
@@ -1707,12 +1707,12 @@ function loadappearance() {
 
     pageContainer.innerHTML = settingsContent;
 
-    const customThemeCSS = localStorage.getItem('customThemeCSS');
+    const themeCSS = localStorage.getItem('themeCSS');
 
-    if (customThemeCSS) {
+    if (themeCSS) {
         const regex = /--(.*?):(.*?);/g;
         let match;
-        while ((match = regex.exec(customThemeCSS)) !== null) {
+        while ((match = regex.exec(themeCSS)) !== null) {
             const propertyName = match[1].trim();
             const propertyValue = match[2].trim();
 
@@ -1749,46 +1749,45 @@ function loadappearance() {
 
 function applyCustomTheme() {
     const customThemeParameters = document.querySelectorAll('.custom-theme-in input[type="color"]');
-    let customThemeCSS = '';
+    let themeCSS = '';
 
     customThemeParameters.forEach(input => {
         const propertyName = input.name;
         const propertyValue = input.value;
-        customThemeCSS += `--${propertyName}: ${propertyValue};`;
+        themeCSS += `--${propertyName}: ${propertyValue};`;
     });
 
-    let customThemeStyle = document.querySelector('#customtheme');
+    let customtheme = document.getElementById('customtheme');
 
-    if (!customThemeStyle) {
-        customThemeStyle = document.createElement('style');
-        customThemeStyle.id = 'customtheme';
-        document.head.appendChild(customThemeStyle);
+    if (!customtheme) {
+        customtheme = document.createElement('style');
+        customtheme.id = 'customtheme';
+        document.head.appendChild(customtheme);
     }
 
-    customThemeStyle.textContent = `.custom-theme { ${customThemeCSS} }`;
+    customtheme.textContent = `.custom-theme { ${themeCSS} }`;
 
-    localStorage.setItem('customThemeCSS', customThemeCSS);
+    localStorage.setItem('themeCSS', themeCSS);
 }
 
 function loadCustomTheme() {
-    const customThemeCSS = localStorage.getItem('customThemeCSS');
-    if (customThemeCSS) {
-        let customThemeStyle = document.querySelector('#customtheme');
-
-        if (!customThemeStyle) {
-            customThemeStyle = document.createElement('style');
-            customThemeStyle.id = 'customtheme';
-            document.head.appendChild(customThemeStyle);
+    const themeCSS = localStorage.getItem('themeCSS');
+    if (themeCSS) {
+        let customtheme = document.getElementById('customtheme');
+        if (!customtheme) {
+            customtheme = document.createElement('style');
+            customtheme.id = 'customtheme';
+            document.head.appendChild(customtheme);
         }
 
-        customThemeStyle.textContent = `.custom-theme { ${customThemeCSS} }`;
+        customtheme.textContent = `.custom-theme { ${themeCSS} }`;
     }
 }
 
 function saveCustomTheme() {
-    const customThemeCSS = localStorage.getItem('customThemeCSS');
-    if (customThemeCSS) {
-        const blob = new Blob([customThemeCSS], { type: 'text/css' });
+    const themeCSS = document.getElementById('customtheme');
+    if (themeCSS) {
+        const blob = new Blob([themeCSS.innerText], { type: 'text/css' });
         const url = URL.createObjectURL(blob);
         
         const a = document.createElement('a');
@@ -1814,9 +1813,9 @@ function loadCustomThemeFile() {
         const reader = new FileReader();
 
         reader.onload = function(event) {
-            const customThemeCSS = event.target.result;
+            const themeCSS = event.target.result;
 
-            applyCustomThemeFromFile(customThemeCSS);
+            applyCustomThemeFromFile(themeCSS);
         };
 
         reader.readAsText(file);
@@ -1825,30 +1824,18 @@ function loadCustomThemeFile() {
     input.click();
 }
 
-function applyCustomThemeFromFile(customThemeCSS) {
-    // thanks bing ai for this bit (I WAS LAZY)
-    const cssVariables = customThemeCSS.match(/--[^;]+/g);
-
-    if (!cssVariables) {
-        console.error('No CSS variables found in the provided customThemeCSS.');
-        return;
+function applyCustomThemeFromFile(themeCSS) {
+    let customtheme = document.getElementById('customtheme');
+    if (!customtheme) {
+        customtheme = document.createElement('style');
+        customtheme.id = 'customtheme';
+        document.head.appendChild(customtheme);
     }
 
-    let customThemeStyle = document.querySelector('#customtheme');
+    customtheme.textContent = `.custom-theme { ${themeCSS} }`;
 
-    if (!customThemeStyle) {
-        customThemeStyle = document.createElement('style');
-        customThemeStyle.id = 'customtheme';
-        document.head.appendChild(customThemeStyle);
-    }
-
-    const cssRule = cssVariables.map(variable => `var(${variable})`).join(', ');
-
-    customThemeStyle.textContent = `.custom-theme { ${cssRule} }`;
-
-    localStorage.setItem('customThemeCSS', customThemeCSS);
+    localStorage.setItem('themeCSS', themeCSS);
 }
-
 
 function loadCustomCss() {
     const css = localStorage.getItem('customCSS');
