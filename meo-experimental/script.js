@@ -1153,6 +1153,8 @@ function loadinbox() {
             <div id='msgs' class='posts'></div>
         `;
 
+        sidebars();
+
         const sidedivs = document.querySelectorAll(".side");
         sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
 
@@ -1244,9 +1246,9 @@ function loadgeneral() {
             </div>
             <div class="stg-section">
                 <label>
-                    Disable console warning
-                    <input type="checkbox" id="consolewarnings" class="settingstoggle">
-                    <p class="subsubheader">Hides warning message from console</p>
+                    Special embeds
+                    <input type="checkbox" id="embeds" class="settingstoggle">
+                    <p class="subsubheader">Embeds Tenor GIFS, Youtube Videos, ect. (Uses 3rd party cookies)</p>
                 </label>
             </div>
             <div class="stg-section">
@@ -1276,6 +1278,14 @@ function loadgeneral() {
                     Always underline links
                     <input type="checkbox" id="underlinelinks" class="settingstoggle">
                     <p class="subsubheader">Make links to websites and other pages stand out more by underlining them</p>
+                </label>
+            </div>
+            <h3>Miscellaneous</h3>
+            <div class="stg-section">
+                <label>
+                    Disable console warning
+                    <input type="checkbox" id="consolewarnings" class="settingstoggle">
+                    <p class="subsubheader">Hides warning message from console</p>
                 </label>
             </div>
             <h3>Account</h3>
@@ -1318,6 +1328,7 @@ function loadgeneral() {
                 invtyping: document.getElementById("invtyping"),
                 imagewhitelist: document.getElementById("imagewhitelist"),
                 censorwords: document.getElementById("censorwords"),
+                embeds: document.getElementById("embeds"),
                 reducemotion: document.getElementById("reducemotion"),
                 underlinelinks: document.getElementById("underlinelinks")
             };
@@ -1332,6 +1343,7 @@ function loadgeneral() {
                         invtyping: settings.invtyping.checked,
                         imagewhitelist: settings.imagewhitelist.checked,
                         censorwords: settings.censorwords.checked,
+                        embeds: settings.embeds.checked,
                         reducemotion: settings.reducemotion.checked,
                         underlinelinks: settings.underlinelinks.checked
                     }));
@@ -1682,9 +1694,12 @@ function loadappearance() {
                     </div>
                 </div>
                 <button onclick="applyCustomTheme()" class="cstpgbt button">Apply</button>
+                <button onclick="saveCustomTheme()" class="cstpgbt button">Save Theme</button>
+                <button onclick="loadCustomThemeFile()" class="cstpgbt button">Load Theme</button>
+
             </div>
         <h3>Custom CSS</h3>
-        <div class='customcss'>
+        <div class='list'>
             <textarea class="editor" id='customcss' placeholder="// you put stuff here"></textarea>
         </div>
     </div>
@@ -1742,9 +1757,15 @@ function applyCustomTheme() {
         customThemeCSS += `--${propertyName}: ${propertyValue};`;
     });
 
-    const customThemeStyle = document.createElement('style');
+    let customThemeStyle = document.querySelector('#customtheme');
+
+    if (!customThemeStyle) {
+        customThemeStyle = document.createElement('style');
+        customThemeStyle.id = 'customtheme';
+        document.head.appendChild(customThemeStyle);
+    }
+
     customThemeStyle.textContent = `.custom-theme { ${customThemeCSS} }`;
-    document.head.appendChild(customThemeStyle);
 
     localStorage.setItem('customThemeCSS', customThemeCSS);
 }
@@ -1752,11 +1773,82 @@ function applyCustomTheme() {
 function loadCustomTheme() {
     const customThemeCSS = localStorage.getItem('customThemeCSS');
     if (customThemeCSS) {
-        const customThemeStyle = document.createElement('style');
+        let customThemeStyle = document.querySelector('#customtheme');
+
+        if (!customThemeStyle) {
+            customThemeStyle = document.createElement('style');
+            customThemeStyle.id = 'customtheme';
+            document.head.appendChild(customThemeStyle);
+        }
+
         customThemeStyle.textContent = `.custom-theme { ${customThemeCSS} }`;
-        document.head.appendChild(customThemeStyle);
     }
 }
+
+function saveCustomTheme() {
+    const customThemeCSS = localStorage.getItem('customThemeCSS');
+    if (customThemeCSS) {
+        const blob = new Blob([customThemeCSS], { type: 'text/css' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'custom-theme.css';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } else {
+        console.error('No cstcss found');
+    }
+}
+
+function loadCustomThemeFile() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.css, .txt';
+
+    input.addEventListener('change', function() {
+        const file = this.files[0];
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+            const customThemeCSS = event.target.result;
+
+            applyCustomThemeFromFile(customThemeCSS);
+        };
+
+        reader.readAsText(file);
+    });
+
+    input.click();
+}
+
+function applyCustomThemeFromFile(customThemeCSS) {
+    // thanks bing ai for this bit (I WAS LAZY)
+    const cssVariables = customThemeCSS.match(/--[^;]+/g);
+
+    if (!cssVariables) {
+        console.error('No CSS variables found in the provided customThemeCSS.');
+        return;
+    }
+
+    let customThemeStyle = document.querySelector('#customtheme');
+
+    if (!customThemeStyle) {
+        customThemeStyle = document.createElement('style');
+        customThemeStyle.id = 'customtheme';
+        document.head.appendChild(customThemeStyle);
+    }
+
+    const cssRule = cssVariables.map(variable => `var(${variable})`).join(', ');
+
+    customThemeStyle.textContent = `.custom-theme { ${cssRule} }`;
+
+    localStorage.setItem('customThemeCSS', customThemeCSS);
+}
+
 
 function loadCustomCss() {
     const css = localStorage.getItem('customCSS');
@@ -1770,6 +1862,7 @@ function loadCustomCss() {
 
     customstyle.textContent = css || '';
 }
+
 
 function changetheme(theme, button) {
     const selectedTheme = theme;
@@ -3002,6 +3095,8 @@ function loadexplore() {
     </div>
     </div>
     `;
+    
+    sidebars();
 
     loadstats();
 
