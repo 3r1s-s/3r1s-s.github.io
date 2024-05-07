@@ -44,14 +44,14 @@ function fetchprofile() {
                 <hr>
                 `
                 profilecont.innerHTML += `
-                <span class="subheader">Quote</span>
+                <span class="subheader">${lang().profile.quote}</span>
                 <br>
                 <textarea class="quote-edit mdl-txt" id="quote">${data.quote}</textarea>
-                <span class="subheader">Personalization</span>
-                <div class="sec"><span>Profile Colour:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input>
+                <span class="subheader">${lang().profile.persona}</span>
+                <div class="sec"><span>${lang().profile.proiflecolor}:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input>
                 </div>
                 <div class="sec">
-                <span>Profile Picture:</span><input type="file" id="profile-photo" accept="image/png,image/jpeg,image/webp,image/gif">
+                <span>${lang().profile.profilepic}:</span><input type="file" id="profile-photo" accept="image/png,image/jpeg,image/webp,image/gif">
                 </div>
                 `;
             } else {
@@ -81,7 +81,7 @@ function fetchprofile() {
                 }
 
                 profilecont.innerHTML += `
-                <span class="subheader">Quote</span>
+                <span class="subheader">${lang().profile.quote}</span>
                 <div class="sec">
                 <span class="profile-qt">${quote}</span>
                 </div>
@@ -94,7 +94,7 @@ function fetchprofile() {
             
             if (data._id === localStorage.getItem('uname')) {
                 profilecont.innerHTML += `
-                <button class="modal-button updt-prfl" onclick="updateprofile()" aria-label="update profile"><div>Update</div></button>      
+                <button class="modal-button updt-prfl" onclick="updateprofile()" aria-label="update profile"><div>${lang().action.update}</div></button>      
                 `;
             }                    
             

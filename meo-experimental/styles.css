@@ -251,7 +251,7 @@ bridge {
     background-color: var(--hov-accent-color);
 }
 
-.posts, .settings, .login, .explore {
+.posts, .settings, .explore {
     margin: calc(var(--margin) / 2);
     /*border: 1px solid var(--accent-color);*/
 }
@@ -275,6 +275,8 @@ bridge {
     margin-left: auto;
     margin-right: auto;
     max-width: 500px;
+    height: 80vh;
+    justify-content: center;
 }
 
 .login-input {
@@ -367,6 +369,10 @@ bridge {
 .buttonContainer {
     display: none;
     float: right;
+}
+
+.visibleButtonContainer {
+    display: block;
 }
 
 .toolbarContainer {
@@ -1296,18 +1302,21 @@ possible future styling
     height: 100px;
     overflow-y: scroll;
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .searchitem {
     padding: 10px var(--button-padding);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    box-sizing: border-box;
-    text-wrap: nowrap;
     background-color: var(--modal-button-color);
     border-radius: var(--border-radius);
     margin-bottom: 5px;
     font-size: 12px;
+    text-align: left;
+}
+
+.searchitem:focus {
+    background: var(--hov-accent-color);
 }
 
 .searchitem:last-child {
@@ -1370,13 +1379,19 @@ possible future styling
 }
 
 .plugins {
-    display: flex;
-    flex-wrap: wrap;
-    margin: -5px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
 }
 
 .plugin {
-    margin: 5px;
+    padding: 15px var(--padding);
+}
+
+.pluginsub {
+    font-size: 12px;
+    user-select: none;
+    opacity: 0.8;
 }
 
 .cstpgbt {
@@ -1389,7 +1404,8 @@ possible future styling
     border-radius: var(--border-radius);
     margin-top: 5px;
     font-size: 12px;
-    text-align: left;
+    text-align: center;
+    min-width: 80px;
 }
 
 .custom-label {
@@ -1445,6 +1461,10 @@ possible future styling
 .post.blocked:hover::before {
     opacity: 0;
 }  
+  
+.post.blocked:focus-visible::before {
+    opacity: 0;
+}
 
 .blockeduser, .blockedword {
     padding: 10px var(--button-padding);
@@ -1461,6 +1481,46 @@ possible future styling
 
 .credit {
     margin: 5px;
+}
+
+.legal {
+    width: 100%;
+    height: 400px;
+    border: none;
+}
+
+.languages {
+    display: flex;
+    flex-direction: column;
+}
+
+.language {
+    padding: 10px var(--button-padding);
+    box-sizing: border-box;
+    background: var(--accent-color);
+    border: 3px solid var(--accent-color);
+    border-radius: var(--border-radius);
+    margin-bottom: 5px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.language-r {
+    flex: 1;
+    text-align: right;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.language-l {
+    flex: 1;
+    text-align: left;
+}
+
+.language-selected {
+    box-sizing: border-box;
+    border: 3px solid var(--hov-accent-color);
 }
 
 @media screen and (max-width: 480px) {
@@ -1758,4 +1818,20 @@ possible future styling
 
 .reduced-ani.modal, .reduced-ani.image-mdl > .embed-large {
     animation: reduced-motion cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+}
+
+.reduced-ani.emojipicker {
+    animation: none;
+}
+
+a.underline, a:hover.underline {
+    text-decoration: underline;
+}
+
+button:focus-visible {
+    outline: auto;
+}
+
+input[type="button"]:focus-visible {
+    outline: auto;
 }

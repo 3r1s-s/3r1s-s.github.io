@@ -48,6 +48,11 @@ function loadpicker() {
     } else {
         picker.innerHTML = `<div class="emojipicker">` + pickerhtm() + `</div>`
     }
+    if (settingsstuff().reducemotion) {
+        document.querySelector(".emojipicker").classList.add("reduced-ani");
+    } else {
+        document.querySelector(".emojipicker").classList.remove("reduced-ani");
+    }
     document.getElementById("emojin").focus();
 }
 
@@ -1667,11 +1672,13 @@ function pickerhtm() {
             <button class="emojibutton" title=":3" onclick="addemoji('<:33:1226320165302571087>')"><img src="https://cdn.discordapp.com/emojis/1226320165302571087.webp?size=44&quality=lossless" alt=":3" height="32px"></button>
             <button class="emojibutton" title="Cydia" onclick="addemoji('<:Cydia:1226320451278602290>')"><img src="https://cdn.discordapp.com/emojis/1226320451278602290.webp?size=44&quality=lossless" alt="Cydia" height="32px"></button>
             <button class="emojibutton" title="yuhhuh" onclick="addemoji('<:yuhhuh:1227268820213698611>')"><img src="https://cdn.discordapp.com/emojis/1227268820213698611.webp?size=96&quality=lossless" alt="yuhhuh" height="32px"></button>
+            <button class="emojibutton" title="nuhhuh" onclick="addemoji('<:nuhhuh:1233290735999258664>')"><img src="https://cdn.discordapp.com/emojis/1233290735999258664.webp?size=96&quality=lossless" alt="nuhhuh" height="32px"></button>
             <button class="emojibutton" title="DebugMan" onclick="addemoji('<:DebugMan2:1226320526037880916>')"><img src="https://cdn.discordapp.com/emojis/1226320526037880916.webp?size=44&quality=lossless" alt="DebugMan" height="32px"></button>
             <button class="emojibutton" title="blobheart" onclick="addemoji('<:blobheart:1226319886867763240>')"><img src="https://cdn.discordapp.com/emojis/1226319886867763240.webp?size=44&quality=lossless" alt="blobheart" height="32px"></button>
             <button class="emojibutton" title="demonetized" onclick="addemoji('<:demonetized:1226320307673894953>')"><img src="https://cdn.discordapp.com/emojis/1226320307673894953.webp?size=44&quality=lossless" alt="demonetized" height="32px"></button>
             <button class="emojibutton" title="GarfTrue" onclick="addemoji('<:GarfTrue:1228207760047472670>')"><img src="https://cdn.discordapp.com/emojis/1228207760047472670.webp?size=44&quality=lossless" alt="GarfTrue" height="32px"></button>
             <button class="emojibutton" title="thubsup" onclick="addemoji('<:thubsup:1229994631840927774>')"><img src="https://cdn.discordapp.com/emojis/1229994631840927774.webp?size=96&quality=lossless" alt="thubsup" height="32px"></button>
+            <button class="emojibutton" title="miau" onclick="addemoji('<:thubsup:1237207275870097519>')"><img src="https://cdn.discordapp.com/emojis/1237207275870097519.webp?size=96&quality=lossless" alt="miau" height="32px"></button>
             
             <button class="emojibutton" title="yippe" onclick="addemoji('<a:yippe:1226318495147495505>')"><img src="https://cdn.discordapp.com/emojis/1226318495147495505.gif?size=48&quality=lossless&name=yippe" alt="yippe" height="32px"></button>
             <button class="emojibutton" title="hooray" onclick="addemoji('<a:hooray:1230023947777609808>')"><img src="https://cdn.discordapp.com/emojis/1230023947777609808.gif?size=48&quality=lossless&name=hooray" alt="hooray" height="32px"></button>
@@ -1679,7 +1686,6 @@ function pickerhtm() {
             <button class="emojibutton" title="ameowdundundun" onclick="addemoji('<a:ameowdundundun:1226319768236331140>')"><img src="https://cdn.discordapp.com/emojis/1226319768236331140.gif?size=48&quality=lossless&name=ameowdundundun" alt="ameowdundundun" height="32px"></button>
             <button class="emojibutton" title="Misc_Hundred" onclick="addemoji('<a:Misc_Hundred:1226319950570983434>')"><img src="https://cdn.discordapp.com/emojis/1226319950570983434.gif?size=48&quality=lossless&name=Misc_Hundred" alt="Misc_Hundred" height="32px"></button>
             <button class="emojibutton" title="kick" onclick="addemoji('<a:kick:1231078387704139967>')"><img src="https://cdn.discordapp.com/emojis/1231078387704139967.gif?size=48&quality=lossless&name=kick" alt="kick" height="32px"></button>
-            
             <button class="emojibutton" title="shake" onclick="addemoji('<a:shake:1227279789472354435>')"><img src="https://cdn.discordapp.com/emojis/1227279789472354435.gif?size=48&quality=lossless&name=shake" alt="shake" height="32px"></button>
             <button class="emojibutton" title="sphere" onclick="addemoji('<a:sphere:1227279796715917362>')"><img src="https://cdn.discordapp.com/emojis/1227279796715917362.gif?size=48&quality=lossless&name=sphere" alt="sphere" height="32px"></button>
             <button class="emojibutton" title="spin" onclick="addemoji('<a:spin:1227279798015889498>')"><img src="https://cdn.discordapp.com/emojis/1227279798015889498.gif?size=48&quality=lossless&name=spin" alt="spin" height="32px"></button>
