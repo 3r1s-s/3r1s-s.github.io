@@ -5,6 +5,7 @@ html {
     font-family: var(--font);
     transition: background-color 0.2s ease-in-out;
     scrollbar-gutter: stable;
+    /*scrollbar-color: var(--hov-color) var(--background);*/
 }
 
 body {
@@ -271,17 +272,111 @@ bridge {
 
 .login {
     display: flex;
-    flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
+    gap: var(--margin);
+    margin: 0 auto;
     max-width: 500px;
-    height: 80vh;
+    height: 100vh;
     justify-content: center;
+    flex-direction: column;
 }
 
-.login-input {
+.login-inner {
+    display: flex;
+    flex-direction: column;
+    background: var(--accent-color);
+    padding: 15px var(--padding);
+    border-radius: var(--border-radius);
+    box-shadow: 0px 3px 10px #00000050;
+    z-index: 1;
+}
+
+.login-text, .login-button {
     padding: 1em;
     margin-bottom: .2cm;
+    background: var(--modal-button-color);
+}
+
+.login-text:disabled, .login-button:disabled {
+    opacity: 0.5;
+}
+
+.login-text:focus {
+    background-color: var(--hov-modal-button-color);
+}
+
+.login-button:hover {
+    background-color: var(--hov-modal-button-color);
+}
+
+.login-button:active {
+    background-color: var(--hov-accent-color);
+}
+
+#login-language-sel {
+    box-shadow: 0px 3px 10px #00000050;
+}
+
+.login-header {
+    margin-top: 10px;
+}
+
+.login-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 50px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.login-back {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    display: flex;
+    align-items: end;
+    color: var(--hov-color);
+    opacity: 0.3;
+}
+
+.login-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+.info-button {
+    color: var(--color);
+    transition: opacity .1s ease-in-out;
+}
+
+.info-button:hover {
+    color: var(--color);
+    opacity: 0.8;
+}
+
+.info-link, .info-link:hover {
+    color: var(--color);
+}
+
+.info-bullet {
+    width: 5px;
+    height: 5px;
+    background-color: var(--color);
+    opacity: 0.5;
+    border-radius: 100%;
 }
 
 .message-container {
@@ -450,6 +545,21 @@ bridge {
     max-height: calc(var(--padding)*9);
 }
 
+.online {
+    position: relative;
+}
+
+.online::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+    background-color: var(--green);
+    border-radius: 100px;
+}
+
 .date {
     margin-left: 5px;
     user-select: none;
@@ -549,6 +659,7 @@ possible future styling
     text-decoration: none;
     padding: 1px 5px 1px 5px;
     transition: all 0.05s ease;
+    user-select: none;
 }
 
 .attachment:hover {
@@ -1813,7 +1924,64 @@ possible future styling
 
     .post.blocked:focus::before {
         opacity: 0;
-    }  
+    }
+
+    .login {
+        display: flex;
+        gap: var(--margin);
+        margin: 0 auto;
+        max-width: 500px;
+        height: 100vh;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .login-text, .login-button {
+        background: var(--accent-color);
+    }
+    
+    .login-text:disabled, .login-button:disabled {
+        opacity: 0.5;
+    }
+    
+    .login-text:focus {
+        background-color: var(--hov-color);
+    }
+    
+    .login-button:hover {
+        background-color: var(--hov-color);
+    }
+    
+    .login-button:active {
+        background-color: var(--hov-accent-color);
+    }
+    
+    .login-inner {
+        display: flex;
+        flex-direction: column;
+        background: var(--background);
+        padding: 15px var(--padding);
+        border-radius: 0px;
+        box-shadow: none;
+    }
+
+    .login-top {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        box-sizing: border-box;
+        height: 100%;
+        width: 100%;
+    }
+
+    .login-bottom {
+        display: none;
+    }
 }
 
 .reduced-ani.modal, .reduced-ani.image-mdl > .embed-large {

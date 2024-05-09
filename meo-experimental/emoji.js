@@ -29,6 +29,7 @@ function addemoji(emoji) {
     const ogmsg = document.getElementById('msg').value
     document.getElementById('msg').value = `${ogmsg}${emoji} `;
     autoresize();
+    event.preventDefault();
     if (event) {
         if (!event.shiftKey) {
             closepicker();
@@ -423,6 +424,7 @@ function pickerhtm() {
             <button class="emojibutton" title="family" onclick="addemoji('👪')">👪</button>
             <button class="emojibutton" title="flexed biceps" onclick="addemoji('💪')">💪</button>
             <button class="emojibutton" title="selfie" onclick="addemoji('🤳')">🤳</button>
+            <button class="emojibutton" title="backhand index pointing at screen" onclick="addemoji('🫵')">🫵</button>
             <button class="emojibutton" title="backhand index pointing left" onclick="addemoji('👈')">👈</button>
             <button class="emojibutton" title="backhand index pointing right" onclick="addemoji('👉')">👉</button>
             <button class="emojibutton" title="index pointing up" onclick="addemoji('☝️')">☝️</button>
@@ -1678,7 +1680,7 @@ function pickerhtm() {
             <button class="emojibutton" title="demonetized" onclick="addemoji('<:demonetized:1226320307673894953>')"><img src="https://cdn.discordapp.com/emojis/1226320307673894953.webp?size=44&quality=lossless" alt="demonetized" height="32px"></button>
             <button class="emojibutton" title="GarfTrue" onclick="addemoji('<:GarfTrue:1228207760047472670>')"><img src="https://cdn.discordapp.com/emojis/1228207760047472670.webp?size=44&quality=lossless" alt="GarfTrue" height="32px"></button>
             <button class="emojibutton" title="thubsup" onclick="addemoji('<:thubsup:1229994631840927774>')"><img src="https://cdn.discordapp.com/emojis/1229994631840927774.webp?size=96&quality=lossless" alt="thubsup" height="32px"></button>
-            <button class="emojibutton" title="miau" onclick="addemoji('<:thubsup:1237207275870097519>')"><img src="https://cdn.discordapp.com/emojis/1237207275870097519.webp?size=96&quality=lossless" alt="miau" height="32px"></button>
+            <button class="emojibutton" title="miau" onclick="addemoji('<:miau:1237207275870097519>')"><img src="https://cdn.discordapp.com/emojis/1237207275870097519.webp?size=96&quality=lossless" alt="miau" height="32px"></button>
             
             <button class="emojibutton" title="yippe" onclick="addemoji('<a:yippe:1226318495147495505>')"><img src="https://cdn.discordapp.com/emojis/1226318495147495505.gif?size=48&quality=lossless&name=yippe" alt="yippe" height="32px"></button>
             <button class="emojibutton" title="hooray" onclick="addemoji('<a:hooray:1230023947777609808>')"><img src="https://cdn.discordapp.com/emojis/1230023947777609808.gif?size=48&quality=lossless&name=hooray" alt="hooray" height="32px"></button>

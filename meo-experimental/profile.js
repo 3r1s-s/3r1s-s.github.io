@@ -48,7 +48,7 @@ function fetchprofile() {
                 <br>
                 <textarea class="quote-edit mdl-txt" id="quote">${data.quote}</textarea>
                 <span class="subheader">${lang().profile.persona}</span>
-                <div class="sec"><span>${lang().profile.proiflecolor}:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input>
+                <div class="sec"><span>${lang().profile.profilecolor}:</span><input id="avtr-clr" type="color" value="#${data.avatar_color}"></input>
                 </div>
                 <div class="sec">
                 <span>${lang().profile.profilepic}:</span><input type="file" id="profile-photo" accept="image/png,image/jpeg,image/webp,image/gif">

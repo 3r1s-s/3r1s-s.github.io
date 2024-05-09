@@ -91,18 +91,7 @@ function main() {
             if (localStorage.getItem("token") != undefined && localStorage.getItem("uname") != undefined) {
                 login(localStorage.getItem("uname"), localStorage.getItem("token"));
             } else {
-                const pageContainer = document.getElementById("main");
-                pageContainer.innerHTML = 
-                `<div class='login'>
-                    <h1>${lang().login_sub.title}</h1>
-                    <input type='text' id='userinput' placeholder='${lang().meo_username}' class='login-input text' aria-label="username input" autocomplete="username">
-                    <input type='password' id='passinput' placeholder='${lang().meo_password}' class='login-input text' aria-label="password input" autocomplete="current-password">
-                    <input type='button' id='login' value='${lang().action.login}' class='login-input button' onclick='login(document.getElementById("userinput").value, document.getElementById("passinput").value)' aria-label="Register">
-                    <input type='button' id='signup' value='${lang().action.signup}' class='login-input button' onclick='agreementModal()' aria-label="log in">
-                    <small>${lang().login_sub.desc}</small>
-                    <div id='msgs'></div>
-                </div>
-                `;
+                loadLogin();
             };
         } else if (sentdata.listener == "auth") {
             if (sentdata.val.mode && sentdata.val.mode == "auth") {
@@ -140,6 +129,7 @@ function main() {
                 }
                 console.log("Logged in!");
             } else if (sentdata.cmd == "statuscode" && sentdata.val != "I:100 | OK") {
+                toggleLogin(false);
                 if ("token" in localStorage)
                     logout(false);
                 switch (sentdata.val) {
@@ -390,6 +380,59 @@ function main() {
     });
 }
 
+function loadLogin() {
+    const pageContainer = document.getElementById("main");
+    pageContainer.innerHTML = 
+    `<div class='login'>
+        <div class='login-inner'>
+            <h2 class="login-header">${lang().meo_welcome}</h2>
+            <input type='text' id='userinput' placeholder='${lang().meo_username}' class='login-text text' aria-label="username input" autocomplete="username">
+            <input type='password' id='passinput' placeholder='${lang().meo_password}' class='login-text text' aria-label="password input" autocomplete="current-password">
+            <input type='button' id='login' value='${lang().action.login}' class='login-button button' onclick='toggleLogin(true);login(document.getElementById("userinput").value, document.getElementById("passinput").value)' aria-label="Register">
+            <input type='button' id='signup' value='${lang().action.signup}' class='login-button button' onclick='agreementModal()' aria-label="log in">
+            <small>${lang().login_sub.desc}</small>
+        </div>
+        <div class="login-top">
+            <svg width="80" height="44.25" viewBox="0 0 321 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M124.695 17.2859L175.713 0.216682C184.63 -1.38586 192.437 6.14467 190.775 14.7463L177.15 68.2185C184.648 86.0893 187.163 104.122 187.163 115.032C187.163 143.057 174.929 178 95.4997 178C16.0716 178 3.83691 143.057 3.83691 115.032C3.83691 104.122 6.35199 86.0893 13.8498 68.2185L0.224791 14.7463C-1.43728 6.14467 6.3705 -1.38586 15.2876 0.216682L66.3051 17.2859C74.8856 14.6362 84.5688 13.2176 95.4997 13.429C106.431 13.2176 116.114 14.6362 124.695 17.2859ZM174.699 124.569H153.569V80.6255C153.569 75.6157 151.762 72.1804 146.896 72.1804C143.143 72.1804 139.529 74.6137 135.775 78.3353V124.569H114.785V80.6255C114.785 75.6157 112.977 72.1804 108.112 72.1804C104.22 72.1804 100.744 74.6137 96.9909 78.3353V124.569H76V54.4314H94.4887L96.0178 64.0216C102.134 57.5804 108.39 53 117.148 53C126.462 53 131.605 57.7235 134.107 64.0216C140.224 57.7235 146.896 53 155.376 53C168.026 53 174.699 61.1588 174.699 74.7569V124.569ZM247.618 89.3569C247.618 91.5039 247.479 93.7941 247.201 94.9392H206.331C207.443 105.961 213.838 110.255 223.012 110.255C230.519 110.255 237.887 107.392 245.393 102.955L247.479 118.127C240.111 122.994 231.075 126 220.371 126C199.936 126 185.34 114.835 185.34 89.7863C185.34 66.8843 198.963 53 217.452 53C238.304 53 247.618 69.0314 247.618 89.3569ZM227.6 83.0588C226.905 72.4667 223.29 67.0274 216.896 67.0274C211.057 67.0274 206.887 72.3235 206.192 83.0588H227.6ZM288.054 126C306.96 126 321 111.973 321 89.5C321 67.0274 307.099 53 288.193 53C269.426 53 255.525 67.1706 255.525 89.6431C255.525 112.116 269.287 126 288.054 126ZM288.193 70.749C296.256 70.749 300.704 78.3353 300.704 89.6431C300.704 100.951 296.256 108.537 288.193 108.537C280.269 108.537 275.821 100.808 275.821 89.5C275.821 78.049 280.13 70.749 288.193 70.749Z" fill="#FEFEFE"></path>
+            </svg>
+            <select id="login-language-sel" onchange="loginLang(this.value)">
+            <option value="en" ${language === "en" ? "selected" : ""}>${en.language}</option>
+            <option value="enuk" ${language === "enuk" ? "selected" : ""}>${enuk.language}</option>
+            <option value="es" ${language === "es" ? "selected" : ""}>${es.language}</option>
+        </select>
+        </div>
+        <div class="login-back">
+            <svg viewBox="0 0 640 241" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M640 125.573V240.972H0V0.0817643C55.9126 -1.18277 109.819 12.2262 158.654 39.893C178.197 51.0356 196.768 64.3924 215.342 77.752C231.898 89.6595 248.457 101.569 265.708 111.915C317.851 143.196 376.397 159.929 437.266 158.287C469.927 157.428 505.114 149.607 540.103 141.831C568.471 135.526 596.708 129.251 623.362 126.737C628.896 126.215 634.448 125.82 640 125.573Z" fill="currentColor"/>
+            </svg>
+        </div>
+        <div class='login-bottom'>
+            <a href="https://github.com/3r1s-s" target="_blank" class="info-button">
+                <svg viewBox="0 0 24 24" height="24" width="24" aria-hidden="true" focusable="false" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M12.026 2c-5.509 0-9.974 4.465-9.974 9.974 0 4.406 2.857 8.145 6.821 9.465.499.09.679-.217.679-.481 0-.237-.008-.865-.011-1.696-2.775.602-3.361-1.338-3.361-1.338-.452-1.152-1.107-1.459-1.107-1.459-.905-.619.069-.605.069-.605 1.002.07 1.527 1.028 1.527 1.028.89 1.524 2.336 1.084 2.902.829.091-.645.351-1.085.635-1.334-2.214-.251-4.542-1.107-4.542-4.93 0-1.087.389-1.979 1.024-2.675-.101-.253-.446-1.268.099-2.64 0 0 .837-.269 2.742 1.021a9.582 9.582 0 0 1 2.496-.336 9.554 9.554 0 0 1 2.496.336c1.906-1.291 2.742-1.021 2.742-1.021.545 1.372.203 2.387.099 2.64.64.696 1.024 1.587 1.024 2.675 0 3.833-2.33 4.675-4.552 4.922.355.308.675.916.675 1.846 0 1.334-.012 2.41-.012 2.737 0 .267.178.577.687.479C19.146 20.115 22 16.379 22 11.974 22 6.465 17.535 2 12.026 2z" clip-rule="evenodd"></path>
+                </svg>
+            </a>
+            <a href="https://discord.com/users/797570703419244594" target="_blank" class="info-button">
+                <svg width="24" height="24" viewBox="0 0 24 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.3303 1.52336C18.7535 0.80145 17.0889 0.289302 15.3789 0C15.1449 0.418288 14.9332 0.848651 14.7447 1.28929C12.9233 1.01482 11.071 1.01482 9.24963 1.28929C9.06097 0.848696 8.84926 0.418339 8.61537 0C6.90435 0.291745 5.23861 0.805109 3.6602 1.52714C0.526645 6.16328 -0.322812 10.6843 0.101917 15.1411C1.937 16.4969 3.99099 17.5281 6.17459 18.1897C6.66627 17.5284 7.10135 16.8269 7.47521 16.0925C6.76512 15.8273 6.07977 15.5001 5.42707 15.1147C5.59885 14.9901 5.76685 14.8617 5.92919 14.7371C7.82839 15.6303 9.90126 16.0934 12 16.0934C14.0987 16.0934 16.1716 15.6303 18.0708 14.7371C18.235 14.8712 18.403 14.9995 18.5729 15.1147C17.9189 15.5007 17.2323 15.8285 16.521 16.0944C16.8944 16.8284 17.3295 17.5294 17.8216 18.1897C20.0071 17.5307 22.0626 16.5001 23.898 15.143C24.3964 9.97452 23.0467 5.49504 20.3303 1.52336ZM8.0132 12.4002C6.82962 12.4002 5.8518 11.3261 5.8518 10.0047C5.8518 8.68334 6.79564 7.59981 8.00942 7.59981C9.2232 7.59981 10.1935 8.68334 10.1727 10.0047C10.1519 11.3261 9.21943 12.4002 8.0132 12.4002ZM15.9868 12.4002C14.8013 12.4002 13.8273 11.3261 13.8273 10.0047C13.8273 8.68334 14.7711 7.59981 15.9868 7.59981C17.2024 7.59981 18.1652 8.68334 18.1444 10.0047C18.1236 11.3261 17.193 12.4002 15.9868 12.4002Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a href="https://eris.pages.dev" target="blank" class="info-button">
+                <svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10.1016 8.99219L12.2812 9.26172C11.9375 10.5352 11.3008 11.5234 10.3711 12.2266C9.44141 12.9297 8.25391 13.2812 6.80859 13.2812C4.98828 13.2812 3.54297 12.7227 2.47266 11.6055C1.41016 10.4805 0.878906 8.90625 0.878906 6.88281C0.878906 4.78906 1.41797 3.16406 2.49609 2.00781C3.57422 0.851562 4.97266 0.273438 6.69141 0.273438C8.35547 0.273438 9.71484 0.839844 10.7695 1.97266C11.8242 3.10547 12.3516 4.69922 12.3516 6.75391C12.3516 6.87891 12.3477 7.06641 12.3398 7.31641H3.05859C3.13672 8.68359 3.52344 9.73047 4.21875 10.457C4.91406 11.1836 5.78125 11.5469 6.82031 11.5469C7.59375 11.5469 8.25391 11.3438 8.80078 10.9375C9.34766 10.5312 9.78125 9.88281 10.1016 8.99219ZM3.17578 5.58203H10.125C10.0312 4.53516 9.76562 3.75 9.32812 3.22656C8.65625 2.41406 7.78516 2.00781 6.71484 2.00781C5.74609 2.00781 4.92969 2.33203 4.26562 2.98047C3.60938 3.62891 3.24609 4.49609 3.17578 5.58203Z" fill="white"/>
+                </svg>                 
+            </a>
+            <div class="info-bullet"></div>
+            <a href="https://meower.org/legal" target="_blank" class="info-link">
+            Terms of Use & Privacy Policy
+            </a>
+        </div>
+        <div id='msgs'></div>
+    </div>
+    `; 
+}
+
 function loadpost(p) {
     let user
     let content
@@ -476,10 +519,14 @@ function loadpost(p) {
     pstinf.appendChild(pstdte);
     wrapperDiv.appendChild(pstinf);
 
-    const replyregex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
-    let match = replyregex.exec(content);
-    if (match) {
-        const replyid = match[3];
+    const roarer = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
+    const bettermeower = /@(\w+)\s+\[([^\]]+)\]/g;
+    
+    let match1 = roarer.exec(content);
+    let match2 = bettermeower.exec(content);
+    
+    if (match1) {
+        const replyid = match1[3];
         const pageContainer = document.getElementById("msgs");
     
         if (pageContainer.firstChild) {
@@ -490,10 +537,24 @@ function loadpost(p) {
         
         loadreply(p.post_origin, replyid).then(replycontainer => {
             pstinf.after(replycontainer);
-            //wrapperDiv.appendChild(replycontainer);
         });
     
-        content = content.replace(match[0], '').trim();
+        content = content.replace(match1[0], '').trim();
+    } else if (match2) {
+        const replyid = match2[2];
+        const pageContainer = document.getElementById("msgs");
+    
+        if (pageContainer.firstChild) {
+            pageContainer.insertBefore(postContainer, pageContainer.firstChild);
+        } else {
+            pageContainer.appendChild(postContainer);
+        }
+        
+        loadreply(p.post_origin, replyid).then(replycontainer => {
+            pstinf.after(replycontainer);
+        });
+    
+        content = content.replace(match2[0], '').trim();
     }
     let postContentText = document.createElement("p");
     postContentText.className = "post-content";
@@ -532,7 +593,6 @@ function loadpost(p) {
         .then(pfpElement => {
             if (pfpElement) {
                 pfpDiv.appendChild(pfpElement);
-                //thx stackoverflow
                 pfpCache[user] = pfpElement.cloneNode(true);
                 postContainer.insertBefore(pfpDiv, wrapperDiv);
             }
@@ -642,7 +702,8 @@ function loadPfp(username, button) {
 }
 
 async function loadreply(postOrigin, replyid) {
-    const replyregex = /^@[^ ]+ (.+?) \(([^)]+)\)/;
+    const roarRegex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
+    const betterMeowerRegex = /@(\w+)\s+\[([^\]]+)\]/g;
     try {
         let replydata = postCache[postOrigin].find(post => post._id === replyid);
         if (!replydata) {
@@ -656,7 +717,9 @@ async function loadreply(postOrigin, replyid) {
         replycontainer.classList.add("reply");
         let replyContent = replydata.p;
         
-        const match = replydata.p.replace(replyregex, "").trim();
+        let match = replydata.p.replace(roarRegex, "").trim();
+        match = match.replace(betterMeowerRegex, "").trim();
+        
         if (match) {
             replyContent = match;
         }
@@ -729,8 +792,15 @@ function sharepost() {
     window.open(`https://meo-32r.pages.dev/share?id=${postId}`, '_blank');
 }
 
+function toggleLogin(yn) {
+    document.getElementById("signup").disabled = yn;
+    document.getElementById("login").disabled = yn;
+    document.getElementById("passinput").disabled = yn;
+    document.getElementById("userinput").disabled = yn;
+}
+
 function login(user, pass) {
-    const data = {
+        const data = {
         cmd: "direct",
         val: {
             cmd: "authpswd",
@@ -1178,12 +1248,15 @@ function logout(iskl) {
     for (const key in postCache) delete postCache[key];
     for (const key in chatCache) delete chatCache[key];
     for (const key in blockedUsers) delete blockedUsers[key];
-    if (document.getElementById("msgs"))
-        document.getElementById("msgs").innerHTML = "";
+    if (document.getElementById("main"))
+        document.getElementById("main").innerHTML = "";
     if (document.getElementById("nav"))
         document.getElementById("nav").innerHTML = "";
     if (document.getElementById("groups"))
         document.getElementById("groups").innerHTML = "";
+    document.querySelectorAll(".side").forEach(function(element) {
+        element.classList.add("hidden");
+    });    
     end = false;
     main();
 }
@@ -1393,6 +1466,10 @@ async function loadPlugins() {
         <div class="settings">
             <h1>${lang().settings_plugins}</h1>
             <div class="msgs"></div>
+            <h3>${lang().plugins_sub.manage}</h3>
+            <button onclick="resetPlugins()" class="button blockeduser">${lang().action.resetplugins}</button>
+
+            <h3>${lang().settings_plugins}</h3>
             <div class='plugins'>
             <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
             <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
@@ -1477,6 +1554,11 @@ function loadPluginScript(scriptUrl) {
         script.async = true;
         document.head.appendChild(script);
     }
+}
+
+function resetPlugins() {
+    localStorage.removeItem("enabledPlugins");
+    modalPluginup();
 }
 
 function loadAppearance() {
@@ -1870,10 +1952,11 @@ function loadLanguages() {
         <h3>${lang().languages_sub.title}</h3>
         <div class="msgs"></div>
         <div class="languages">
-            <button class="language button" id="en" onclick="setlang('en')"><span class="language-l">${en.language}</span><span class="language-r">English, US</span></button>
-            <button class="language button" id="enuk" onclick="setlang('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span></button>
+            <button class="language button" id="en" onclick="changeLanguage('en')"><span class="language-l">${en.language}</span><span class="language-r">English, US</span></button>
+            <button class="language button" id="enuk" onclick="changeLanguage('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span></button>
+            <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish</span></button>
         </div>
-        <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>Github</a>!</span>
+        <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
     </div>
     `;
     pageContainer.innerHTML = settingsContent;
@@ -1883,19 +1966,27 @@ function loadLanguages() {
     }
 }
 
-function setlang(lang) {
-    localStorage.setItem("language", lang);
-    language = lang;
+function changeLanguage(lang) {
+    setlang(lang)
     sidebars();
     loadstgs();
     loadLanguages();
+}
+
+function loginLang(lang) {
+    setlang(lang)
+    loadLogin();
+}
+
+function setlang(lang) {
+    localStorage.setItem("language", lang);
+    language = lang;
 }
 
 function settingsstuff() {
     const storedsettings = localStorage.getItem('settings');
     if (!storedsettings) {
         const defaultSettings = {
-            swearfilter: false,
         };
         localStorage.setItem('settings', JSON.stringify(defaultSettings));
         return defaultSettings;
@@ -3517,7 +3608,7 @@ function agreementModal() {
             const mdbt = mdl.querySelector('.modal-bottom');
             if (mdbt) {
                 mdbt.innerHTML = `
-                <button class="modal-back-btn" onclick="signup(document.getElementById('userinput').value, document.getElementById('passinput').value)" aria-label="log in">${lang().action.signup}</button>
+                <button class="modal-back-btn" onclick="toggleLogin(true);signup(document.getElementById('userinput').value, document.getElementById('passinput').value)" aria-label="log in">${lang().action.signup}</button>
                 `;
             }
         }
