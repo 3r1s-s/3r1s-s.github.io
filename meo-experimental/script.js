@@ -88,8 +88,8 @@ function main() {
 
             meowerConnection.send(JSON.stringify(data));
             console.log("OUT: " + JSON.stringify(data));
-            if (localStorage.getItem("token") != undefined && localStorage.getItem("uname") != undefined) {
-                login(localStorage.getItem("uname"), localStorage.getItem("token"));
+            if (localStorage.getItem("token") != undefined && localStorage.getItem("username") != undefined) {
+                login(localStorage.getItem("username"), localStorage.getItem("token"));
             } else {
                 loadLogin();
             };
@@ -101,8 +101,8 @@ function main() {
                     }
                 });
                 loggedin = true;
-                if (localStorage.getItem("token") == undefined || localStorage.getItem("uname") == undefined || localStorage.getItem("permissions") == undefined) {
-                    localStorage.setItem("uname", sentdata.val.payload.username);
+                if (localStorage.getItem("token") == undefined || localStorage.getItem("username") == undefined || localStorage.getItem("permissions") == undefined) {
+                    localStorage.setItem("username", sentdata.val.payload.username);
                     localStorage.setItem("token", sentdata.val.payload.token);
                     localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
 
@@ -209,7 +209,7 @@ function main() {
                 loadchat(chat._id);
             };
             if (chat.type === 1) {
-                console.log(loadPfp(chat.members.find(v => v !== localStorage.getItem("uname"))).src);
+                console.log(loadPfp(chat.members.find(v => v !== localStorage.getItem("username"))).src);
             }
 
             const chatIconElem = document.createElement("img");
@@ -217,7 +217,7 @@ function main() {
             if (chat.type === 0) {
                 chatIconElem.src = "images/GC.svg";
             } else {
-                loadPfp(chat.members.find(v => v !== localStorage.getItem("uname")))
+                loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
                 .then(pfpElem => {
                     chatIconElem.src = pfpElem.src;
                 });
@@ -226,7 +226,7 @@ function main() {
 
             const chatNameElem = document.createElement("span");
             chatNameElem.classList.add("gcname");
-            chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("uname"))}`;
+            chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("username"))}`;
             r.appendChild(chatNameElem);
     
             const gcs = document.getElementsByClassName("gcs");
@@ -357,7 +357,7 @@ function main() {
             if (postCache[page]) {
                 event.preventDefault();
 
-                const post = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("uname"));
+                const post = [...postCache[page]].reverse().find(post => post.u === localStorage.getItem("username"));
                 if (post) {
                     editPost(page, post._id);
                 }
@@ -394,12 +394,13 @@ function loadLogin() {
         </div>
         <div class="login-top">
             <svg width="80" height="44.25" viewBox="0 0 321 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M124.695 17.2859L175.713 0.216682C184.63 -1.38586 192.437 6.14467 190.775 14.7463L177.15 68.2185C184.648 86.0893 187.163 104.122 187.163 115.032C187.163 143.057 174.929 178 95.4997 178C16.0716 178 3.83691 143.057 3.83691 115.032C3.83691 104.122 6.35199 86.0893 13.8498 68.2185L0.224791 14.7463C-1.43728 6.14467 6.3705 -1.38586 15.2876 0.216682L66.3051 17.2859C74.8856 14.6362 84.5688 13.2176 95.4997 13.429C106.431 13.2176 116.114 14.6362 124.695 17.2859ZM174.699 124.569H153.569V80.6255C153.569 75.6157 151.762 72.1804 146.896 72.1804C143.143 72.1804 139.529 74.6137 135.775 78.3353V124.569H114.785V80.6255C114.785 75.6157 112.977 72.1804 108.112 72.1804C104.22 72.1804 100.744 74.6137 96.9909 78.3353V124.569H76V54.4314H94.4887L96.0178 64.0216C102.134 57.5804 108.39 53 117.148 53C126.462 53 131.605 57.7235 134.107 64.0216C140.224 57.7235 146.896 53 155.376 53C168.026 53 174.699 61.1588 174.699 74.7569V124.569ZM247.618 89.3569C247.618 91.5039 247.479 93.7941 247.201 94.9392H206.331C207.443 105.961 213.838 110.255 223.012 110.255C230.519 110.255 237.887 107.392 245.393 102.955L247.479 118.127C240.111 122.994 231.075 126 220.371 126C199.936 126 185.34 114.835 185.34 89.7863C185.34 66.8843 198.963 53 217.452 53C238.304 53 247.618 69.0314 247.618 89.3569ZM227.6 83.0588C226.905 72.4667 223.29 67.0274 216.896 67.0274C211.057 67.0274 206.887 72.3235 206.192 83.0588H227.6ZM288.054 126C306.96 126 321 111.973 321 89.5C321 67.0274 307.099 53 288.193 53C269.426 53 255.525 67.1706 255.525 89.6431C255.525 112.116 269.287 126 288.054 126ZM288.193 70.749C296.256 70.749 300.704 78.3353 300.704 89.6431C300.704 100.951 296.256 108.537 288.193 108.537C280.269 108.537 275.821 100.808 275.821 89.5C275.821 78.049 280.13 70.749 288.193 70.749Z" fill="#FEFEFE"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M124.695 17.2859L175.713 0.216682C184.63 -1.38586 192.437 6.14467 190.775 14.7463L177.15 68.2185C184.648 86.0893 187.163 104.122 187.163 115.032C187.163 143.057 174.929 178 95.4997 178C16.0716 178 3.83691 143.057 3.83691 115.032C3.83691 104.122 6.35199 86.0893 13.8498 68.2185L0.224791 14.7463C-1.43728 6.14467 6.3705 -1.38586 15.2876 0.216682L66.3051 17.2859C74.8856 14.6362 84.5688 13.2176 95.4997 13.429C106.431 13.2176 116.114 14.6362 124.695 17.2859ZM174.699 124.569H153.569V80.6255C153.569 75.6157 151.762 72.1804 146.896 72.1804C143.143 72.1804 139.529 74.6137 135.775 78.3353V124.569H114.785V80.6255C114.785 75.6157 112.977 72.1804 108.112 72.1804C104.22 72.1804 100.744 74.6137 96.9909 78.3353V124.569H76V54.4314H94.4887L96.0178 64.0216C102.134 57.5804 108.39 53 117.148 53C126.462 53 131.605 57.7235 134.107 64.0216C140.224 57.7235 146.896 53 155.376 53C168.026 53 174.699 61.1588 174.699 74.7569V124.569ZM247.618 89.3569C247.618 91.5039 247.479 93.7941 247.201 94.9392H206.331C207.443 105.961 213.838 110.255 223.012 110.255C230.519 110.255 237.887 107.392 245.393 102.955L247.479 118.127C240.111 122.994 231.075 126 220.371 126C199.936 126 185.34 114.835 185.34 89.7863C185.34 66.8843 198.963 53 217.452 53C238.304 53 247.618 69.0314 247.618 89.3569ZM227.6 83.0588C226.905 72.4667 223.29 67.0274 216.896 67.0274C211.057 67.0274 206.887 72.3235 206.192 83.0588H227.6ZM288.054 126C306.96 126 321 111.973 321 89.5C321 67.0274 307.099 53 288.193 53C269.426 53 255.525 67.1706 255.525 89.6431C255.525 112.116 269.287 126 288.054 126ZM288.193 70.749C296.256 70.749 300.704 78.3353 300.704 89.6431C300.704 100.951 296.256 108.537 288.193 108.537C280.269 108.537 275.821 100.808 275.821 89.5C275.821 78.049 280.13 70.749 288.193 70.749Z" fill="currentColor"></path>
             </svg>
             <select id="login-language-sel" onchange="loginLang(this.value)">
             <option value="en" ${language === "en" ? "selected" : ""}>${en.language}</option>
             <option value="enuk" ${language === "enuk" ? "selected" : ""}>${enuk.language}</option>
             <option value="es" ${language === "es" ? "selected" : ""}>${es.language}</option>
+            <option value="de" ${language === "de" ? "selected" : ""}>${de.language}</option>
         </select>
         </div>
         <div class="login-back">
@@ -420,12 +421,12 @@ function loadLogin() {
             </a>
             <a href="https://eris.pages.dev" target="blank" class="info-button">
                 <svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10.1016 8.99219L12.2812 9.26172C11.9375 10.5352 11.3008 11.5234 10.3711 12.2266C9.44141 12.9297 8.25391 13.2812 6.80859 13.2812C4.98828 13.2812 3.54297 12.7227 2.47266 11.6055C1.41016 10.4805 0.878906 8.90625 0.878906 6.88281C0.878906 4.78906 1.41797 3.16406 2.49609 2.00781C3.57422 0.851562 4.97266 0.273438 6.69141 0.273438C8.35547 0.273438 9.71484 0.839844 10.7695 1.97266C11.8242 3.10547 12.3516 4.69922 12.3516 6.75391C12.3516 6.87891 12.3477 7.06641 12.3398 7.31641H3.05859C3.13672 8.68359 3.52344 9.73047 4.21875 10.457C4.91406 11.1836 5.78125 11.5469 6.82031 11.5469C7.59375 11.5469 8.25391 11.3438 8.80078 10.9375C9.34766 10.5312 9.78125 9.88281 10.1016 8.99219ZM3.17578 5.58203H10.125C10.0312 4.53516 9.76562 3.75 9.32812 3.22656C8.65625 2.41406 7.78516 2.00781 6.71484 2.00781C5.74609 2.00781 4.92969 2.33203 4.26562 2.98047C3.60938 3.62891 3.24609 4.49609 3.17578 5.58203Z" fill="white"/>
+                    <path d="M10.1016 8.99219L12.2812 9.26172C11.9375 10.5352 11.3008 11.5234 10.3711 12.2266C9.44141 12.9297 8.25391 13.2812 6.80859 13.2812C4.98828 13.2812 3.54297 12.7227 2.47266 11.6055C1.41016 10.4805 0.878906 8.90625 0.878906 6.88281C0.878906 4.78906 1.41797 3.16406 2.49609 2.00781C3.57422 0.851562 4.97266 0.273438 6.69141 0.273438C8.35547 0.273438 9.71484 0.839844 10.7695 1.97266C11.8242 3.10547 12.3516 4.69922 12.3516 6.75391C12.3516 6.87891 12.3477 7.06641 12.3398 7.31641H3.05859C3.13672 8.68359 3.52344 9.73047 4.21875 10.457C4.91406 11.1836 5.78125 11.5469 6.82031 11.5469C7.59375 11.5469 8.25391 11.3438 8.80078 10.9375C9.34766 10.5312 9.78125 9.88281 10.1016 8.99219ZM3.17578 5.58203H10.125C10.0312 4.53516 9.76562 3.75 9.32812 3.22656C8.65625 2.41406 7.78516 2.00781 6.71484 2.00781C5.74609 2.00781 4.92969 2.33203 4.26562 2.98047C3.60938 3.62891 3.24609 4.49609 3.17578 5.58203Z" fill="currentColor"/>
                 </svg>                 
             </a>
             <div class="info-bullet"></div>
             <a href="https://meower.org/legal" target="_blank" class="info-link">
-            Terms of Use & Privacy Policy
+            ${lang().login_sub.agreement}
             </a>
         </div>
         <div id='msgs'></div>
@@ -929,13 +930,13 @@ function sidebars() {
     <input type='button' class='navigation-button button' id='explore' value='${lang().page_explore}' onclick='loadexplore();' aria-label="explore" tabindex="0">
     <input type='button' class='navigation-button button' id='inbox' value='${lang().page_inbox}' onclick='loadinbox()' aria-label="inbox" tabindex="0">
     <input type='button' class='navigation-button button' id='settings' value='${lang().page_settings}' onclick='loadstgs()' aria-label="settings" tabindex="0">
-    <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("uname")}")' aria-label="profile" tabindex="0">
+    <button type='button' class='user-area button' id='profile' onclick='openUsrModal("${localStorage.getItem("username")}")' aria-label="profile" tabindex="0">
         <img class="avatar-small" id="uav" src="" alt="Avatar">
-        <span class="gcname">${localStorage.getItem("uname")}</span></div>
+        <span class="gcname">${localStorage.getItem("username")}</span></div>
     </button>
     `;
 
-    loadPfp(localStorage.getItem("uname"))
+    loadPfp(localStorage.getItem("username"))
     .then(pfpElem => {
         if (pfpElem) {
             const userAvatar = document.getElementById("uav");
@@ -995,7 +996,7 @@ function sidebars() {
             } else {
                 // this is so hacky :p
                 // - Tnix
-                loadPfp(chat.members.find(v => v !== localStorage.getItem("uname")))
+                loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
                 .then(pfpElem => {
                     if (pfpElem) {
                         chatIconElem.src = pfpElem.src;
@@ -1012,7 +1013,7 @@ function sidebars() {
 
             const chatNameElem = document.createElement("span");
             chatNameElem.classList.add("gcname");
-            chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("uname"))}`;
+            chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("username"))}`;
             r.appendChild(chatNameElem);
     
             gcdiv.appendChild(r);
@@ -1060,7 +1061,7 @@ function loadstart() {
     .then(data => {
         data.autoget.forEach(item => {
             const gr = item._id.trim();
-            if (gr !== localStorage.getItem("uname")) {
+            if (gr !== localStorage.getItem("username")) {
                 const profilecont = document.createElement('div');
                 profilecont.classList.add('mdl-sec');
                 if (item.avatar_color !== "!color" && data.avatar_color) {
@@ -1164,7 +1165,7 @@ function loadchat(chatId) {
         </svg>            
         `;
     } else {
-        mainContainer.innerHTML = `<div class='info'><h1 id='username' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("uname"))}')">${data.members.find(v => v !== localStorage.getItem("uname"))}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
+        mainContainer.innerHTML = `<div class='info'><h1 id='username' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
     }
 
     if (postCache[chatId]) {
@@ -1283,75 +1284,95 @@ function loadGeneral() {
             <h3>${lang().general_sub.chat}</h3>
             <div class="msgs"></div>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.homepage}
-                    <input type="checkbox" id="homepage" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.homepage}</p>
+                <p class="subsubheader">${lang().general_list.desc.homepage}</p>
+                </div>
+                <input type="checkbox" id="homepage" class="settingstoggle">
                 </label>
             </div>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.invtyping}
-                    <input type="checkbox" id="invtyping" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.invtyping}</p>
+                <p class="subsubheader">${lang().general_list.desc.invtyping}</p>
+                </div>
+                <input type="checkbox" id="invtyping" class="settingstoggle">
                 </label>
             </div>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.imagewhitelist}
-                    <input type="checkbox" id="imagewhitelist" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.imagewhitelist}</p>
+                <p class="subsubheader">${lang().general_list.desc.imagewhitelist}</p>
+                </div>
+                <input type="checkbox" id="imagewhitelist" class="settingstoggle">
                 </label>
             </div>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.embeds}
-                    <input type="checkbox" id="embeds" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.embeds}</p>
+                <p class="subsubheader">${lang().general_list.desc.embeds}</p>
+                </div>
+                <input type="checkbox" id="embeds" class="settingstoggle">
                 </label>
             </div>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.blockedmessages}
-                    <input type="checkbox" id="blockedmessages" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.blockedmessages}</p>
+                <p class="subsubheader">${lang().general_list.desc.blockedmessages}</p>
+                </div>
+                <input type="checkbox" id="blockedmessages" class="settingstoggle">
                 </label>
             </div>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.censorwords}
-                    <input type="checkbox" id="censorwords" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.censorwords}</p>
+                <p class="subsubheader">${lang().general_list.desc.censorwords}</p>
+                </div>
+                <input type="checkbox" id="censorwords" class="settingstoggle">
                 </label>
             </div>
             <h3>${lang().general_sub.accessibility}</h3>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.reducemotion}
-                    <input type="checkbox" id="reducemotion" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.reducemotion}</p>
+                <p class="subsubheader">${lang().general_list.desc.reducemotion}</p>
+                </div>
+                <input type="checkbox" id="reducemotion" class="settingstoggle">
                 </label>
             </div>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.showpostbuttons}
-                    <input type="checkbox" id="showpostbuttons" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.showpostbuttons}</p>
+                <p class="subsubheader">${lang().general_list.desc.showpostbuttons}</p>
+                </div>
+                <input type="checkbox" id="showpostbuttons" class="settingstoggle">
                 </label>
             </div>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.underlinelinks}
-                    <input type="checkbox" id="underlinelinks" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.underlinelinks}</p>
+                <p class="subsubheader">${lang().general_list.desc.underlinelinks}</p>
+                </div>
+                <input type="checkbox" id="underlinelinks" class="settingstoggle">
                 </label>
             </div>
             <h3>${lang().general_sub.misc}</h3>
             <div class="stg-section">
-                <label>
+                <label class="general-label">
+                <div class="general-desc">
                 ${lang().general_list.title.consolewarnings}
-                    <input type="checkbox" id="consolewarnings" class="settingstoggle">
-                    <p class="subsubheader">${lang().general_list.desc.consolewarnings}</p>
+                <p class="subsubheader">${lang().general_list.desc.consolewarnings}</p>
+                </div>
+                <input type="checkbox" id="consolewarnings" class="settingstoggle">
                 </label>
             </div>
             <h3>${lang().general_sub.acc}</h3>
@@ -1378,7 +1399,7 @@ function loadGeneral() {
                     <span class="credit">ethernet, moral support, and translating</span>
                     <span class="credit">melt, for the original webhook code</span>
                     <span class="credit">theotherhades, for the IP popup</span>
-                    <span class="credit">You, ${localStorage.getItem("uname")}, for using the client</span>
+                    <span class="credit">You, ${localStorage.getItem("username")}, for using the client</span>
                     <span class="credit">All the contributors and translators</span>
                 </div>
             </div>
@@ -1494,14 +1515,21 @@ async function loadPlugins() {
 
 function addPlugin(plugin, isEnabled) {
     let pluginsList = document.querySelector(".plugins");
+
     pluginsList.insertAdjacentHTML('beforeend', `
-        <div class='section plugin'>
+        <div class='section plugin' ${plugin.flags === '1' ? `title="Use this plugin with caution."` : ''}>
         <label>
             ${plugin.name}
-            <input type="checkbox" id="${plugin.name}" class="settingstoggle" ${isEnabled ? 'checked' : ''}>
+            <input type="checkbox" id="${plugin.name}" class="plugintoggle" ${isEnabled ? 'checked' : ''}>
             <p class='pluginsub'>${plugin.description}</p>
             <p class='subsubheader'>Created by <a href='https://github.com/${plugin.creator}' target='_blank'>${plugin.creator}</a></p>
             </label>
+            ${plugin.flags === '1' ? `
+            <svg class="plugin-flag" width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M20 6.00201H14V3.00201C14 2.45001 13.553 2.00201 13 2.00201H4C3.447 2.00201 3 2.45001 3 3.00201V22.002H5V14.002H10.586L8.293 16.295C8.007 16.581 7.922 17.011 8.076 17.385C8.23 17.759 8.596 18.002 9 18.002H20C20.553 18.002 21 17.554 21 17.002V7.00201C21 6.45001 20.553 6.00201 20 6.00201Z">
+                </path>
+            </svg>
+            ` : ''}
         </div>
     `);
 
@@ -1510,6 +1538,7 @@ function addPlugin(plugin, isEnabled) {
         const enabledPlugins = JSON.parse(localStorage.getItem('enabledPlugins')) || {};
         enabledPlugins[plugin.name] = checkbox.checked;
         localStorage.setItem('enabledPlugins', JSON.stringify(enabledPlugins));
+
 
         if (!checkbox.checked) {
             const existingScript = document.querySelector(`script[src="${plugin.script}"]`);
@@ -1954,7 +1983,8 @@ function loadLanguages() {
         <div class="languages">
             <button class="language button" id="en" onclick="changeLanguage('en')"><span class="language-l">${en.language}</span><span class="language-r">English, US</span></button>
             <button class="language button" id="enuk" onclick="changeLanguage('enuk')"><span class="language-l">${enuk.language}</span><span class="language-r">English, UK</span></button>
-            <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish</span></button>
+            <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin America)</span></button>
+            <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span></button>
         </div>
         <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
     </div>
@@ -2207,7 +2237,7 @@ function openModal(postId) {
                 const postDiv = document.getElementById(postId);
                 const usernameElement = postDiv.querySelector('#username').innerText;
 
-                if (usernameElement === localStorage.getItem("uname")) {
+                if (usernameElement === localStorage.getItem("username")) {
                     mdlt.innerHTML += `
                     <button class="modal-button" onclick="deletePost('${postId}')"><div>${lang().action.delete}</div><div class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg></div></button>      
                     <button class="modal-button" onclick="editPost('${page}', '${postId}')"><div>${lang().action.edit}</div><div class="modal-icon"><svg width="20" height="20" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z" fill="currentColor"></path></svg></div></button>      
@@ -3703,8 +3733,8 @@ function DeleteAccountModal() {
 function confirmDelete() {
     let comfirmation = window.prompt('Type your "Delete" +  your username');
 
-    if (comfirmation === "Delete " + localStorage.getItem("uname")) {
-        if (document.getElementById("userinput").value === localStorage.getItem("uname")) {
+    if (comfirmation === "Delete " + localStorage.getItem("username")) {
+        if (document.getElementById("userinput").value === localStorage.getItem("username")) {
             deleteAccount(document.getElementById("passinput").value)
         } else {
             closemodal(lang().info.invaliduser);

@@ -283,7 +283,7 @@ bridge {
 .login-inner {
     display: flex;
     flex-direction: column;
-    background: var(--accent-color);
+    background: var(--modal-color);
     padding: 15px var(--padding);
     border-radius: var(--border-radius);
     box-shadow: 0px 3px 10px #00000050;
@@ -1460,8 +1460,14 @@ possible future styling
     margin: 0 10px 0 0;
 }
 
-.settingstoggle {
-    float: right;
+.general-label {
+    user-select: none;
+    display: flex;
+    position: relative;
+}
+
+.general-desc {
+    flex: 1;
 }
 
 .subsubheader {
@@ -1497,6 +1503,19 @@ possible future styling
 
 .plugin {
     padding: 15px var(--padding);
+    position: relative;
+}
+
+.plugintoggle {
+    float: right;
+}
+
+.plugin-flag {
+    position: absolute;
+    margin: var(--margin);
+    bottom: 0;
+    right: 0;
+    color: var(--color);
 }
 
 .pluginsub {
@@ -1741,6 +1760,7 @@ possible future styling
         flex: none;
         width: 100vw;
         scroll-snap-align: center;
+        scroll-snap-stop: always;
         overflow-y: scroll;
         height: 100vh;
     }
@@ -1934,6 +1954,7 @@ possible future styling
         height: 100vh;
         justify-content: center;
         flex-direction: column;
+        overflow-y: hidden;
     }
 
     .login-text, .login-button {
@@ -1959,7 +1980,7 @@ possible future styling
     .login-inner {
         display: flex;
         flex-direction: column;
-        background: var(--background);
+        background: transparent;
         padding: 15px var(--padding);
         border-radius: 0px;
         box-shadow: none;
