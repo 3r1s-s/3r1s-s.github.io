@@ -521,7 +521,7 @@ function loadpost(p) {
     wrapperDiv.appendChild(pstinf);
 
     const roarer = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
-    const bettermeower = /@(\w+)\s+\[([^\]]+)\]/g;
+    const bettermeower = /@(\w+)\[([a-zA-Z0-9]+)\]/g;
     
     let match1 = roarer.exec(content);
     let match2 = bettermeower.exec(content);
@@ -703,8 +703,8 @@ function loadPfp(username, button) {
 }
 
 async function loadreply(postOrigin, replyid) {
-    const roarRegex = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
-    const betterMeowerRegex = /@(\w+)\s+\[([^\]]+)\]/g;
+    const roarRegex = /^@[^ ]+ (.+?) \(([^)]+)\)/
+    const betterMeowerRegex = /@(\w+)\[([a-zA-Z0-9]+)\]/g;
     try {
         let replydata = postCache[postOrigin].find(post => post._id === replyid);
         if (!replydata) {
@@ -717,7 +717,6 @@ async function loadreply(postOrigin, replyid) {
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
         let replyContent = replydata.p;
-        
         let match = replydata.p.replace(roarRegex, "").trim();
         match = match.replace(betterMeowerRegex, "").trim();
         

@@ -67,7 +67,7 @@ function loadinputs() {
         <div id="emojipicker"></div>
     </div>
     <div class="sub-msg-cnt">
-    <span id="typing-indicator"></span>
+    <div id="images-container"></div>
     <span id="edit-indicator"></span>
     </div>
     <div id="msgs" class="posts"></div>
@@ -139,11 +139,6 @@ function embed(links) {
         let embeddedElements = [];
 
         links.forEach(link => {
-            const source = whitelist.some(source => link.includes(source) || settingsstuff().imagewhitelist);
-            if (!source) {
-                return;
-            }
-            
             const baseURL = link.split('?')[0];
             const fileExtension = baseURL.split('.').pop().toLowerCase();
             const fileName = baseURL.split('/').pop();
@@ -151,52 +146,57 @@ function embed(links) {
             let embeddedElement;
 
             if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'].includes(fileExtension)) {
-                let imgElement = document.createElement("img");
-                imgElement.setAttribute("src", link);
-                imgElement.setAttribute("onclick", `openImage('${link}')`);
-                imgElement.setAttribute("alt", fileName);
-                imgElement.classList.add("embed");
-                
-                //var imgLink = document.createElement("a");
-                //imgLink.setAttribute("href", baseURL);
-                //imgLink.setAttribute("target", "_blank");
-                //imgLink.appendChild(imgElement);
-                //embeddedElement = imgLink;
-                embeddedElement = imgElement;
-
-                
-                
-            } else if (['mp4', 'webm', 'mov', 'mp3', 'wav', 'ogg', 'mkv'].includes(fileExtension)) {
+                if (whitelist.some(source => link.includes(source))  || settingsstuff().imagewhitelist) {
+                    let imgElement = document.createElement("img");
+                    imgElement.setAttribute("src", link);
+                    imgElement.setAttribute("onclick", `openImage('${link}')`);
+                    imgElement.setAttribute("alt", fileName);
+                    imgElement.classList.add("embed");
+                    
+                    //var imgLink = document.createElement("a");
+                    //imgLink.setAttribute("href", baseURL);
+                    //imgLink.setAttribute("target", "_blank");
+                    //imgLink.appendChild(imgElement);
+                    //embeddedElement = imgLink;
+                    embeddedElement = imgElement;
+                }
+            } else if (['mp4', 'webm', 'mov', 'mkv'].includes(fileExtension)) {
                 embeddedElement = document.createElement("video");
                 embeddedElement.setAttribute("src", baseURL);
                 embeddedElement.setAttribute("controls", "controls");
-                embeddedElement.setAttribute("style", "max-width: 300px;");
+                embeddedElement.setAttribute("alt", fileName);
+                embeddedElement.classList.add("embed");
+            } else if (['mp3', 'wav', 'ogg', 'flac'].includes(fileExtension)) {
+                embeddedElement = document.createElement("audio");
+                embeddedElement.setAttribute("src", baseURL);
+                embeddedElement.setAttribute("controls", "controls");
                 embeddedElement.setAttribute("alt", fileName);
                 embeddedElement.classList.add("embed");
             }
             if (settingsstuff().embeds) {
-            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            const youtubeMobRegex = /^(https?:\/\/)?(www\.)?(m\.youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            if (youtubeRegex.test(link) || youtubeMobRegex.test(link)) {
-                let match
-                if (youtubeRegex.test(link)) {
-                    match = link.match(youtubeRegex);
-                } else {
-                    match = link.match(youtubeMobRegex);
+                if (link.includes('www.youtube.com')) {      
+                const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/(?:shorts\/)?|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                const youtubeMobRegex = /^(https?:\/\/)?(www\.)?(m\.youtube\.com\/(?:[^\/\n\s]+\/(?:shorts\/)?|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                if (youtubeRegex.test(link) || youtubeMobRegex.test(link)) {
+                    let match
+                    if (youtubeRegex.test(link)) {
+                        match = link.match(youtubeRegex);
+                    } else {
+                        match = link.match(youtubeMobRegex);
+                    }
+                
+                    const videoId = match[4];
+                    embeddedElement = document.createElement("iframe");
+                    embeddedElement.setAttribute("width", "100%");
+                    embeddedElement.setAttribute("height", "315");
+                    embeddedElement.setAttribute("style", "max-width:500px;");
+                    embeddedElement.setAttribute("class", "embed");
+                    embeddedElement.setAttribute("src", "https://www.youtube-nocookie.com/embed/" + videoId);
+                    embeddedElement.setAttribute("title", "YouTube video player");
+                    embeddedElement.setAttribute("frameborder", "0");
+                    embeddedElement.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+                    embeddedElement.setAttribute("allowfullscreen", "");
                 }
-                
-                const videoId = match[4];
-                
-                embeddedElement = document.createElement("iframe");
-                embeddedElement.setAttribute("width", "100%");
-                embeddedElement.setAttribute("height", "315");
-                embeddedElement.setAttribute("style", "max-width:500px;");
-                embeddedElement.setAttribute("class", "embed");
-                embeddedElement.setAttribute("src", "https://www.youtube-nocookie.com/embed/" + videoId);
-                embeddedElement.setAttribute("title", "YouTube video player");
-                embeddedElement.setAttribute("frameborder", "0");
-                embeddedElement.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
-                embeddedElement.setAttribute("allowfullscreen", "");
             } else if (link.includes('open.spotify.com')) {
                 const spotifyRegex = /track\/([a-zA-Z0-9]+)/;
                 const match = link.match(spotifyRegex);
