@@ -1984,6 +1984,11 @@ possible future styling
         padding: 15px var(--padding);
         border-radius: 0px;
         box-shadow: none;
+
+        position: fixed;
+        width: 100%;
+        box-sizing: border-box;
+        top: 25vh;
     }
 
     .login-top {
