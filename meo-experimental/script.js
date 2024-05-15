@@ -24,6 +24,8 @@ const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inacti
 const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
 
+let pendingAttachments = [];
+
 let blockedWords;
 
 if (localStorage.getItem("blockedWords")) {
@@ -310,14 +312,27 @@ function main() {
         if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
             const textarea = document.getElementById("msg");
             if (event.key === "Enter" && !event.shiftKey) {
-                if (textarea === document.activeElement) {
-                    event.preventDefault();
-                    sendpost();
-                    textarea.style.height = 'auto';
+                if (settingsstuff().entersend) {
+                    if (textarea === document.activeElement) {
+                        if (opened === 1) {
+                            fstemj();
+                            textarea.focus();
+                        }
+                    } else {
+                        event.preventDefault();
+                        sendpost();
+                        textarea.style.height = 'auto';
+                    }
                 } else {
-                    if (opened === 1) {
-                        fstemj();
-                        textarea.focus();
+                    if (textarea === document.activeElement) {
+                        event.preventDefault();
+                        sendpost();
+                        textarea.style.height = 'auto';
+                    } else {
+                        if (opened === 1) {
+                            fstemj();
+                            textarea.focus();
+                        }
                     }
                 }
             } else if (event.key === "Escape") {
@@ -328,10 +343,7 @@ function main() {
                 }
                 const editIndicator = document.getElementById("edit-indicator");
                 if (editIndicator.hasAttribute("data-postid")) {
-                    editIndicator.removeAttribute("data-postid");
-                    editIndicator.innerText = "";
-                    textarea.value = "";
-                    autoresize();
+                    cancelEdit();
                 }
                 textarea.blur();
             } else if (event.keyCode >= 48 && event.keyCode <= 90 && textarea === document.activeElement && !settingsstuff().invtyping && lastTyped+3000 < Date.now()) {
@@ -371,7 +383,10 @@ function main() {
         } else if ((event.ctrlKey || event.metaKey) && event.key === 'u') {
             if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
                 event.preventDefault();
-                uploadImage();
+                const editIndicator = document.getElementById("edit-indicator");
+                if (!editIndicator.hasAttribute("data-postid")) {
+                    addAttachment();
+                }
             }
         } else if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
             event.preventDefault();
@@ -507,7 +522,8 @@ function loadpost(p) {
     ts.setTime(tsrb);
     pstdte.innerText = new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
 
-    const pstinf = document.createElement("h3");
+    const pstinf = document.createElement("span");
+    pstinf.classList.add("user-header")
     pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")'>${user}</span>`;
 
     if (p.u == "Discord" || p.u == "SplashBridge") {
@@ -578,15 +594,27 @@ function loadpost(p) {
     
     if (content) {
         wrapperDiv.appendChild(postContentText);
-    } 
+    }
 
     const links = content.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g);
     const embd = embed(links);
-    if (embd) {
-        embd.forEach(embeddedElement => {
-            wrapperDiv.appendChild(embeddedElement);
+    if (embd || p.attachments) {
+        const embedsDiv = document.createElement('div');
+        embedsDiv.classList.add('embeds');
+        if (embd) {
+            embd.forEach(embeddedElement => {
+                embedsDiv.appendChild(embeddedElement);
+            });
+        }
+
+        p.attachments.forEach(attachment => {
+            const g = attach(attachment);
+            embedsDiv.appendChild(g);
         });
+    
+        wrapperDiv.appendChild(embedsDiv);
     }
+    
 
     postContainer.appendChild(wrapperDiv);
 
@@ -793,10 +821,12 @@ function sharepost() {
 }
 
 function toggleLogin(yn) {
-    document.getElementById("signup").disabled = yn;
-    document.getElementById("login").disabled = yn;
-    document.getElementById("passinput").disabled = yn;
-    document.getElementById("userinput").disabled = yn;
+    if (document.getElementById("signup")) {
+        document.getElementById("signup").disabled = yn;
+        document.getElementById("login").disabled = yn;
+        document.getElementById("passinput").disabled = yn;
+        document.getElementById("userinput").disabled = yn;
+    }
 }
 
 function login(user, pass) {
@@ -833,15 +863,20 @@ function signup(user, pass) {
     closemodal();
 }
 
-function sendpost() {
-    const message = document.getElementById('msg').value;
+async function sendpost() {
+    const msgbox = document.getElementById('msg');
+    if (msgbox.disabled) return;
+    const message = msgbox.value;
+    msgbox.value = "";
 
-    if (!message.trim()) {
+    const attachmentCont = document.getElementById("images-container");
+    const editIndicator = document.getElementById("edit-indicator");
+
+    if (!message.trim() && (editIndicator.hasAttribute("data-postid") || pendingAttachments.length < 1)) {
         console.log("The message is blank.");
         return;
     }
-
-    const editIndicator = document.getElementById("edit-indicator");
+    
     if (editIndicator.hasAttribute("data-postid")) {
         fetch(`https://api.meower.org/posts?id=${editIndicator.getAttribute("data-postid")}`, {
             method: "PATCH",
@@ -853,18 +888,31 @@ function sendpost() {
         });
         editIndicator.removeAttribute("data-postid");
         editIndicator.innerText = "";
+        document.getElementById("attach").hidden = false;
     } else {
+        // Wait for attachments to upload and get attachment IDs
+        msgbox.placeholder = `Uploading ${pendingAttachments.length} ${pendingAttachments.length > 1 ? 'files' : 'file'}...`;
+        msgbox.disabled = true;
+        const attachments = await Promise.all(pendingAttachments.map(attachment => attachment.req));
+        pendingAttachments.length = 0;
+        msgbox.placeholder = lang().meo_messagebox;
+        msgbox.disabled = false;
+        attachmentCont.innerHTML = '';
+        
+
         fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 token: localStorage.getItem("token")
             },
-            body: JSON.stringify({content: message})
+            body: JSON.stringify({
+                content: message,
+                attachments: attachments.map(attachment => attachment.id),
+            })
         });
     }
 
-    document.getElementById('msg').value = "";
     autoresize();
     closepicker();
 }
@@ -1149,7 +1197,7 @@ function loadchat(chatId) {
 
     const mainContainer = document.getElementById("main");
     if (data.nickname) {
-        mainContainer.innerHTML = `<div class='info'><h1 id='nickname'>${escapeHTML(data.nickname)}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
+        mainContainer.innerHTML = `<div class='info'><h1 id='nickname' class='header-top'>${escapeHTML(data.nickname)}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
         const ulinf = document.getElementById('info');
         data.members.forEach((user, index) => {
             if (index === data.members.length - 1) {
@@ -1164,7 +1212,7 @@ function loadchat(chatId) {
         </svg>            
         `;
     } else {
-        mainContainer.innerHTML = `<div class='info'><h1 id='username' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
+        mainContainer.innerHTML = `<div class='info'><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
     }
 
     if (postCache[chatId]) {
@@ -1309,6 +1357,15 @@ function loadGeneral() {
                 <input type="checkbox" id="imagewhitelist" class="settingstoggle">
                 </label>
             </div>
+                <div class="stg-section">
+                <label class="general-label">
+                <div class="general-desc">
+                ${lang().general_list.title.hideimages}
+                <p class="subsubheader">${lang().general_list.desc.hideimages}</p>
+                </div>
+                <input type="checkbox" id="hideimages" class="settingstoggle">
+                </label>
+            </div>
             <div class="stg-section">
                 <label class="general-label">
                 <div class="general-desc">
@@ -1316,6 +1373,15 @@ function loadGeneral() {
                 <p class="subsubheader">${lang().general_list.desc.embeds}</p>
                 </div>
                 <input type="checkbox" id="embeds" class="settingstoggle">
+                </label>
+            </div>
+            <div class="stg-section">
+                <label class="general-label">
+                <div class="general-desc">
+                ${lang().general_list.title.entersend}
+                <p class="subsubheader">${lang().general_list.desc.entersend}</p>
+                </div>
+                <input type="checkbox" id="entersend" class="settingstoggle">
                 </label>
             </div>
             <div class="stg-section">
@@ -1417,7 +1483,9 @@ function loadGeneral() {
                 embeds: document.getElementById("embeds"),
                 reducemotion: document.getElementById("reducemotion"),
                 showpostbuttons: document.getElementById("showpostbuttons"),
-                underlinelinks: document.getElementById("underlinelinks")
+                underlinelinks: document.getElementById("underlinelinks"),
+                entersend: document.getElementById("entersend"),
+                hideimages: document.getElementById("hideimages")
             };
         
             Object.values(settings).forEach((checkbox) => {
@@ -1432,7 +1500,9 @@ function loadGeneral() {
                         embeds: settings.embeds.checked,
                         reducemotion: settings.reducemotion.checked,
                         showpostbuttons: settings.showpostbuttons.checked,
-                        underlinelinks: settings.underlinelinks.checked
+                        underlinelinks: settings.underlinelinks.checked,
+                        entersend: settings.entersend.checked,
+                        hideimages: settings.hideimages.checked
                     }));
                     setAccessibilitySettings();
                 });
@@ -2016,6 +2086,8 @@ function settingsstuff() {
     const storedsettings = localStorage.getItem('settings');
     if (!storedsettings) {
         const defaultSettings = {
+            "homepage": "false",
+            "consolewarnings": "false",
         };
         localStorage.setItem('settings', JSON.stringify(defaultSettings));
         return defaultSettings;
@@ -2106,6 +2178,8 @@ function editPost(postOrigin, postid) {
     const post = postCache[postOrigin].find(post => post._id === postid);
     if (!post) return;
 
+    document.getElementById("attach").hidden = true;
+
     const editIndicator = document.getElementById("edit-indicator");
     editIndicator.setAttribute("data-postid", postid);
     editIndicator.innerHTML = `
@@ -2128,6 +2202,7 @@ function cancelEdit() {
     const editIndicator = document.getElementById("edit-indicator");
     editIndicator.removeAttribute("data-postid");
     editIndicator.innerText = "";
+    document.getElementById("attach").hidden = false;
     document.getElementById('msg').value = "";
     autoresize();
 }
@@ -3311,8 +3386,74 @@ function createDate(tsmp) {
     return new Date(tsrb).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
 }
 
-function uploadImage() {
-    openUpdate("Placeholder!");
+function addAttachment() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = true;
+    input.click();
+
+    input.onchange = function(e) {
+        const files = Array.from(e.target.files);
+        if (files.some(file => file.size > (25 << 20))) {
+            errorModal("File too large", "Please upload files smaller than 25MiB.");
+            return;
+        }
+
+        for (const file of files) {
+            const formData = new FormData();
+            formData.append('file', file);
+            pendingAttachments.push({
+                id: Math.random(),
+                file,
+                req: fetch('https://uploads.meower.org/attachments', {
+                    method: 'POST',
+                    headers: { Authorization: localStorage.getItem("token") },
+                    body: formData
+                })
+                .then(response => {
+                    return response.json();
+                })
+                .catch(error => errorModal("Error uploading attachment", error))
+            });
+        }
+        setAttachmentContainer()
+    };
+}
+
+function deleteAttachment(id) {
+    pendingAttachments = pendingAttachments.filter(item => item.id.toString() !== id);
+    console.debug(id.toString());
+    setAttachmentContainer();
+}
+
+function setAttachmentContainer() {
+    const container = document.getElementById('images-container');
+    container.innerHTML = '';    
+    
+    pendingAttachments.forEach((item, index) => {
+        item.req.then(data => {
+            const filetype = data.filename.split('.').pop().toLowerCase();
+            if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'].includes(filetype)) {
+                const element = document.createElement('div');
+                element.classList.add("attach-pre-outer");
+                element.id = data.id;
+                element.innerHTML = `
+                <img src="https://uploads.meower.org/attachments/${data.id}/${data.filename}" onclick="openImage('https://uploads.meower.org/attachments/${data.id}/${data.filename}')" class="image-pre">
+                <div class="delete-attach" onclick="deleteAttachment('${item.id.toString()}')">
+                <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+                </div>
+                `;
+                container.appendChild(element);
+            } else {
+                //add non images
+                //add delete button
+                //finish the horizontal scrolling thing
+            }
+            console.debug("item added" + index);
+            console.debug(data);
+            console.debug(filetype);
+        });
+    });
 }
 
 function goAnywhere() {
@@ -3543,10 +3684,11 @@ function changePasswordModal() {
                 mdlt.innerHTML = `
                 <h3>${lang().modals.changepass}</h3>
                 <hr class="mdl-hr">
-                <span class="subheader" for="oldpass-input">${lang().login_sub.oldpass}</span>
-                <input id="oldpass-input" class="mdl-inp" placeholder="${lang().login_sub.oldpass}" type="password">
-                <span class="subheader" for="newpass-input">${lang().login_sub.newpass}</span>
-                <input id="newpass-input" class="mdl-inp" placeholder="${lang().login_sub.newpass}" type="password" minlength="8">
+                <p class="mdl-w">${lang().info.changepwwarn}</p>
+                <span class="subheader mdl-lb" for="oldpass-input">${lang().login_sub.oldpass}</span>
+                <input id="oldpass-input" class="mdl-inp mdl-lg" placeholder="${lang().login_sub.oldpass}" type="password">
+                <span class="subheader mdl-lb" for="newpass-input">${lang().login_sub.newpass}</span>
+                <input id="newpass-input" class="mdl-inp mdl-lg" placeholder="${lang().login_sub.newpass}" type="password" minlength="8">
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
@@ -3646,11 +3788,11 @@ function agreementModal() {
 
 function errorModal(header, text) {
     document.documentElement.style.overflow = "hidden";
-
+    
     const mdlbck = document.querySelector('.modal-back');
-    const mdl = mdlbck?.querySelector('.modal');
-    const mdlt = mdl?.querySelector('.modal-top');
-    const mdbt = mdl?.querySelector('.modal-bottom');
+    const mdl = mdlbck.querySelector('.modal');
+    const mdlt = mdl.querySelector('.modal-top');
+    const mdbt = mdl.querySelector('.modal-bottom');
 
     if (mdlbck) mdlbck.style.display = 'flex';
     if (mdlt) mdlt.innerHTML = `<h3>${header}</h3><hr class="mdl-hr"><span class="subheader">${text}</span>`;
@@ -3712,11 +3854,11 @@ function DeleteAccountModal() {
                 mdlt.innerHTML = `
                 <h3>${lang().modals.deleteacc}</h3>
                 <hr class="mdl-hr">
-                <p class="subheader">${lang().info.deletewarn}</p>
-                <span class="subheader" for="userinput">${lang().meo_username}</span>
-                <input type='text' id='userinput' placeholder='${lang().meo_username}' class='mdl-inp text' aria-label="username input" autocomplete="username">
-                <span class="subheader" for="passinput">${lang().meo_password}</span>
-                <input type='password' id='passinput' placeholder='${lang().meo_password}' class='mdl-inp text' aria-label="password input" autocomplete="current-password">
+                <p class="mdl-w">${lang().info.deletewarn}</p>
+                <span class="mdl-lb" for="userinput">${lang().meo_username}</span>
+                <input type='text' id='userinput' placeholder='${lang().meo_username}' class='mdl-inp mdl-lg text' aria-label="username input" autocomplete="username">
+                <span class="mdl-lb" for="passinput">${lang().meo_password}</span>
+                <input type='password' id='passinput' placeholder='${lang().meo_password}' class='mdl-inp  mdl-lg text' aria-label="password input" autocomplete="current-password">
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');

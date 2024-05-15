@@ -1,13 +1,14 @@
 :root {
     --primary: #714cc8;
     --secondary: #5d6092;
+    --tertiary: #9fa1d8;
     --background: #1c1c26;
     --color: #fefefe;
     --accent-color: #2f3040;
     --hov-accent-color: #3e3f54;
     --hov-color: #4b4c66;
     --link-color: #bea2ff;
-    --attachment-background-color: #30215490;
+    --attachment-background-color: #5b409b90;
     --attachment-color: #bea2ff;
     --attachment-background-color-hover: #714cc8;
     --attachment-color-hover: #fefefe;
@@ -354,8 +355,8 @@
     --hov-accent-color: #250c12;
     --hov-color: #3a121c;
     --link-color: #00abd2;
-    --attachment-background-color: #1b1e49;
-    --attachment-color: #a0a4d1;
+    --attachment-background-color: #741b33;
+    --attachment-color: #f93a69;
     --attachment-background-color-hover: #7236f9;
     --attachment-color-hover: #fefefe;
     --button-color: #7a2c3f;

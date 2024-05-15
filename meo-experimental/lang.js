@@ -53,6 +53,8 @@ const en = {
             "reducemotion": "Reduce motion",
             "showpostbuttons": "Always show post buttons",
             "underlinelinks": "Always underline links",
+            "entersend": "Don't send on Enter",
+            "hideimages": "Hide images",
         },
         "desc": {
             "homepage": "Instead of showing you the Start Page you get directly taken to home",
@@ -65,6 +67,8 @@ const en = {
             "reducemotion": "Reduce the intensity of animations and other moving effects",
             "showpostbuttons": "Post buttons always remain visible",
             "underlinelinks": "Make links to websites and other pages stand out more by underlining them",
+            "entersend": "Enter key creates newlines instead of sending the post",
+            "hideimages": "Blurs images before hovering over them",
         }
     },
     "appearance_sub": {
@@ -155,6 +159,7 @@ const en = {
         "tokenscleared": "Tokens deleted, you will need to log back in",
         "accscheduled": "Account scheduled for deletion",
         "deletewarn": "It will be deleted FOREVER (a very long time!)",
+        "changepwwarn": "It will be updated immediately.",
         "tryagain": "Try again",
         "cleared": "Cleared!",
         "plugin": "Restart now to apply new plugins and their settings",
@@ -237,6 +242,8 @@ const enuk = {
             "reducemotion": "Reduce motion",
             "showpostbuttons": "Always show post buttons",
             "underlinelinks": "Always underline links",
+            "entersend": "Don't send on Enter",
+            "hideimages": "Hide images",
         },
         "desc": {
             "homepage": "Instead of showing you the Start Page, you're taken directly to the Home.",
@@ -249,6 +256,8 @@ const enuk = {
             "reducemotion": "Reduces the intensity of animations and other moving effects.",
             "showpostbuttons": "Post buttons always remain visible.",
             "underlinelinks": "Makes links to websites and other pages stand out more by underlining them.",
+            "entersend": "Enter key creates newlines instead of sending the post",
+            "hideimages": "Blurs images before hovering over them",
         },
     },
     "appearance_sub": {
@@ -339,6 +348,7 @@ const enuk = {
         "tokenscleared": "Tokens deleted, you will need to log back in",
         "accscheduled": "Account scheduled for deletion",
         "deletewarn": "It will be deleted FOREVER (a very long time!)",
+        "changepwwarn": "It will be updated immediately.",
         "tryagain": "Try again",
         "cleared": "Cleared!",
         "plugin": "Restart now to apply new plugins and their settings",
@@ -424,6 +434,8 @@ const es = {
             "reducemotion": "Reducir movimiento",
             "showpostbuttons": "Siempre mostrar botones en mensajes",
             "underlinelinks": "Siempre subrayar enlaces",
+            "entersend": "Don't send on Enter", // uploads
+            "hideimages": "Hide images", // uploads
         },
         "desc": {
             "homepage": "En lugar de mostrarte la página de inicio, navegar directamente a home",
@@ -436,6 +448,8 @@ const es = {
             "reducemotion": "Reducir la intensidad de las animaciones y otros efectos con movimiento",
             "showpostbuttons": "Los botones en las publicaciónes/mensajes permanecen siempre visibles",
             "underlinelinks": "Subrayar los enlaces a sitios web y otras páginas para que destaquen más.",
+            "entersend": "Enter key creates newlines instead of sending the post", // uploads
+            "hideimages": "Blurs images before hovering over them", // uploads
         }
     },
     "appearance_sub": {
@@ -526,6 +540,7 @@ const es = {
         "tokenscleared": "Fichas de sesión (Session Tokens) eliminadas, tendrá que volver a iniciar sesión",
         "accscheduled": "Cuenta de usuario programada para su eliminación",
         "deletewarn": "Se borrará PARA SIEMPRE (¡Un tiempo muy largo!)",
+        "changepwwarn": "It will be updated immediately.", //update
         "tryagain": "Inténtalo de nuevo",
         "cleared": "¡Borrado!",
         "plugin": "Restart now to apply new plugins and their settings",
@@ -606,6 +621,8 @@ const de = {
             "reducemotion": "Bewegung reduzieren",
             "showpostbuttons": "Postknöpfe immer zeigen",
             "underlinelinks": "Links immer unterstreichen",
+            "entersend": "Don't send on Enter", // uploads
+            "hideimages": "Hide images", // uploads
         },
         "desc": {
             "homepage": "Direkt zu Home navigieren, statt die Startseite anzuzeigen",
@@ -618,6 +635,8 @@ const de = {
             "reducemotion": "Die Intensität der Animationen und andere Bewegungseffekte reduzieren",
             "showpostbuttons": "Postknöpfe bleiben immer sichtbar",
             "underlinelinks": "Links zu Websiten und anderen Seiten unterstreichen und damit hervorheben",
+            "entersend": "Enter key creates newlines instead of sending the post", // uploads
+            "hideimages": "Blurs images before hovering over them", // uploads
         }
     },
     "appearance_sub": {
@@ -708,6 +727,7 @@ const de = {
         "tokenscleared": "Tokens wurden gelöscht, du musst dich erneut anmelden",
         "accscheduled": "Konto wird gelöscht werden",
         "deletewarn": "Es wird FÜR IMMER (eine sehr lange Zeit!) gelöscht",
+        "changepwwarn": "It will be updated immediately.", //update
         "tryagain": "Versuche es erneut",
         "cleared": "Gelöscht!",
         "plugin": "Jetzt neu laden um neue Plugins und ihre Einstellungen anzuwenden",
