@@ -355,6 +355,36 @@ function main() {
             }
         }
     });
+    addEventListener("DOMContentLoaded", () => {
+        document.onpaste = (event) => {
+            if (!document.getElementById("msg")) return;
+    
+            const files = Array.from(event.clipboardData.files);
+            if (files.some(file => file.size > (25 << 20))) {
+                errorModal("File too large", "Please upload files smaller than 25MiB.");
+                return;
+            }
+    
+            for (const file of files) {
+                const formData = new FormData();
+                formData.append('file', file);
+                pendingAttachments.push({
+                    id: Math.random(),
+                    file,
+                    req: fetch('https://uploads.meower.org/attachments', {
+                        method: 'POST',
+                        headers: { Authorization: localStorage.getItem("token") },
+                        body: formData
+                    })
+                    .then(response => {
+                        return response.json();
+                    })
+                    .catch(error => errorModal("Error uploading attachment", error))
+                });
+            }
+            setAttachmentContainer();
+        };
+    });
     addEventListener("keydown", (event) => {
         if (!event.ctrlKey && event.keyCode >= 48 && event.keyCode <= 90) {
             if (!document.activeElement || (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA')) {
@@ -458,7 +488,14 @@ function loadpost(p) {
         const parts = rcon.split(': ');
         user = parts[0];
         content = parts.slice(1).join(': ');
-    } else {
+    } else if (p.u == "Webhooks") {
+        const rcon = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
+        const parts = rcon.split(': ');
+        user = parts[1];
+        content = parts.slice(1).join(': ').split(': ')[1];
+               
+    }
+     else {
         content = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
         user = p.u;
     }
@@ -526,7 +563,7 @@ function loadpost(p) {
     pstinf.classList.add("user-header")
     pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")'>${user}</span>`;
 
-    if (p.u == "Discord" || p.u == "SplashBridge") {
+    if (p.u == "Discord" || p.u == "SplashBridge" || p.u == "Webhooks") {
         const bridged = document.createElement("bridge");
         bridged.innerText = lang().meo_bridged.start;
         bridged.setAttribute("title", lang().meo_bridged.title);
@@ -770,15 +807,20 @@ async function loadreply(postOrigin, replyid) {
 }
 
 function reply(event) {
+    let postcont = "";
     const postContainer = event.target.closest('.post');
     if (postContainer) {
         const username = postContainer.querySelector('#username').innerText;
-        const postcont = postContainer.querySelector('p').innerText
-        .replace(/\n/g, ' ')
-        .replace(/@\w+/g, '')
-        .split(' ')
-        .slice(0, 6)
-        .join(' ');
+        if (postContainer.querySelector('p')) {
+            postcont = postContainer.querySelector('p').innerText
+            .replace(/\n/g, ' ')
+            .replace(/@\w+/g, '')
+            .split(' ')
+            .slice(0, 6)
+            .join(' ');
+        } else {
+            postcont = "";
+        }
         const ogmsg = document.getElementById('msg').value
         
         const postId = postContainer.id;
@@ -3416,7 +3458,7 @@ function addAttachment() {
                 .catch(error => errorModal("Error uploading attachment", error))
             });
         }
-        setAttachmentContainer()
+        setAttachmentContainer();
     };
 }
 
@@ -3429,7 +3471,7 @@ function deleteAttachment(id) {
 function setAttachmentContainer() {
     const container = document.getElementById('images-container');
     container.innerHTML = '';    
-    
+    //reminder to check if all the drag stuff was removed
     pendingAttachments.forEach((item, index) => {
         item.req.then(data => {
             const filetype = data.filename.split('.').pop().toLowerCase();
@@ -3445,9 +3487,16 @@ function setAttachmentContainer() {
                 `;
                 container.appendChild(element);
             } else {
-                //add non images
-                //add delete button
-                //finish the horizontal scrolling thing
+                const element = document.createElement('div');
+                element.classList.add("attach-pre-outer");
+                element.id = data.id;
+                element.innerHTML = `
+                <h1>${filetype}</h1>
+                <div class="delete-attach" onclick="deleteAttachment('${item.id.toString()}')">
+                <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+                </div>
+                `;
+                container.appendChild(element);
             }
             console.debug("item added" + index);
             console.debug(data);
