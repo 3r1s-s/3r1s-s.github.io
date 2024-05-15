@@ -2130,6 +2130,24 @@ possible future styling
     .login-bottom {
         display: none;
     }
+
+    .attach-pre-outer .delete-attach {
+        display: block;
+        background-color: var(--accent-color);
+    }
+
+    .attach-pre-outer:hover .delete-attach, .attach-pre-outer:hover {
+        display: block;
+        background-color: var(--accent-color);
+    }
+
+    .delete-attach {
+        color: var(--color);
+    }
+
+    .delete-attach:hover {
+        color: var(--color);
+    }
 }
 
 .reduced-ani.modal, .reduced-ani.image-mdl > .embed-large {
