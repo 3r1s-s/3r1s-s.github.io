@@ -464,7 +464,7 @@ bridge {
 }
 
 .attach-pre-outer {
-    min-width: 96px;
+    width: 96px;
     height: 96px;
     background: var(--accent-color);
     padding: 5px;
