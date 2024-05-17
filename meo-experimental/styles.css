@@ -144,7 +144,8 @@ iframe {
 }
 
 ul, ol {
-    padding-left: 45px;
+    padding-left: 20px;
+    margin: 0;
 }
 
 li::marker, code, kbd, samp, pre {
@@ -214,6 +215,15 @@ bridge {
 .image-outer {
     border-radius: var(--border-radius);
     overflow: clip;
+    width: max-content;
+}
+
+.blocked .image-outer {
+    opacity: 0;
+}
+
+.blocked:hover .image-outer {
+    opacity: 1;
 }
 
 .spoiler {
@@ -1146,10 +1156,10 @@ possible future styling
 }
 
 @keyframes open {
-    from {
+    0% {
         transform: scale(0.5);
     }
-    to {
+    100% {
         transform: scale(1);
     }
 }
@@ -1194,6 +1204,29 @@ possible future styling
         transform: rotate(1turn);
     }
 }
+
+@keyframes bouncyopen {
+    0% {
+      transform:scale(0.7);
+      -webkit-transform:scale(0.7);
+      opacity:1
+    }
+    25% {
+      transform:scale(1.05);
+      -webkit-transform:scale(1.05);
+      opacity:1
+    }
+    50% {
+      transform:scale(0.95);
+      -webkit-transform:scale(0.95);
+      opacity:1
+    }
+    100% {
+      transform:scale(1);
+      -webkit-transform:scale(1);
+      opacity:1
+    }
+  }
 
 .section {
     background-color: var(--accent-color);
@@ -1374,10 +1407,6 @@ possible future styling
     animation: slidedown cubic-bezier(.2,-.25,0,1) 0.2s forwards;
 }
 
-.emojiheader {
-    width: 100%;
-}
-
 .emojisec {
     display: none;
     flex-wrap: wrap;
@@ -1393,6 +1422,8 @@ possible future styling
 
 .emojiheader {
     margin: calc(var(--margin)/2);
+    width: 100%;
+    font-size: initial;
 }
 
 .emojibutton {
@@ -1947,7 +1978,7 @@ possible future styling
         font-size: 12px;
     }
 
-    .embed {
+    .image-outer, .embed {
         max-width: 100% !important;
     }
 

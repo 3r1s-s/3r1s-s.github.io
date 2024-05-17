@@ -170,14 +170,20 @@ function attach(attachment) {
                 embeddedElement = element;
             }
         } else if (['mp4', 'webm', 'mov', 'mkv'].includes(fileExtension)) {
+            const element = document.createElement("div");
+            element.classList.add("media-outer");
+
             let mediaElement = document.createElement("video");
             mediaElement.setAttribute("src", baseURL);
             mediaElement.setAttribute("controls", "controls");
             mediaElement.setAttribute("alt", fileName);
-            mediaElement.classList.add("media");
+            mediaElement.classList.add("embed");
+            
+            element.appendChild(mediaElement);
 
-            embeddedElement = mediaElement;
+            embeddedElement = element;
         } else if (['mp3', 'wav', 'ogg', 'flac'].includes(fileExtension)) {
+
             const element = document.createElement("div");
             element.classList.add("media-outer");
 

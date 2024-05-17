@@ -311,17 +311,15 @@ function main() {
     document.addEventListener("keydown", function(event) {
         if (page !== "settings" && page !== "explore" && page !== "login" && page !== "start") {
             const textarea = document.getElementById("msg");
+            const emj = document.getElementById("emojin");
             if (event.key === "Enter" && !event.shiftKey) {
                 if (settingsstuff().entersend) {
                     if (textarea === document.activeElement) {
+
+                    } else if (emj === document.activeElement) {
                         if (opened === 1) {
                             fstemj();
-                            textarea.focus();
                         }
-                    } else {
-                        event.preventDefault();
-                        sendpost();
-                        textarea.style.height = 'auto';
                     }
                 } else {
                     if (textarea === document.activeElement) {
@@ -329,9 +327,10 @@ function main() {
                         sendpost();
                         textarea.style.height = 'auto';
                     } else {
-                        if (opened === 1) {
-                            fstemj();
-                            textarea.focus();
+                        if (emj === document.activeElement) {
+                            if (opened === 1) {
+                                fstemj();
+                            }
                         }
                     }
                 }
@@ -421,6 +420,9 @@ function main() {
         } else if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
             event.preventDefault();
             goAnywhere();
+        } else if ((event.ctrlKey || event.metaKey) && event.key === '/') {
+            event.preventDefault();
+            document.getElementById("msg").focus();
         }
     });
 }
@@ -781,7 +783,13 @@ async function loadreply(postOrigin, replyid) {
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
-        let replyContent = replydata.p;
+        let replyContent;
+        if (replydata.p) {
+            replyContent = replydata.p;
+        } else if (replydata.attachments) {
+            replyContent = "[Attachment]";
+        }
+        
         let match = replydata.p.replace(roarRegex, "").trim();
         match = match.replace(betterMeowerRegex, "").trim();
         
