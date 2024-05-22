@@ -45,6 +45,13 @@ function erimd(content) {
 }
 
 function loadinputs() {
+// this should be called preChatLoad or something
+    let textin
+    
+    textin = `
+    <textarea type="text" oninput="autoresize()" class="message-input text" id="msg" rows="1" autocomplete="false" placeholder="${lang().meo_messagebox}" aria-label="Message Input"></textarea>
+    `
+
     const inputs = `
     <div class="message-outer">
         <div class="message-container">
@@ -53,7 +60,7 @@ function loadinputs() {
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37256 18.6274 0 12 0C5.37256 0 0 5.37256 0 12C0 18.6274 5.37256 24 12 24ZM18.7896 13.1978L13.2046 13.1982L13.2051 18.7832C13.2056 19.4453 12.6694 19.9814 12.0068 19.9814C11.3447 19.9814 10.8076 19.4443 10.8086 18.7832V13.1982L5.20996 13.1987C4.54785 13.1987 4.01123 12.6621 4.01123 12C4.01074 11.3384 4.54736 10.8018 5.20947 10.8018H10.8081L10.8086 5.2168C10.8081 4.79785 11.0229 4.4292 11.3486 4.21484C11.5376 4.09033 11.7637 4.01807 12.0068 4.01807C12.6685 4.01758 13.2056 4.55469 13.2051 5.21631L13.2046 10.8013H18.7896C19.4517 10.8008 19.9878 11.3369 19.9878 11.9995C19.9883 12.6616 19.4517 13.1982 18.7896 13.1978Z" fill="currentColor"/>
                 </svg>
             </button>
-            <textarea type="text" oninput="autoresize()" class="message-input text" id="msg" rows="1" autocomplete="false" placeholder="${lang().meo_messagebox}" aria-label="Message Input"></textarea>
+            ${textin}
             <button class="message-tool button emoji-button" id="emojis" value="Emojis" onclick="togglePicker()" aria-label="Emoji Picker">
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 9.77778C4 9.77778 5.33333 10.2222 8 10.2222C10.6667 10.2222 12 9.77778 12 9.77778C12 9.77778 11.1111 11.5556 8 11.5556C4.88889 11.5556 4 9.77778 4 9.77778Z" fill="currentColor"/>
@@ -72,7 +79,24 @@ function loadinputs() {
             <span id="edit-indicator"></span>
         </div>
     </div>
-    <div id="msgs" class="posts"></div>
+    <div id="msgs" class="posts">
+    </div>
+    <div id="skeleton-msgs" class="posts" style="display:block;">
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+    </div>
     `;
     return inputs;
 }
@@ -166,7 +190,6 @@ function attach(attachment) {
                 }
 
                 element.appendChild(imgElement);
-
                 embeddedElement = element;
             }
         } else if (['mp4', 'webm', 'mov', 'mkv'].includes(fileExtension)) {
@@ -176,11 +199,12 @@ function attach(attachment) {
             let mediaElement = document.createElement("video");
             mediaElement.setAttribute("src", baseURL);
             mediaElement.setAttribute("controls", "controls");
+            mediaElement.setAttribute("playsinline", "");
+            mediaElement.setAttribute("preload", "metadata");
             mediaElement.setAttribute("alt", fileName);
             mediaElement.classList.add("embed");
             
             element.appendChild(mediaElement);
-
             embeddedElement = element;
         } else if (['mp3', 'wav', 'ogg', 'flac'].includes(fileExtension)) {
 
@@ -240,13 +264,20 @@ function embed(links) {
                     embeddedElement = element;
                 }
             } else if (['mp4', 'webm', 'mov', 'mkv'].includes(fileExtension)) {
+                const element = document.createElement("div");
+                element.classList.add("media-outer");
+                
                 let mediaElement = document.createElement("video");
                 mediaElement.setAttribute("src", baseURL);
                 mediaElement.setAttribute("controls", "controls");
+                mediaElement.setAttribute("playsinline", "");
+                mediaElement.setAttribute("preload", "metadata");
                 mediaElement.setAttribute("alt", fileName);
-                mediaElement.classList.add("media");
+                mediaElement.setAttribute("style", "max-width:300px");
+                mediaElement.classList.add("embed");
 
-                embeddedElement = mediaElement;
+                element.appendChild(mediaElement);
+                embeddedElement = element;
             } else if (['mp3', 'wav', 'ogg', 'flac'].includes(fileExtension)) {
                 const element = document.createElement("div");
                 element.classList.add("media-outer");

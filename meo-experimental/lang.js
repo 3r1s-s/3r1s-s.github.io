@@ -7,7 +7,7 @@ if (localStorage.getItem("language")) {
 }
 
 function lang() {
-    return eval(language);
+    return  eval(language);
 }
 
 const en = {
@@ -68,7 +68,7 @@ const en = {
             "showpostbuttons": "Post buttons always remain visible",
             "underlinelinks": "Make links to websites and other pages stand out more by underlining them",
             "entersend": "Enter key creates newlines instead of sending the post",
-            "hideimages": "Blurs images before hovering over them",
+            "hideimages": "Blurs images before opening them",
         }
     },
     "appearance_sub": {
@@ -82,6 +82,8 @@ const en = {
     },
     "plugins_sub": {
         "manage": "Manage",
+        "desc": "The plugins repo can be found ",
+        "link": "here!"
     },
     "languages_sub": {
         "title": "Select a Language",
@@ -105,6 +107,7 @@ const en = {
         "search": "Search",
         "mod": "Moderate",
         "creategc": "Create Chat",
+        
         "dmme": "DM Me :)",
         "invite": "Invite People",
         "gohome": "Go Home",
@@ -138,6 +141,7 @@ const en = {
         "savetheme": "Save Theme",
         "loadtheme": "Load Theme",
         "resetplugins": "Disable All",
+        "favorite": "Favorite",
     },
     "info": {
         "accexists": "Username Already Taken!",
@@ -257,7 +261,7 @@ const enuk = {
             "showpostbuttons": "Post buttons always remain visible.",
             "underlinelinks": "Makes links to websites and other pages stand out more by underlining them.",
             "entersend": "Enter key creates newlines instead of sending the post",
-            "hideimages": "Blurs images before hovering over them",
+            "hideimages": "Blurs images before opening them",
         },
     },
     "appearance_sub": {
@@ -270,7 +274,9 @@ const enuk = {
         "cscss": "Custom CSS",
     },
     "plugins_sub": {
-        "manage": "Manage"
+        "manage": "Manage",
+        "desc": "The plugins repo can be found ",
+        "link": "here!"
     },
     "languages_sub": {
         "title": "Select a Language",
@@ -294,6 +300,7 @@ const enuk = {
         "search": "Search",
         "mod": "Moderate",
         "creategc": "Create Chat",
+        "leavegc": "Leave Chat",
         "dmme": "DM Me :)",
         "invite": "Invite People",
         "gohome": "Go Home",
@@ -327,6 +334,7 @@ const enuk = {
         "savetheme": "Save Theme",
         "loadtheme": "Load Theme",
         "resetplugins": "Disable All",
+        "favorite": "Favourite",
     },
     "info": {
         "accexists": "Username Already Taken!",
@@ -434,8 +442,8 @@ const es = {
             "reducemotion": "Reducir movimiento",
             "showpostbuttons": "Siempre mostrar botones en mensajes",
             "underlinelinks": "Siempre subrayar enlaces",
-            "entersend": "Don't send on Enter", // uploads
-            "hideimages": "Hide images", // uploads
+            "entersend": "Don't send on Enter", // update
+            "hideimages": "Hide images", // update
         },
         "desc": {
             "homepage": "En lugar de mostrarte la página de inicio, navegar directamente a home",
@@ -448,8 +456,8 @@ const es = {
             "reducemotion": "Reducir la intensidad de las animaciones y otros efectos con movimiento",
             "showpostbuttons": "Los botones en las publicaciónes/mensajes permanecen siempre visibles",
             "underlinelinks": "Subrayar los enlaces a sitios web y otras páginas para que destaquen más.",
-            "entersend": "Enter key creates newlines instead of sending the post", // uploads
-            "hideimages": "Blurs images before hovering over them", // uploads
+            "entersend": "Enter key creates newlines instead of sending the post", // update
+            "hideimages": "Blurs images before opening them", // update
         }
     },
     "appearance_sub": {
@@ -462,7 +470,9 @@ const es = {
         "cscss": "Código CSS personalizado",
     },
     "plugins_sub": {
-        "manage": "Manage"
+        "manage": "Manage",
+        "desc": "The plugins repo can be found ",
+        "link": "here!"
     },
     "languages_sub": {
         "title": "Select a Language",
@@ -518,7 +528,8 @@ const es = {
         "apply": "Aplicar",
         "savetheme": "Save Theme (Salvar Tema)",
         "loadtheme": "Load Theme (Cargar Tema)",
-        "resetplugins": "Disable All",
+        "resetplugins": "Disable All", // update
+        "favorite": "Favorite", // update
     },
     "info": {
         "accexists": "¡Nombre de Usuario ya Ocupado!",
@@ -543,7 +554,7 @@ const es = {
         "changepwwarn": "It will be updated immediately.", //update
         "tryagain": "Inténtalo de nuevo",
         "cleared": "¡Borrado!",
-        "plugin": "Restart now to apply new plugins and their settings",
+        "plugin": "Restart now to apply new plugins and their settings", // update
     },
     "reports": {
         "spam": "Spam (Basura)",
@@ -621,8 +632,8 @@ const de = {
             "reducemotion": "Bewegung reduzieren",
             "showpostbuttons": "Postknöpfe immer zeigen",
             "underlinelinks": "Links immer unterstreichen",
-            "entersend": "Don't send on Enter", // uploads
-            "hideimages": "Hide images", // uploads
+            "entersend": "Don't send on Enter", // update
+            "hideimages": "Hide images", // update
         },
         "desc": {
             "homepage": "Direkt zu Home navigieren, statt die Startseite anzuzeigen",
@@ -635,8 +646,8 @@ const de = {
             "reducemotion": "Die Intensität der Animationen und andere Bewegungseffekte reduzieren",
             "showpostbuttons": "Postknöpfe bleiben immer sichtbar",
             "underlinelinks": "Links zu Websiten und anderen Seiten unterstreichen und damit hervorheben",
-            "entersend": "Enter key creates newlines instead of sending the post", // uploads
-            "hideimages": "Blurs images before hovering over them", // uploads
+            "entersend": "Enter key creates newlines instead of sending the post", // update
+            "hideimages": "Blurs images before opening them", // update
         }
     },
     "appearance_sub": {
@@ -650,6 +661,8 @@ const de = {
     },
     "plugins_sub": {
         "manage": "Einstellen",
+        "desc": "The plugins repo can be found ",
+        "link": "here!"
     },
     "languages_sub": {
         "title": "Wähle eine Sprache",
@@ -706,6 +719,7 @@ const de = {
         "savetheme": "Aussehen speichern",
         "loadtheme": "Aussehen laden",
         "resetplugins": "Alles ausschalten",
+        "favorite": "Favorite", // update
     },
     "info": {
         "accexists": "Der Benutzername wird schon benutzt!",
@@ -765,4 +779,4 @@ const de = {
         "profilecolor": "Profilfarbe",
         "profilepic": "Profilbild",
     },
-  }
+}

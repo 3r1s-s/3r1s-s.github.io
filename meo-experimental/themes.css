@@ -37,6 +37,7 @@
 .dark-theme {
     --primary: #714cc8;
     --secondary: #5d6092;
+    --tertiary: #9fa1d8;
     --background: #1c1c26;
     --color: #fefefe;
     --accent-color: #2f3040;
@@ -52,12 +53,6 @@
     --modal-color: #2f3040;
     --modal-button-color: #4b4c66;
     --hov-modal-button-color: #626386;
-
-    --blue: #00abd2;
-    --green: #32E875;
-    --red: #cc2936;
-    --magenta: #F04290;
-    --color-scheme: dark;
 }
 
 .light-theme {
@@ -65,45 +60,24 @@
     --background: #f1f0fb;
     --color: #43485b;
     --accent-color: #dad9e9;
-    --hov-accent-color: #dfdeed;
-    --hov-color: #e6e3f0;
+    --hov-accent-color: #c7c6d8;
+    --hov-color: #d0cfe3;
     --link-color: #714cc8;
     --attachment-background-color: #d4c1ff;
     --attachment-color: #513593;
     --attachment-background-color-hover: #b190fe;
     --attachment-color-hover: #fefefe;
-    --button-color: #a49faf;
-    --hov-button-color: #7b7783;
+    --button-color: #7b7783;
+    --hov-button-color: #43485b;
     --modal-color: #dad9e9;
-    --modal-button-color: #c6c5d6;
-    --hov-modal-button-color: #cdcbdb;
+    --modal-button-color: #c7c6d8;
+    --hov-modal-button-color: #bab9cb;
 
-    --blue: #00abd2;
+    --blue: #006ce7;
     --green: #32E875;
     --red: #cc2936;
     --magenta: #F04290;
     --color-scheme: light;
-}
-
-.softblue-theme {
-    --primary: #15a4c1;
-    --secondary: #0f788e;
-    --background: #1c1f26;
-    --color: #fefefe;
-    --accent-color: #2f3540;
-    --hov-accent-color: #414959;
-    --hov-color: #414959;
-    --link-color: #00abd2;
-    --attachment-background-color: #094c5b;
-    --attachment-color: #15a4c1;
-    --attachment-background-color-hover: #15a4c1;
-    --attachment-color-hover: #fefefe;
-    --button-color: #a5abb3;
-    --hov-button-color: #fefefe;
-    --modal-color: #3a3d43;
-    --modal-button-color: #4a4d56;
-    --hov-modal-button-color: #636774;
-    --color-scheme: dark;
 }
 
 .blurple-theme {
@@ -136,7 +110,7 @@
     --color: #fefefe;
     --accent-color: #0d0e0f;
     --hov-accent-color: #111214;
-    --hov-color: #17181a;
+    --hov-color: #16191e;
     --link-color: #00abd2;
     --attachment-background-color: #30215490;
     --attachment-color: #bea2ff;
@@ -145,8 +119,8 @@
     --button-color: #a5abb3;
     --hov-button-color: #fefefe;
     --modal-color: #000;
-    --modal-button-color: #101011;
-    --hov-modal-button-color: #1b1b1d;
+    --modal-button-color: #0d0e0f;
+    --hov-modal-button-color: #16191e;
 
     --blue: #00abd2;
     --green: #32E875;
@@ -233,31 +207,6 @@
     --color-scheme: dark;
 }
 
-.scratch-theme {
-    --primary: #714cc8;
-    --background: #f1f0fb;
-    --color: #43485b;
-    --accent-color: #dad9e9;
-    --hov-accent-color: #dfdeed;
-    --hov-color: #e6e3f0;
-    --link-color: #714cc8;
-    --attachment-background-color: #d4c1ff;
-    --attachment-color: #513593;
-    --attachment-background-color-hover: #b190fe;
-    --attachment-color-hover: #fefefe;
-    --button-color: #a49faf;
-    --hov-button-color: #7b7783;
-    --modal-color: #dad9e9;
-    --modal-button-color: #c6c5d6;
-    --hov-modal-button-color: #cdcbdb;
-
-    --blue: #00abd2;
-    --green: #32E875;
-    --red: #cc2936;
-    --magenta: #F04290;
-    --color-scheme: light;
-}
-
 .cosmic-theme {
     --primary: #8f8b7c;
     --background: #fff8e7;
@@ -336,17 +285,6 @@
     --color-scheme: dark;
 }
 
-.quake-pro-theme {
-    --border: none;
-    --border-radius: 5px;
-    --button-radius: 5px;
-    --margin: 8px;
-    --text-margin: 4px;
-    --padding: 4px;
-    --button-padding: 8px;
-    --button-margin: 8px;
-}
-
 .flamingo-theme {
     --primary: #cc2936;
     --background: #0c0303;
@@ -383,7 +321,6 @@
     --hov-modal-button-color: #dddddd80;
     --border-radius: 5px;
     --button-radius: 5px;
-    --glass-border: 1px solid #ffffff80;
 }
 
 .gdark-theme {
@@ -397,7 +334,6 @@
     --hov-modal-button-color: #4f4f4f50;
     --border-radius: 5px;
     --button-radius: 5px;
-    --glass-border: 1px solid #ffffff20;
 }
 
 .oldlight-theme {
@@ -502,6 +438,67 @@
     
     --color-scheme: light;
 }
+
+/*Unused*/
+
+.softblue-theme {
+    --primary: #15a4c1;
+    --secondary: #0f788e;
+    --background: #1c1f26;
+    --color: #fefefe;
+    --accent-color: #2f3540;
+    --hov-accent-color: #414959;
+    --hov-color: #414959;
+    --link-color: #00abd2;
+    --attachment-background-color: #094c5b;
+    --attachment-color: #15a4c1;
+    --attachment-background-color-hover: #15a4c1;
+    --attachment-color-hover: #fefefe;
+    --button-color: #a5abb3;
+    --hov-button-color: #fefefe;
+    --modal-color: #3a3d43;
+    --modal-button-color: #4a4d56;
+    --hov-modal-button-color: #636774;
+    --color-scheme: dark;
+}
+
+.quake-pro-theme {
+    --border: none;
+    --border-radius: 5px;
+    --button-radius: 5px;
+    --margin: 8px;
+    --text-margin: 4px;
+    --padding: 4px;
+    --button-padding: 8px;
+    --button-margin: 8px;
+}
+
+.scratch-theme {
+    --primary: #714cc8;
+    --background: #f1f0fb;
+    --color: #43485b;
+    --accent-color: #dad9e9;
+    --hov-accent-color: #dfdeed;
+    --hov-color: #e6e3f0;
+    --link-color: #714cc8;
+    --attachment-background-color: #d4c1ff;
+    --attachment-color: #513593;
+    --attachment-background-color-hover: #b190fe;
+    --attachment-color-hover: #fefefe;
+    --button-color: #a49faf;
+    --hov-button-color: #7b7783;
+    --modal-color: #dad9e9;
+    --modal-button-color: #c6c5d6;
+    --hov-modal-button-color: #cdcbdb;
+
+    --blue: #00abd2;
+    --green: #32E875;
+    --red: #cc2936;
+    --magenta: #F04290;
+    --color-scheme: light;
+}
+
+/*Other*/
 
 .theme-buttons-inner {
     display: flex;

@@ -13,6 +13,8 @@ let eul;
 let sul = "";
 let pre = "";
 
+let bridges = ['Discord', 'SplashBridge', 'gc'];
+
 let ipBlocked = false;
 
 const communityDiscordLink = "https://discord.com/invite/THgK9CgyYJ";
@@ -23,6 +25,8 @@ const pfpCache = {};
 const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
 const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
+
+let favoritedChats = [];  // [chatId, ...]
 
 let pendingAttachments = [];
 
@@ -102,13 +106,11 @@ function main() {
                         blockedUsers[relationship.username] = true;
                     }
                 });
+                localStorage.setItem("username", sentdata.val.payload.username);
+                localStorage.setItem("token", sentdata.val.payload.token);
+                localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
+                favoritedChats = sentdata.val.payload.account.favorited_chats;
                 loggedin = true;
-                if (localStorage.getItem("token") == undefined || localStorage.getItem("username") == undefined || localStorage.getItem("permissions") == undefined) {
-                    localStorage.setItem("username", sentdata.val.payload.username);
-                    localStorage.setItem("token", sentdata.val.payload.token);
-                    localStorage.setItem("permissions", sentdata.val.payload.account.permissions);
-
-                }
                 sidebars();
                 
                 // work on this
@@ -171,6 +173,11 @@ function main() {
             }
         } else if (end) {
             return 0;
+        } else if (sentdata.val.mode == "update_config") {
+            if (sentdata.val.payload.favorited_chats) {
+                favoritedChats = sentdata.val.payload.favorited_chats;
+                renderChats();
+            }
         } else if (sentdata.val.mode == "update_profile") {
             let username = sentdata.val.payload._id;
             if (pfpCache[username]) {
@@ -201,59 +208,16 @@ function main() {
                 loadpost(sentdata.val.payload);
             }
         } else if (sentdata.val.mode == "create_chat") {
-            const chat = sentdata.val.payload;
-            chatCache[chat._id] = chat;
-
-            const r = document.createElement("button");
-            r.id = chat._id;
-            r.className = `navigation-button button gcbtn`;
-            r.onclick = function() {
-                loadchat(chat._id);
-            };
-            if (chat.type === 1) {
-                console.log(loadPfp(chat.members.find(v => v !== localStorage.getItem("username"))).src);
-            }
-
-            const chatIconElem = document.createElement("img");
-            chatIconElem.classList.add("avatar-small");
-            if (chat.type === 0) {
-                chatIconElem.src = "images/GC.svg";
-            } else {
-                loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
-                .then(pfpElem => {
-                    chatIconElem.src = pfpElem.src;
-                });
-            }
-            r.appendChild(chatIconElem);
-
-            const chatNameElem = document.createElement("span");
-            chatNameElem.classList.add("gcname");
-            chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("username"))}`;
-            r.appendChild(chatNameElem);
-    
-            const gcs = document.getElementsByClassName("gcs");
-            if (gcs.length > 0) {
-                gcs[0].appendChild(r);
-            }
+            chatCache[sentdata.val.payload._id] = sentdata.val.payload;
+            renderChats();
         } else if (sentdata.val.mode == "update_chat") {
             const chatId = sentdata.val.payload._id;
-
             if (chatId in chatCache) {
                 chatCache[chatId] = Object.assign(
                     chatCache[chatId],
                     sentdata.val.payload
                 );
-            }
-
-            if (sentdata.val.payload.nickname) {
-                const newNickname = sentdata.val.payload.nickname;
-                document.getElementById(chatId).innerText = newNickname;
-                if (page === sentdata.val.payload._id) {
-                    const nicknameElem = document.getElementById("nickname");
-                    const chatIdElem = nicknameElem.childNodes[1].cloneNode(true);
-                    nicknameElem.innerText = newNickname;
-                    nicknameElem.appendChild(chatIdElem);
-                }
+                renderChats();
             }
         } else if (sentdata.cmd == "ulist") {
             const iul = sentdata.val;
@@ -461,7 +425,7 @@ function loadLogin() {
                     <path fill-rule="evenodd" d="M12.026 2c-5.509 0-9.974 4.465-9.974 9.974 0 4.406 2.857 8.145 6.821 9.465.499.09.679-.217.679-.481 0-.237-.008-.865-.011-1.696-2.775.602-3.361-1.338-3.361-1.338-.452-1.152-1.107-1.459-1.107-1.459-.905-.619.069-.605.069-.605 1.002.07 1.527 1.028 1.527 1.028.89 1.524 2.336 1.084 2.902.829.091-.645.351-1.085.635-1.334-2.214-.251-4.542-1.107-4.542-4.93 0-1.087.389-1.979 1.024-2.675-.101-.253-.446-1.268.099-2.64 0 0 .837-.269 2.742 1.021a9.582 9.582 0 0 1 2.496-.336 9.554 9.554 0 0 1 2.496.336c1.906-1.291 2.742-1.021 2.742-1.021.545 1.372.203 2.387.099 2.64.64.696 1.024 1.587 1.024 2.675 0 3.833-2.33 4.675-4.552 4.922.355.308.675.916.675 1.846 0 1.334-.012 2.41-.012 2.737 0 .267.178.577.687.479C19.146 20.115 22 16.379 22 11.974 22 6.465 17.535 2 12.026 2z" clip-rule="evenodd"></path>
                 </svg>
             </a>
-            <a href="https://discord.com/users/797570703419244594" target="_blank" class="info-button">
+            <a href="https://discord.gg/gjdKksMjMs" target="_blank" class="info-button">
                 <svg width="24" height="24" viewBox="0 0 24 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20.3303 1.52336C18.7535 0.80145 17.0889 0.289302 15.3789 0C15.1449 0.418288 14.9332 0.848651 14.7447 1.28929C12.9233 1.01482 11.071 1.01482 9.24963 1.28929C9.06097 0.848696 8.84926 0.418339 8.61537 0C6.90435 0.291745 5.23861 0.805109 3.6602 1.52714C0.526645 6.16328 -0.322812 10.6843 0.101917 15.1411C1.937 16.4969 3.99099 17.5281 6.17459 18.1897C6.66627 17.5284 7.10135 16.8269 7.47521 16.0925C6.76512 15.8273 6.07977 15.5001 5.42707 15.1147C5.59885 14.9901 5.76685 14.8617 5.92919 14.7371C7.82839 15.6303 9.90126 16.0934 12 16.0934C14.0987 16.0934 16.1716 15.6303 18.0708 14.7371C18.235 14.8712 18.403 14.9995 18.5729 15.1147C17.9189 15.5007 17.2323 15.8285 16.521 16.0944C16.8944 16.8284 17.3295 17.5294 17.8216 18.1897C20.0071 17.5307 22.0626 16.5001 23.898 15.143C24.3964 9.97452 23.0467 5.49504 20.3303 1.52336ZM8.0132 12.4002C6.82962 12.4002 5.8518 11.3261 5.8518 10.0047C5.8518 8.68334 6.79564 7.59981 8.00942 7.59981C9.2232 7.59981 10.1935 8.68334 10.1727 10.0047C10.1519 11.3261 9.21943 12.4002 8.0132 12.4002ZM15.9868 12.4002C14.8013 12.4002 13.8273 11.3261 13.8273 10.0047C13.8273 8.68334 14.7711 7.59981 15.9868 7.59981C17.2024 7.59981 18.1652 8.68334 18.1444 10.0047C18.1236 11.3261 17.193 12.4002 15.9868 12.4002Z" fill="currentColor"/>
                 </svg>
@@ -482,25 +446,35 @@ function loadLogin() {
 }
 
 function loadpost(p) {
-    let user
-    let content
-
-    if (p.u == "Discord" || p.u == "SplashBridge") {
-        const rcon = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
-        const parts = rcon.split(': ');
-        user = parts[0];
-        content = parts.slice(1).join(': ');
-    } else if (p.u == "Webhooks") {
-        const rcon = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
-        const parts = rcon.split(': ');
-        user = parts[1];
-        content = parts.slice(1).join(': ').split(': ')[1];
-               
+    let user;
+    let content;
+    let bridged = (p.u && bridges.includes(p.u));
+    
+    if (bridged) {
+        const rcon = p.p;
+        const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
+        console.debug(match);
+        
+        if (match) {
+            user = match[1];
+            content = match[2] || "";
+        } else {
+            user = p.u;
+            content = rcon;
+        }
+    } else {
+        if (p.u === "Webhooks") {
+            const rcon = p.p;
+            const parts = rcon.split(': ');
+            user = parts[0];
+            content = parts.slice(1).join(': ');
+        } else {
+            content = p.p;
+            user = p.u;
+        }
     }
-     else {
-        content = settingsstuff().swearfilter && p.unfiltered_p ? p.unfiltered_p : p.p;
-        user = p.u;
-    }
+    
+    
     
     const postContainer = document.createElement("div");
     postContainer.classList.add("post");
@@ -565,7 +539,7 @@ function loadpost(p) {
     pstinf.classList.add("user-header")
     pstinf.innerHTML = `<span id='username' onclick='openUsrModal("${user}")'>${user}</span>`;
 
-    if (p.u == "Discord" || p.u == "SplashBridge" || p.u == "Webhooks") {
+    if (bridged || p.u == "Webhooks") {
         const bridged = document.createElement("bridge");
         bridged.innerText = lang().meo_bridged.start;
         bridged.setAttribute("title", lang().meo_bridged.title);
@@ -577,7 +551,7 @@ function loadpost(p) {
 
     const roarer = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
     const bettermeower = /@(\w+)\[([a-zA-Z0-9]+)\]/g;
-    
+
     let match1 = roarer.exec(content);
     let match2 = bettermeower.exec(content);
     
@@ -772,40 +746,60 @@ function loadPfp(username, button) {
 async function loadreply(postOrigin, replyid) {
     const roarRegex = /^@[^ ]+ (.+?) \(([^)]+)\)/
     const betterMeowerRegex = /@(\w+)\[([a-zA-Z0-9]+)\]/g;
+
     try {
         let replydata = postCache[postOrigin].find(post => post._id === replyid);
         if (!replydata) {
             const replyresp = await fetch(`https://api.meower.org/posts?id=${replyid}`, {
                 headers: { token: localStorage.getItem("token") }
             });
-            replydata = await replyresp.json();
+            if (replyresp.status === 404) {
+                replydata = { p: "[original message was deleted]" };
+            } else {
+                replydata = await replyresp.json();
+            }
         }
+
+        let bridged = (bridges.includes(replydata.u));
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
-        let replyContent;
+        let content;
         if (replydata.p) {
-            replyContent = replydata.p;
+            content = replydata.p;
+
+            let match = replydata.p.replace(roarRegex, "").trim();
+            match = match.replace(betterMeowerRegex, "").trim();
+
+            if (match) {
+                content = match;
+            }
         } else if (replydata.attachments) {
-            replyContent = "[Attachment]";
-        }
-        
-        let match = replydata.p.replace(roarRegex, "").trim();
-        match = match.replace(betterMeowerRegex, "").trim();
-        
-        if (match) {
-            replyContent = match;
-        }
-        
-        if (replydata.u === "Discord" || replydata.u === "SplashBridge") {
-            const rcon = replyContent;
-            const parts = rcon.split(': ');
-            const user = parts[0];
-            const content = parts.slice(1).join(': ');
-            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
+            content = "[Attachment]";
         } else {
-            replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(replydata.u)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(replyContent)}</p>`;
+            content = '';
         }
+
+        if (replydata.u) {
+            user = replydata.u;
+        } else {
+            user = '';
+        }
+        
+        if (bridged) {
+            const rcon = content;
+            const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
+            console.debug(match);
+            
+            if (match) {
+                user = match[1];
+                content = match[2] || "";
+            } else {
+                user = replydata.u;
+                content = rcon;
+            }
+        }
+        replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
         
         return replycontainer;
     } catch (error) {
@@ -975,10 +969,10 @@ function loadhome() {
     pageContainer.innerHTML = `
         <div class='info'><h1 class='header-top'>${lang().page_home}</h1><p id='info'></p>
         </div>` + loadinputs();
-    document.getElementById("info").innerText = lul + " users online (" + sul + ")";
+        document.getElementById("info").innerText = lul + " users online (" + sul + ")";
     
     sidebars();
-    
+
     if (postCache["home"]) {
         postCache["home"].forEach(post => {
             if (page !== "home") {
@@ -986,6 +980,7 @@ function loadhome() {
             }
             loadpost(post);
         });
+        document.getElementById("skeleton-msgs").style.display = "none";
     } else {
         const xhttpPosts = new XMLHttpRequest();
         xhttpPosts.open("GET", "https://api.meower.org/home?autoget");
@@ -1001,9 +996,30 @@ function loadhome() {
                 }
                 loadpost(post);
             });
+            document.getElementById("skeleton-msgs").style.display = "none";
         };
         xhttpPosts.send();
     }
+    
+    const attachButton = document.getElementById('attach')
+    attachButton.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.add('dragover');
+    });
+
+    attachButton.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.remove('dragover');
+    });
+
+    attachButton.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.remove('dragover');
+        dropFiles(e.dataTransfer.files);
+    });
 }
 
 function sidebars() {
@@ -1052,79 +1068,119 @@ function sidebars() {
     let mdmdl = document.getElementsByClassName('navigation')[0];
     mdmdl.innerHTML += navlist;
 //make it check if the list already exists, if so dont do this
-    const char = new XMLHttpRequest();
-    char.open("GET", "https://api.meower.org/chats?autoget");
-    char.setRequestHeader("token", localStorage.getItem('token'));
-    char.onload = async () => {
-        const response = JSON.parse(char.response);
-    
-        const groupsdiv = document.getElementById("groups");
-        const gcdiv = document.createElement("div");
-        gcdiv.className = "gcs";
-        gcdiv.setAttribute("tabindex", "-1");
-
-
-        groupsdiv.innerHTML = `
-        <h1 class="groupheader">${lang().title_chats}</h1>
-        <button class="search-input button" id="search" aria-label="search" onclick="goAnywhere();"><span class="srchtx">${lang().action.search}</span></button
-        
-        `;
-        gcdiv.innerHTML += `<button class="navigation-button button gcbtn" onclick="loadhome()">
-        <svg width="36" height="26" class="homebuttonsvg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8334 21.6667V15.1667H15.1667V21.6667H20.5834V13H23.8334L13.0001 3.25L2.16675 13H5.41674V21.6667H10.8334Z" fill="currentColor"/></svg>
-        <span class="gcname">${lang().page_home}</span></button>
-        `;
-
-        response.autoget.forEach(chat => {
-            chatCache[chat._id] = chat;
-
-            const r = document.createElement("button");
-            r.id = chat._id;
-            r.className = `navigation-button button gcbtn`;
-            r.onclick = function() {
-                loadchat(chat._id);
-            };
-
-            const chatIconElem = document.createElement("img");
-            chatIconElem.classList.add("avatar-small");
-            chatIconElem.setAttribute("alt", "Avatar");;
-            if (chat.type === 0) {
-                chatIconElem.src = "images/GC.svg";
-                chatIconElem.style.border = "3px solid #1f5831";
-            } else {
-                // this is so hacky :p
-                // - Tnix
-                loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
-                .then(pfpElem => {
-                    if (pfpElem) {
-                        chatIconElem.src = pfpElem.src;
-                        chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px");
-                        chatIconElem.style.background = pfpElem.style.border.replace("3px solid", "");
-                        if (pfpElem.classList.contains("svg-avatar")) {
-                            chatIconElem.classList.add("svg-avatar");
-                            chatIconElem.style.background = '#fff';
-                        }
-                    }
-                });
-            }
-            r.appendChild(chatIconElem);
-
-            const chatNameElem = document.createElement("span");
-            chatNameElem.classList.add("gcname");
-            chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("username"))}`;
-            r.appendChild(chatNameElem);
-    
-            gcdiv.appendChild(r);
-        });
-
-        groupsdiv.appendChild(gcdiv);
-
-    };
-    char.send();
+    if (Object.keys(chatCache).length === 0) {
+        const char = new XMLHttpRequest();
+        char.open("GET", "https://api.meower.org/chats?autoget");
+        char.setRequestHeader("token", localStorage.getItem('token'));
+        char.onload = async () => {
+            const response = JSON.parse(char.response);
+            response.autoget.forEach(chat => {
+                chatCache[chat._id] = chat;
+            });
+            renderChats();
+        };
+        char.send();
+    }
 
     const sidediv = document.querySelectorAll(".side");
     sidediv.forEach(function(sidediv) {
         sidediv.classList.remove("hidden");
     });
+}
+
+function renderChats() {
+    const groupsdiv = document.getElementById("groups");
+    const gcdiv = document.createElement("div");
+    gcdiv.className = "gcs";
+    gcdiv.setAttribute("tabindex", "-1");
+
+
+    groupsdiv.innerHTML = `
+    <h1 class="groupheader">${lang().title_chats}</h1>
+    <button class="search-input button" id="search" aria-label="search" onclick="goAnywhere();"><span class="srchtx">${lang().action.search}</span></button
+    
+    `;
+    gcdiv.innerHTML += `<button class="navigation-button button gcbtn" onclick="loadhome()">
+    <div class="chat-home-button">
+    <svg width="36" height="26" class="homebuttonsvg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8334 21.6667V15.1667H15.1667V21.6667H20.5834V13H23.8334L13.0001 3.25L2.16675 13H5.41674V21.6667H10.8334Z" fill="currentColor"/></svg>
+    </div>
+    <span class="gcname">${lang().page_home}</span></button>
+    `;
+
+    let favedChats = Object.values(chatCache).filter(chat => favoritedChats.includes(chat._id)).sort((a, b) => {
+        return b.last_active - a.last_active;
+    });
+    let unfavedChats = Object.values(chatCache).filter(chat => !favoritedChats.includes(chat._id)).sort((a, b) => {
+        return b.last_active - a.last_active;
+    });
+    let sortedChats = favedChats.concat(unfavedChats);
+
+    sortedChats.forEach(chat => {
+        const r = document.createElement("button");
+        r.id = chat._id;
+        r.className = `navigation-button button gcbtn`;
+        r.onclick = function() {
+            loadchat(chat._id);
+        };
+
+        const chatIconElem = document.createElement("img");
+        chatIconElem.classList.add("avatar-small");
+        chatIconElem.setAttribute("alt", "Avatar");;
+        if (chat.type === 0) {
+            chatIconElem.src = "images/GC.svg";
+            chatIconElem.style.border = "3px solid #1f5831";
+        } else {
+            // this is so hacky :p
+            // - Tnix
+            loadPfp(chat.members.find(v => v !== localStorage.getItem("username")))
+            .then(pfpElem => {
+                if (pfpElem) {
+                    chatIconElem.src = pfpElem.src;
+                    chatIconElem.style.border = pfpElem.style.border.replace("3px", "3px");
+                    chatIconElem.style.background = pfpElem.style.border.replace("3px solid", "");
+                    if (pfpElem.classList.contains("svg-avatar")) {
+                        chatIconElem.classList.add("svg-avatar");
+                        chatIconElem.style.background = '#fff';
+                    }
+                }
+            });
+        }
+        r.appendChild(chatIconElem);
+
+        const chatNameElem = document.createElement("span");
+        chatNameElem.classList.add("gcname");
+        chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("username"))}`;
+        r.appendChild(chatNameElem);
+
+        const chatOps = document.createElement("div");
+        chatOps.classList.add("chat-ops");
+        chatOps.innerHTML = `
+        <div class="chat-op" onclick="favChat(event, '${escapeHTML(chat._id)}')" title="${lang().action.favorite}" aria-label="${lang().action.favorite}">
+            ${favoritedChats.includes(chat._id) ? `
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M3.05649 9.24618L0.635792 6.89056C0.363174 6.62527 0.264902 6.22838 0.382279 5.8667C0.499657 5.50502 0.812337 5.24125 1.1889 5.18626L5.27593 4.58943L7.10348 0.890366C7.27196 0.549372 7.61957 0.333496 8.00019 0.333496C8.38081 0.333496 8.72843 0.549372 8.8969 0.890366L9.72865 2.57387L3.05649 9.24618Z"/>
+            <path fill="currentColor" d="M3.66083 14.7073L13.3894 4.97859L14.8115 5.18626C15.188 5.24125 15.5007 5.50502 15.6181 5.8667C15.7355 6.22838 15.6372 6.62527 15.3646 6.89056L12.408 9.76762L13.1058 13.8322C13.1701 14.207 13.0159 14.5859 12.7079 14.8094C12.3999 15.0329 11.9917 15.0624 11.6547 14.8853L8.00019 12.9652L4.34564 14.8853C4.06073 15.035 3.72478 15.0371 3.44161 14.899C3.51788 14.8409 3.59116 14.777 3.66083 14.7073Z"/>
+            <path fill="currentColor" d="M2.95372 14.0002C2.93062 14.0233 2.90678 14.0452 2.88227 14.066C2.88227 14.066 2.88226 14.0659 2.88227 14.066C2.43262 14.446 1.75904 14.4238 1.3352 14C0.888265 13.5531 0.888265 12.8285 1.33521 12.3815L12.3815 1.3352C12.8284 0.888267 13.5531 0.888267 14 1.3352C14.4469 1.78213 14.4469 2.50675 14 2.95368L2.95372 14.0002Z"/>
+            </svg>
+            ` : `
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M8.8969 0.890366C8.72843 0.549372 8.38081 0.333496 8.00019 0.333496C7.61957 0.333496 7.27196 0.549372 7.10348 0.890366L5.27593 4.58943L1.1889 5.18626C0.812337 5.24125 0.499657 5.50502 0.382279 5.8667C0.264902 6.22838 0.363174 6.62527 0.635792 6.89056L3.59234 9.76762L2.89458 13.8322C2.83023 14.207 2.98448 14.5859 3.29246 14.8094C3.60044 15.0329 4.00873 15.0624 4.34564 14.8853L8.00019 12.9652L11.6547 14.8853C11.9917 15.0624 12.3999 15.0329 12.7079 14.8094C13.0159 14.5859 13.1701 14.207 13.1058 13.8322L12.408 9.76762L15.3646 6.89056C15.6372 6.62527 15.7355 6.22838 15.6181 5.8667C15.5007 5.50502 15.188 5.24125 14.8115 5.18626L10.7245 4.58943L8.8969 0.890366Z"/>
+            </svg>
+            `}
+        </div>
+        <div class="chat-op" onclick="closeChatModal(event, '${escapeHTML(chat._id)}')" title="${lang().action.close}" aria-label="${lang().action.close}">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"/>
+            </svg>            
+        </div>
+        `;
+
+        r.appendChild(chatOps);
+
+        gcdiv.appendChild(r);
+    });
+
+    groupsdiv.appendChild(gcdiv);
 }
 
 function loadstart() {
@@ -1137,7 +1193,17 @@ function loadstart() {
     <div class="explore">
         <h3>Online - ${lul}</h3>
         <div class="start-users-online">
-        
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
+            <button class="ubtn button skeleton" aria-label="Skeleton"><div class="ubtnsa"><div class="start-pfp-outer"><div class="skeleton-avatar-small"></div></div></div></button>
         </div>
         <div class="quick-btns">
         <div class="qc-bts-sc">
@@ -1156,11 +1222,12 @@ function loadstart() {
     fetch('https://api.meower.org/ulist?autoget')
     .then(response => response.json())
     .then(data => {
+        let pl = ''
         data.autoget.forEach(item => {
             const gr = item._id.trim();
             if (gr !== localStorage.getItem("username")) {
                 const profilecont = document.createElement('div');
-                profilecont.classList.add('mdl-sec');
+                profilecont.classList.add('start-pfp-outer');
                 if (item.avatar_color !== "!color" && data.avatar_color) {
                     profilecont.classList.add('custom-bg');
                 }
@@ -1177,10 +1244,10 @@ function loadstart() {
                         <img class="avatar-small svg-avatar" style="border: 3px solid #000"; src="images/avatars/icon_-4.svg" alt="Avatar" title="${item._id}"></img>
                     `;
                 }
-                const pl = `<button class="ubtn button" aria-label="${gr}"><div class="ubtnsa" onclick="openUsrModal('${gr}')">${profilecont.outerHTML}${gr}</div><div class="ubtnsb" onclick="opendm('${gr}')" id="username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg></div></button>`;
-                document.querySelector(".start-users-online").innerHTML += pl;
+                pl += `<button class="ubtn button" aria-label="${gr}"><div class="ubtnsa" onclick="openUsrModal('${gr}')">${profilecont.outerHTML}${gr}</div><div class="ubtnsb" onclick="opendm('${gr}')" id="username"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z" class=""></path></svg></div></button>`;
             }
         });
+        document.querySelector(".start-users-online").innerHTML = pl;
     });
 
 }
@@ -1272,6 +1339,7 @@ function loadchat(chatId) {
             }
             loadpost(post);
         });
+        document.getElementById("skeleton-msgs").style.display = "none";
     } else {
         const xhttpPosts = new XMLHttpRequest();
         xhttpPosts.open("GET", `https://api.meower.org/posts/${chatId}?autoget`);
@@ -1288,9 +1356,30 @@ function loadchat(chatId) {
                 }
                 loadpost(post);
             });
+            document.getElementById("skeleton-msgs").style.display = "none";
         };
         xhttpPosts.send();
     }
+
+    const attachButton = document.getElementById('attach')
+    attachButton.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.add('dragover');
+    });
+
+    attachButton.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.remove('dragover');
+    });
+
+    attachButton.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.remove('dragover');
+        dropFiles(e.dataTransfer.files);
+    });
 }
 
 function loadinbox() {
@@ -1311,6 +1400,22 @@ function loadinbox() {
             <div class='message-container'>
             </div>
             <div id='msgs' class='posts'></div>
+                <div id="skeleton-msgs" class="posts" style="display:block;">
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            </div>
         `;
 
         sidebars();
@@ -1330,6 +1435,8 @@ function loadinbox() {
             postsarray.forEach(postId => {
                 loadpost(postId);
             });
+            document.getElementById("skeleton-msgs").style.display = "none";
+            document.getElementById("msg").style.display = "block";
         };
         xhttpPosts.send();
     };
@@ -1618,6 +1725,8 @@ async function loadPlugins() {
             <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
             <div class="section plugin"><label>----<input type="checkbox" id="placeholder" class="settingstoggle" disabled><p class="pluginsub">--------------</p><p class="subsubheader">-----------</p></label></div>
             </div>
+            <hr>
+            <span>${lang().plugins_sub.desc} <a href='https://github.com/3r1s-s/meo-plugins' target="_blank" id='link'>${lang().plugins_sub.link}</a></span>
         </div>
     `;
     pageContainer.innerHTML = settingsContent;
@@ -1671,7 +1780,7 @@ function addPlugin(plugin, isEnabled) {
 
 async function fetchPlugins() {
     try {
-        const response = await fetch('https://meo-32r.pages.dev/plugins.json');
+        const response = await fetch('https://raw.githubusercontent.com/3r1s-s/meo-plugins/main/index.json');
         const pluginsData = await response.json();
         return pluginsData;
     } catch (error) {
@@ -1695,13 +1804,16 @@ async function loadSavedPlugins() {
 }
 
 function loadPluginScript(scriptUrl) {
-    const existingScript = document.querySelector(`script[src="${scriptUrl}"]`);
-    if (!existingScript) {
-        const script = document.createElement('script');
-        script.src = scriptUrl;
-        script.async = true;
-        document.head.appendChild(script);
-    }
+    fetch(scriptUrl, {
+        headers: {
+            'Accept': 'application.javascript'
+        }
+    })
+    .then(response => response.text())
+    .then(data =>{
+        eval(data);
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 function resetPlugins() {
@@ -2105,6 +2217,7 @@ function loadLanguages() {
             <button class="language button" id="es" onclick="changeLanguage('es')"><span class="language-l">${es.language}</span><span class="language-r">Spanish (Latin America)</span></button>
             <button class="language button" id="de" onclick="changeLanguage('de')"><span class="language-l">${de.language}</span><span class="language-r">German</span></button>
         </div>
+        <hr>
         <span>${lang().languages_sub.desc} <a href='https://github.com/3r1s-s/meo' target="_blank" id='link'>${lang().languages_sub.link}</a></span>
     </div>
     `;
@@ -2119,6 +2232,7 @@ function changeLanguage(lang) {
     setlang(lang)
     sidebars();
     loadstgs();
+    renderChats();
     loadLanguages();
 }
 
@@ -2333,6 +2447,70 @@ function createChat() {
     });
 }
 
+function favChat(e, chatId) {
+    e.stopPropagation();
+
+    // Filter faved chats
+    favoritedChats = favoritedChats.filter(_chatId => chatCache[_chatId]);
+
+    if (favoritedChats.includes(chatId)) {
+        favoritedChats = favoritedChats.filter(_chatId => _chatId !== chatId);
+    } else {
+        favoritedChats.push(chatId);
+    }
+    renderChats();
+    fetch("https://api.meower.org/me/config", {
+        method: "PATCH",
+        headers: {
+            token: localStorage.getItem("token"),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ favorited_chats: favoritedChats })
+    });
+}
+
+function closeChatModal(e, chatId) {
+    e.stopPropagation();
+
+    const chat = chatCache[chatId];
+    if (chat && chat.type === 1) {
+        closeChat(chat._id);
+        return;
+    }
+
+    document.documentElement.style.overflow = "hidden";
+    
+    const mdlbck = document.querySelector('.modal-back');
+    if (mdlbck) {
+        mdlbck.style.display = 'flex';
+        
+        const mdl = mdlbck.querySelector('.modal');
+        mdl.id = 'mdl-uptd';
+        if (mdl) {
+            const mdlt = mdl.querySelector('.modal-top');
+            if (mdlt) {
+                mdlt.innerHTML = `
+                <h3>${lang().action.leavegc}</h3>
+                `;
+            }
+            const mdbt = mdl.querySelector('.modal-bottom');
+            if (mdbt) {
+                mdbt.innerHTML = `
+                <button class="modal-back-btn" onclick="closeChat('${chatId}')">${lang().action.yes}</button>
+                `;
+            }
+        }
+    }
+}
+
+function closeChat(chatId) {
+    closemodal();
+    fetch(`https://api.meower.org/chats/${chatId}`, {
+        method: "DELETE",
+        headers: { token: localStorage.getItem("token") }
+    });
+}
+
 function openModal(postId) {
     document.documentElement.style.overflow = "hidden";
     const mdlbck = document.querySelector('.modal-back');
@@ -2394,7 +2572,7 @@ function openUsrModal(uId) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
-                <iframe class="profile" src="users.html?u=${uId}"></iframe>
+                <iframe class="profile" src="/profile/?u=${uId}"></iframe>
                 `;
                 
                 fetch(`https://api.meower.org/users/${uId}`)
@@ -2404,6 +2582,7 @@ function openUsrModal(uId) {
                         const clr1 = darkenColour(data.avatar_color, 3);
                         const clr2 = darkenColour(data.avatar_color, 5);
                         mdl.style.background = `linear-gradient(180deg, ${clr1} 0%, ${clr2} 100%`;
+                        mdl.style.setProperty('--accent', clr1);
                         mdl.classList.add('custom-bg');
                     }
                 })
@@ -3445,7 +3624,7 @@ function addAttachment() {
     input.onchange = function(e) {
         const files = Array.from(e.target.files);
         if (files.some(file => file.size > (25 << 20))) {
-            errorModal("File too large", "Please upload files smaller than 25MiB.");
+            errorModal("File too large", "Please upload files smaller than 25MiB."); // add a lang prop to this
             return;
         }
 
@@ -3511,6 +3690,33 @@ function setAttachmentContainer() {
             console.debug(filetype);
         });
     });
+}
+
+function dropFiles(files) {
+    const fileArray = Array.from(files);
+    if (fileArray.some(file => file.size > (25 << 20))) {
+        errorModal("File too large", "Please upload files smaller than 25MiB."); // add a lang prop to this
+        return;
+    }
+
+    for (const file of fileArray) {
+        const formData = new FormData();
+        formData.append('file', file);
+        pendingAttachments.push({
+            id: Math.random(),
+            file,
+            req: fetch('https://uploads.meower.org/attachments', {
+                method: 'POST',
+                headers: { Authorization: localStorage.getItem("token") },
+                body: formData
+            })
+            .then(response => {
+                return response.json();
+            })
+            .catch(error => errorModal("Error uploading attachment", error))
+        });
+    }
+    setAttachmentContainer();
 }
 
 function goAnywhere() {

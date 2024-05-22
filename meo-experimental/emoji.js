@@ -33,6 +33,7 @@ function addemoji(emoji) {
     if (event) {
         if (!event.shiftKey) {
             closepicker();
+            document.getElementById('msg').focus();
         }
     }
 }
