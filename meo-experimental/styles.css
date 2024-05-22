@@ -2323,6 +2323,29 @@ possible future styling
     .delete-attach:hover {
         color: var(--color);
     }
+
+    .chat-ops {
+        display: flex;
+    }
+
+    .gcbtn:hover .chat-ops {
+        display: flex;
+    }
+
+    .chat-op {
+        width: 16px;
+        height: 16px;
+        padding: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--hov-button-color);
+    }
+
+    .chat-op:hover {
+        cursor: default;
+        color: var(--hov-button-color);
+    }
 }
 
 .reduced-ani.modal, .reduced-ani.image-mdl > .embed-large {
