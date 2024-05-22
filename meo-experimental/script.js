@@ -2572,7 +2572,7 @@ function openUsrModal(uId) {
             const mdlt = mdl.querySelector('.modal-top');
             if (mdlt) {
                 mdlt.innerHTML = `
-                <iframe class="profile" src="/profile/?u=${uId}"></iframe>
+                <iframe class="profile" src="profile/?u=${uId}"></iframe>
                 `;
                 
                 fetch(`https://api.meower.org/users/${uId}`)
