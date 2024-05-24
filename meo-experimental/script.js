@@ -816,10 +816,6 @@ async function loadreply(postOrigin, replyid) {
                 top: elementPosition,
                 behavior: 'smooth'
             });
-            setTimeout(() => {
-                // Reset the background color
-                targetElement.style.backgroundColor = '';
-            }, 1000); // Adjust the timeout duration as needed
         });
         
         
