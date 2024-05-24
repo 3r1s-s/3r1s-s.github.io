@@ -2507,3 +2507,23 @@ button:focus-visible {
 input[type="button"]:focus-visible {
     outline: auto;
 }
+
+::-moz-placeholder {
+    color: var(--color);
+    opacity: 0.6;
+}
+
+:-ms-input-placeholder {
+    color: var(--color);
+    opacity: 0.6;
+}
+
+::placeholder {
+    color: var(--color);
+    opacity: 0.6;
+}
+
+::-webkit-input-placeholder  {
+    color: var(--color);
+    opacity: 0.6;
+}
