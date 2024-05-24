@@ -806,31 +806,30 @@ async function loadreply(postOrigin, replyid) {
         full.href = `${replyid}`;
         full.classList.add("reply-outer");
         
-        full.addEventListener('click', (e) => {
-            try {
-                e.preventDefault();
-                const targetElement = document.getElementById(`${replyid}`);
-                        if (!targetElement) {
-                            throw new Error('Target element not found');
-                        }
-                targetElement.style.backgroundColor = 'var(--hov-accent-color)';
-                const navbarOffset = document.querySelector('.message-container').offsetHeight;
-                        if (isNaN(navbarOffset)) {
-                            throw new Error('Invalid navbar offset');
-                        }
-                const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarOffset;
-                window.scrollTo({
-                    top: elementPosition,
-                    behavior: 'smooth'
-                });
-                setTimeout(() => {
-                    // Reset the background color
-                    targetElement.style.backgroundColor = '';
-                }, 1000); // Adjust the timeout duration as needed
-            } catch (error) {
-                alert(`Error: ${error.message}`);
-            }
+full.addEventListener('click', (e) => {
+    try {
+        e.preventDefault();
+        const targetElement = document.getElementById(`${replyid}`);
+        if (!targetElement) {
+            throw new Error('Target element not found');
+        }
+        targetElement.style.backgroundColor = 'var(--hov-accent-color)';
+        
+        // Use scrollIntoView for smooth scrolling
+        targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
         });
+
+        setTimeout(() => {
+            // Reset the background color
+            targetElement.style.backgroundColor = '';
+        }, 1000); // Adjust the timeout duration as needed
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+});
+
         
         full.appendChild(replycontainer);
         return full;
