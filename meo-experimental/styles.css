@@ -2186,6 +2186,7 @@ possible future styling
         scroll-snap-stop: always;
         overflow-y: scroll;
         height: 100vh;
+        position: relative;
     }
 
     .settings {
@@ -2475,6 +2476,11 @@ possible future styling
     .chat-op:hover {
         cursor: default;
         color: var(--hov-button-color);
+    }
+
+    .jump {
+        position: sticky;
+        bottom: var(--margin);
     }
 }
 

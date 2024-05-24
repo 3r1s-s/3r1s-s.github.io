@@ -806,31 +806,36 @@ async function loadreply(postOrigin, replyid) {
         full.href = `${replyid}`;
         full.classList.add("reply-outer");
         
-full.addEventListener('click', (e) => {
-    try {
-        e.preventDefault();
-        const targetElement = document.getElementById(`${replyid}`);
-        if (!targetElement) {
-            throw new Error('Target element not found');
-        }
-        targetElement.style.backgroundColor = 'var(--hov-accent-color)';
+        full.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const targetElement = document.getElementById(`${replyid}`);
+            const outer = document.getElementById("main");
+            targetElement.style.backgroundColor = 'var(--hov-accent-color)';
+            const navbarOffset = document.querySelector('.message-container').offsetHeight;
+            if (window.innerWidth < 480) {
+                const containerRect = outer.getBoundingClientRect();
+                const elementRect = targetElement.getBoundingClientRect();
+                const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - navbarOffset;
         
-        // Use scrollIntoView for smooth scrolling
-        targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center'
+                outer.scrollTo({
+                    top: elementPosition,
+                    behavior: 'smooth'
+                });
+            } else {
+                const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarOffset;
+                window.scrollTo({
+                    top: elementPosition,
+                    behavior: 'smooth'
+                });
+            }
+            setTimeout(() => {
+                targetElement.style.backgroundColor = '';
+            }, 1000);
         });
-
-        setTimeout(() => {
-            // Reset the background color
-            targetElement.style.backgroundColor = '';
-        }, 1000); // Adjust the timeout duration as needed
-    } catch (error) {
-        alert(`Error: ${error.message}`);
-    }
-});
-
         
+        
+
         full.appendChild(replycontainer);
         return full;
     } catch (error) {
@@ -4278,10 +4283,18 @@ function setAccessibilitySettings() {
 }
 
 function jumpToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+    if (window.innerWidth < 480) {
+        const outer = document.getElementById("main");
+        outer.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    } else {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
 }
 
 main();

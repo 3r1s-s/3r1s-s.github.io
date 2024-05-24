@@ -97,7 +97,9 @@ function loadinputs() {
         <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
         <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
     </div>
-    <div class="jump" onclick="jumpToTop()"><svg viewBox="0 0 448 512" height="19" width="19"><path fill="currentColor" d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"></path></svg></div>
+    <div class="jump" onclick="jumpToTop()">
+        <svg viewBox="0 0 448 512" height="19" width="19"><path fill="currentColor" d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"></path></svg>
+    </div>
     `;
     return inputs;
 }
