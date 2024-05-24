@@ -813,7 +813,7 @@ async function loadreply(postOrigin, replyid) {
             const outer = document.getElementById("main");
             targetElement.style.backgroundColor = 'var(--hov-accent-color)';
             const navbarOffset = document.querySelector('.message-container').offsetHeight;
-            if (window.innerWidth < 480) {
+            if (window.innerWidth < 720) {
                 const containerRect = outer.getBoundingClientRect();
                 const elementRect = targetElement.getBoundingClientRect();
                 const elementPosition = elementRect.top - containerRect.top + outer.scrollTop - navbarOffset;
@@ -3838,7 +3838,7 @@ function goAnywhere() {
             }
         }
     }
-    if (window.innerWidth >= 480) {
+    if (window.innerWidth >= 720) {
         document.getElementById("goanywhere").focus();
     }
 }
@@ -4283,7 +4283,7 @@ function setAccessibilitySettings() {
 }
 
 function jumpToTop() {
-    if (window.innerWidth < 480) {
+    if (window.innerWidth < 720) {
         const outer = document.getElementById("main");
         outer.scrollTo({
             top: 0,

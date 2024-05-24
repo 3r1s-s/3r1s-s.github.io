@@ -788,6 +788,7 @@ bridge {
 #groups {
   justify-content: left;
   flex-direction: column;
+  min-width: 0;
 }
 
 .navigation {
@@ -2076,7 +2077,7 @@ possible future styling
     color: var(--color);
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 720px) {
     html {
         scrollbar-gutter: none;
     }
