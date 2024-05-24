@@ -549,8 +549,8 @@ function loadpost(p) {
     pstinf.appendChild(pstdte);
     wrapperDiv.appendChild(pstinf);
 
-    const roarer = /@(\w+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
-    const bettermeower = /@(\w+)\[([a-zA-Z0-9]+)\]/g;
+    const roarer = /@([\w-]+)\s+"([^"]*)"\s+\(([^)]+)\)/g;
+    const bettermeower = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
 
     let match1 = roarer.exec(content);
     let match2 = bettermeower.exec(content);
@@ -744,8 +744,8 @@ function loadPfp(username, button) {
 }
 
 async function loadreply(postOrigin, replyid) {
-    const roarRegex = /^@[^ ]+ (.+?) \(([^)]+)\)/
-    const betterMeowerRegex = /@(\w+)\[([a-zA-Z0-9]+)\]/g;
+    const roarRegex = /^@[\w-]+ (.+?) \(([^)]+)\)/;
+    const betterMeowerRegex = /@([\w-]+)\[([a-zA-Z0-9]+)\]/g;
 
     try {
         let replydata = postCache[postOrigin].find(post => post._id === replyid);
@@ -764,7 +764,11 @@ async function loadreply(postOrigin, replyid) {
 
         const replycontainer = document.createElement("div");
         replycontainer.classList.add("reply");
+        replycontainer.id = `reply-${replyid}`;  // Add an ID to the reply container
+
         let content;
+        let user;
+
         if (replydata.p) {
             content = replydata.p;
 
@@ -780,17 +784,13 @@ async function loadreply(postOrigin, replyid) {
             content = '';
         }
 
-        if (replydata.u) {
-            user = replydata.u;
-        } else {
-            user = '';
-        }
-        
+        user = replydata.u || '';
+
         if (bridged) {
             const rcon = content;
             const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
             console.debug(match);
-            
+
             if (match) {
                 user = match[1];
                 content = match[2] || "";
@@ -799,12 +799,38 @@ async function loadreply(postOrigin, replyid) {
                 content = rcon;
             }
         }
+
         replycontainer.innerHTML = `<p style='font-weight:bold;margin: 10px 0 10px 0;'>${escapeHTML(user)}</p><p style='margin: 10px 0 10px 0;'>${escapeHTML(content)}</p>`;
         
-        return replycontainer;
+        const full = document.createElement("div");
+        full.href = `${replyid}`;
+        full.classList.add("reply-outer");
+        
+        full.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetElement = document.getElementById(`${replyid}`);
+            targetElement.style.backgroundColor = 'var(--hov-accent-color)';
+            const navbarOffset = document.querySelector('.message-container').offsetHeight;
+            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarOffset;
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+            setTimeout(() => {
+                // Reset the background color
+                targetElement.style.backgroundColor = '';
+            }, 1000); // Adjust the timeout duration as needed
+        });
+        
+        
+
+        full.appendChild(replycontainer);
+        return full;
     } catch (error) {
         console.error("Error fetching reply:", error);
-        return document.createElement("p");
+        const errorElement = document.createElement("p");
+        errorElement.textContent = "Error fetching reply";
+        return errorElement;
     }
 }
 
@@ -1020,6 +1046,17 @@ function loadhome() {
         attachButton.classList.remove('dragover');
         dropFiles(e.dataTransfer.files);
     });
+
+    const jumpButton = document.querySelector('.jump');
+    const navbarOffset = document.querySelector('.message-container').offsetHeight;
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > navbarOffset) {
+            jumpButton.classList.add('visible');
+        } else {
+            jumpButton.classList.remove('visible');
+        }
+    });
 }
 
 function sidebars() {
@@ -1151,7 +1188,12 @@ function renderChats() {
         chatNameElem.classList.add("gcname");
         chatNameElem.innerText = chat.nickname || `@${chat.members.find(v => v !== localStorage.getItem("username"))}`;
         r.appendChild(chatNameElem);
-
+        let escnickname
+        if (chat.nickname) {
+            escnickname = escapeHTML(chat.nickname);
+        }
+        console.debug(escnickname);
+        
         const chatOps = document.createElement("div");
         chatOps.classList.add("chat-ops");
         chatOps.innerHTML = `
@@ -1168,7 +1210,7 @@ function renderChats() {
             </svg>
             `}
         </div>
-        <div class="chat-op" onclick="closeChatModal(event, '${escapeHTML(chat._id)}')" title="${lang().action.close}" aria-label="${lang().action.close}">
+        <div class="chat-op" onclick="closeChatModal(event, '${escapeHTML(chat._id)}', '${escnickname || chat.members.find(v => v !== localStorage.getItem("username"))}')" title="${lang().action.close}" aria-label="${lang().action.close}">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M2.3352 13.6648C2.78215 14.1117 3.50678 14.1117 3.95372 13.6648L8 9.61851L12.0463 13.6648C12.4932 14.1117 13.2179 14.1117 13.6648 13.6648C14.1117 13.2179 14.1117 12.4932 13.6648 12.0463L9.61851 8L13.6648 3.95372C14.1117 3.50678 14.1117 2.78214 13.6648 2.3352C13.2179 1.88826 12.4932 1.88827 12.0463 2.33521L8 6.38149L3.95372 2.33521C3.50678 1.88827 2.78214 1.88827 2.3352 2.33521C1.88826 2.78215 1.88827 3.50678 2.33521 3.95372L6.38149 8L2.33521 12.0463C1.88827 12.4932 1.88827 13.2179 2.3352 13.6648Z"/>
             </svg>            
@@ -1379,6 +1421,17 @@ function loadchat(chatId) {
         e.stopPropagation();
         attachButton.classList.remove('dragover');
         dropFiles(e.dataTransfer.files);
+    });
+
+    const jumpButton = document.querySelector('.jump');
+    const navbarOffset = document.querySelector('.message-container').offsetHeight;
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > navbarOffset) {
+            jumpButton.classList.add('visible');
+        } else {
+            jumpButton.classList.remove('visible');
+        }
     });
 }
 
@@ -2469,7 +2522,7 @@ function favChat(e, chatId) {
     });
 }
 
-function closeChatModal(e, chatId) {
+function closeChatModal(e, chatId, chatName) {
     e.stopPropagation();
 
     const chat = chatCache[chatId];
@@ -2491,6 +2544,8 @@ function closeChatModal(e, chatId) {
             if (mdlt) {
                 mdlt.innerHTML = `
                 <h3>${lang().action.leavegc}</h3>
+                <hr class="mdl-hr">
+                <span class="subheader">${lang().leave_sub.desc} ${chatName}${lang().leave_sub.end}</span>
                 `;
             }
             const mdbt = mdl.querySelector('.modal-bottom');
@@ -3662,29 +3717,49 @@ function setAttachmentContainer() {
     pendingAttachments.forEach((item, index) => {
         item.req.then(data => {
             const filetype = data.filename.split('.').pop().toLowerCase();
+
             if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'].includes(filetype)) {
                 const element = document.createElement('div');
                 element.classList.add("attach-pre-outer");
+                element.title = data.filename;
                 element.id = data.id;
                 element.innerHTML = `
+                <div class="attachment-wrapper">
+                <div class="attachment-media">
                 <img src="https://uploads.meower.org/attachments/${data.id}/${data.filename}" onclick="openImage('https://uploads.meower.org/attachments/${data.id}/${data.filename}')" class="image-pre">
+                </div>
+                <div class="attachment-name">
+                <span>${data.filename}</span>
+                </div>
                 <div class="delete-attach" onclick="deleteAttachment('${item.id.toString()}')">
                 <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+                </div>
                 </div>
                 `;
                 container.appendChild(element);
             } else {
                 const element = document.createElement('div');
                 element.classList.add("attach-pre-outer");
+                element.title = data.filename;
                 element.id = data.id;
                 element.innerHTML = `
-                <h1>${filetype}</h1>
+                <div class="attachment-wrapper">
+                <div class="attachment-other">
+                <div class="other-pre">
+                <span class="other-in">.${filetype.toLowerCase()}</span>
+                </div>
+                </div>
+                <div class="attachment-name">
+                <span>${data.filename}</span>
+                </div>
                 <div class="delete-attach" onclick="deleteAttachment('${item.id.toString()}')">
-                <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>
+                <svg height="24" viewBox="0 0 24 24" style="width: 100%;"><path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path><path fill="currentColor" d="M5 6.99902V18.999C5 20.101 5.897 20.999 7 20.999H17C18.103 20.999 19 20.101 19 18.999V6.99902H5ZM11 17H9V11H11V17ZM15 17H13V11H15V17Z"></path></svg>                </div>
                 </div>
                 `;
                 container.appendChild(element);
             }
+// remember to fix delete button alignment
+
             console.debug("item added" + index);
             console.debug(data);
             console.debug(filetype);
@@ -4183,16 +4258,23 @@ function clearLocalstorage() {
 }
 
 function setAccessibilitySettings() {
-// reduce motion
-const b = document.querySelector('.modal');
-const c = document.querySelector('.image-mdl');
-if (settingsstuff().reducemotion) {
-    b.classList.add("reduced-ani");
-    c.classList.add("reduced-ani");
-} else {
-    b.classList.remove("reduced-ani");
-    c.classList.remove("reduced-ani");
+    // reduce motion
+    const b = document.querySelector('.modal');
+    const c = document.querySelector('.image-mdl');
+    if (settingsstuff().reducemotion) {
+        b.classList.add("reduced-ani");
+        c.classList.add("reduced-ani");
+    } else {
+        b.classList.remove("reduced-ani");
+        c.classList.remove("reduced-ani");
+    }
 }
+
+function jumpToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
 main();

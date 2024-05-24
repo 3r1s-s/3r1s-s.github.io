@@ -38,7 +38,7 @@ function escapeHTML(content) {
 
 function erimd(content) {
     const text = content
-        .replace(/@(\w+)/g, '<span id="username" class="attachment" onclick="openUsrModal(\'$1\')">@$1</span>')
+        .replace(/@([\w-]+)/g, '<span id="username" class="attachment" onclick="openUsrModal(\'$1\')">@$1</span>')
         .replace(/&lt;:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.webp?size=96&quality=lossless" alt="$1" title="$1" class="emoji">')
         .replace(/&lt;a:(\w+):(\d+)&gt;/g, '<img src="https://cdn.discordapp.com/emojis/$2.gif?size=96&quality=lossless" alt="$1" title="$1" class="emoji">');
     return text;
@@ -97,6 +97,7 @@ function loadinputs() {
         <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
         <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
     </div>
+    <div class="jump" onclick="jumpToTop()"><svg viewBox="0 0 448 512" height="19" width="19"><path fill="currentColor" d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"></path></svg></div>
     `;
     return inputs;
 }
@@ -113,7 +114,7 @@ function buttonbadges(content) {
         
         if ((['png', 'jpg', 'jpeg', 'webp', 'gif', 'mp4', 'webm', 'mov', 'm4v', 'svg'].includes(fileExtension)) || fileDomain) {
             link.classList.add('attachment');
-            link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
+            link.innerHTML = '<svg class="icon_ecf39b icon__13ad2" xmlns="http://www.w3.org/2000/svg" width="0.8em" height="0.8em" viewBox="0 0 24 24"><path fill="currentColor" d="M10.57 4.01a6.97 6.97 0 0 1 9.86 0l.54.55a6.99 6.99 0 0 1 0 9.88l-7.26 7.27a1 1 0 0 1-1.42-1.42l7.27-7.26a4.99 4.99 0 0 0 0-7.06L19 5.43a4.97 4.97 0 0 0-7.02 0l-8.02 8.02a3.24 3.24 0 1 0 4.58 4.58l6.24-6.24a1.12 1.12 0 0 0-1.58-1.58l-3.5 3.5a1 1 0 0 1-1.42-1.42l3.5-3.5a3.12 3.12 0 1 1 4.42 4.42l-6.24 6.24a5.24 5.24 0 0 1-7.42-7.42l8.02-8.02Z" class=""></path></svg><span> attachments</span>';
         } else if (url === "https://meo-32r.pages.dev/" || url === "https://meo-32r.pages.dev") {
             link.classList.add('attachment');
             link.innerHTML = '<span class="ext-link-wrapper"><span class="link-icon-wrapper"><img width="14px" class="ext-icon" src="images/links/meo_1x.png"></span>meo</span>';
@@ -121,9 +122,6 @@ function buttonbadges(content) {
             // find a better method to do this
             const socregex = {
                 'twitter': /twitter\.com\/@(\w+)/,
-                'discord_user': /discord\.com\/users\/(\w+)/,
-                'discord_channel': /discord\.com\/channels\/(\w+)/,
-                'discord_server': /discord\.gg\/(\w+)/,
                 'youtube': /youtube\.com\/@(\w+)/,
                 'instagram': /instagram\.com\/(\w+)/,
                 'facebook': /facebook\.com\/(\w+)/,
@@ -134,9 +132,6 @@ function buttonbadges(content) {
             
             const socialmedicns = {
                 'twitter': 'twitter_1x.png',
-                'discord_user': 'discord_1x.png',
-                'discord_channel': 'discord_1x.png',
-                'discord_server': 'discord_1x.png',
                 'youtube': 'youtube_1x.png',
                 'instagram': 'instagram_1x.png',
                 'facebook': 'facebook_1x.png',
@@ -220,14 +215,16 @@ function attach(attachment) {
             element.appendChild(mediaElement);
             embeddedElement = element;
         } else {
-            const element = document.createElement("a")
-            element.href = link 
-            element.setAttribute('target', '_blank');
+            const element = document.createElement("div");
+            element.classList.add("download");
             if (settingsstuff().underlinelinks) {
                 element.classList.add("underline");
             }
+            console.debug(attachment);
             element.innerHTML = `
-            <span>${attachment.filename}</span>`;
+            <a href="${link}" target="_blank">${attachment.filename}</a>
+            <span class="subsubheader">${formatSize(attachment.size)}</span>
+            `;
             embeddedElement = element;
         }
         return embeddedElement;
@@ -292,13 +289,20 @@ function embed(links) {
                 embeddedElement = element;
             }
             if (settingsstuff().embeds) {
-                if (link.includes('www.youtube.com')) {      
+                if (link.includes('www.youtube.com') || link.includes('m.youtube.com')) {      
                 const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(?:[^\/\n\s]+\/(?:shorts\/)?|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                const youtubeMobRegex = /^(https?:\/\/)?(m\.)?(youtube\.com\/(?:[^\/\n\s]+\/(?:shorts\/)?|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
                 if (youtubeRegex.test(link) || youtubeMobRegex.test(link)) {
                     let match
-                    match = link.match(youtubeRegex);
+                    let videoId
+                    if (youtubeRegex.test(link)) {
+                        match = link.match(youtubeRegex);
+                        videoId = match[4];
+                    } else {
+                        match = link.match(youtubeMobRegex);
+                        videoId = match[4];
+                    }
                 
-                    const videoId = match[4];
                     embeddedElement = document.createElement("iframe");
                     embeddedElement.setAttribute("width", "100%");
                     embeddedElement.setAttribute("height", "315");
@@ -349,7 +353,6 @@ function embed(links) {
                 }
             }
         }
-
             if (embeddedElement) {
                 embeddedElements.push(embeddedElement);
             }
@@ -454,4 +457,12 @@ function oldMarkdown(content) {
     }
 
     return textContent;
+}
+
+function formatSize(bytes) {
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return '0 Byte';
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const size = (bytes / Math.pow(1024, i)).toFixed(2);
+    return `${size} ${sizes[i]}`;
 }

@@ -100,6 +100,10 @@ const en = {
         "newpass": "New Password",
         "agreement": "Terms of Use & Privacy Policy",
     },
+    "leave_sub": {
+        "desc": "Are you sure you want to leave",
+        "end": "?",
+    },
     "action": {
         "logout": "Log Out",
         "login": "Log In",
@@ -107,7 +111,7 @@ const en = {
         "search": "Search",
         "mod": "Moderate",
         "creategc": "Create Chat",
-        
+        "leavegc": "Leave Chat?",
         "dmme": "DM Me :)",
         "invite": "Invite People",
         "gohome": "Go Home",
@@ -293,6 +297,10 @@ const enuk = {
         "newpass": "New Password",
         "agreement": "Terms of Use & Privacy Policy",
     },
+    "leave_sub": {
+        "desc": "Are you sure you want to leave",
+        "end": "?",
+    },
     "action": {
         "logout": "Log Out",
         "login": "Log In",
@@ -300,7 +308,7 @@ const enuk = {
         "search": "Search",
         "mod": "Moderate",
         "creategc": "Create Chat",
-        "leavegc": "Leave Chat",
+        "leavegc": "Leave Chat?",
         "dmme": "DM Me :)",
         "invite": "Invite People",
         "gohome": "Go Home",
@@ -489,6 +497,10 @@ const es = {
         "newpass": "Contraseña Nueva",
         "agreement": "Términos de servicio y Política de privacidad"
     },
+    "leave_sub": { // update
+        "desc": "Are you sure you want to leave",
+        "end": "?",
+    },
     "action": {
         "logout": "Cerrar Sesión",
         "login": "Iniciar Sesión",
@@ -496,6 +508,7 @@ const es = {
         "search": "Búsqueda",
         "mod": "Moderar",
         "creategc": "Crear Chat (Grupo)",
+        "leavegc": "Leave Chat?", // update
         "dmme": "DM Me :)",
         "invite": "Invitar Personas",
         "gohome": "Ir a Home",
@@ -679,6 +692,10 @@ const de = {
         "newpass": "Neues Passwort",
         "agreement": "Geschäftsbedingungen und Datenschutzerklärung"
     },
+    "leave_sub": { // update
+        "desc": "Are you sure you want to leave",
+        "end": "?",
+    },
     "action": {
         "logout": "Abmelden",
         "login": "Anmelden",
@@ -686,6 +703,7 @@ const de = {
         "search": "Suchen",
         "mod": "Moderieren",
         "creategc": "Chat erstellen",
+        "leavegc": "Leave Chat?", // update
         "dmme": "Schicke mir eine Nachricht :)",
         "invite": "Menschen einladen",
         "gohome": "Zu Home gehen",
