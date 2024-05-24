@@ -807,14 +807,26 @@ async function loadreply(postOrigin, replyid) {
         full.classList.add("reply-outer");
         
         full.addEventListener('click', (e) => {
-          //  e.preventDefault();
-            const targetElement = document.getElementById(`${replyid}`);
-            const navbarOffset = document.querySelector('.message-container').offsetHeight;
-            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarOffset;
-            window.scrollTo({
-                top: elementPosition,
-                behavior: 'smooth'
-            });
+            try {
+                const replyid = 'yourReplyIdHere'; // Make sure to define or get your replyid
+                const targetElement = document.getElementById(`${replyid}`);
+                if (!targetElement) {
+                    throw new Error('Target element not found');
+                }
+        
+                const navbarOffset = document.querySelector('.message-container').offsetHeight;
+                if (isNaN(navbarOffset)) {
+                    throw new Error('Invalid navbar offset');
+                }
+        
+                const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarOffset;
+                window.scrollTo({
+                    top: elementPosition,
+                    behavior: 'smooth'
+                });
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
         });
         
         full.appendChild(replycontainer);
