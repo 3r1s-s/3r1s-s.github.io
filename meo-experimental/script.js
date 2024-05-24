@@ -807,9 +807,8 @@ async function loadreply(postOrigin, replyid) {
         full.classList.add("reply-outer");
         
         full.addEventListener('click', (e) => {
-            e.preventDefault();
+          //  e.preventDefault();
             const targetElement = document.getElementById(`${replyid}`);
-            targetElement.style.backgroundColor = 'var(--hov-accent-color)';
             const navbarOffset = document.querySelector('.message-container').offsetHeight;
             const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarOffset;
             window.scrollTo({
@@ -818,8 +817,6 @@ async function loadreply(postOrigin, replyid) {
             });
         });
         
-        
-
         full.appendChild(replycontainer);
         return full;
     } catch (error) {
