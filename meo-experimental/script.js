@@ -818,7 +818,7 @@ full.addEventListener('click', (e) => {
         // Use scrollIntoView for smooth scrolling
         targetElement.scrollIntoView({
             behavior: 'smooth',
-            block: 'start'
+            block: 'center'
         });
 
         setTimeout(() => {
