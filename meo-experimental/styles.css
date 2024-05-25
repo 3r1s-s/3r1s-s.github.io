@@ -556,8 +556,9 @@ bridge {
 }
 
 .attachment-name {
-    margin: 4px;
+    padding: 4px;
     font-size: 12px;
+    margin-top: auto;
 }
 
 .edit-info {
