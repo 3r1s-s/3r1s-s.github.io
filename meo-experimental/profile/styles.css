@@ -93,10 +93,6 @@ p {
     border: 2px dashed #ffffff20;
 }
 
-.custom-bg blockquote {
-    border-color: var(--accent);
-}
-
 .custom-bg a {
     color: var(--accent);
 }
