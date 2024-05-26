@@ -273,11 +273,6 @@ bridge {
     margin-right: 5px;
 }
 
-#ulmnl:hover {
-    text-decoration: line-through;
-    cursor: pointer;
-}
-
 #page {
     display: flex;
     justify-content: center;
@@ -487,6 +482,10 @@ bridge {
     color: var(--color);
 }
 
+.delete-attach:active > svg {
+    padding-top: 2px;
+}
+
 .image-pre {
     border-radius: var(--border-radius);
     max-width: 100%;
@@ -559,6 +558,14 @@ bridge {
     padding: 4px;
     font-size: 12px;
     margin-top: auto;
+}
+
+.attachment-name > span {
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    width: 100%;
+    display: inline-block;
 }
 
 .edit-info {
@@ -1482,6 +1489,7 @@ possible future styling
     overflow: auto;
     resize: horizontal;
     animation: slidedown cubic-bezier(.2,-.25,0,1) 0.2s forwards;
+    z-index: 1;
 }
 
 .emojisec {
@@ -1710,6 +1718,10 @@ possible future styling
 .chat-op:hover {
     cursor: pointer;
     color: var(--hov-button-color);
+}
+
+.chat-op:active {
+    padding-top: 4px;
 }
 
 .chat-home-button {

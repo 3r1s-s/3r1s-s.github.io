@@ -474,8 +474,6 @@ function loadpost(p) {
         }
     }
     
-    
-    
     const postContainer = document.createElement("div");
     postContainer.classList.add("post");
     postContainer.setAttribute("tabindex", "0");
@@ -813,6 +811,13 @@ async function loadreply(postOrigin, replyid) {
             const outer = document.getElementById("main");
             targetElement.style.backgroundColor = 'var(--hov-accent-color)';
             const navbarOffset = document.querySelector('.message-container').offsetHeight;
+            let scroll
+            if (settingsstuff().reducemotion) {
+                scroll = "auto";
+            } else {
+                scroll = "smooth";
+            }
+
             if (window.innerWidth < 720) {
                 const containerRect = outer.getBoundingClientRect();
                 const elementRect = targetElement.getBoundingClientRect();
@@ -820,13 +825,13 @@ async function loadreply(postOrigin, replyid) {
         
                 outer.scrollTo({
                     top: elementPosition,
-                    behavior: 'smooth'
+                    behavior: scroll
                 });
             } else {
                 const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - navbarOffset;
                 window.scrollTo({
                     top: elementPosition,
-                    behavior: 'smooth'
+                    behavior: scroll
                 });
             }
             setTimeout(() => {
@@ -1002,6 +1007,7 @@ async function sendpost() {
 function loadhome() {
     page = "home";
     pre = "home";
+    setTop();
     let pageContainer
     pageContainer = document.getElementById("main");
     pageContainer.innerHTML = `
@@ -1174,10 +1180,20 @@ function renderChats() {
 
         const chatIconElem = document.createElement("img");
         chatIconElem.classList.add("avatar-small");
-        chatIconElem.setAttribute("alt", "Avatar");;
+        chatIconElem.setAttribute("alt", "Avatar");
         if (chat.type === 0) {
-            chatIconElem.src = "images/GC.svg";
-            chatIconElem.style.border = "3px solid #1f5831";
+            if (chat.icon) {
+                chatIconElem.src = 'https://uploads.meower.org/icons/' + chat.icon;
+            } else {
+                chatIconElem.src = "images/GC.svg";
+            }
+            if (!chat.icon) {
+                chatIconElem.style.border = "3px solid #" + '1f5831';
+            } else if (chat.icon_color) {
+                chatIconElem.style.border = "3px solid #" + chat.icon_color;
+            } else {
+                chatIconElem.style.border = "3px solid #" + '000';
+            }
         } else {
             // this is so hacky :p
             // - Tnix
@@ -1332,6 +1348,7 @@ function opendm(username) {
 function loadchat(chatId) {
     page = chatId;
     pre = chatId;
+    setTop();
 
     if (!chatCache[chatId]) {
         fetch(`https://api.meower.org/chats/${chatId}`, {
@@ -1377,11 +1394,6 @@ function loadchat(chatId) {
                 ulinf.innerHTML += `<div class='ulmember'><span id='ulmnl'>${user}</span>, </div>`;
             }
         });
-        ulinf.innerHTML += `
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7.00027 0C6.38172 0 5.88027 0.501441 5.88027 1.12V5.88013H1.12C0.501441 5.88013 0 6.38158 0 7.00013C0 7.61869 0.501441 8.12013 1.12 8.12013H5.88027V12.88C5.88027 13.4986 6.38171 14 7.00027 14C7.61883 14 8.12027 13.4986 8.12027 12.88V8.12013H12.88C13.4986 8.12014 14 7.61869 14 7.00013C14 6.38157 13.4986 5.88013 12.88 5.88013H8.12027V1.12C8.12027 0.501441 7.61883 0 7.00027 0Z" fill="currentColor"/>
-        </svg>            
-        `;
     } else {
         mainContainer.innerHTML = `<div class='info'><h1 id='username' class='header-top' onclick="openUsrModal('${data.members.find(v => v !== localStorage.getItem("username"))}')">${data.members.find(v => v !== localStorage.getItem("username"))}<i class="subtitle">${chatId}</i></h1><p id='info'></p></div>` + loadinputs();
     }
@@ -1450,60 +1462,54 @@ function loadchat(chatId) {
 function loadinbox() {
     page = "inbox"
     pre = "inbox"
+    setTop();
+
+    const mainContainer = document.getElementById("main");
+    mainContainer.innerHTML = `
+        <div class='info'>
+            <h1>${lang().page_inbox}</h1>
+            <p id='info'>${lang().inbox_sub.desc}</p>
+        </div>
+        <div class='message-container'>
+        </div>
+        <div id='msgs' class='posts'></div>
+            <div id="skeleton-msgs" class="posts" style="display:block;">
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+            <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
+        </div>
+    `;
+
+    sidebars();
+
+    const sidedivs = document.querySelectorAll(".side");
+    sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
+
     const inboxUrl = 'https://api.meower.org/inbox?autoget=1';
 
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", inboxUrl);
     xhttp.setRequestHeader("token", localStorage.getItem('token'));
     xhttp.onload = () => {
-        const mainContainer = document.getElementById("main");
-        mainContainer.innerHTML = `
-            <div class='info'>
-                <h1>${lang().page_inbox}</h1>
-                <p id='info'>${lang().inbox_sub.desc}</p>
-            </div>
-            <div class='message-container'>
-            </div>
-            <div id='msgs' class='posts'></div>
-                <div id="skeleton-msgs" class="posts" style="display:block;">
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-                <div class="skeleton-post"><div class="pfp"><div class="skeleton-avatar"></div></div><div class="wrapper"><span class="skeleton-header"><div class="skeleton-username"></div><div class="skeleton-date"></div></span><div class="skeleton-content-1"></div><div class="skeleton-content-2"></div></div></div>
-            </div>
-        `;
+        const postsData = JSON.parse(xhttp.response);
+        const postsarray = postsData.autoget || [];
 
-        sidebars();
+        postsarray.reverse();
 
-        const sidedivs = document.querySelectorAll(".side");
-        sidedivs.forEach(sidediv => sidediv.classList.remove("hidden"));
-
-        const xhttpPosts = new XMLHttpRequest();
-        xhttpPosts.open("GET", inboxUrl);
-        xhttpPosts.setRequestHeader("token", localStorage.getItem('token'));
-        xhttpPosts.onload = () => {
-            const postsData = JSON.parse(xhttpPosts.response);
-            const postsarray = postsData.autoget || [];
-
-            postsarray.reverse();
-
-            postsarray.forEach(postId => {
-                loadpost(postId);
-            });
-            document.getElementById("skeleton-msgs").style.display = "none";
-            document.getElementById("msg").style.display = "block";
-        };
-        xhttpPosts.send();
+        postsarray.forEach(postId => {
+            loadpost(postId);
+        });
+        document.getElementById("skeleton-msgs").style.display = "none";
+        document.getElementById("msg").style.display = "block";
     };
     xhttp.send();
 }
@@ -1546,6 +1552,7 @@ function loadstgs() {
 }
 
 function loadGeneral() {
+    setTop();
     const pageContainer = document.getElementById("main");
     const settingsContent = `
         <div class="settings">
@@ -1773,6 +1780,7 @@ function loadGeneral() {
 }
 
 async function loadPlugins() {
+    setTop();
     let pageContainer = document.getElementById("main");
     let settingsContent = `
         <div class="settings">
@@ -1887,6 +1895,7 @@ function resetPlugins() {
 }
 
 function loadAppearance() {
+    setTop();
     let pageContainer = document.getElementById("main");
     let settingsContent = `
     <div class="settings">
@@ -2270,6 +2279,7 @@ function changeTheme(theme, button) {
 }
 
 function loadLanguages() {
+    setTop();
     const pageContainer = document.getElementById("main");
     const settingsContent = `
     <div class="settings">
@@ -3537,17 +3547,23 @@ function mdlreply(event) {
     const modalId = event.target.closest('.modal').id;
     const postContainer = document.getElementById(modalId);
 
+    let postcont = "";
     if (postContainer) {
         const username = postContainer.querySelector('#username').innerText;
-        const postContent = postContainer.querySelector('p').innerText
+        if (postContainer.querySelector('p')) {
+            postcont = postContainer.querySelector('p').innerText
             .replace(/\n/g, ' ')
             .replace(/@\w+/g, '')
             .split(' ')
             .slice(0, 6)
             .join(' ');
-
+        } else {
+            postcont = "";
+        }
+        const ogmsg = document.getElementById('msg').value
+        
         const postId = postContainer.id;
-        document.getElementById('msg').value = `@${username} "${postContent}..." (${postId})\n`;
+        document.getElementById('msg').value = `@${username} "${postcont}..." (${postId})\n${ogmsg}`;
         document.getElementById('msg').focus();
         autoresize();
     }
@@ -4283,16 +4299,36 @@ function setAccessibilitySettings() {
 }
 
 function jumpToTop() {
+    let scroll
+    if (settingsstuff().reducemotion) {
+        scroll = "auto";
+    } else {
+        scroll = "smooth";
+    }
+
     if (window.innerWidth < 720) {
         const outer = document.getElementById("main");
         outer.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: scroll
         });
     } else {
         window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: scroll
+        });
+    }
+}
+
+function setTop() {
+    if (window.innerWidth < 720) {
+        const outer = document.getElementById("main");
+        outer.scrollTo({
+            top: 0,
+        });
+    } else {
+        window.scrollTo({
+            top: 0,
         });
     }
 }
