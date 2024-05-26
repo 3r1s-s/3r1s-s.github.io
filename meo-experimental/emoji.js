@@ -357,6 +357,7 @@ function pickerhtm() {
             <button class="emojibutton" title="person getting haircut" onclick="addemoji('💇')">💇</button>
             <button class="emojibutton" title="man getting haircut" onclick="addemoji('💇‍♂️')">💇‍♂️</button>
             <button class="emojibutton" title="woman getting haircut" onclick="addemoji('💇‍♀️')">💇‍♀️</button>
+            <button class="emojibutton" title="deaf person" onclick="addemoji('🧏')">🧏</button>
             <button class="emojibutton" title="person walking" onclick="addemoji('🚶')">🚶</button>
             <button class="emojibutton" title="man walking" onclick="addemoji('🚶‍♂️')">🚶‍♂️</button>
             <button class="emojibutton" title="woman walking" onclick="addemoji('🚶‍♀️')">🚶‍♀️</button>
@@ -1122,6 +1123,7 @@ function pickerhtm() {
             <button class="emojibutton" title="anger symbol" onclick="addemoji('💢')">💢</button>
             <button class="emojibutton" title="bomb" onclick="addemoji('💣')">💣</button>
             <button class="emojibutton" title="collision" onclick="addemoji('💥')">💥</button>
+            <button class="emojibutton" title="grave, tomb" onclick="addemoji('🪦')">🪦</button>
             <button class="emojibutton" title="hole" onclick="addemoji('🕳️')">🕳️</button>
         </div>
         <div class="emojisec" id="symbols">
@@ -1670,6 +1672,7 @@ function pickerhtm() {
             <button class="emojibutton" title="me" onclick="addemoji('<:me:1221628997025267752>')"><img src="https://cdn.discordapp.com/emojis/1221628997025267752.webp?size=96&amp;quality=lossless" alt="me" height="32px"></button>
             <button class="emojibutton" title="oswal" onclick="addemoji('<:oswal:1226912603931148338>')"><img src="https://cdn.discordapp.com/emojis/1226912603931148338.webp?size=96&quality=lossless" alt="oswal" height="32px"></button>
             <button class="emojibutton" title="cta" onclick="addemoji('<:cta:1226913189590073494>')"><img src="https://cdn.discordapp.com/emojis/1226913189590073494.webp?size=96&quality=lossless" alt="cta" height="32px"></button>
+            <button class="emojibutton" title="freya" onclick="addemoji('<:freya:1244418744202170389>')"><img src="https://cdn.discordapp.com/emojis/1244418744202170389.webp?size=96&quality=lossless" alt="freya" height="32px"></button>
             <button class="emojibutton" title="atticus" onclick="addemoji('<:atticu:1221630557369405440>')"><img src="https://cdn.discordapp.com/emojis/1221630557369405440.webp?size=96&amp;quality=lossless" alt="atticu" height="32px"></button>
             <button class="emojibutton" title="uggh" onclick="addemoji('<:uggh:1227845267496243242>')"><img src="https://cdn.discordapp.com/emojis/1227845267496243242.webp?size=96&quality=lossless" alt="uggh" height="32px"></button>
             <button class="emojibutton" title=":3" onclick="addemoji('<:33:1226320165302571087>')"><img src="https://cdn.discordapp.com/emojis/1226320165302571087.webp?size=44&quality=lossless" alt=":3" height="32px"></button>
