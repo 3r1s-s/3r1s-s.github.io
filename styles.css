@@ -65,6 +65,14 @@ a {
     background-size: 100% 1px;
 }
 
+.secret {
+    text-decoration: none;
+}
+
+.secret:hover {
+    text-decoration: underline;
+}
+
 /*Fonts*/
 
 @font-face {
