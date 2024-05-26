@@ -170,6 +170,10 @@ function main() {
                 } else if (postCache[postOrigin].length >= 24) {
                     postCache[postOrigin].shift();
                 }
+            } else {
+                if (postOrigin = 'livechat') {
+                    loadpost(sentdata.val);
+                }
             }
         } else if (end) {
             return 0;
@@ -1155,11 +1159,19 @@ function renderChats() {
     <button class="search-input button" id="search" aria-label="search" onclick="goAnywhere();"><span class="srchtx">${lang().action.search}</span></button
     
     `;
-    gcdiv.innerHTML += `<button class="navigation-button button gcbtn" onclick="loadhome()">
+    gcdiv.innerHTML += `
+    <button class="navigation-button button gcbtn" onclick="loadhome()">
     <div class="chat-home-button">
-    <svg width="36" height="26" class="homebuttonsvg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8334 21.6667V15.1667H15.1667V21.6667H20.5834V13H23.8334L13.0001 3.25L2.16675 13H5.41674V21.6667H10.8334Z" fill="currentColor"/></svg>
+        <svg width="36" height="26" class="homebuttonsvg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8334 21.6667V15.1667H15.1667V21.6667H20.5834V13H23.8334L13.0001 3.25L2.16675 13H5.41674V21.6667H10.8334Z" fill="currentColor"/></svg>
     </div>
-    <span class="gcname">${lang().page_home}</span></button>
+    <span class="gcname">${lang().page_home}</span>
+    </button>
+    <button class="navigation-button button gcbtn" onclick="loadlive()">
+    <div class="chat-home-button">
+        <svg width="36" height="26" viewBox="0 0 36 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.4 8C8.97012 8 7 9.94349 7 12.3405C7 14.7376 8.97012 16.6811 11.4 16.6811H24.6L27.7482 19.7867C28.2101 20.2424 29 19.9195 29 19.2752V12.7023C29 10.1053 26.8659 8 24.2333 8H11.4Z" fill="currentColor"/></svg>
+    </div>    
+    <span class="gcname">${lang().title_live}</span>
+    </button>
     `;
 
     let favedChats = Object.values(chatCache).filter(chat => favoritedChats.includes(chat._id)).sort((a, b) => {
@@ -1349,7 +1361,6 @@ function loadchat(chatId) {
     page = chatId;
     pre = chatId;
     setTop();
-
     if (!chatCache[chatId]) {
         fetch(`https://api.meower.org/chats/${chatId}`, {
             headers: {token: localStorage.getItem("token")}
@@ -1426,6 +1437,54 @@ function loadchat(chatId) {
         };
         xhttpPosts.send();
     }
+
+    const attachButton = document.getElementById('attach')
+    attachButton.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.add('dragover');
+    });
+
+    attachButton.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.remove('dragover');
+    });
+
+    attachButton.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        attachButton.classList.remove('dragover');
+        dropFiles(e.dataTransfer.files);
+    });
+
+    const jumpButton = document.querySelector('.jump');
+    const navbarOffset = document.querySelector('.message-container').offsetHeight;
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > navbarOffset) {
+            jumpButton.classList.add('visible');
+        } else {
+            jumpButton.classList.remove('visible');
+        }
+    });
+}
+
+function loadlive() {
+    page = 'livechat';
+    pre = 'livechat';
+    setTop();
+    const mainContainer = document.getElementById("main");
+    mainContainer.innerHTML = `
+        <div class='info'>
+            <h1>${lang().title_live}</h1>
+            <p id='info'>${lang().live_sub.desc}</p>
+        </div>
+        ${loadinputs()}
+    `;
+    
+    document.getElementById("skeleton-msgs").style.display = "none";
+    sidebars();
 
     const attachButton = document.getElementById('attach')
     attachButton.addEventListener('dragover', function(e) {

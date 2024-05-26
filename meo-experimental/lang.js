@@ -27,6 +27,7 @@ const en = {
         "title": "This post has been bridged from another platform."
     },
     "title_chats": "Chats",
+    "title_live": "LiveChat",
     "settings_general": "General",
     "settings_appearance": "Appearance",
     "settings_plugins": "Plugins",
@@ -92,6 +93,9 @@ const en = {
     },
     "inbox_sub": {
         "desc": "Notifications are displayed here.",
+    },
+    "live_sub": {
+        "desc": "Messages won't be saved here."
     },
     "login_sub": {
         "title": "Login",
@@ -224,6 +228,7 @@ const enuk = {
         "title": "This post has been bridged from another platform.",
     },
     "title_chats": "Chats",
+    "title_live": "LiveChat",
     "settings_general": "General",
     "settings_appearance": "Appearance",
     "settings_plugins": "Plugins",
@@ -289,6 +294,9 @@ const enuk = {
     },
     "inbox_sub": {
         "desc": "Notifications are displayed here.",
+    },
+    "live_sub": {
+        "desc": "Messages won't be saved here."
     },
     "login_sub": {
         "title": "Login",
@@ -424,6 +432,7 @@ const es = {
         "title": "Este mensaje ha sido puenteado desde otra plataforma."
     },
     "title_chats": "Chats",
+    "title_live": "LiveChat", // update
     "settings_general": "General",
     "settings_appearance": "Apariencia",
     "settings_plugins": "Plugins (expansiones)",
@@ -489,6 +498,9 @@ const es = {
     },
     "inbox_sub": {
         "desc": "Las notificaciones aparecen aquí.",
+    },
+    "live_sub": {
+        "desc": "Messages won't be saved here." // update
     },
     "login_sub": {
         "title": "Iniciar sesión",
@@ -619,6 +631,7 @@ const de = {
         "title": "Dieser Post wurde auf einer externen Platform geschickt."
     },
     "title_chats": "Chats",
+    "title_live": "LiveChat", // update
     "settings_general": "Allgemein",
     "settings_appearance": "Aussehen",
     "settings_plugins": "Plugins",
@@ -684,6 +697,9 @@ const de = {
     },
     "inbox_sub": {
         "desc": "Benachrichtigungen werden hier angezeigt.",
+    },
+    "live_sub": {
+        "desc": "Messages won't be saved here." // update
     },
     "login_sub": {
         "title": "Anmelden",
