@@ -164,14 +164,13 @@ function main() {
             let postOrigin = sentdata.val.post_origin;
             if (postCache[postOrigin]) {
                 postCache[postOrigin].push(sentdata.val);
-
                 if (page === postOrigin) {
                     loadpost(sentdata.val);
                 } else if (postCache[postOrigin].length >= 24) {
                     postCache[postOrigin].shift();
                 }
             } else {
-                if (postOrigin = 'livechat') {
+                if (postOrigin === 'livechat' && page === 'livechat') {
                     loadpost(sentdata.val);
                 }
             }
