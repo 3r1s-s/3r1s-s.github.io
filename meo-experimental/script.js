@@ -11,18 +11,19 @@ const sidediv = document.querySelectorAll(".side");
 let lul = 0;
 let eul;
 let sul = "";
-let pre = "";
+let pre = "start";
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
 
 let ipBlocked = false;
+let openprofile = false;
 
 const communityDiscordLink = "https://discord.com/invite/THgK9CgyYJ";
 const forumLink = "https://forums.meower.org";
 const server = "wss://server.meower.org/";
 
 const pfpCache = {};
-const postCache = {};  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
+const postCache = { livechat: [] };  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
 const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
 
@@ -131,6 +132,9 @@ function main() {
                 } else {
                     loadhome();
                 }
+                if (openprofile) {
+                    openUsrModal(localStorage.getItem("username"));
+                }
                 console.log("Logged in!");
             } else if (sentdata.cmd == "statuscode" && sentdata.val != "I:100 | OK") {
                 toggleLogin(false);
@@ -168,10 +172,6 @@ function main() {
                     loadpost(sentdata.val);
                 } else if (postCache[postOrigin].length >= 24) {
                     postCache[postOrigin].shift();
-                }
-            } else {
-                if (postOrigin === 'livechat' && page === 'livechat') {
-                    loadpost(sentdata.val);
                 }
             }
         } else if (end) {
@@ -456,7 +456,6 @@ function loadpost(p) {
     if (bridged) {
         const rcon = p.p;
         const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
-        console.debug(match);
         
         if (match) {
             user = match[1];
@@ -600,7 +599,7 @@ function loadpost(p) {
         postContentText.innerHTML = oldMarkdown(content);
         console.error("Parsed with old markdown, fix later :)")
     }
-    const emojiRgx = /^(?:\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/gi;
+    const emojiRgx = /^(?:(?!\d)(?:\p{Emoji}|[\u200d\ufe0f\u{E0061}-\u{E007A}\u{E007F}]))+$/u;
     const discordRgx = /^<(a)?:\w+:\d+>$/gi;
     if (emojiRgx.test(content) || discordRgx.test(content)) {
         postContentText.classList.add('big');
@@ -790,7 +789,6 @@ async function loadreply(postOrigin, replyid) {
         if (bridged) {
             const rcon = content;
             const match = rcon.match(/^([a-zA-Z0-9]{1,20})?: ([\s\S]+)?/m);
-            console.debug(match);
 
             if (match) {
                 user = match[1];
@@ -950,6 +948,7 @@ function signup(user, pass) {
     };
     meowerConnection.send(JSON.stringify(data));
     console.log("User is signing up, details will not be logged for security reasons.");
+    openprofile = true;
     closemodal();
 }
 
@@ -1161,7 +1160,7 @@ function renderChats() {
     gcdiv.innerHTML += `
     <button class="navigation-button button gcbtn" onclick="loadhome()">
     <div class="chat-home-button">
-        <svg width="36" height="26" class="homebuttonsvg" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.8334 21.6667V15.1667H15.1667V21.6667H20.5834V13H23.8334L13.0001 3.25L2.16675 13H5.41674V21.6667H10.8334Z" fill="currentColor"/></svg>
+        <svg width="36" height="26" viewBox="0 0 36 26" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.8336 21.6667C15.3859 21.6667 15.8336 21.219 15.8336 20.6667V16.1667C15.8336 15.6144 16.2814 15.1667 16.8336 15.1667H19.1669C19.7192 15.1667 20.1669 15.6144 20.1669 16.1667V20.6667C20.1669 21.219 20.6147 21.6667 21.1669 21.6667H24.5836C25.1359 21.6667 25.5836 21.219 25.5836 20.6667V13H28.8336L18.0003 3.25L7.16699 13H10.417V20.6667C10.417 21.219 10.8647 21.6667 11.417 21.6667H14.8336Z" fill="currentColor"/></svg>
     </div>
     <span class="gcname">${lang().page_home}</span>
     </button>
@@ -1231,7 +1230,6 @@ function renderChats() {
         if (chat.nickname) {
             escnickname = escapeHTML(chat.nickname);
         }
-        console.debug(escnickname);
         
         const chatOps = document.createElement("div");
         chatOps.classList.add("chat-ops");
@@ -1485,6 +1483,14 @@ function loadlive() {
     document.getElementById("skeleton-msgs").style.display = "none";
     sidebars();
 
+    if (!postCache["livechat"]) postCache["livechat"] = [];
+    postCache["livechat"].forEach(post => {
+        if (page !== "livechat") {
+            return;
+        }
+        loadpost(post);
+    });
+
     const attachButton = document.getElementById('attach')
     attachButton.addEventListener('dragover', function(e) {
         e.preventDefault();
@@ -1579,7 +1585,7 @@ function logout(iskl) {
     }
     end = true;
     for (const key in pfpCache) delete pfpCache[key];
-    for (const key in postCache) delete postCache[key];
+    for (const key in postCache) if (key !== "livechat") delete postCache[key];
     for (const key in chatCache) delete chatCache[key];
     for (const key in blockedUsers) delete blockedUsers[key];
     if (document.getElementById("main"))
@@ -3804,7 +3810,7 @@ function setAttachmentContainer() {
         item.req.then(data => {
             const filetype = data.filename.split('.').pop().toLowerCase();
 
-            if (['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'].includes(filetype)) {
+            if (['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(filetype)) {
                 const element = document.createElement('div');
                 element.classList.add("attach-pre-outer");
                 element.title = data.filename;
