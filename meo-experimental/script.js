@@ -11,7 +11,7 @@ const sidediv = document.querySelectorAll(".side");
 let lul = 0;
 let eul;
 let sul = "";
-let pre = "start";
+let pre = settingsstuff().homepage ? 'home' : 'start';
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
 
@@ -127,10 +127,8 @@ function main() {
                     } else {
                         loadchat(pre);
                     }                
-                } else if (!settingsstuff().homepage) {
+                } else  {
                     loadstart();
-                } else {
-                    loadhome();
                 }
                 if (openprofile) {
                     openUsrModal(localStorage.getItem("username"));
