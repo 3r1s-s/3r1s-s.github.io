@@ -49,6 +49,9 @@ body {
 }
 
 .header-logo a img {
+    padding: 2px;
+    box-sizing: border-box;
+
     transform: scale(1);
     transition: all 0.1s ease-out;
 }
