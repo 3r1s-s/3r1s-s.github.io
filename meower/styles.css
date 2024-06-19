@@ -46,6 +46,20 @@ body {
     justify-content: space-between;
     box-sizing: border-box;
     align-items: center;
+    z-index: 1;
+}
+
+.hero-header.home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #00000029;
+    -webkit-filter: blur(30px);
+    filter: blur(30px);
+    z-index: -1;
 }
 
 .header-logo a img {
