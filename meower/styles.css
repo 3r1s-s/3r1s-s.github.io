@@ -84,6 +84,7 @@ body {
     aspect-ratio: 16 / 9;
     display: flex;
     overflow-x: auto;
+    overflow-y: hidden;
     gap: 10px;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
