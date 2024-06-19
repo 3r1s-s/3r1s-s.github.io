@@ -16,6 +16,7 @@ body {
     background-color: var(--dark1);
     color: var(--color);
     margin: 0;
+    color-scheme: dark;
 }
 
 .page {
@@ -325,7 +326,7 @@ body {
 }
 
 .client-jump:active {
-    transform: translateY(0.5px);
+    transform: translateY(1px);
 }
 
 .client-sec {
@@ -487,6 +488,81 @@ body {
     flex-wrap: wrap;
 }
 
+.discord-sec {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    background: var(--dark3);
+    padding: 125px 75px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0,0,0,.1);
+    border-top: 7px solid var(--border);
+    border-bottom: 7px solid var(--dark3);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.meower-info {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.discord-sec a {
+    color: var(--color);
+    text-decoration: underline;
+}
+
+.discord-sec form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 200px;
+}
+
+.input {
+    font-weight: 400;
+    padding: 8px;
+    background: var(--dark4);
+    color: var(--color);
+    text-decoration: none;
+    border-radius: 5px;
+    border: 3px solid var(--dark4);
+    transition: all 0.1s ease-in;
+    user-select: none;
+}
+
+.input:focus {
+    outline: none;
+    border: 3px solid var(--border);
+}
+
+.button {
+    font-family: Rubik Variable, sans-serif;
+    font-weight: 400;
+    padding: 8px;
+    background: var(--dark4);
+    color: var(--color);
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    transition: background 0.1s ease-in;
+    user-select: none;
+}
+
+.button:hover {
+    background-color: var(--border);
+    cursor: pointer;
+}
+
+.button:active {
+    transform: translateY(1px);
+}
+
 @media screen and (max-width: 700px) {
     .carousel {
         width: 100%;
@@ -570,6 +646,11 @@ body {
 
     .welcome {
         padding: 50px
+    }
+
+    .discord-sec {
+        padding: 50px;
+        margin: 50px 0;
     }
 
     .main {
