@@ -1,8 +1,15 @@
+html {
+    --primary: #8f75cc;
+    --secondary: #231c35;
+    --tertiary: #140d2a;
+    scrollbar-color: var(--primary) var(--secondary);
+}
+
 body {
     margin: 0;
-    font-family: Arial;
-    background-color: #2b233e;
-    color: #b190fe;
+    font-family: 'GG Sans';
+    background-color: #231c35;
+    color: #8f75cc;
 }
 
 p {
@@ -11,6 +18,70 @@ p {
 
 a {
     color: inherit;
+}
+
+.title {
+    -webkit-user-select: none;
+    user-select: none;
+    display: flex;
+    text-shadow:
+    1px 1px 0px var(--tertiary),
+    2px 2px 0px var(--tertiary),
+    3px 3px 0px var(--tertiary),
+    4px 4px 0px var(--tertiary),
+    5px 5px 0px var(--tertiary),
+    6px 6px 0px var(--tertiary),
+    7px 7px 0px var(--tertiary),
+    8px 8px 0px var(--tertiary),
+    9px 9px 0px var(--tertiary),
+    10px 10px 0px var(--tertiary),
+    11px 11px 0px var(--tertiary),
+    12px 12px 0px var(--tertiary),
+    13px 13px 0px var(--tertiary),
+    14px 14px 0px var(--tertiary),
+    15px 15px 0px var(--tertiary),
+    16px 16px 0px var(--tertiary),
+    17px 17px 0px var(--tertiary),
+    18px 18px 0px var(--tertiary),
+    19px 19px 0px var(--tertiary),
+    20px 20px 0px var(--tertiary),
+    21px 21px 0px var(--tertiary),
+    22px 22px 0px var(--tertiary),
+    23px 23px 0px var(--tertiary),
+    24px 24px 0px var(--tertiary),
+    25px 25px 0px var(--tertiary),
+    26px 26px 0px var(--tertiary),
+    27px 27px 0px var(--tertiary),
+    28px 28px 0px var(--tertiary),
+    29px 29px 0px var(--tertiary),
+    30px 30px 0px var(--tertiary);
+}
+
+.title span {
+    display: inline-block;
+    animation: wave 1s ease-in-out infinite;
+}
+
+.title span:nth-child(1) {animation-delay: 0s;}
+.title span:nth-child(2) {animation-delay: 0.1s;}
+.title span:nth-child(3) {animation-delay: 0.2s;}
+.title span:nth-child(4) {animation-delay: 0.3s;}
+.title span:nth-child(5) {animation-delay: 0.4s;}
+.title span:nth-child(6) {animation-delay: 0.5s;}
+
+.flex {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.header {
+    font-size: 48px;
+    font-weight: 600;
+}
+
+.small {
+    font-size: 16px;
 }
 
 .special {
@@ -35,6 +106,35 @@ a {
     max-width: 500px;
 }
 
+#intro {
+    position: relative;
+}
+
+.scroll {
+    -webkit-user-select: none;
+    user-select: none;
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    font-weight: 500;
+}
+
+.scroll span {
+    animation: small-wave 1s ease-in-out infinite;
+}
+
+.scroll span:nth-child(1) {animation-delay: 0s;}
+.scroll span:nth-child(2) {animation-delay: 0.1s;}
+.scroll span:nth-child(3) {animation-delay: 0.2s;}
+.scroll span:nth-child(4) {animation-delay: 0.3s;}
+.scroll span:nth-child(5) {animation-delay: 0.4s;}
+.scroll span:nth-child(6) {animation-delay: 0.5s;}
+.scroll span:nth-child(7) {animation-delay: 0.5s;}
+.scroll span:nth-child(8) {animation-delay: 0.4s;}
+.scroll span:nth-child(9) {animation-delay: 0.3s;}
+.scroll span:nth-child(10) {animation-delay: 0.2s;}
+.scroll span:nth-child(11) {animation-delay: 0.1s;}
+
 .artist {
     font-size: 20px;
 }
@@ -44,16 +144,15 @@ a {
 }
 
 .subheader {
-    font-size: 36px;
-    margin-top: 10px;
-    margin-bottom: 5px;
+    font-size: 26px;
+    font-weight: 500;
 }
 
 .nav-link {
     color: inherit;
     text-decoration: none;
     background-position: 0 calc(1em + 3px);
-    background-image: linear-gradient(to right,#b190fe,#b190fe);
+    background-image: linear-gradient(to right,var(--primary),var(--primary));
     background-size: 0% 1px;
     background-repeat: no-repeat;
     display: inline;
@@ -94,4 +193,80 @@ a {
     font-style: normal;
     font-weight: lighter;
     src: url(fonts/arial/ArialTh.ttf);
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    font-style: normal;
+    font-weight: 300;
+    src: url(fonts/ggsans/ggsans-Normal.woff2);
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url(fonts/ggsans/ggsans-Medium.woff2);
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: url(fonts/ggsans/ggsans-Semibold.woff2);
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    font-style: normal;
+    font-weight: 600;
+    src: url(fonts/ggsans/ggsans-Bold.woff2);
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    font-style: italic;
+    font-weight: 300;
+    src: url(fonts/ggsans/ggsans-NormalItalic.woff2);
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    font-style: italic;
+    font-weight: 400;
+    src: url(fonts/ggsans/ggsans-MediumItalic.woff2);
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    font-style: italic;
+    font-weight: 500;
+    src: url(fonts/ggsans/ggsans-SemiboldItalic.woff2);
+}
+
+@font-face {
+    font-family: 'GG Sans';
+    font-style: italic;
+    font-weight: 600;
+    src: url(fonts/ggsans/ggsans-BoldItalic.woff2);
+}
+
+/* Animations */
+
+@keyframes wave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes small-wave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
 }
