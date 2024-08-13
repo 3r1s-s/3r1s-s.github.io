@@ -73,6 +73,7 @@ a {
     display: flex;
     align-items: baseline;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .header {
@@ -137,6 +138,9 @@ a {
 
 .featured {
     margin: 5px;
+    width: 100%;
+    max-width: 560px;
+    height: 315px;
 }
 
 iframe {
@@ -277,5 +281,13 @@ iframe {
     }
     50% {
         transform: translateY(-5px);
+    }
+}
+
+/* Screen */
+
+@media screen and (max-width: 720px) {
+    .title {
+        font-size: 64px !important;
     }
 }
