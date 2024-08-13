@@ -135,6 +135,15 @@ a {
 .scroll span:nth-child(10) {animation-delay: 0.2s;}
 .scroll span:nth-child(11) {animation-delay: 0.1s;}
 
+.featured {
+    margin: 5px;
+}
+
+iframe {
+    border-radius: 5px;
+    border: none;
+}
+
 .artist {
     font-size: 20px;
 }
