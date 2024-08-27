@@ -1,0 +1,103 @@
+:root {
+    --back: rgb(82, 143, 228);
+    --text: #fff;
+    --back-text: rgb(214, 235, 255);
+    --accent: rgb(51, 107, 185);
+    --accent-text: rgb(20, 47, 88);
+    --foreground: rgb(77, 202, 154);
+    --tile-text: var(--text);
+    --red: #ee4d3c;
+
+    --blue-200: #898bff;
+    --blue-300: #6062de;
+    --blue-500: #5b5eff;
+    --blue-600: #4143d6;
+    --blue-800: #22248d;
+}
+
+.clear {
+    --back: rgb(82, 143, 228);
+    --text: #fff;
+    --back-text: rgb(228, 252, 255);
+    --accent: rgb(255, 252, 92);
+    --accent-text: rgb(77, 76, 25);
+}
+
+.partly-cloudy {
+    --back: rgb(82, 143, 228);
+    --text: #fff;
+    --back-text: rgb(228, 252, 255);
+    --accent: rgb(255, 252, 92);
+    --accent-text: rgb(77, 76, 25);
+}
+
+.cloudy {
+    --back: rgb(128, 137, 143);
+    --text: #fff;
+    --back-text: rgb(255, 255, 255);
+    --accent: rgb(95, 103, 109);
+    --accent-text: rgb(188, 200, 208);
+    --foreground: rgb(125, 191, 167);
+}
+
+.rain {
+    --back: #4b5769;
+    --text: #fff;
+    --back-text: rgb(255, 255, 255);
+    --accent: #7689a7;
+    --accent-text: #c9dcf3;
+    --foreground: rgb(117, 143, 144);
+}
+
+.storm {
+    --back: #262b33;
+    --text: #fff;
+    --back-text: rgb(255, 255, 255);
+    --accent: #465782;
+    --accent-text: #859cc5;
+    --foreground: #526468;
+}
+
+.dust {
+    --back: #332a26;
+    --text: #fff;
+    --back-text: rgb(255, 255, 255);
+    --accent: #825146;
+    --accent-text: #3d1a14;
+    --foreground: #3e3e3c;
+}
+
+.fog {
+    --back: #3b3b38;
+    --text: #fff;
+    --back-text: rgb(255, 255, 255);
+    --accent: #616364;
+    --accent-text: #a3a3a3;
+    --foreground: #4a5549;
+}
+
+.clear.night {
+    --back: rgb(26, 0, 71);
+    --text: #fff;
+    --back-text: #ede2ff;
+    --accent: rgb(111, 110, 45);
+    --accent-text: rgb(255, 252, 92);
+    --foreground: #346671;
+    --tile: #5b5eff;
+    --red: #ee4d3c;
+}
+
+.dark {
+    --back: rgb(0, 0, 0);
+    --text: #fff;
+    --back-text: #efefef;
+    --accent: rgb(255, 255, 255);
+    --accent-text: rgb(0, 0, 0);
+    --foreground: #000000;
+    --blue-200: #999999;
+    --blue-500: #fff;
+    --blue-600: #aaa;
+    --blue-800: #000;
+    --tile-text: #000;
+    --red: #fff;
+}
