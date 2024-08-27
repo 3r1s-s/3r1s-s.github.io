@@ -43,6 +43,9 @@ async function getWeather(station) {
             }
         }
 
+        const meta = document.querySelector('meta[name="theme-color"]');
+        meta.setAttribute('content', getComputedStyle(document.body).getPropertyValue('--back'));
+
         const highTemp = data.features[0].properties.maxTemperatureLast24Hours.value;
         const lowTemp = data.features[0].properties.minTemperatureLast24Hours.value;
 
