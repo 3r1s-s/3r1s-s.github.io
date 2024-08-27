@@ -14,7 +14,7 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    width: 100%;
+    flex: 1;
     padding: 20px 5px;
     gap: 50px;
     box-sizing: border-box;
@@ -26,19 +26,25 @@ body {
 .sidebar {
     transition: width 0.5s cubic-bezier(.2,0,0,1), padding 0.5s cubic-bezier(.2,0,0,1);
     width: 0px;
-    background: var(--blue-800);
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
     height: 100vh;
+    border-top-right-radius: 50px;
     position: sticky;
     top: 0;
     overflow-x: hidden;
-    height: 100vh;
 }
 
 .sidebar.open {
-    width: 30%;
+    width: 30vw;
+}
+
+.sidebar-outer {
+    height: 100vh;
+    width: 30vw;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    background: var(--blue-800);
+    border-top-right-radius: 50px;
 }
 
 .sidebar-button {
@@ -416,7 +422,6 @@ body {
     .sidebar {
         position: fixed;
         z-index: 5;
-        border-top-right-radius: 50px;
     }
 
     .sidebar-button {
@@ -429,8 +434,11 @@ body {
     }
 
     .sidebar.open {
-        width: 80%;
-        box-shadow: 0 2px 20px #00000050;
+        width: 80vw;
+    }
+
+    .sidebar-outer {
+        width: 80vw;
     }
 
     .location {
