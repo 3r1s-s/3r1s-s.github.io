@@ -100,6 +100,8 @@ async function getWeather(station) {
         
         const now = new Date();
         const next24Hours = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+
+        let maxChanceOfRain = 0;
         
         forecastData.properties.periods
             .filter(period => new Date(period.startTime) <= next24Hours)
@@ -115,9 +117,12 @@ async function getWeather(station) {
                     <span class="forcast-time">${formattedHour}${ampm}</span>
                 `;
                 forecastContainer.appendChild(forecastDiv);
-            });
-        
 
+                if (period.probabilityOfPrecipitation.value > maxChanceOfRain) {
+                    maxChanceOfRain = period.probabilityOfPrecipitation.value;
+                }
+            });
+        document.getElementById("chanceOfRain").querySelector(".tile-value").innerText = maxChanceOfRain + '%';
     } catch (error) {
         console.error('Error fetching temperature:', error);
     }
