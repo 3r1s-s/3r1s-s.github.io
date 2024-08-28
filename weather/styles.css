@@ -67,7 +67,7 @@ body {
 
 .sidebar-inner {
     padding: 0 15px;
-    margin: 80px 0 15px 0;
+    margin-top: 80px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -76,6 +76,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-bottom: 15px;
 }
 
 .sidebar-button:active {
@@ -398,7 +399,7 @@ body {
     background: var(--blue-500);
     padding: 20px;
     border-radius: 25px;
-    height: 90px;
+    height: 96px;
     display: flex;
     flex-direction: column;
     justify-content: center;
