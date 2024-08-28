@@ -24,11 +24,11 @@
     <div class="sidebar open">
         <div class="sidebar-outer">
             <div class="sidebar-inner">
-                <div class="searchbar button" onclick="searchStations()">
-                    <span>Search</span>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div class="searchbar button">
+                    <input class="searchbar-input" id="search-input" type="text" placeholder="search"></input>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="searchStations(document.getElementById('search-input').value)">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M17.868 12.4264C15.6268 14.6675 12.288 15.1418 9.58217 13.8492L4.14215 19.2894C3.19457 20.2369 1.65825 20.2369 0.710681 19.2894C-0.236894 18.3417 -0.236894 16.8055 0.710681 15.8578L6.15077 10.4178C4.85821 7.71204 5.33248 4.37315 7.5736 2.13204C10.4164 -0.710679 15.0253 -0.710679 17.868 2.13204C20.7107 4.97474 20.7107 9.58369 17.868 12.4264ZM9.28934 10.7107C11.1845 12.6058 14.2571 12.6058 16.1523 10.7107C18.0474 8.81554 18.0474 5.74291 16.1523 3.84776C14.2571 1.95263 11.1845 1.95263 9.28934 3.84776C7.39419 5.74291 7.39419 8.81554 9.28934 10.7107Z" fill="currentColor"/>
-                    </svg>                          
+                    </svg>
                 </div>
                 <div class="sidebar-main">
                 </div>

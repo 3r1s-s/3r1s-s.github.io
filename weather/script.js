@@ -203,12 +203,11 @@ function convertToC(f) {
     return (f - 32) * 5 / 9;
 }
 
-async function searchStations() {
-    const location = prompt("Enter a location:");
-
-    if (location) {
+async function searchStations(query) {
+    if (query) {
+        document.querySelector('.sidebar-main').innerHTML = '';
         try {
-            const locationResponse = await fetch(`https://nominatim.openstreetmap.org/search?q=${location}&format=json`);
+            const locationResponse = await fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json`);
             const locationData = await locationResponse.json();
 
             if (locationData.length > 0) {
@@ -219,7 +218,6 @@ async function searchStations() {
                 const stations = stationsData.features;
 
                 if (stations.length > 0) {
-                    document.querySelector('.sidebar-main').innerHTML = '';
                     for (const station of stations) {
                         const stationId = station.properties.stationIdentifier;
 
