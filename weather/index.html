@@ -14,12 +14,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body class="">
-    <div class="sidebar-button" onclick="toggleSidebar()">
-        <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect y="2" width="19" height="3" rx="1.5" fill="currentColor"/>
-            <rect y="8" width="19" height="3" rx="1.5" fill="currentColor"/>
-            <rect y="14" width="19" height="3" rx="1.5" fill="currentColor"/>
-        </svg>            
+    <div class="sidebar-buttons">
+        <div class="sidebar-button" onclick="toggleSidebar()" id="menu">
+            <svg width="20" height="20" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect y="2" width="19" height="3" rx="1.5" fill="currentColor"/>
+                <rect y="8" width="19" height="3" rx="1.5" fill="currentColor"/>
+                <rect y="14" width="19" height="3" rx="1.5" fill="currentColor"/>
+            </svg>            
+        </div>
+        <div class="sidebar-button" onclick="" id="refresh">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 8.4899V0.500829L17.3497 3.13847C15.2507 1.05541 12.8156 0 10.0437 0C4.50701 0 0.00180172 4.48864 0 10.0013C0.00090086 15.5131 4.507 19.9982 10.0446 20C13.8967 20 18.4848 18.0047 19.8063 12.4042L19.8315 12.2949H16.9218L16.9019 12.3559C15.9308 15.2605 13.1742 17.2127 10.0437 17.2127C9.0911 17.2149 8.14752 17.0292 7.26753 16.6665C6.38754 16.3037 5.58859 15.771 4.9169 15.0992C4.24168 14.4315 3.70635 13.6372 3.34188 12.7623C2.97741 11.8874 2.79104 10.9493 2.79357 10.0022C2.79357 6.02607 6.04657 2.79084 10.0455 2.79084C11.9094 2.79084 13.3228 3.31049 15.3822 5.09609L11.9661 8.49079L20 8.4899Z" fill="currentColor"/>
+            </svg>                              
+        </div>
     </div>
     <div class="sidebar">
         <div class="sidebar-outer">

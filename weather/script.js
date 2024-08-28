@@ -12,6 +12,8 @@ async function getWeather(station) {
 
         const st = data.features[0].properties.station.replace(/^https:\/\/api\.weather\.gov\/stations\//, '');
 
+        document.getElementById("refresh").setAttribute('onclick', `getWeather('${st}')`);
+
         const stationResp = await fetch(`https://api.weather.gov/stations/${station}`);
         const stationData = await stationResp.json();
         const name = stationData.properties.name;
