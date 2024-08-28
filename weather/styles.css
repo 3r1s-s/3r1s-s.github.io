@@ -31,6 +31,7 @@ body {
     position: sticky;
     top: 0;
     overflow-x: hidden;
+    scrollbar-color: var(--blue-500) var(--blue-800);
 }
 
 .sidebar.open {
@@ -69,9 +70,6 @@ body {
     margin: 80px 0 15px 0;
     overflow-y: scroll;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
 }
 
 .sidebar-main {
@@ -185,7 +183,7 @@ body {
 }
 
 .title {
-    font-size: 100px;
+    font-size: 6.25em;
     font-weight: 600;
     color: var(--accent-text);
     display: flex;
@@ -206,25 +204,26 @@ body {
 }
 
 .location {
-    font-size: 32px;
+    font-size: 2em;
     font-weight: 600;
     color: var(--text);
     opacity: 1;
 }
 
 .type {
-    font-size: 32px;
+    font-size: 2em;
     font-weight: 600;
     color: var(--back-text);
 }
 
 .ext {
+    display: flex;
     gap: 8px;
     color: var(--back-text);
-    display: none;
+    font-size: 1.15em;
 }
 
-.ext span {
+.ext div {
     display: flex;
     margin: 0 1px;
     font-weight: 600;
@@ -238,6 +237,7 @@ body {
     justify-content: center;
     flex-direction: column;
     gap: 10px;
+    text-shadow: 0 2px 0 #00000025;
 }
 
 .hero-in {
@@ -246,6 +246,7 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
+    text-shadow: none;
 }
 
 .background {
@@ -397,18 +398,21 @@ body {
     background: var(--blue-500);
     padding: 20px;
     border-radius: 25px;
-    height: 120px;
-    box-sizing: border-box;
+    height: 90px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
+    gap: 2px;
 }
 
 .saved-loc-name {
     color: var(--tile-text);
     font-weight: 600;
     text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    height: 20px;
 }
 
 .saved-loc-title {
@@ -416,6 +420,13 @@ body {
     font-size: 48px;
     font-weight: 600;
     text-wrap: nowrap;
+    height: 60px;
+}
+
+.searchbar {
+    border-radius: 100px;
+    padding: 15px 25px;
+    margin-bottom: 15px;
 }
 
 @media screen and (max-width: 720px) {

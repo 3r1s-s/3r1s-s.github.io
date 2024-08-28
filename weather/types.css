@@ -32,12 +32,12 @@
 }
 
 .cloudy {
-    --back: rgb(128, 137, 143);
+    --back: rgb(141, 170, 189);
     --text: #fff;
     --back-text: rgb(255, 255, 255);
-    --accent: rgb(95, 103, 109);
-    --accent-text: rgb(188, 200, 208);
-    --foreground: rgb(125, 191, 167);
+    --accent: rgb(120, 144, 161);
+    --accent-text: rgb(215, 229, 238);
+    --foreground: rgb(133, 206, 179);
 }
 
 .rain {

@@ -46,9 +46,6 @@ async function getWeather(station) {
         const meta = document.querySelector('meta[name="theme-color"]');
         meta.setAttribute('content', getComputedStyle(document.body).getPropertyValue('--back'));
 
-        const highTemp = data.features[0].properties.maxTemperatureLast24Hours.value;
-        const lowTemp = data.features[0].properties.minTemperatureLast24Hours.value;
-
         const barometricPressure = data.features[0].properties.barometricPressure.value;
         const windSpeed = data.features[0].properties.windSpeed.value;
         const windDirection = data.features[0].properties.windDirection.value;
@@ -57,13 +54,11 @@ async function getWeather(station) {
         const dewpoint = data.features[4].properties.dewpoint.value;
         const relativeHumidity = data.features[4].properties.relativeHumidity.value;
         const precipitationLast6Hours = data.features[4].properties.precipitationLast6Hours.value;
-
+        
         document.getElementById("temperature").innerText = Math.round(temperature);
         document.getElementById("loc").innerText = st;
         document.getElementById("location-full").innerText = name;
         document.getElementById("description").innerText = desc;
-        document.getElementById("low-temp").innerText = lowTemp;
-        document.getElementById("high-temp").innerText = highTemp;
 
         document.getElementById("barometricPressure").querySelector(".tile-value").innerText = Math.round(barometricPressure * 0.0002953);
         document.getElementById("windSpeed").querySelector(".tile-value").innerText = Math.round(windSpeed);
@@ -84,6 +79,15 @@ async function getWeather(station) {
         const forecastUrl = `https://api.weather.gov/gridpoints/${gridId}/${gridX},${gridY}/forecast/hourly`;
         const forecastResponse = await fetch(forecastUrl);
         const forecastData = await forecastResponse.json();
+
+        const periods = forecastData.properties.periods;
+        const todayForecast = periods.filter(period => new Date(period.startTime).getDate() === new Date().getDate());
+        
+        const highTemp = Math.max(...todayForecast.map(period => period.temperature));
+        const lowTemp = Math.min(...todayForecast.map(period => period.temperature));
+
+        document.getElementById("high-temp").innerText = `${Math.round(convertToC(highTemp))}°`;
+        document.getElementById("low-temp").innerText = `${Math.round(convertToC(lowTemp))}°`;
 
         const forecastContainer = document.getElementById('forecast');
         forecastContainer.innerHTML = '';
@@ -197,6 +201,73 @@ function setMoon() {
 
 function convertToC(f) {
     return (f - 32) * 5 / 9;
+}
+
+async function searchStations() {
+    const location = prompt("Enter a location:");
+
+    if (location) {
+        try {
+            const locationResponse = await fetch(`https://nominatim.openstreetmap.org/search?q=${location}&format=json`);
+            const locationData = await locationResponse.json();
+
+            if (locationData.length > 0) {
+                const { lat, lon } = locationData[0];
+
+                const stationsResponse = await fetch(`https://api.weather.gov/points/${lat},${lon}/stations`);
+                const stationsData = await stationsResponse.json();
+                const stations = stationsData.features;
+
+                if (stations.length > 0) {
+                    document.querySelector('.sidebar-main').innerHTML = '';
+                    for (const station of stations) {
+                        const stationId = station.properties.stationIdentifier;
+
+                        try {
+                            const observationResponse = await fetch(`https://api.weather.gov/stations/${stationId}/observations/`);
+                            const data = await observationResponse.json();
+                            let temperature
+                            if (data.features[0].properties.temperature.value) {
+                                temperature = data.features[0].properties.temperature.value;
+                            } else {
+                                temperature = data.features[1].properties.temperature.value;
+                            }
+
+                            const stationResp = await fetch(`https://api.weather.gov/stations/${stationId}`);
+                            const stationData = await stationResp.json();
+                            const name = stationData.properties.name;
+
+                            const savedLocDiv = document.createElement('div');
+                            savedLocDiv.className = 'saved-loc';
+                            savedLocDiv.id = stationId;
+                            savedLocDiv.onclick = () => getWeather(stationId);
+
+                            savedLocDiv.innerHTML = `
+                                <span class="saved-loc-name">
+                                    ${stationId} - ${name}
+                                </span>
+                                <div class="saved-loc-title">
+                                    <span id="loc-temp">${temperature ? Math.round(temperature) : 'N/A'}°</span>
+                                </div>
+                            `;
+
+                            document.querySelector('.sidebar-main').appendChild(savedLocDiv);
+                        } catch (error) {
+                            console.error('Error fetching temperature data:', error);
+                        }
+                    }
+                } else {
+                    console.error('No weather stations found');
+                }
+            } else {
+                console.error('Location not found');
+            }
+        } catch (error) {
+            console.error('Error fetching location coordinates:', error);
+        }
+    } else {
+        console.log('No location entered');
+    }
 }
 
 setMoon();
