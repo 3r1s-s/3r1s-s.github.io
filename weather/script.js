@@ -1,5 +1,8 @@
 async function getWeather(station) {
     placeholders(station);
+    if (document.querySelector(".sidebar.open")) {
+        toggleSidebar();
+    }
     try {
         const response = await fetch('https://api.weather.gov/stations/' + station + '/observations');
         if (!response.ok) {
@@ -36,6 +39,9 @@ async function getWeather(station) {
         } else if (desc === "Mostly Clear") {
             document.body.className = '';
             document.body.classList.add('clear');
+        } else if (desc === "Light Rain") {
+            document.body.className = '';
+            document.body.classList.add('rain');
         } else {
             document.body.className = '';
             if (desc) {
@@ -125,6 +131,9 @@ function placeholders(station) {
     document.getElementById("low-temp").innerText = '--';
     document.getElementById("high-temp").innerText = '--';
 
+    const forecastContainer = document.getElementById('forecast');
+    forecastContainer.innerHTML = '';
+
     document.getElementById("barometricPressure").querySelector(".tile-value").innerText = '--';
     document.getElementById("windSpeed").querySelector(".tile-value").innerText = '--';
     document.getElementById("visibility").querySelector(".tile-value").innerText = '--';
@@ -206,6 +215,19 @@ function convertToC(f) {
 async function searchStations(query) {
     if (query) {
         document.querySelector('.sidebar-main').innerHTML = '';
+        document.getElementById('search-input').value = '';
+
+        const results = document.createElement('div');
+        results.className = 'results';
+
+        results.innerHTML = `
+            <span class="saved-loc-name">
+                Results for "${query}"
+            </span>
+            <span class="loading"></span>
+        `;
+
+        document.querySelector('.sidebar-main').appendChild(results);
         try {
             const locationResponse = await fetch(`https://nominatim.openstreetmap.org/search?q=${query}&format=json`);
             const locationData = await locationResponse.json();
@@ -254,6 +276,7 @@ async function searchStations(query) {
                             console.error('Error fetching temperature data:', error);
                         }
                     }
+                    document.querySelectorAll('.loading').forEach(element => element.remove());
                 } else {
                     console.error('No weather stations found');
                 }
