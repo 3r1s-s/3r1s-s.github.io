@@ -150,14 +150,6 @@ function placeholders(station) {
     document.getElementById("precipitationLast6Hours").querySelector(".tile-value").innerHTML = `--`;
 }
 
-function toggleSidebar() {
-    if (document.querySelector(".sidebar.open")) {
-        document.querySelector(".sidebar").classList.remove("open")
-    } else {
-        document.querySelector(".sidebar").classList.add("open")
-    }
-}
-
 function getMoonPhase(date) {
     // Reference date: January 11, 2024
     const referenceDate = new Date('2024-01-11');
@@ -295,6 +287,22 @@ async function searchStations(query) {
         }
     } else {
         console.log('No location entered');
+    }
+}
+
+function toggleSidebar() {
+    if (document.querySelector(".sidebar.open")) {
+        document.querySelector(".sidebar").classList.remove("open")
+    } else {
+        document.querySelector(".sidebar").classList.add("open")
+    }
+}
+
+function toggleSettings() {
+    if (document.querySelector(".body-inner.fade")) {
+        document.querySelector(".body-inner").classList.remove("fade")
+    } else {
+        document.querySelector(".body-inner").classList.add("fade")
     }
 }
 
