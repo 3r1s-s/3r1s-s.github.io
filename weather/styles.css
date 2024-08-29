@@ -21,7 +21,7 @@ body {
 }
 
 .fade {
-    transform: scale3d(0.8,0.8,0.8) translate3d(0,50px,0);
+    transform: scale3d(0.8,0.8,0.8) translate3d(0,20px,0);
     border-radius: 40px;
     overflow: hidden;
     opacity: 0.5;
@@ -577,7 +577,7 @@ body {
 
 .modal {
     width: 100%;
-    height: 80%;
+    height: 85%;
     align-self: end;
     background: var(--purple-800);
     color: var(--text);
@@ -588,12 +588,12 @@ body {
     display: flex;
     flex-direction: column;
 
-    transform: translateY(100%); /* Start off-screen */
-    transition: transform 0.5s cubic-bezier(.2,0,0,1);
+    transform: translateY(100%);
+    transition: transform cubic-bezier(0,-.25,0,1) 0.4s;
 }
 
 .modal-outer.open .modal {
-    transform: translateY(0); /* Move into view */
+    transform: translateY(0);
 }
 
 .modal-options {
@@ -616,6 +616,7 @@ body {
 
 .modal-button {
     background: var(--purple-600);
+    color: var(--color);
     border-radius: 100px;
     border: none;
     min-width: 100px;
@@ -680,6 +681,10 @@ body {
 
     .hero {
         margin-top: 55px;
+    }
+
+    .modal {
+        padding-bottom: 50px;
     }
 }
 
