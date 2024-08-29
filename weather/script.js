@@ -299,12 +299,26 @@ function toggleSidebar() {
 }
 
 function toggleSettings() {
-    if (document.querySelector(".body-inner.fade")) {
-        document.querySelector(".body-inner").classList.remove("fade")
+    const modalOuter = document.querySelector(".modal-outer");
+    const bodyInner = document.querySelector(".body-inner");
+    
+    if (modalOuter.classList.contains("open")) {
+        bodyInner.classList.remove("fade");
+        modalOuter.classList.remove("open");
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', getComputedStyle(document.body).getPropertyValue('--back'));
+
+        // Add a delay before setting visibility to hidden
+        setTimeout(() => {
+            modalOuter.style.visibility = "hidden";
+        }, 500); // Match this delay with your CSS transition time
     } else {
-        document.querySelector(".body-inner").classList.add("fade")
+        modalOuter.style.visibility = "visible";
+        modalOuter.classList.add("open");
+        bodyInner.classList.add("fade");
+        document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000');
     }
 }
+
 
 setMoon();
 

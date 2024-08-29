@@ -8,11 +8,19 @@
     --tile-text: var(--text);
     --red: #ee4d3c;
 
+    --blue-100: #C2C2FF;
     --blue-200: #898bff;
     --blue-300: #6062de;
     --blue-500: #5b5eff;
     --blue-600: #4143d6;
     --blue-800: #22248d;
+
+    --purple-600: #4d4e72;
+    --purple-800: #363750;
+
+    --grey-100: #aaa;
+    --grey-500: #303030;
+    --grey-600: #212121;
 }
 
 .clear {
