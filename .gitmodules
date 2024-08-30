@@ -1,7 +1,6 @@
 [submodule "meo"]
 	path = meo
 	url = https://github.com/3r1s-s/meo.git
-
 [submodule "weather"]
 	path = weather
 	url = https://github.com/3r1s-s/weather.git
