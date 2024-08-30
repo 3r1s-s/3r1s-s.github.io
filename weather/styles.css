@@ -13,18 +13,8 @@ body {
     background-color: var(--back);
     display: flex;
     justify-content: space-between;
-    transition: transform 0.5s cubic-bezier(.2,0,0,1), 
-    opacity 0.5s cubic-bezier(.2,0,0,1),
-    border-radius 0.5s cubic-bezier(.2,0,0,1);
     z-index: -1;
     overflow: hidden;
-}
-
-.fade {
-    transform: scale3d(0.8,0.8,0.8) translate3d(0,20px,0);
-    border-radius: 40px;
-    overflow: hidden;
-    opacity: 0.5;
 }
 
 .page {
@@ -43,7 +33,7 @@ body {
 }
 
 .sidebar {
-    transition: width 0.5s cubic-bezier(.2,0,0,1), padding 0.5s cubic-bezier(.2,0,0,1);
+    transition: width 0.3s cubic-bezier(.2,0,0,1), padding 0.3s cubic-bezier(.2,0,0,1);
     width: 0px;
     height: 100vh;
     border-top-right-radius: 50px;
@@ -261,6 +251,12 @@ body {
     z-index: 1;
     display: flex;
     align-items: flex-start;
+}
+
+@media (min-width: 150px) {
+    .title {
+        font-size: 5.5em;
+    }
 }
 
 .symbol {
@@ -563,37 +559,43 @@ body {
 .modal-outer {
     visibility: hidden;
     display: flex;
+    justify-content: center;
     position: fixed;
     z-index: 100;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background: transparent;
+    transition: background 0.2s cubic-bezier(.2,0,0,1);
 }
 
 .modal-outer.open {
     visibility: visible;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .modal {
-    width: 100%;
+    width: 70%;
+    max-width: 700px;
     height: 85%;
-    align-self: end;
-    background: var(--purple-800);
-    color: var(--text);
-    border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
-    padding: 25px 20px;
+    align-self: center;
+    background: var(--settings-400);
+    color: var(--settings-text);
+    border-radius: 40px;
+    padding: 25px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
 
-    transform: translateY(100%);
-    transition: transform cubic-bezier(0,-.25,0,1) 0.4s;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform cubic-bezier(0,-.25,0,1.5) 0.2s, opacity cubic-bezier(0,-.25,0,1) 0.2s;
 }
 
 .modal-outer.open .modal {
-    transform: translateY(0);
+    transform: scale(1);
+    opacity: 1;
 }
 
 .modal-options {
@@ -606,25 +608,58 @@ body {
     display: flex;
     flex-direction: column;
     flex: 1;
+    position: relative;
+    gap: 10px;
 }
 
 .modal-header {
     font-size: 2em;
     font-weight: 600;
-    border-bottom: 2px solid var(--purple-600);
+    border-bottom: 3px solid var(--settings-600);
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
 .modal-button {
-    background: var(--purple-600);
-    color: var(--color);
+    background: var(--settings-600);
+    color: var(--settings-text);
     border-radius: 100px;
     border: none;
     min-width: 100px;
-    padding: 5px 20px;
+    padding: 8px 20px;
     box-sizing: border-box;
-    font-size: 1.2em;
+    font-size: 1.05em;
     font-weight: 500;
     font-family: 'GG Sans';
+    transition: background 0.2s cubic-bezier(.2,0,0,1)
+}
+
+.modal-button:active {
+    background-color: var(--settings-500);
+}
+
+.temperature-unit {
+    display: flex;
+    flex-wrap: nowrap;
+    border: 2px solid var(--settings-text);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.temperature-unit-button {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.temperature-unit-button.enabled {
+    background-color: var(--settings-text);
+    color: var(--settings-400);
+    font-weight: 600;
 }
 
 @media screen and (max-width: 720px) {
@@ -634,6 +669,19 @@ body {
         left: 0;
         width: 100%;
         height: 100%;
+    }
+
+    .body-inner {
+        transition: transform 0.5s cubic-bezier(.2,0,0,1), 
+        opacity 0.5s cubic-bezier(.2,0,0,1),
+        border-radius 0.5s cubic-bezier(.2,0,0,1);
+    }
+
+    .fade {
+        transform: scale3d(0.8,0.8,0.8) translate3d(0,20px,0);
+        border-radius: 40px;
+        overflow: hidden;
+        opacity: 0.5;
     }
 
     .sidebar {
@@ -683,8 +731,27 @@ body {
         margin-top: 55px;
     }
 
+    .modal-outer.open {
+        background: transparent;
+    }
+
     .modal {
+        width: 100%;
+        height: 85%;
+        align-self: end;
+        border-radius: 0;
+        border-top-left-radius: 40px;
+        border-top-right-radius: 40px;
+        padding: 25px 20px;
         padding-bottom: 50px;
+        opacity: 1;
+    
+        transform: translateY(100%);
+        transition: transform cubic-bezier(0.68, 0.1, 0.27, 1) 0.4s;
+    }
+    
+    .modal-outer.open > .modal {
+        transform: translateY(0);
     }
 }
 

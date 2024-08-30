@@ -1,3 +1,11 @@
+if (!localStorage.getItem("w-settings")) {
+    const settings = {
+        "temperature": 0,
+    };
+    
+    localStorage.setItem("w-settings", JSON.stringify(settings));
+}
+
 async function getWeather(station) {
     placeholders(station);
     if (document.querySelector(".sidebar.open")) {
@@ -21,15 +29,13 @@ async function getWeather(station) {
         let desc
         if (data.features[0].properties.textDescription) {
             desc = data.features[0].properties.textDescription;
-        } else {
-            desc = data.features[1].properties.textDescription;
         }
 
         let temperature
         if (data.features[0].properties.temperature.value) {
             temperature = data.features[0].properties.temperature.value;
         } else {
-            temperature = data.features[1].properties.temperature.value;
+            temperature = 0;
         }
 
         if (desc === "Fog/Mist") {
@@ -58,12 +64,12 @@ async function getWeather(station) {
         const windSpeed = data.features[0].properties.windSpeed.value;
         const windDirection = data.features[0].properties.windDirection.value;
         const visibility = data.features[0].properties.visibility.value;
-        const heatIndex = data.features[4].properties.heatIndex.value;
-        const dewpoint = data.features[4].properties.dewpoint.value;
-        const relativeHumidity = data.features[4].properties.relativeHumidity.value;
-        const precipitationLast6Hours = data.features[4].properties.precipitationLast6Hours.value;
+        const heatIndex = data.features[1].properties.heatIndex.value;
+        const dewpoint = data.features[1].properties.dewpoint.value;
+        const relativeHumidity = data.features[1].properties.relativeHumidity.value;
+        const precipitationLast6Hours = data.features[1].properties.precipitationLast6Hours.value;
         
-        document.getElementById("temperature").innerText = Math.round(temperature);
+        document.getElementById("temperature").innerText = convertTemperature(temperature, 0, JSON.parse(localStorage.getItem("w-settings")).temperature);
         document.getElementById("loc").innerText = st;
         document.getElementById("location-full").innerText = name;
         document.getElementById("description").innerText = desc;
@@ -72,8 +78,8 @@ async function getWeather(station) {
         document.getElementById("windSpeed").querySelector(".tile-value").innerText = Math.round(windSpeed);
         document.getElementById("windSpeed").querySelector(".compass").style.transform = `rotate(${windDirection}deg)`;
         document.getElementById("visibility").querySelector(".tile-value").innerText = Math.round(visibility / 1000);
-        document.getElementById("heatIndex").querySelector(".tile-value").innerHTML = `<span class="str"><span>${Math.round(heatIndex)}</span><span class="symbol small">°</span></span>`;
-        document.getElementById("dewpoint").querySelector(".tile-value").innerHTML = `<span class="str"><span>${Math.round(dewpoint)}</span><span class="symbol small">°</span></span>`;
+        document.getElementById("heatIndex").querySelector(".tile-value").innerHTML = `<span class="str"><span>${convertTemperature(heatIndex, 0, JSON.parse(localStorage.getItem("w-settings")).temperature)}</span><span class="symbol small">°</span></span>`;
+        document.getElementById("dewpoint").querySelector(".tile-value").innerHTML = `<span class="str"><span>${convertTemperature(dewpoint, 0, JSON.parse(localStorage.getItem("w-settings")).temperature)}</span><span class="symbol small">°</span></span>`;
         document.getElementById("relativeHumidity").querySelector(".tile-value").innerText = Math.round(relativeHumidity) + '%';
         document.getElementById("precipitationLast6Hours").querySelector(".tile-value").innerHTML = `<span class='str'><span>${Math.round(precipitationLast6Hours)}</span><span class='symbol small'>"</span></span>`;
 
@@ -89,13 +95,21 @@ async function getWeather(station) {
         const forecastData = await forecastResponse.json();
 
         const periods = forecastData.properties.periods;
-        const todayForecast = periods.filter(period => new Date(period.startTime).getDate() === new Date().getDate());
-        
-        const highTemp = Math.max(...todayForecast.map(period => period.temperature));
-        const lowTemp = Math.min(...todayForecast.map(period => period.temperature));
 
-        document.getElementById("high-temp").innerText = `${Math.round(convertToC(highTemp))}°`;
-        document.getElementById("low-temp").innerText = `${Math.round(convertToC(lowTemp))}°`;
+        const highTemp = convertTemperature(
+            Math.max(...periods.map(period => period.temperature)),
+            1,
+            JSON.parse(localStorage.getItem("w-settings")).temperature
+        );
+        
+        const lowTemp = convertTemperature(
+            Math.min(...periods.map(period => period.temperature)),
+            1,
+            JSON.parse(localStorage.getItem("w-settings")).temperature
+        );
+        
+        document.getElementById("high-temp").innerText = `${highTemp}°`;
+        document.getElementById("low-temp").innerText = `${lowTemp}°`;
 
         const forecastContainer = document.getElementById('forecast');
         forecastContainer.innerHTML = '';
@@ -115,7 +129,7 @@ async function getWeather(station) {
         
                 const forecastDiv = document.createElement('div');
                 forecastDiv.innerHTML = `
-                    <span class="forcast-temp">${Math.round(convertToC(period.temperature))}<span class="symbol">°</span></span>
+                    <span class="forcast-temp">${convertTemperature(period.temperature, 1, JSON.parse(localStorage.getItem("w-settings")).temperature)}<span class="symbol">°</span></span>
                     <span class="forcast-time">${formattedHour}${ampm}</span>
                 `;
                 forecastContainer.appendChild(forecastDiv);
@@ -124,7 +138,11 @@ async function getWeather(station) {
                     maxChanceOfRain = period.probabilityOfPrecipitation.value;
                 }
             });
+
         document.getElementById("chanceOfRain").querySelector(".tile-value").innerText = maxChanceOfRain + '%';
+
+        document.getElementById("heatIndex").querySelector(".tile-unit").innerText = `${JSON.parse(localStorage.getItem("w-settings")).temperature === 1 ? 'F°' : 'C°'}`;
+        document.getElementById("dewpoint").querySelector(".tile-unit").innerText = `${JSON.parse(localStorage.getItem("w-settings")).temperature === 1 ? 'F°' : 'C°'}`;
     } catch (error) {
         console.error('Error fetching temperature:', error);
     }
@@ -207,6 +225,17 @@ function setMoon() {
     document.getElementById("moon").querySelector(".tile-unit").innerText = phaseName;
 }
 
+function convertTemperature(val, from, to) {
+    // 1 = f, 0 = c
+    if (from === 1 && to === 0) {
+        return Math.round((val - 32) * 5 / 9);
+    } else if (from === 0 && to === 1) {
+        return Math.round((val * 9 / 5) + 32);
+    } else {
+        return Math.round(val);
+    }
+}
+
 function convertToC(f) {
     return (f - 32) * 5 / 9;
 }
@@ -266,7 +295,7 @@ async function searchStations(query) {
                                     ${stationId} - ${name}
                                 </span>
                                 <div class="saved-loc-title">
-                                    <span id="loc-temp">${temperature ? Math.round(temperature) : 'N/A'}°</span>
+                                    <span id="loc-temp">${temperature ? convertTemperature(temperature, 0, JSON.parse(localStorage.getItem("w-settings")).temperature) : 'N/A'}°</span>
                                 </div>
                             `;
 
@@ -304,21 +333,48 @@ function toggleSettings() {
     
     if (modalOuter.classList.contains("open")) {
         bodyInner.classList.remove("fade");
-        modalOuter.classList.remove("open");
         document.querySelector('meta[name="theme-color"]').setAttribute('content', getComputedStyle(document.body).getPropertyValue('--back'));
+        modalOuter.classList.remove("open");
 
-        // Add a delay before setting visibility to hidden
         setTimeout(() => {
             modalOuter.style.visibility = "hidden";
-        }, 500); // Match this delay with your CSS transition time
+            document.querySelector(".modal-inner").innerHTML = ``;
+            document.querySelector(".modal-options").innerHTML = ``;
+        }, 500);
+        
     } else {
         modalOuter.style.visibility = "visible";
+        loadSettings();
         modalOuter.classList.add("open");
         bodyInner.classList.add("fade");
         document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000');
     }
 }
 
+function loadSettings() {
+    document.querySelector(".modal-inner").innerHTML = `
+    <span class="modal-header">Settings</span>
+    <span class="modal-subheader">Temperature Unit</span>
+    <div class="temperature-unit">
+    <div class="temperature-unit-button enabled" id="unit-c" onclick="setTemperatureUnit(0)">C°</div>
+    <div class="temperature-unit-button" id="unit-f" onclick="setTemperatureUnit(1)">F°</div>
+    </div>
+    `;
+    document.querySelector(".modal-options").innerHTML = `
+    <button class="modal-button" onclick="toggleSettings()">Close</button>
+    `;
+    document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).temperature ? 'f' : 'c'}`).classList.add("enabled");
+    document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).temperature ? 'c' : 'f'}`).classList.remove("enabled");
+}
+
+function setTemperatureUnit(unit) {
+    const currentSettings = JSON.parse(localStorage.getItem("w-settings"));
+    currentSettings.temperature = unit;
+    localStorage.setItem("w-settings", JSON.stringify(currentSettings));
+
+    document.querySelector(`#unit-${unit ? 'f' : 'c'}`).classList.add("enabled");
+    document.querySelector(`#unit-${unit ? 'c' : 'f'}`).classList.remove("enabled");
+}
 
 setMoon();
 

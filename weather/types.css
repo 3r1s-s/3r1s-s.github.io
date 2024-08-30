@@ -13,9 +13,13 @@
     --blue-300: #6062de;
     --blue-500: #5b5eff;
     --blue-600: #4143d6;
+    --blue-700: #22249f;
     --blue-800: #22248d;
+    --blue-900: #23276a;
+    --blue-1000: #0a0b1e;
 
     --purple-600: #4d4e72;
+    --purple-700: #434562;
     --purple-800: #363750;
 
     --grey-100: #aaa;
@@ -108,4 +112,34 @@
     --blue-800: #000;
     --tile-text: #000;
     --red: #fff;
+}
+
+.modal.purple {
+    --settings-text: #e8e1f2;
+    --settings-100: #020102;
+    --settings-200: #070609;
+    --settings-300: #0e0d13;
+    --settings-400: #14121b;
+    --settings-500: #191825;
+    --settings-600: #221e2e;
+}
+
+.modal.orange {
+    --settings-text: #4d1600;
+    --settings-100: #b67441;
+    --settings-200: #ca8a59;
+    --settings-300: #73c5ff;
+    --settings-400: #f3d1b7;
+    --settings-500: #d7a076;
+    --settings-600: #e4b692;
+}
+
+.modal.blue {
+    --settings-text: #002d4d;
+    --settings-100: #3f88bc;
+    --settings-200: #57a2d8;
+    --settings-300: #73c5ff;
+    --settings-400: #8fd0ff;
+    --settings-500: #58a1d5;
+    --settings-600: #68afe3;
 }
