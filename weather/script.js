@@ -2,9 +2,14 @@ if (!localStorage.getItem("w-settings")) {
     const settings = {
         "temperature": 0, // 1 = F, 0 = C
         "measure": 0, // 1 = miles, 0 = km;
+        "theme": 0, // 1 = dark, 0 = light;
     };
     
     localStorage.setItem("w-settings", JSON.stringify(settings));
+}
+
+if (localStorage.getItem("w-settings").theme === "1") {
+    document.body.classList.add("dark");
 }
 
 async function getWeather(station) {
@@ -58,6 +63,10 @@ async function getWeather(station) {
             if (desc) {
                 document.body.classList.add(desc.toLowerCase().replace(/\s+/g, '-'));
             }
+        }
+
+        if (JSON.parse(localStorage.getItem("w-settings")).theme === 1) {
+            document.body.classList.add("dark");
         }
 
         const meta = document.querySelector('meta[name="theme-color"]');
@@ -382,6 +391,11 @@ function loadSettings() {
     <div class="unit-toggle-button" id="unit-km" data-unit="0" onclick="setUnit(0, 2)">Kilometers</div>
     <div class="unit-toggle-button enabled" id="unit-mi" data-unit="1" onclick="setUnit(1, 2)">Miles</div>
     </div>
+    <span class="modal-subheader">App Theme</span>
+    <div class="unit-toggle" id='unit-theme'>
+    <div class="unit-toggle-button" id="theme-light" data-unit="0" onclick="setUnit(1, 3)">Light</div>
+    <div class="unit-toggle-button enabled" id="theme-dark" data-unit="1" onclick="setUnit(0, 3)">Dark</div>
+    </div>
     `;
     document.querySelector(".modal-options").innerHTML = `
     <button class="modal-button" onclick="applySettings()">Apply</button>
@@ -391,6 +405,8 @@ function loadSettings() {
     document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).temperature ? 'c' : 'f'}`).classList.remove("enabled");
     document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).measure ? 'mi' : 'km'}`).classList.add("enabled");
     document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).measure ? 'km' : 'mi'}`).classList.remove("enabled");
+    document.querySelector(`#theme-${JSON.parse(localStorage.getItem("w-settings")).theme ? 'dark' : 'light'}`).classList.add("enabled");
+    document.querySelector(`#theme-${JSON.parse(localStorage.getItem("w-settings")).theme ? 'light' : 'dark'}`).classList.remove("enabled");
 }
 function setUnit(unit, target) {
     // 1 = temp, 2 = measure
@@ -400,6 +416,9 @@ function setUnit(unit, target) {
     } else if (target == 2) {
         document.querySelector(`#unit-${unit ? 'mi' : 'km'}`).classList.add("enabled");
         document.querySelector(`#unit-${unit ? 'km' : 'mi'}`).classList.remove("enabled");
+    } else if (target == 3) {
+        document.querySelector(`#theme-${unit ? 'light' : 'dark'}`).classList.add("enabled");
+        document.querySelector(`#theme-${unit ? 'dark' : 'light'}`).classList.remove("enabled");
     }
 }
 
@@ -407,6 +426,7 @@ function applySettings() {
     const currentSettings = JSON.parse(localStorage.getItem("w-settings"));
     currentSettings.temperature = parseInt(document.querySelector("#unit-temperature .unit-toggle-button.enabled").getAttribute("data-unit"));
     currentSettings.measure = parseInt(document.querySelector("#unit-measure .unit-toggle-button.enabled").getAttribute("data-unit"));
+    currentSettings.theme = parseInt(document.querySelector("#unit-theme .unit-toggle-button.enabled").getAttribute("data-unit"));
     // save
 
     localStorage.setItem("w-settings", JSON.stringify(currentSettings));

@@ -698,6 +698,10 @@ body {
         background-color: transparent;
     }
 
+    .dark .sidebar-button, .settings-button {
+        color: var(--back-text);
+    }
+
     .sidebar-button#refresh {
         display: none;
     }
