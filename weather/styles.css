@@ -640,7 +640,7 @@ body {
     background-color: var(--settings-500);
 }
 
-.temperature-unit {
+.unit-toggle {
     display: flex;
     flex-wrap: nowrap;
     border: 2px solid var(--settings-text);
@@ -648,7 +648,7 @@ body {
     overflow: hidden;
 }
 
-.temperature-unit-button {
+.unit-toggle-button {
     flex: 1;
     display: flex;
     justify-content: center;
@@ -656,7 +656,7 @@ body {
     padding: 10px;
 }
 
-.temperature-unit-button.enabled {
+.unit-toggle-button.enabled {
     background-color: var(--settings-text);
     color: var(--settings-400);
     font-weight: 600;

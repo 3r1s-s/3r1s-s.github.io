@@ -1,6 +1,7 @@
 if (!localStorage.getItem("w-settings")) {
     const settings = {
-        "temperature": 0,
+        "temperature": 0, // 1 = F, 0 = C
+        "measure": 0, // 1 = miles, 0 = km;
     };
     
     localStorage.setItem("w-settings", JSON.stringify(settings));
@@ -29,13 +30,15 @@ async function getWeather(station) {
         let desc
         if (data.features[0].properties.textDescription) {
             desc = data.features[0].properties.textDescription;
+        } else {
+            desc = data.features[1].properties.textDescription;
         }
 
         let temperature
         if (data.features[0].properties.temperature.value) {
             temperature = data.features[0].properties.temperature.value;
         } else {
-            temperature = 0;
+            temperature = data.features[1].properties.temperature.value;
         }
 
         if (desc === "Fog/Mist") {
@@ -75,9 +78,9 @@ async function getWeather(station) {
         document.getElementById("description").innerText = desc;
 
         document.getElementById("barometricPressure").querySelector(".tile-value").innerText = Math.round(barometricPressure * 0.0002953);
-        document.getElementById("windSpeed").querySelector(".tile-value").innerText = Math.round(windSpeed);
+        document.getElementById("windSpeed").querySelector(".tile-value").innerText = convertDistance(windSpeed, 0, JSON.parse(localStorage.getItem("w-settings")).measure);
         document.getElementById("windSpeed").querySelector(".compass").style.transform = `rotate(${windDirection}deg)`;
-        document.getElementById("visibility").querySelector(".tile-value").innerText = Math.round(visibility / 1000);
+        document.getElementById("visibility").querySelector(".tile-value").innerText = convertDistance(visibility / 1000, 0, JSON.parse(localStorage.getItem("w-settings")).measure);
         document.getElementById("heatIndex").querySelector(".tile-value").innerHTML = `<span class="str"><span>${convertTemperature(heatIndex, 0, JSON.parse(localStorage.getItem("w-settings")).temperature)}</span><span class="symbol small">°</span></span>`;
         document.getElementById("dewpoint").querySelector(".tile-value").innerHTML = `<span class="str"><span>${convertTemperature(dewpoint, 0, JSON.parse(localStorage.getItem("w-settings")).temperature)}</span><span class="symbol small">°</span></span>`;
         document.getElementById("relativeHumidity").querySelector(".tile-value").innerText = Math.round(relativeHumidity) + '%';
@@ -143,6 +146,8 @@ async function getWeather(station) {
 
         document.getElementById("heatIndex").querySelector(".tile-unit").innerText = `${JSON.parse(localStorage.getItem("w-settings")).temperature === 1 ? 'F°' : 'C°'}`;
         document.getElementById("dewpoint").querySelector(".tile-unit").innerText = `${JSON.parse(localStorage.getItem("w-settings")).temperature === 1 ? 'F°' : 'C°'}`;
+        document.getElementById("windSpeed").querySelector(".tile-unit").innerText = `${JSON.parse(localStorage.getItem("w-settings")).measure === 1 ? 'mph' : 'km/h'}`;
+        document.getElementById("visibility").querySelector(".tile-unit").innerText = `${JSON.parse(localStorage.getItem("w-settings")).measure === 1 ? 'mi' : 'km'}`;
     } catch (error) {
         console.error('Error fetching temperature:', error);
     }
@@ -236,11 +241,23 @@ function convertTemperature(val, from, to) {
     }
 }
 
+function convertDistance(val, from, to) {
+    // 1 = mi, 0 = km
+    if (from === 1 && to === 0) {
+        return Math.round(val * 1.60934);
+    } else if (from === 0 && to === 1) {
+        return Math.round(val / 1.60934);
+    } else {
+        return Math.round(val);
+    }
+}
+
 function convertToC(f) {
     return (f - 32) * 5 / 9;
 }
 
 async function searchStations(query) {
+    document.getElementById('search-input').blur();
     if (query) {
         document.querySelector('.sidebar-main').innerHTML = '';
         document.getElementById('search-input').value = '';
@@ -268,7 +285,8 @@ async function searchStations(query) {
                 const stations = stationsData.features;
 
                 if (stations.length > 0) {
-                    for (const station of stations) {
+                    for (let i = 0; i < Math.min(stations.length, 10); i++) {
+                        const station = stations[i];
                         const stationId = station.properties.stationIdentifier;
 
                         try {
@@ -355,25 +373,46 @@ function loadSettings() {
     document.querySelector(".modal-inner").innerHTML = `
     <span class="modal-header">Settings</span>
     <span class="modal-subheader">Temperature Unit</span>
-    <div class="temperature-unit">
-    <div class="temperature-unit-button enabled" id="unit-c" onclick="setTemperatureUnit(0)">C°</div>
-    <div class="temperature-unit-button" id="unit-f" onclick="setTemperatureUnit(1)">F°</div>
+    <div class="unit-toggle" id='unit-temperature'>
+    <div class="unit-toggle-button enabled" id="unit-c" data-unit="0" onclick="setUnit(0, 1)">C°</div>
+    <div class="unit-toggle-button" id="unit-f" data-unit="1" onclick="setUnit(1, 1)">F°</div>
+    </div>
+    <span class="modal-subheader">Measurement System</span>
+    <div class="unit-toggle" id='unit-measure'>
+    <div class="unit-toggle-button" id="unit-km" data-unit="0" onclick="setUnit(0, 2)">Kilometers</div>
+    <div class="unit-toggle-button enabled" id="unit-mi" data-unit="1" onclick="setUnit(1, 2)">Miles</div>
     </div>
     `;
     document.querySelector(".modal-options").innerHTML = `
+    <button class="modal-button" onclick="applySettings()">Apply</button>
     <button class="modal-button" onclick="toggleSettings()">Close</button>
     `;
     document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).temperature ? 'f' : 'c'}`).classList.add("enabled");
     document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).temperature ? 'c' : 'f'}`).classList.remove("enabled");
+    document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).measure ? 'mi' : 'km'}`).classList.add("enabled");
+    document.querySelector(`#unit-${JSON.parse(localStorage.getItem("w-settings")).measure ? 'km' : 'mi'}`).classList.remove("enabled");
+}
+function setUnit(unit, target) {
+    // 1 = temp, 2 = measure
+    if (target == 1) {
+        document.querySelector(`#unit-${unit ? 'f' : 'c'}`).classList.add("enabled");
+        document.querySelector(`#unit-${unit ? 'c' : 'f'}`).classList.remove("enabled");
+    } else if (target == 2) {
+        document.querySelector(`#unit-${unit ? 'mi' : 'km'}`).classList.add("enabled");
+        document.querySelector(`#unit-${unit ? 'km' : 'mi'}`).classList.remove("enabled");
+    }
 }
 
-function setTemperatureUnit(unit) {
+function applySettings() {
     const currentSettings = JSON.parse(localStorage.getItem("w-settings"));
-    currentSettings.temperature = unit;
-    localStorage.setItem("w-settings", JSON.stringify(currentSettings));
+    currentSettings.temperature = parseInt(document.querySelector("#unit-temperature .unit-toggle-button.enabled").getAttribute("data-unit"));
+    currentSettings.measure = parseInt(document.querySelector("#unit-measure .unit-toggle-button.enabled").getAttribute("data-unit"));
+    // save
 
-    document.querySelector(`#unit-${unit ? 'f' : 'c'}`).classList.add("enabled");
-    document.querySelector(`#unit-${unit ? 'c' : 'f'}`).classList.remove("enabled");
+    localStorage.setItem("w-settings", JSON.stringify(currentSettings));
+    setTimeout(() => {
+        location.reload();
+    }, 200);
 }
 
 setMoon();

@@ -42,7 +42,7 @@
             <div class="sidebar-outer">
                 <div class="sidebar-inner">
                     <div class="searchbar button">
-                        <input class="searchbar-input" id="search-input" type="text" placeholder="search"></input>
+                        <input class="searchbar-input" id="search-input" type="text" placeholder="search" onkeydown="if (event.keyCode == 13) searchStations(document.getElementById('search-input').value)"></input>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" onclick="searchStations(document.getElementById('search-input').value)">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M17.868 12.4264C15.6268 14.6675 12.288 15.1418 9.58217 13.8492L4.14215 19.2894C3.19457 20.2369 1.65825 20.2369 0.710681 19.2894C-0.236894 18.3417 -0.236894 16.8055 0.710681 15.8578L6.15077 10.4178C4.85821 7.71204 5.33248 4.37315 7.5736 2.13204C10.4164 -0.710679 15.0253 -0.710679 17.868 2.13204C20.7107 4.97474 20.7107 9.58369 17.868 12.4264ZM9.28934 10.7107C11.1845 12.6058 14.2571 12.6058 16.1523 10.7107C18.0474 8.81554 18.0474 5.74291 16.1523 3.84776C14.2571 1.95263 11.1845 1.95263 9.28934 3.84776C7.39419 5.74291 7.39419 8.81554 9.28934 10.7107Z" fill="currentColor"/>
                         </svg>
@@ -86,7 +86,7 @@
                 <div class="tile" id="windSpeed">
                     <span class="tile-name">Wind Speed</span>
                     <span class="tile-value">--</span>
-                    <span class="tile-unit">km/h</span>
+                    <span class="tile-unit">--</span>
                     <svg class="compass" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M44.3144 6.83224C45.9637 1.72259 54.0363 1.72258 55.6856 6.83223L77.7512 75.1937C79.3189 80.0507 73.1441 83.9367 68.5843 80.9626L51.7407 69.9767C50.7029 69.2999 49.2971 69.2999 48.2593 69.9767L31.4157 80.9626C26.8559 83.9367 20.6811 80.0507 22.2488 75.1937L44.3144 6.83224Z" fill="currentColor"/>
                     </svg>
@@ -94,17 +94,17 @@
                 <div class="tile" id="visibility">
                     <span class="tile-name">Visibility</span>
                     <span class="tile-value">--</span>
-                    <span class="tile-unit">km</span>
+                    <span class="tile-unit">--</span>
                 </div>
                 <div class="tile" id="heatIndex">
                     <span class="tile-name">Heat Index</span>
                     <span class="tile-value">--</span>
-                    <span class="tile-unit">C°</span>
+                    <span class="tile-unit">--</span>
                 </div>
                 <div class="tile" id="dewpoint">
                     <span class="tile-name">Dewpoint</span>
                     <span class="tile-value">--</span>
-                    <span class="tile-unit">C°</span>
+                    <span class="tile-unit">--</span>
                 </div>
                 <div class="tile" id="relativeHumidity">
                     <span class="tile-name">Humidity</span>
