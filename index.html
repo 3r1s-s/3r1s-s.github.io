@@ -202,5 +202,45 @@
             </p>
         </div>
     </div>
+    <div class="apps">
+        <div class="apps-button" onclick="toggleApps()">
+            <svg width="16" height="16" viewBox="0 0 175 175" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="35" height="35" fill="currentColor"/>
+                <rect y="70" width="35" height="35" fill="currentColor"/>
+                <rect y="140" width="35" height="35" fill="currentColor"/>
+                <rect x="140" width="35" height="35" fill="currentColor"/>
+                <rect x="140" y="70" width="35" height="35" fill="currentColor"/>
+                <rect x="140" y="140" width="35" height="35" fill="currentColor"/>
+                <rect x="70" width="35" height="35" fill="currentColor"/>
+                <rect x="70" y="70" width="35" height="35" fill="currentColor"/>
+                <rect x="70" y="140" width="35" height="35" fill="currentColor"/>
+            </svg>    
+        </div>
+        <div class="apps-inner" style="display: none;">
+            <iframe src="apps/index.html" frameborder="0" style="height: 340px; width: 340px; color-scheme: light; border-radius: 15px; box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);"></iframe>
+        </div>
+    </div>
 </body>
+<script>
+    function toggleApps() {
+        const appsInner = document.querySelector(".apps-inner");
+        appsInner.style.display = appsInner.style.display == "none" ? "flex" : "none";
+
+        if (appsInner.style.display === "flex") {
+            document.addEventListener("click", clickAway);
+        } else {
+            document.removeEventListener("click", clickAway);
+        }
+    }
+
+    function clickAway(event) {
+        const appsInner = document.querySelector(".apps-inner");
+        const appsButton = document.querySelector(".apps-button");
+
+        if (!appsInner.contains(event.target) && !appsButton.contains(event.target)) {
+            appsInner.style.display = "none";
+            document.removeEventListener("click", clickAway);
+        }
+    }
+</script>
 </html>
