@@ -5,3 +5,11 @@
 [submodule "meo"]
 	path = meo
 	url = https://github.com/3r1s-s/meo.git
+
+[submodule "gnaw"]
+	path = gnaw
+	url = https://github.com/3r1s-s/gnaw.git
+
+[submodule "markpad"]
+	path = markpad
+	url = https://github.com/3r1s-s/markpad.git
