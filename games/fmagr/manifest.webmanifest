@@ -1,0 +1,36 @@
+{
+  "name": "Five Minutes at Gen's Remastered",
+  "short_name": "fmagr",
+  "start_url": "/games/fmagr",
+  "display": "standalone",
+  "background_color": "#000",
+  "lang": "en",
+  "scope": "/games/fmagr",
+  "description": "Neo + Meower",
+  "categories": [
+    "games"
+  ],
+  "orientation": "landscape",
+  "theme_color": "#000",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": ""
+    },
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    }
+  ],
+  "id": "fmagr",
+  "dir": "ltr",
+  "display_override": [
+    "standalone",
+    "window-controls-overlay",
+    "borderless"
+  ]
+}
