@@ -12,7 +12,7 @@ body {
 .body-inner {
     background-color: #221e2e;
     padding: 8px;
-    border-radius: 15px;
+    border-radius: 25px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -22,7 +22,7 @@ body {
 .directory {
     background-color: #130f1c;
     padding: 8px;
-    border-radius: 15px;
+    border-radius: 20px;
     max-width: 324px;
     box-sizing: border-box;
     display: flex;
