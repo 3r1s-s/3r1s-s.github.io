@@ -218,6 +218,33 @@ iframe {
     cursor: pointer;
 }
 
+.listening {
+    display: flex;
+    gap: 10px;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.song-title-outer {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.song-album-outer, .song-artist-outer {
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.cover {
+    border-radius: 6px;
+    width: 174px;
+    height: 174px;
+}
+
 /*Fonts*/
 
 @font-face {

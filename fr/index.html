@@ -92,6 +92,27 @@
             <p class="subheader flex"><a class="special" href="https://steamcommunity.com/profiles/76561199230479533" target="_blank">Steam</a></p>
         </div>
     </div>
+    <div class="main" id="listening">
+        <div class="main-inner">
+            <p class="header flex">Écouter</p>
+            <div class="listening">
+                <div><img class="cover"></div>
+                <div class="song-info">
+                    <span class="song-title-outer">
+                        <span class="song-title"></span>
+                    </span>
+                    <span class="song-album-outer">
+                        Sur
+                        <span class="song-album"></span>
+                    </span>
+                    <span class="song-artist-outer">
+                        Par
+                        <span class="song-artist"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="main" id="langs">
         <div class="main-inner">
             <p class="header flex">Langues à qui je suis bon</p>
@@ -193,6 +214,7 @@
                 <a href="#intro" class="nav-link">intro</a>
                 <a href="#about" class="nav-link">environ</a>
                 <a href="#things" class="nav-link">things</a>
+                <a href="#listening" class="nav-link">écouter</a>
                 <a href="#langs" class="nav-link">langues</a>
                 <a href="#artists" class="nav-link">artistes</a>
                 <a href="#collection" class="nav-link">éléments</a>
@@ -241,5 +263,32 @@
             document.removeEventListener("click", clickAway);
         }
     }
+
+    let user = 'eriiis';
+    let url = 'https://lastfm-last-played.biancarosa.com.br/' + user + '/latest-song';
+    let title = document.querySelector('.listening').querySelector('.song-title');
+    let album = document.querySelector('.listening').querySelector('.song-album');
+    let artist = document.querySelector('.listening').querySelector('.song-artist');
+    let songcover = document.querySelector('.listening').querySelector('.cover');
+
+    function fetchData() {
+        fetch(url)
+            .then(function (response) {
+                return response.json()
+            }).then(function (json) {
+                title.innerHTML = json['track']['name'];
+                album.innerHTML = json['track']['album']['#text'];
+                artist.innerHTML = json['track']['artist']['#text'];
+                
+                if (json['track']['image']['2']['#text'] === ''){
+                    songcover.src = '../images/cover.png';
+                } else {
+                    songcover.src = json['track']['image']['2']['#text'];
+                }
+            });
+    }
+
+    fetchData();
+    setInterval(() => { fetchData(); }, 10000);
 </script>
 </html>
