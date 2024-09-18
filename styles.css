@@ -226,7 +226,7 @@ iframe {
 .song-info {
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    gap: 8px;
 }
 
 .song-title-outer {
