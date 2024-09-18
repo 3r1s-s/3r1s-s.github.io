@@ -374,4 +374,8 @@ iframe {
         justify-content: center;
         align-items: center;
     }
+
+    .listening {
+        flex-direction: column;
+    }
 }
