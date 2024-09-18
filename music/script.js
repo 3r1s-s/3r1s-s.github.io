@@ -27,7 +27,6 @@ function fetchData() {
         });
         containerWidth = document.querySelector('.song-outer-first').offsetWidth;
         textWidth = songText.offsetWidth;
-        scrollText();
 }
 
 function moveCover() {
