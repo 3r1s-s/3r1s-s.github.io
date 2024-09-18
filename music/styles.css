@@ -19,6 +19,7 @@ body {
     -webkit-touch-callout: none;
     padding-top: env(safe-area-inset-top);
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .listening {
