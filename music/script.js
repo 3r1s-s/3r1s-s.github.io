@@ -10,16 +10,6 @@ let containerWidth = document.querySelector('.song-outer-first').offsetWidth;
 let textWidth = songText.offsetWidth;
 
 function fetchData() {
-    if (true) {
-        songcover.style.setProperty('--cover', `url('https://lastfm.freetls.fastly.net/i/u/256s/9da8be34590e6d59fe131e96693f0475.jpg')`);
-        title.innerHTML = 'This is a really really really long name';
-        title.setAttribute('style', `--title: 'This is a really really really long name'`);
-        album.innerHTML = 'album';
-        artist.innerHTML = 'artist';
-        containerWidth = document.querySelector('.song-outer-first').offsetWidth;
-        textWidth = songText.offsetWidth;
-        return
-    }
     fetch(url)
         .then(function (response) {
             return response.json()
