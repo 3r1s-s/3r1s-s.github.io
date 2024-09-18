@@ -50,5 +50,5 @@ function scrollText() {
 fetchData();
 moveCover();
 // scrollText();
-setInterval(() => { fetchData(); }, 20000);
+setInterval(() => { fetchData(); }, 50000);
 setInterval(() => { moveCover(); }, 50000);

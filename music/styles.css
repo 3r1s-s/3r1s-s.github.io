@@ -26,7 +26,7 @@ body {
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
-    padding-top: env(safe-area-inset-top);
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
     box-sizing: border-box;
     overflow: hidden;
 }
