@@ -34,6 +34,11 @@ body::before {
     top: 0;
     left: 0;
     box-shadow: inset 0 -10px 50px #00000080;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
 }
 
 .listening {
