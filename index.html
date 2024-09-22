@@ -98,7 +98,7 @@
         <div class="main-inner">
             <p class="header flex">Listening to</p>
             <div class="listening">
-                <div><img class="cover"></div>
+                <div><div class="cover"></div></div>
                 <div class="song-info">
                     <span class="song-title-outer">
                         <span class="song-title"></span>
@@ -284,8 +284,9 @@
                 
                 if (json['track']['image']['2']['#text'] === ''){
                     songcover.src = '/images/cover.png';
+                    songcover.style.setProperty('--cover', `url('/images/cover.png'`);
                 } else {
-                    songcover.src = json['track']['image']['2']['#text'];
+                    songcover.style.setProperty('--cover', `url('${json['track']['image']['2']['#text']}`);
                 }
             });
     }
