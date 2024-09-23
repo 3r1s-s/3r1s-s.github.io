@@ -13,3 +13,7 @@
 [submodule "markpad"]
 	path = markpad
 	url = https://github.com/3r1s-s/markpad.git
+
+[submodule "scribe"]
+	path = scribe
+	url = https://github.com/3r1s-s/scribe.git
