@@ -1,3 +1,7 @@
+[submodule "scribe"]
+	path = scribe
+	url = https://github.com/3r1s-s/scribe.git
+
 [submodule "weather"]
 	path = weather
 	url = https://github.com/3r1s-s/weather.git
@@ -13,7 +17,3 @@
 [submodule "markpad"]
 	path = markpad
 	url = https://github.com/3r1s-s/markpad.git
-
-[submodule "scribe"]
-	path = scribe
-	url = https://github.com/3r1s-s/scribe.git
