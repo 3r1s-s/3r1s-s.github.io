@@ -1,0 +1,63 @@
+:root {
+    -webkit-touch-callout: none;
+    -webkit-user-callout: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-modify: none;
+    -webkit-highlight: none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+:root {
+    --red: rgb(255, 69, 58);
+    --orange: rgb(255, 159, 10);
+    --yellow: rgb(255, 214, 110);
+    --green: rgb(48, 209, 88);
+    --mint: rgb(99, 230, 226);
+    --teal: rgb(64, 203, 224);
+    --cyan: rgb(100, 210, 255);
+    --blue: rgb(10, 132, 255);
+    --indigo: rgb(94, 92, 230);
+    --purple: rgb(191, 90, 242);
+    --pink: rgb(255, 55, 95);
+    --brown: rgb(172, 142, 104);
+    --black: rgb(0, 0, 0);
+    --grey: rgb(142, 142, 147);
+    --grey-2: rgb(99, 99, 102);
+    --grey-3: rgb(72, 72, 74);
+    --grey-4: rgb(58, 58, 60);
+    --grey-5: rgb(44, 44, 46);
+    --grey-6: rgb(28, 28, 30);
+    --white: rgb(255, 255, 255);
+    --bg-1: rgb(0, 0, 0);
+    --bg-2: rgb(28, 28, 30);
+    --bg-3: rgb(44, 44, 46);
+    --bg-4: rgb(58, 58, 60);
+    --text-1: rgb(255, 255, 255);
+    --text-2: rgba(235, 235, 245, 0.6);
+    --text-3: rgba(235, 235, 245, 0.3);
+    --text-4: rgba(235, 235, 245, 0.16);
+    --fill-1: rgba(120, 120, 128, 0.36);
+    --fill-2: rgba(120, 120, 128, 0.32);
+    --fill-3: rgba(118, 118, 128, 0.24);
+    --fill-4: rgba(116, 116, 128, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+
+}
+
+html {
+    margin: 0px;
+    padding: 0px;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    color: white;
+    overscroll-behavior: none;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    padding-top: env(safe-area-inset-top);
+}
