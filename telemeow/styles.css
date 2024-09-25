@@ -158,7 +158,7 @@ button, input {
 }
 
 .content {
-    padding: calc(35px + env(safe-area-inset-top)) 0 calc(var(--nav-height) + env(safe-area-inset-bottom)) 0;
+    padding: 35px 0 calc(var(--nav-height) + env(safe-area-inset-bottom)) 0;
     box-sizing: border-box;
     height: 100%;
     width: 100%;

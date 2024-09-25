@@ -18,14 +18,12 @@ function openModal(data) {
     }
     modalOuter.style.visibility = "visible";
     modalOuter.classList.add("open");
-    app.classList.add("fade");
 }
 
 function closeModal() {
     const modalOuter = document.querySelector(".modal-outer");
     const modalInner = document.querySelector(".modal");
 
-    app.classList.remove("fade");
     modalOuter.classList.remove("open");
 
     setTimeout(() => {
