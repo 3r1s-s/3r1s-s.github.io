@@ -159,7 +159,7 @@ button, input {
 }
 
 .content {
-    padding: 35px 0 calc(var(--nav-height) + env(safe-area-inset-bottom)) 0;
+    margin: 35px 0 calc(var(--nav-height) + env(safe-area-inset-bottom)) 0;
     box-sizing: border-box;
     height: 100%;
     width: 100%;
@@ -169,7 +169,7 @@ button, input {
 }
 
 .content.max {
-    padding: 0;
+    margin: 0;
 }
 
 .chats {
@@ -220,6 +220,7 @@ button, input {
     background-image: var(--image);
     border-radius: 100%;
     position: relative;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset;
 }
 
 .chat-icon.online::after {
@@ -387,21 +388,6 @@ button, input {
     transition: transform cubic-bezier(0.68, 0.1, 0.27, 1) 0.4s;
 }
 
-.modal.small {
-    align-self: center;
-    width: 80%;
-    height: 250px;
-    border-radius: 40px;
-    transform: scale(0.8) translateY(0);
-    opacity: 0;
-    transition: transform cubic-bezier(0,-.25,0,1.5) 0.2s, opacity cubic-bezier(0,-.25,0,1) 0.2s;
-}
-
-.modal-outer.open .modal.small {
-    transform: scale(1);
-    opacity: 1;
-}
-
 .modal-outer.open .modal {
     transform: translateY(0);
 }
@@ -457,4 +443,5 @@ button, input {
     background-image: var(--image);
     border-radius: 100%;
     position: relative;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset;
 }

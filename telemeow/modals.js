@@ -18,9 +18,7 @@ function openModal(data) {
     }
     modalOuter.style.visibility = "visible";
     modalOuter.classList.add("open");
-    if (!data.small) {
-        app.classList.add("fade");
-    }
+    app.classList.add("fade");
 }
 
 function closeModal() {
