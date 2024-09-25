@@ -226,6 +226,8 @@ button {
     outline: none;
     border: 2px solid var(--app-800);
     caret-color: var(--app-blue);
+    color: var(--app-text);
+    transition: border .15s ease-out;
 }
 
 .login-input:focus {
@@ -250,6 +252,10 @@ button {
 
 .login-input:focus + label {
     color: var(--app-blue);
+}
+
+.login-input:focus + label,
+.login-input.filled + label {
     top: -10px;
     left: 5px;
     font-size: .75em;
@@ -265,4 +271,3 @@ button {
     color: var(--app-text);
     font-weight: 600;
 }
-

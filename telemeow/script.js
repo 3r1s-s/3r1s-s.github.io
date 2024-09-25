@@ -104,6 +104,16 @@ function login() {
             <button class="login-button">Login</button>
         </div>
     `;
+
+    document.querySelectorAll('.login-input').forEach(function(input) {
+        input.addEventListener('input', function() {
+            if (this.value) {
+                this.classList.add('filled');
+            } else {
+                this.classList.remove('filled');
+            }
+        });
+    });
 }
 
 login(); //remove later
