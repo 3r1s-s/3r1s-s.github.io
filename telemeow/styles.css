@@ -27,6 +27,8 @@
     --app-pink: #ff5bff;
     --app-purple: #895bff;
     --app-orange: #ff9b5b;
+
+    --nav-height: 60px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -72,7 +74,6 @@ body {
 }
 
 .nav {
-    --nav-height: 60px;
     position: fixed;
     left: 0px;
     bottom: 0px;
