@@ -51,19 +51,20 @@ body {
     background: var(--app-400);
     color: var(--app-text);
     padding-top: env(safe-area-inset-top);
+    box-sizing: border-box;
 }
 
 .titlebar {
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 100%;
-    height: calc(35px + env(safe-area-inset-bottom));
+    height: calc(35px + env(safe-area-inset-top));
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 2;
-    padding: 0 15px;
+    padding: env(safe-area-inset-top) 15px 0px 15px;
     box-sizing: border-box;
     background-color: var(--app-300);
     border-bottom: 2px solid var(--app-600);
@@ -72,7 +73,7 @@ body {
 
 .nav {
     --nav-height: 60px;
-    position: absolute;
+    position: fixed;
     left: 0px;
     bottom: 0px;
     width: 100%;
