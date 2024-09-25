@@ -73,21 +73,6 @@ const storage = (() => {
     };
 })();
 
-function chatsPage() {
-    titlebar.set('TeleMeow');
-    titlebar.show();
-
-    navigation.show();
-    content.classList.remove('max');
-
-    content.innerHTML = `
-        <div class="chats">
-        </div>
-    `;
-
-    chatList();
-}
-
 function loginPage() {
     page = 'login';
     titlebar.set('Login');
@@ -135,6 +120,21 @@ function login(user, pass) {
         },
         listener: "auth",
     }));
+}
+
+function chatsPage() {
+    titlebar.set('TeleMeow');
+    titlebar.show();
+
+    navigation.show();
+    content.classList.remove('max');
+
+    content.innerHTML = `
+        <div class="chats">
+        </div>
+    `;
+
+    chatList();
 }
 
 function chatList() {
@@ -188,7 +188,7 @@ function chatList() {
             }
 
             chatList += `
-                <div class="chat favourite" onclick="openChat('${chatId}')" id="${chatId}">
+                <div class="chat favourite" onclick="openModal( { small: false, icon: '${icon}', title: '${nickname}', body: 'placeholder' })" id="${chatId}">
                     <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
                     <div class="chat-text">
                         <span class="chat-title">${nickname}</span>
@@ -229,7 +229,7 @@ function chatList() {
             }
 
             chatList += `
-                <div class="chat" onclick="openChat('${chatId}')" id="${chatId}">
+                <div class="chat" onclick="openModal( { small: true, icon: '${icon}', title: '${nickname}', body: 'placeholder' })" id="${chatId}">
                     <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
                     <div class="chat-text">
                         <span class="chat-title">${nickname}</span>

@@ -8,6 +8,7 @@ function openModal(data) {
         }
 
         document.querySelector(".modal-inner").innerHTML = `
+        <div class="modal-icon" style="--image: url('${data.icon}')"></div>
         <span class="modal-header">${data.title}</span>
         <span class="modal-body">${data.body}</span>
         `;
@@ -17,7 +18,9 @@ function openModal(data) {
     }
     modalOuter.style.visibility = "visible";
     modalOuter.classList.add("open");
-    app.classList.add("fade");
+    if (!data.small) {
+        app.classList.add("fade");
+    }
 }
 
 function closeModal() {
@@ -34,3 +37,5 @@ function closeModal() {
         document.querySelector(".modal-options").innerHTML = ``;
     }, 500);
 }
+
+// openModal( { small: false, icon: 'assets/images/placeholder.jpg', title: 'TeleMeow', body: 'placeholder' })
