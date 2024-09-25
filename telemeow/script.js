@@ -32,58 +32,65 @@ const titlebar = (() => {
     };
 })();
 
-const data = (() => {
-    let data = {};
+const navigation = (() => {
+    const nav = document.querySelector('.nav');
+
+    return {
+        hide() {
+            nav.style.display = 'none';
+        },
+        show() {
+            nav.style.display = '';
+        },
+    };
+})();
+
+const storage = (() => {
+    let storagedata = {};
 
     try {
-        data = JSON.parse(localStorage.getItem('tele-data') || '{}');
+        storagedata = JSON.parse(localStorage.getItem('tele-data') || '{}');
     } catch (e) {
         console.error(e);
     }
 
     return {
         get(key) {
-            return data[key];
+            return storagedata[key];
         },
 
         set(key, value) {
-            data[key] = value;
-            localStorage.setItem('tele-data', JSON.stringify(data));
+            storagedata[key] = value;
+            localStorage.setItem('tele-data', JSON.stringify(storagedata));
         },
 
         delete(key) {
-            delete data[key];
-            localStorage.setItem('tele-data', JSON.stringify(data));
+            delete storagedata[key];
+            localStorage.setItem('tele-data', JSON.stringify(storagedata));
         }
     };
 })();
 
-function main() {
-    serverWebSocket = new WebSocket(server);
+function chatsPage() {
+    titlebar.set('TeleMeow');
+    titlebar.show();
 
-    serverWebSocket.addEventListener('error', function(event) {
-        // Error message
-    });
+    navigation.show();
+    content.classList.remove('max');
 
-    serverWebSocket.onopen = () => {
-        if (data().get("token") != undefined && data().get("username") != undefined) {
-            serverWebSocket.send(JSON.stringify({
-                cmd: "authpswd",
-                val: {
-                    username: data().get("username"),
-                    pswd: data().get("token"),
-                },
-                listener: "auth",
-            }));
-        } else {
-            login();
-        };
-    };
+    content.innerHTML = `
+        <div class="chats">
+        </div>
+    `;
+
+    chatList();
 }
 
-function login() {
+function loginPage() {
     titlebar.set('Login');
     titlebar.show();
+
+    navigation.hide();
 
     content.classList.add('max');
 
@@ -101,7 +108,7 @@ function login() {
                     <label for="login-pass">Password</label>
                 </div>
             </div>
-            <button class="login-button">Login</button>
+            <button class="login-button" onclick="login(document.getElementById('login-username').value, document.getElementById('login-pass').value)">Login</button>
         </div>
     `;
 
@@ -116,4 +123,50 @@ function login() {
     });
 }
 
-login(); //remove later
+function login(user, pass) {
+    serverWebSocket.send(JSON.stringify({
+        cmd: "authpswd",
+        val: {
+            username: user,
+            pswd: pass,
+        },
+        listener: "auth",
+    }));
+}
+
+function chatList() {
+    let chatList = '';
+    for (let chatId in chatCache) {
+        let data = chatCache[chatId];
+        let nickname;
+        let icon;
+
+        nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
+        nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+
+
+        if (data.type === 0) {
+            if (data.icon) {
+                icon = `https://uploads.meower.org/icons/${data.icon}`;
+            } else {
+                icon = 'assets/images/chat.jpg';
+            }
+        } else {
+            icon = 'assets/images/dm.jpg';
+        }
+
+        chatList += `
+            <div class="chat" onclick="openChat('${chatId}')">
+                <div class="chat-icon" style="--image: url('${icon}')"></div>
+                <div class="chat-text">
+                    <span class="chat-title">${nickname}</span>
+                    <span class="chat-preview">Placeholder</span>
+                </div>
+            </div>
+        `;
+
+    }
+    document.querySelector('.chats').innerHTML = chatList;
+}
+
+main();
