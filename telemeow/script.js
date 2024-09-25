@@ -136,6 +136,22 @@ function login(user, pass) {
 
 function chatList() {
     let chatList = '';
+    chatList += `
+    <div class="chat" onclick="openChat('home')">
+        <div class="chat-icon" style="--image: url('assets/images/home.jpg')"></div>
+        <div class="chat-text">
+            <span class="chat-title">Home</span>
+            <span class="chat-preview">18 Users Online</span>
+        </div>
+    </div>
+    <div class="chat" onclick="openChat('inbox')">
+        <div class="chat-icon" style="--image: url('assets/images/inbox.jpg')"></div>
+        <div class="chat-text">
+            <span class="chat-title">Inbox</span>
+            <span class="chat-preview">Placeholder</span>
+        </div>
+    </div>
+`;
     for (let chatId in chatCache) {
         let data = chatCache[chatId];
         let nickname;
