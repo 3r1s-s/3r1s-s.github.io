@@ -407,6 +407,9 @@ button, input {
 .modal-header {
     font-size: 2em;
     font-weight: 600;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     border-bottom: 3px solid var(--app-600);
     position: sticky;
     top: 0;
@@ -442,4 +445,18 @@ button, input {
     border-radius: 100%;
     position: relative;
     box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    background: var(--app-300);
+    padding: 15px;
+    border-radius: 20px;
+    margin-top: 10px;
 }

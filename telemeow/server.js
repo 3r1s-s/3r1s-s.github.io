@@ -120,3 +120,21 @@ function getPfp(username) {
             });
     });
 }
+
+function getUser(username) {
+    return new Promise((resolve, reject) => {
+        fetch(`https://api.meower.org/users/${username}`)
+            .then(resp => resp.json())
+            .then(userData => {
+                if (userData.avatar) {
+                    const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
+                    pfpCache[username] = pfpurl;
+                }
+                resolve(userData);
+            })
+            .catch(error => {
+                console.error("Failed to fetch:", error);
+                reject(error);
+            });
+    });
+}

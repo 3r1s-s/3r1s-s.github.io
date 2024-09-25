@@ -170,6 +170,7 @@ function chatList() {
             let nickname;
             let icon;
             let attention = '';
+            let action = '';
 
             nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
             nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
@@ -185,10 +186,11 @@ function chatList() {
                 if (userList.includes(user)) {
                     attention = 'online';
                 }
+                action = `openProfile('${user}')`;
             }
 
             chatList += `
-                <div class="chat favourite" onclick="openModal( { small: false, icon: '${icon}', title: '${nickname}', body: 'placeholder' })" id="${chatId}">
+                <div class="chat favourite" onclick="${action}" id="${chatId}">
                     <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
                     <div class="chat-text">
                         <span class="chat-title">${nickname}</span>
@@ -210,6 +212,7 @@ function chatList() {
             let nickname;
             let icon;
             let attention = 'offline';
+            let action = '';
 
             nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
             nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
@@ -226,10 +229,11 @@ function chatList() {
                 if (userList.includes(user)) {
                     attention = 'online';
                 }
+                action = `openProfile('${user}')`;
             }
 
             chatList += `
-                <div class="chat" onclick="openModal( { small: true, icon: '${icon}', title: '${nickname}', body: 'placeholder' })" id="${chatId}">
+                <div class="chat" onclick="${action}" id="${chatId}">
                     <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
                     <div class="chat-text">
                         <span class="chat-title">${nickname}</span>
