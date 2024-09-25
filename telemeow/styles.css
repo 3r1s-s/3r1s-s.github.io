@@ -20,7 +20,7 @@
     --app-800: #343043;
     --app-900: #3e3b50;
 
-    --app-blue: #5b5eff;
+    --app-blue: #3679f0;
     --app-red: #ee4d3c;
     --app-green: #4dca9a;
     --app-yellow: #fffc5c;
@@ -54,6 +54,10 @@ body {
     color: var(--app-text);
     padding-top: env(safe-area-inset-top);
     box-sizing: border-box;
+}
+
+button {
+    font-family: 'GG Sans', sans-serif;
 }
 
 .titlebar {
@@ -129,6 +133,10 @@ body {
     overscroll-behavior: initial;
 }
 
+.content.max {
+    padding: 0;
+}
+
 .chats {
     display: flex;
     flex-direction: column;
@@ -169,3 +177,91 @@ body {
     background-image: var(--image);
     border-radius: 100%;
 }
+
+.logo-hero {
+    width: 128px;
+    aspect-ratio: 1 / 1;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('assets/images/placeholder.jpg');
+    border-radius: 100%;
+}
+
+.login {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    background: var(--app-400);
+}
+
+.login-title {
+    font-weight: 600;
+    font-size: 1.5em;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-image: linear-gradient(to right,#5892f5,#1661ec);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 225px;
+}
+
+.login-input {
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+    height: 32px;
+    background: var(--app-400);
+    outline: none;
+    border: 2px solid var(--app-800);
+    caret-color: var(--app-blue);
+}
+
+.login-input:focus {
+    border: 2px solid var(--app-blue);
+}
+
+.login-input-container {
+    position: relative;
+}
+
+.login-input-container label {
+    transition: all .15s ease-out;
+    color: var(--app-900);
+    background: var(--app-400);
+    pointer-events: none;
+    display: block;
+    padding: 0 .25rem;
+    position: absolute;
+    left: 6px;
+    top: 6px;
+}
+
+.login-input:focus + label {
+    color: var(--app-blue);
+    top: -10px;
+    left: 5px;
+    font-size: .75em;
+}
+
+.login-button {
+    width: 225px;
+    height: 36px;
+    border-radius: 5px;
+    font-size: 1em;
+    border: none;
+    background: var(--app-blue);
+    color: var(--app-text);
+    font-weight: 600;
+}
+
