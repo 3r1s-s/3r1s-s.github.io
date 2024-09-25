@@ -1,6 +1,6 @@
 const server = 'wss://server.meower.org?v=1';
 const home = 'https://eris.pages.dev/telemeow';
-let page = 'chats';
+let page = '';
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
 
@@ -10,9 +10,10 @@ const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
 const usersTyping = {}; // {chatId: {username1: timeoutId, username2: timeoutId}}
 
+let userList = {}; // {user, user}
 let favoritedChats = [];  // [chatId, ...]
-
 let pendingAttachments = [];
+let unreadInbox = '';
 
 const content = document.querySelector('.app').querySelector('.content');
 
@@ -87,6 +88,7 @@ function chatsPage() {
 }
 
 function loginPage() {
+    page = 'login';
     titlebar.set('Login');
     titlebar.show();
 
@@ -135,17 +137,18 @@ function login(user, pass) {
 }
 
 function chatList() {
+    page = 'chats';
     let chatList = '';
     chatList += `
-    <div class="chat" onclick="openChat('home')">
+    <div class="chat favourite" onclick="openChat('home')" id="home">
         <div class="chat-icon" style="--image: url('assets/images/home.jpg')"></div>
         <div class="chat-text">
             <span class="chat-title">Home</span>
-            <span class="chat-preview">18 Users Online</span>
+            <span class="chat-preview">${userList.length - 1} Users Online</span>
         </div>
     </div>
-    <div class="chat" onclick="openChat('inbox')">
-        <div class="chat-icon" style="--image: url('assets/images/inbox.jpg')"></div>
+    <div class="chat favourite" onclick="openChat('inbox')" id="inbox">
+        <div class="chat-icon ${unreadInbox ? 'attention' : ''}" style="--image: url('assets/images/inbox.jpg')"></div>
         <div class="chat-text">
             <span class="chat-title">Inbox</span>
             <span class="chat-preview">Placeholder</span>
@@ -155,10 +158,57 @@ function chatList() {
 
 // put a gc icon next to gc names
     (async () => {
-        for (let chatId in chatCache) {
+        let favouritedChats = favoritedChats.slice().sort((a, b) => {
+            let aLastPost = postCache[a]?.[0]?.timestamp || 0;
+            let bLastPost = postCache[b]?.[0]?.timestamp || 0;
+            return bLastPost - aLastPost;
+        });
+
+        for (let chatId of favouritedChats) {
             let data = chatCache[chatId];
             let nickname;
             let icon;
+            let attention = '';
+
+            nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
+            nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+            if (data.type === 0) {
+                if (data.icon) {
+                    icon = `https://uploads.meower.org/icons/${data.icon}`;
+                } else {
+                    icon = 'assets/images/chat.jpg';
+                }
+            } else {
+                const user = data.members.find(v => v !== storage.get("username"));
+                icon = await getPfp(`${user}`);
+                if (userList.includes(user)) {
+                    attention = 'online';
+                }
+            }
+
+            chatList += `
+                <div class="chat favourite" onclick="openChat('${chatId}')" id="${chatId}">
+                    <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
+                    <div class="chat-text">
+                        <span class="chat-title">${nickname}</span>
+                        <span class="chat-preview">Placeholder</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        let otherChats = Object.keys(chatCache).filter(chatId => !favouritedChats.includes(chatId));
+        otherChats.sort((a, b) => {
+            let aLastPost = postCache[a]?.[0]?.timestamp || 0;
+            let bLastPost = postCache[b]?.[0]?.timestamp || 0;
+            return bLastPost - aLastPost;
+        });
+
+        for (let chatId of otherChats) {
+            let data = chatCache[chatId];
+            let nickname;
+            let icon;
+            let attention = 'offline';
 
             nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
             nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
@@ -170,12 +220,16 @@ function chatList() {
                     icon = 'assets/images/chat.jpg';
                 }
             } else {
-                icon = await getPfp(`${data.members.find(v => v !== storage.get("username"))}`);
+                const user = data.members.find(v => v !== storage.get("username"));
+                icon = await getPfp(`${user}`);
+                if (userList.includes(user)) {
+                    attention = 'online';
+                }
             }
 
             chatList += `
-                <div class="chat" onclick="openChat('${chatId}')">
-                    <div class="chat-icon" style="--image: url('${icon}')"></div>
+                <div class="chat" onclick="openChat('${chatId}')" id="${chatId}">
+                    <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
                     <div class="chat-text">
                         <span class="chat-title">${nickname}</span>
                         <span class="chat-preview">Placeholder</span>
@@ -183,6 +237,7 @@ function chatList() {
                 </div>
             `;
         }
+
         document.querySelector('.chats').innerHTML = chatList;
     })();
 }

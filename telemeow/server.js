@@ -34,6 +34,9 @@ function main() {
                     chatCache[chat._id] = chat;
                 });
 
+                favoritedChats = data.val.account.favorited_chats;
+                unreadInbox = data.val.account.unread_inbox;
+
                 chatsPage();
             }
         } else if (data.cmd === "post" || data.cmd === "inbox_message") {
@@ -86,6 +89,11 @@ function main() {
             }
             if (postCache[data.val.chat_id]) {
                 delete postCache[data.val.chat_id];
+            }
+        } else if (data.cmd == 'ulist') {
+            userList = data.val.trim().split(";");
+            if (page === 'chats') {
+                document.getElementById("home").querySelector(".chat-preview").innerText = `${userList.length - 1} Users Online`;
             }
         }
 }}

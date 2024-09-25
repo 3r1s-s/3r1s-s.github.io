@@ -158,14 +158,22 @@ button, input {
 .chats {
     display: flex;
     flex-direction: column;
-    background: var(--app-400);
 }
 
 .chat {
     display: flex;
     height: 64px;
     gap: 6px;
-    /* border-bottom: 1px solid var(--app-600); */
+    background: var(--app-300);
+    border-bottom: 1px solid var(--app-500);
+}
+
+.chat:last-child {
+    border-bottom: none;
+}
+
+.chat.favourite {
+    background: var(--app-400);
 }
 
 .chat-text {
@@ -194,6 +202,31 @@ button, input {
     background-repeat: no-repeat;
     background-image: var(--image);
     border-radius: 100%;
+    position: relative;
+}
+
+.chat-icon.online::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 12px;
+    height: 12px;
+    background: var(--app-green);
+    border-radius: 100%;
+    pointer-events: none;
+}
+
+.chat-icon.attention::after {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 12px;
+    height: 12px;
+    background: var(--app-red);
+    border-radius: 100%;
+    pointer-events: none;
 }
 
 .logo-hero {
