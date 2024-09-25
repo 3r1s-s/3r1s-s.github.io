@@ -87,7 +87,6 @@ button, input {
 .fade {
     transform: scale3d(0.8,0.8,0.8) translate3d(0,20px,0);
     border-radius: 40px;
-    overflow: hidden;
     opacity: 0.5;
 }
 
