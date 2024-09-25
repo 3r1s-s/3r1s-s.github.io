@@ -16,6 +16,7 @@ let pendingAttachments = [];
 let unreadInbox = '';
 
 const content = document.querySelector('.app').querySelector('.content');
+const app = document.querySelector('.app');
 
 const titlebar = (() => {
     const titlebar = document.querySelector('.titlebar');
