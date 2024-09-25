@@ -89,3 +89,26 @@ function main() {
             }
         }
 }}
+
+function getPfp(username) {
+    return new Promise((resolve, reject) => {
+        if (username in pfpCache) return resolve(pfpCache[username]);
+
+        fetch(`https://api.meower.org/users/${username}`)
+            .then(resp => resp.json())
+            .then(userData => {
+                if (userData.avatar) {
+                    const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
+                    pfpCache[username] = pfpurl;
+                    resolve(pfpurl);
+                } else {
+                    pfpCache[username] = `assets/images/dm.jpg`;
+                    resolve(`assets/images/dm.jpg`);
+                }
+            })
+            .catch(error => {
+                console.error("Failed to fetch:", error);
+                reject(error);
+            });
+    });
+}

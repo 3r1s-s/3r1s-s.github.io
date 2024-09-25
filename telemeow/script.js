@@ -152,37 +152,39 @@ function chatList() {
         </div>
     </div>
 `;
-    for (let chatId in chatCache) {
-        let data = chatCache[chatId];
-        let nickname;
-        let icon;
 
-        nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
-        nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+// put a gc icon next to gc names
+    (async () => {
+        for (let chatId in chatCache) {
+            let data = chatCache[chatId];
+            let nickname;
+            let icon;
 
+            nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
+            nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 
-        if (data.type === 0) {
-            if (data.icon) {
-                icon = `https://uploads.meower.org/icons/${data.icon}`;
+            if (data.type === 0) {
+                if (data.icon) {
+                    icon = `https://uploads.meower.org/icons/${data.icon}`;
+                } else {
+                    icon = 'assets/images/chat.jpg';
+                }
             } else {
-                icon = 'assets/images/chat.jpg';
+                icon = await getPfp(`${data.members.find(v => v !== storage.get("username"))}`);
             }
-        } else {
-            icon = 'assets/images/dm.jpg';
-        }
 
-        chatList += `
-            <div class="chat" onclick="openChat('${chatId}')">
-                <div class="chat-icon" style="--image: url('${icon}')"></div>
-                <div class="chat-text">
-                    <span class="chat-title">${nickname}</span>
-                    <span class="chat-preview">Placeholder</span>
+            chatList += `
+                <div class="chat" onclick="openChat('${chatId}')">
+                    <div class="chat-icon" style="--image: url('${icon}')"></div>
+                    <div class="chat-text">
+                        <span class="chat-title">${nickname}</span>
+                        <span class="chat-preview">Placeholder</span>
+                    </div>
                 </div>
-            </div>
-        `;
-
-    }
-    document.querySelector('.chats').innerHTML = chatList;
+            `;
+        }
+        document.querySelector('.chats').innerHTML = chatList;
+    })();
 }
 
 main();
