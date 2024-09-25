@@ -117,3 +117,54 @@ body {
     width: 20px;
     height: 20px;
 }
+
+.content {
+    padding: 35px 0 60px 0;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    background: var(--app-200);
+    overflow: auto;
+    overscroll-behavior: initial;
+}
+
+.chats {
+    display: flex;
+    flex-direction: column;
+    background: var(--app-400);
+}
+
+.chat {
+    display: flex;
+    height: 64px;
+    gap: 6px;
+    /* border-bottom: 1px solid var(--app-600); */
+}
+
+.chat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+}
+
+.chat-title {
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.chat-preview {
+    font-weight: 300;
+    font-size: 0.9em;
+}
+
+.chat-icon {
+    aspect-ratio: 1 / 1;
+    width: auto;
+    margin: 5px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: var(--image);
+    border-radius: 100%;
+}
