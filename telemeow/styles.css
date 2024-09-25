@@ -20,6 +20,8 @@
     --app-800: #343043;
     --app-900: #3e3b50;
 
+    --titlebar: rgba(14, 13, 19, 0.8);
+
     --app-blue: #3679f0;
     --app-red: #ee4d3c;
     --app-green: #4dca9a;
@@ -90,9 +92,11 @@ button, input {
     z-index: 2;
     padding: env(safe-area-inset-top) 15px 0px 15px;
     box-sizing: border-box;
-    background-color: var(--app-300);
+    background-color: var(--titlebar);
     border-bottom: 2px solid var(--app-600);
     font-weight: 600;
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
 .nav {
@@ -105,8 +109,10 @@ button, input {
     z-index: 3;
     padding: 0 15px env(safe-area-inset-bottom) 15px;
     box-sizing: border-box;
-    background-color: var(--app-300);
+    background-color: var(--titlebar);
     border-top: 2px solid var(--app-600);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
 .nav-item {
