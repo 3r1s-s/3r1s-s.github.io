@@ -48,6 +48,13 @@ const titlebar = (() => {
             } else {
                 titlebar.querySelector('.titlebar .titlebar-back').style.display = 'none';
             }
+        },
+        clear(val) {
+            if (val) {
+                titlebar.classList.add('trans');
+            } else {
+                titlebar.classList.remove('trans');
+            }
         }
     };
 })();
@@ -94,6 +101,7 @@ const storage = (() => {
 function loginPage() {
     page = 'login';
     titlebar.set('Login');
+    titlebar.clear(true);
     titlebar.show();
     titlebar.back();
 
@@ -152,11 +160,13 @@ function chatsPage() {
     document.querySelectorAll('.active').forEach(element => element.classList.remove('active'));
     document.querySelector('.nav').getElementsByClassName('nav-item')[0].classList.add('active');
     titlebar.set('TeleMeow');
+    titlebar.clear(false);
     titlebar.show();
     titlebar.back();
     
     navigation.show();
     content.scrollTo(0,0);
+    content.style = ``;
     content.classList.remove('max');
 
     content.innerHTML = `
@@ -283,18 +293,20 @@ function settingsPage() {
     document.querySelectorAll('.active').forEach(element => element.classList.remove('active'));
     document.querySelector('.nav').getElementsByClassName('nav-item')[1].classList.add('active');
     titlebar.set('Settings');
+    titlebar.clear(false);
     titlebar.show();
     titlebar.back();
 
     navigation.show();
     content.classList.remove('max');
     content.scrollTo(0,0);
+    content.style = ``;
 
     content.innerHTML = `
         <div class="settings">
             <div class="settings-options">
                 <div class="menu-button" onclick="settingsGeneral()"><span>General</span>${icon.arrow}</div>
-                <div class="menu-button"><span>Profile</span>${icon.arrow}</div>
+                <div class="menu-button" onclick="settingsProfile()"><span>Profile</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Account</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Appearance</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Notifications</span>${icon.arrow}</div>
@@ -318,11 +330,13 @@ function settingsPage() {
 function settingsGeneral() {
     page = `settings.general`;
     titlebar.set(`General`);
+    titlebar.clear(false);
     titlebar.back(`settingsPage()`);
 
     navigation.show();
     content.classList.remove('max');
     content.scrollTo(0,0);
+    content.style = ``;
 
     content.innerHTML = `
         <div class="settings">
@@ -340,6 +354,57 @@ function settingsGeneral() {
             </div>
         </div>
     `;
+}
+
+function settingsProfile() {
+    page = `settings.profile`;
+
+    let quote;
+    let pronouns;
+    let attention = '';
+    let recent;
+
+    getUser(storage.get('username')).then(data => {
+        titlebar.set(``);
+        titlebar.clear(true);
+        titlebar.back(`settingsPage()`);
+    
+        navigation.show();
+        content.classList.remove('max');
+        content.scrollTo(0,0);
+        content.style = `background: var(--app-400);`;
+
+        md.disable(['image']);
+        const regex = /\[(.*?)\]/;
+        const newlineregex = /\n\n\[(.*?)\]/;
+        const match = data.quote.match(regex);
+        
+        pronouns = match ? match[1] : "";
+        quote = data.quote.replace(regex, '');
+        editquote = data.quote.replace(newlineregex, '');
+        quote = md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
+
+        if (userList.includes(storage.get('username'))) {
+            attention = 'online';
+            recent = 'Online';
+        } else {
+            recent = `Last Seen: ${timeAgo(data.last_seen)}`;
+        }
+
+        content.innerHTML = `
+            <div class="settings">
+                <div class="profile-settings">
+                    <div class="edit-profile-icon" style="--image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
+                    <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
+                    <span class="edit-profile-title">Pronouns</span>
+                    <input type="text" class="edit-profile-quote" value="${pronouns}">
+                    <span class="edit-profile-title">Quote</span>
+                    <textarea class="edit-profile-quote">${editquote}</textarea>
+                    <div class="profile-section info"><span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span><span class="divider"></span><span>${recent}</span></div>
+                </div>
+            </div>
+        `;
+    });
 }
 
 main();
