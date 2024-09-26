@@ -21,7 +21,9 @@ const content = document.querySelector('.app').querySelector('.content');
 const app = document.querySelector('.app');
 
 const icon = {
-    "arrow": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M9.3 5.3a1 1 0 0 0 0 1.4l5.29 5.3-5.3 5.3a1 1 0 1 0 1.42 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.42 0Z"></path></svg>`
+    "arrow": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M9.3 5.3a1 1 0 0 0 0 1.4l5.29 5.3-5.3 5.3a1 1 0 1 0 1.42 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.42 0Z"></path></svg>`,
+    "back": `<svg style="transform: rotate(180deg)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M9.3 5.3a1 1 0 0 0 0 1.4l5.29 5.3-5.3 5.3a1 1 0 1 0 1.42 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.42 0Z"></path></svg>`,
+    "check": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>`,
 }
 
 const titlebar = (() => {
@@ -35,8 +37,18 @@ const titlebar = (() => {
             titlebar.style.display = '';
         },
         set(title) {
-            titlebar.querySelector('span').textContent = title;
+            titlebar.querySelector('.titlebar .title').textContent = title;
         },
+        back(back) {
+            if (back) {
+                titlebar.querySelector('.titlebar .titlebar-back').style.display = 'flex';
+                titlebar.querySelector('.titlebar .titlebar-back').setAttribute('onclick', `${back}`)
+                titlebar.querySelector('.titlebar .titlebar-back').innerHTML = `${icon.back}`
+
+            } else {
+                titlebar.querySelector('.titlebar .titlebar-back').style.display = 'none';
+            }
+        }
     };
 })();
 
@@ -83,6 +95,7 @@ function loginPage() {
     page = 'login';
     titlebar.set('Login');
     titlebar.show();
+    titlebar.back();
 
     navigation.hide();
 
@@ -140,8 +153,10 @@ function chatsPage() {
     document.querySelector('.nav').getElementsByClassName('nav-item')[0].classList.add('active');
     titlebar.set('TeleMeow');
     titlebar.show();
-
+    titlebar.back();
+    
     navigation.show();
+    content.scrollTo(0,0);
     content.classList.remove('max');
 
     content.innerHTML = `
@@ -269,18 +284,22 @@ function settingsPage() {
     document.querySelector('.nav').getElementsByClassName('nav-item')[1].classList.add('active');
     titlebar.set('Settings');
     titlebar.show();
+    titlebar.back();
 
     navigation.show();
     content.classList.remove('max');
+    content.scrollTo(0,0);
 
     content.innerHTML = `
         <div class="settings">
             <div class="settings-options">
-                <div class="menu-button"><span>General</span>${icon.arrow}</div>
+                <div class="menu-button" onclick="settingsGeneral()"><span>General</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Profile</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Account</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Appearance</span>${icon.arrow}</div>
+                <div class="menu-button"><span>Notifications</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Language</span>${icon.arrow}</div>
+                <div class="menu-button"><span>Plugins</span>${icon.arrow}</div>
             </div>
             <div class="settings-options">
                 <div class="menu-button" onclick="logout()"><span>Log Out</span>${icon.arrow}</div>
@@ -294,7 +313,33 @@ function settingsPage() {
             </div>
         </div>
     `;
+}
 
+function settingsGeneral() {
+    page = `settings.general`;
+    titlebar.set(`General`);
+    titlebar.back(`settingsPage()`);
+
+    navigation.show();
+    content.classList.remove('max');
+    content.scrollTo(0,0);
+
+    content.innerHTML = `
+        <div class="settings">
+            <span class="settings-options-title">Chat</span>
+            <div class="settings-options">
+                <div class="menu-button checked"><span>Invisible Typing</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button"><span>Special Embeds</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button"><span>Don't Send On Enter</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button"><span>Hide Blocked User Messages</span><div class="toggle">${icon.check}</div></div>
+            </div>
+            <span class="settings-options-title">Accessibility</span>
+            <div class="settings-options">
+                <div class="menu-button"><span>Reduce Motion</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button"><span>Always Underline Links</span><div class="toggle">${icon.check}</div></div>
+            </div>
+        </div>
+    `;
 }
 
 main();
