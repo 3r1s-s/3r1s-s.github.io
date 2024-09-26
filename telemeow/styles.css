@@ -14,7 +14,7 @@
     --app-200: #070609;
     --app-300: #0e0d13;
     --app-400: #14121b;
-    --app-500: #191825;
+    --app-500: #1a1825;
     --app-600: #221e2e;
     --app-700: #2b2738;
     --app-800: #343043;
@@ -206,10 +206,11 @@ a:hover {
 
 .chat {
     display: flex;
-    height: 64px;
+    height: 75px;
     gap: 6px;
     background: var(--app-300);
     border-bottom: 1px solid var(--app-500);
+    transition: background 0.2s cubic-bezier(.2,0,0,1);
 }
 
 .chat:last-child {
@@ -218,6 +219,10 @@ a:hover {
 
 .chat.favourite {
     background: var(--app-400);
+}
+
+.chat:active {
+    background: var(--app-500);
 }
 
 .chat-text {
@@ -434,9 +439,11 @@ a:hover {
 .modal-inner {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    height: calc(100% - 40px);
     position: relative;
     gap: 10px;
+    overflow: auto;
+    margin-bottom: auto;
 }
 
 .modal-header {
@@ -445,6 +452,7 @@ a:hover {
     text-wrap: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    background: var(--app-400);
     border-bottom: 3px solid var(--app-600);
     position: sticky;
     top: 0;
@@ -547,4 +555,26 @@ a:hover {
     flex-direction: row;
     font-size: 12px;
     font-weight: 500;
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    background: var(--app-300);
+    overflow: hidden;
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.menu-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--app-300);
+    font-weight: 500;
+    padding: 15px;
+}
+
+.menu-button:active {
+    background: var(--app-500);
 }

@@ -15,6 +15,8 @@ let favoritedChats = [];  // [chatId, ...]
 let pendingAttachments = [];
 let unreadInbox = '';
 
+let moderator = true;
+
 const content = document.querySelector('.app').querySelector('.content');
 const app = document.querySelector('.app');
 

@@ -1,3 +1,7 @@
+const icon = {
+    "arrow": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M9.3 5.3a1 1 0 0 0 0 1.4l5.29 5.3-5.3 5.3a1 1 0 1 0 1.42 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.42 0Z"></path></svg>`
+}
+
 function openModal(data) {
     const modalOuter = document.querySelector(".modal-outer");
     const modalInner = document.querySelector(".modal");
@@ -46,6 +50,7 @@ function openProfile(user) {
     let quote;
     let pronouns;
     let attention = '';
+    let recent;
 
     getUser(user).then(data => {
         md.disable(['image']);
@@ -58,16 +63,20 @@ function openProfile(user) {
         
         if (userList.includes(user)) {
             attention = 'online';
+            recent = 'Online';
+        } else {
+            recent = `Last Seen: ${timeAgo(data.last_seen)}`;
         }
 
         openModal({ body: `
             <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
             <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
             <div class="profile-section">${quote}</div>
-            <div class="profile-section info">
-            <span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span>
-            <span class="divider"></span
-            <span>Last Seen: ${timeAgo(data.last_seen)}</span>
+            <div class="profile-section info"><span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span><span class="divider"></span><span>${recent}</span></div>
+            <div class="menu-options">
+            <div class="menu-button"><span>Send DM</span>${icon.arrow}</div>
+            ${moderator ? `<div class="menu-button"><span>Moderate</span>${icon.arrow}</div>` : ``}
+            </div>
             </div>
         ` });
     });
