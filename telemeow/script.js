@@ -4,7 +4,7 @@ let page = '';
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
 
-const pfpCache = {};
+const usersCache = {};
 const postCache = { livechat: [] };  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
 const chatCache = {}; // {chatId: chat}
 const blockedUsers = {}; // {user, user}
@@ -182,7 +182,8 @@ function chatList() {
                 }
             } else {
                 const user = data.members.find(v => v !== storage.get("username"));
-                icon = await getPfp(`${user}`);
+                userData = await getUser(`${user}`);
+                icon = `https://uploads.meower.org/icons/${userData.avatar}`;
                 if (userList.includes(user)) {
                     attention = 'online';
                 }
@@ -225,7 +226,8 @@ function chatList() {
                 }
             } else {
                 const user = data.members.find(v => v !== storage.get("username"));
-                icon = await getPfp(`${user}`);
+                userData = await getUser(`${user}`);
+                icon = `https://uploads.meower.org/icons/${userData.avatar}`;
                 if (userList.includes(user)) {
                     attention = 'online';
                 }

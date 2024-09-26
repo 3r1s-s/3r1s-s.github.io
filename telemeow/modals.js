@@ -43,14 +43,35 @@ function closeModal() {
 }
 
 function openProfile(user) {
+    let quote;
+    let pronouns;
+    let attention = '';
+
     getUser(user).then(data => {
+        md.disable(['image']);
+        const regex = /\[(.*?)\]/;
+        let match = data.quote.match(regex);
+        pronouns = match ? match[1] : "";
+        
+        quote = data.quote.replace(regex, '');
+        quote = md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">');  
+        
+        if (userList.includes(user)) {
+            attention = 'online';
+        }
+
         openModal({ body: `
-            <div class="modal-icon" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
-            <span class="modal-header">${data._id}</span>
-            <div class="profile-section"><span>this is a placeholder bio</span></div>
+            <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
+            <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
+            <div class="profile-section">${quote}</div>
+            <div class="profile-section info">
+            <span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span>
+            <span class="divider"></span
+            <span>Last Seen: ${timeAgo(data.last_seen)}</span>
+            </div>
         ` });
     });
-
 }
+
 
 // openModal( { small: false, icon: 'assets/images/placeholder.jpg', title: 'TeleMeow', body: 'placeholder' })

@@ -98,21 +98,15 @@ function main() {
         }
 }}
 
-function getPfp(username) {
+function getUser(username) {
     return new Promise((resolve, reject) => {
-        if (username in pfpCache) return resolve(pfpCache[username]);
+        if (username in usersCache) return resolve(usersCache[username]);
 
         fetch(`https://api.meower.org/users/${username}`)
             .then(resp => resp.json())
-            .then(userData => {
-                if (userData.avatar) {
-                    const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
-                    pfpCache[username] = pfpurl;
-                    resolve(pfpurl);
-                } else {
-                    pfpCache[username] = `assets/images/dm.jpg`;
-                    resolve(`assets/images/dm.jpg`);
-                }
+            .then(data => {
+                usersCache[username] = data;
+                resolve(data);
             })
             .catch(error => {
                 console.error("Failed to fetch:", error);
@@ -121,20 +115,22 @@ function getPfp(username) {
     });
 }
 
-function getUser(username) {
-    return new Promise((resolve, reject) => {
-        fetch(`https://api.meower.org/users/${username}`)
-            .then(resp => resp.json())
-            .then(userData => {
-                if (userData.avatar) {
-                    const pfpurl = `https://uploads.meower.org/icons/${userData.avatar}`;
-                    pfpCache[username] = pfpurl;
-                }
-                resolve(userData);
-            })
-            .catch(error => {
-                console.error("Failed to fetch:", error);
-                reject(error);
-            });
-    });
+function timeAgo(tstamp) {
+    const currentTime = Date.now();
+    const lastSeenTime = tstamp * 1000;
+    const timeDifference = currentTime - lastSeenTime;
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+        return `${days} day${days > 1 ? 's' : ''} ago`;
+    } else if (hours > 0) {
+        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else if (minutes > 0) {
+        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else {
+        return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+    }
 }
