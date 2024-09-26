@@ -155,14 +155,14 @@ function chatsPage() {
 function chatList() {
     let chatList = '';
     chatList += `
-    <div class="chat favourite" onclick="openChat('home')" id="home">
+    <div class="chat favourite" onclick="" id="home">
         <div class="chat-icon" style="--image: url('assets/images/home.jpg')"></div>
         <div class="chat-text">
             <span class="chat-title">Home</span>
             <span class="chat-preview">${userList.length - 1} Users Online</span>
         </div>
     </div>
-    <div class="chat favourite" onclick="openChat('inbox')" id="inbox">
+    <div class="chat favourite" onclick="" id="inbox">
         <div class="chat-icon ${unreadInbox ? 'attention' : ''}" style="--image: url('assets/images/inbox.jpg')"></div>
         <div class="chat-text">
             <span class="chat-title">Inbox</span>
