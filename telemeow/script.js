@@ -289,6 +289,9 @@ function settingsPage() {
             <span style="font-weight: 600;">TeleMeow</span>
             <span>0.0.0</span>
             </div>
+            <div class="settings-about">
+            <span style="font-weight: 600;">ErisUI 1</span>
+            </div>
         </div>
     `;
 
