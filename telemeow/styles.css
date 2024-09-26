@@ -97,7 +97,9 @@ a:hover {
     height: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     overflow: hidden;
 
     transition: transform 0.5s cubic-bezier(.2,0,0,1), 
@@ -193,7 +195,7 @@ a:hover {
 }
 
 .content {
-    padding: 35px 0 calc(var(--nav-height) + env(safe-area-inset-bottom)) 0;
+    padding: calc(35px + env(safe-area-inset-top)) 0 calc(var(--nav-height) + env(safe-area-inset-bottom)) 0;
     box-sizing: border-box;
     height: 100%;
     width: 100%;
@@ -610,4 +612,13 @@ hr {
     overflow: hidden;
     border-radius: 20px;
     margin: 0 20px;
+}
+
+.settings-about {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0.6;
 }
