@@ -156,6 +156,20 @@ a:hover {
     color: var(--app-text);
 }
 
+.nav-item-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    align-items: center;
+    box-sizing: content-box;
+    transition: transform 0.2s ease;
+}
+
+.nav-item:active .nav-item-inner{
+    transform: scale(0.9);
+}
+
 .nav-text {
     font-size: 0.9em;
 }

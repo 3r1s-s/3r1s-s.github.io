@@ -123,6 +123,9 @@ function login(user, pass) {
 }
 
 function chatsPage() {
+    page = 'chats';
+    document.querySelectorAll('.active').forEach(element => element.classList.remove('active'));
+    document.querySelector('.nav').getElementsByClassName('nav-item')[0].classList.add('active');
     titlebar.set('TeleMeow');
     titlebar.show();
 
@@ -138,7 +141,6 @@ function chatsPage() {
 }
 
 function chatList() {
-    page = 'chats';
     let chatList = '';
     chatList += `
     <div class="chat favourite" onclick="openChat('home')" id="home">
@@ -247,6 +249,23 @@ function chatList() {
 
         document.querySelector('.chats').innerHTML = chatList;
     })();
+}
+
+function settingsPage() {
+    page = 'settings';
+    document.querySelectorAll('.active').forEach(element => element.classList.remove('active'));
+    document.querySelector('.nav').getElementsByClassName('nav-item')[1].classList.add('active');
+    titlebar.set('Settings');
+    titlebar.show();
+
+    navigation.show();
+    content.classList.remove('max');
+
+    content.innerHTML = `
+        <div class="settings">
+        </div>
+    `;
+
 }
 
 main();
