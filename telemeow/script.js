@@ -20,6 +20,10 @@ let moderator = true;
 const content = document.querySelector('.app').querySelector('.content');
 const app = document.querySelector('.app');
 
+const icon = {
+    "arrow": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M9.3 5.3a1 1 0 0 0 0 1.4l5.29 5.3-5.3 5.3a1 1 0 1 0 1.42 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.42 0Z"></path></svg>`
+}
+
 const titlebar = (() => {
     const titlebar = document.querySelector('.titlebar');
 
@@ -122,6 +126,12 @@ function login(user, pass) {
         },
         listener: "auth",
     }));
+}
+
+function logout() {
+    storage.delete("token");
+    storage.delete("username");
+    loginPage();
 }
 
 function chatsPage() {
@@ -265,6 +275,16 @@ function settingsPage() {
 
     content.innerHTML = `
         <div class="settings">
+            <div class="settings-options">
+                <div class="menu-button"><span>General</span>${icon.arrow}</div>
+                <div class="menu-button"><span>Profile</span>${icon.arrow}</div>
+                <div class="menu-button"><span>Account</span>${icon.arrow}</div>
+                <div class="menu-button"><span>Appearance</span>${icon.arrow}</div>
+                <div class="menu-button"><span>Language</span>${icon.arrow}</div>
+            </div>
+            <div class="settings-options">
+                <div class="menu-button" onclick="logout()"><span>Log Out</span>${icon.arrow}</div>
+            </div>
         </div>
     `;
 

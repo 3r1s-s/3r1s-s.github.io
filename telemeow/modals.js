@@ -1,7 +1,3 @@
-const icon = {
-    "arrow": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M9.3 5.3a1 1 0 0 0 0 1.4l5.29 5.3-5.3 5.3a1 1 0 1 0 1.42 1.4l6-6a1 1 0 0 0 0-1.4l-6-6a1 1 0 0 0-1.42 0Z"></path></svg>`
-}
-
 function openModal(data) {
     const modalOuter = document.querySelector(".modal-outer");
     const modalInner = document.querySelector(".modal");
@@ -54,7 +50,7 @@ function openProfile(user) {
 
     getUser(user).then(data => {
         md.disable(['image']);
-        const regex = /\[(.*?)\]/;
+        const regex = /\[(.*?)\]$/;
         let match = data.quote.match(regex);
         pronouns = match ? match[1] : "";
         
@@ -67,7 +63,7 @@ function openProfile(user) {
         } else {
             recent = `Last Seen: ${timeAgo(data.last_seen)}`;
         }
-
+        
         openModal({ body: `
             <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
             <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>

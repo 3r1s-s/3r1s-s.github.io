@@ -76,6 +76,12 @@ ul, ol {
     margin: 0;
 }
 
+blockquote {
+    border-left: 3px solid var(--app-800);
+    padding: 0 5px;
+    margin: 2px 0;
+}
+
 a {
     text-decoration: none;
     color: var(--app-blue);
@@ -533,8 +539,14 @@ a:hover {
     margin-top: 10px;
 }
 
-.profile-section > * {
+.profile-section > p, .profile-section > span, .profile-section > blockquote > p {
     margin: 0;
+}
+
+hr {
+    margin: 8px 0;
+    border: 0;
+    border-top: 3px solid var(--app-800);
 }
 
 .pronouns {
@@ -555,6 +567,8 @@ a:hover {
     flex-direction: row;
     font-size: 12px;
     font-weight: 500;
+    align-items: center;
+    gap: 5px;
 }
 
 .menu-options {
@@ -575,6 +589,25 @@ a:hover {
     padding: 15px;
 }
 
+/* .menu-button:not(:last-child) {
+    border-bottom: 3px solid var(--app-600);
+} */
+
 .menu-button:active {
     background: var(--app-500);
+}
+
+.settings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.settings-options {
+    display: flex;
+    flex-direction: column;
+    background: var(--app-300);
+    overflow: hidden;
+    border-radius: 20px;
+    margin: 0 20px;
 }
