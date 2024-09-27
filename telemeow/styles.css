@@ -6,6 +6,8 @@
     -webkit-user-modify: none;
     -webkit-highlight: none;
     -webkit-tap-highlight-color: transparent;
+
+    color-scheme: dark;
 }
 
 :root {
@@ -41,6 +43,19 @@
 
     --nav-height: 60px;
     --titlebar-height: 40px;
+
+    --modal-text: var(--app-text);
+    --modal-link: var(--app-link);
+    --modal-accent: var(--app-blue);
+    --modal-100: var(--app-100);
+    --modal-200: var(--app-200);
+    --modal-300: var(--app-300);
+    --modal-400: var(--app-400);
+    --modal-500: var(--app-500);
+    --modal-600: var(--app-600);
+    --modal-700: var(--app-700);
+    --modal-800: var(--app-800);
+    --modal-900: var(--app-900);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,6 +112,12 @@ a:hover {
 textarea, input[type="text"] {
     resize: none;
     outline: none;
+}
+
+hr {
+    margin: 8px 0;
+    border: 0;
+    border-top: 3px solid var(--app-800);
 }
 
 .app {
@@ -455,8 +476,8 @@ textarea, input[type="text"] {
 }
 
 .modal {
-    background: var(--app-400);
-    color: var(--app-text);
+    background: var(--modal-400);
+    color: var(--modal-text);
 
     width: 100%;
     height: 85%;
@@ -506,8 +527,8 @@ textarea, input[type="text"] {
     text-wrap: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background: var(--app-400);
-    border-bottom: 3px solid var(--app-600);
+    background: transparent;
+    border-bottom: 3px solid var(--modal-600);
     position: sticky;
     top: 0;
     left: 0;
@@ -518,8 +539,8 @@ textarea, input[type="text"] {
 }
 
 .modal-button {
-    background: var(--app-600);
-    color: var(--app-text);
+    background: var(--modal-600);
+    color: var(--modal-text);
     border-radius: 100px;
     border: none;
     min-width: 100px;
@@ -532,7 +553,7 @@ textarea, input[type="text"] {
 }
 
 .modal-button:active {
-    background-color: var(--app-500);
+    background-color: var(--modal-500);
 }
 
 .modal-icon {
@@ -555,7 +576,7 @@ textarea, input[type="text"] {
     width: 24px;
     height: 24px;
     background: var(--app-green);
-    border: 6px solid var(--app-400);
+    border: 6px solid var(--modal-400);
     border-radius: 100%;
     pointer-events: none;
 }
@@ -568,7 +589,7 @@ textarea, input[type="text"] {
     width: 24px;
     height: 24px;
     background: var(--app-red);
-    border: 6px solid var(--app-400);
+    border: 6px solid var(--modal-400);
     border-radius: 100%;
     pointer-events: none;
 }
@@ -581,7 +602,7 @@ textarea, input[type="text"] {
 .profile-section {
     display: flex;
     flex-direction: column;
-    background: var(--app-300);
+    background: var(--modal-300);
     padding: 15px;
     border-radius: 20px;
     margin-top: 10px;
@@ -593,10 +614,8 @@ textarea, input[type="text"] {
     margin: 0;
 }
 
-hr {
-    margin: 8px 0;
-    border: 0;
-    border-top: 3px solid var(--app-800);
+.modal hr {
+    border-color: var(--modal-800)
 }
 
 .pronouns {
@@ -613,6 +632,10 @@ hr {
     margin: 5px;
 }
 
+.modal .divider {
+    background: var(--modal-text);
+}
+
 .profile-section.info {
     flex-direction: row;
     font-size: 12px;
@@ -624,7 +647,7 @@ hr {
 .menu-options {
     display: flex;
     flex-direction: column;
-    background: var(--app-300);
+    background: var(--modal-300);
     overflow: hidden;
     border-radius: 20px;
     margin-top: 10px;
@@ -634,9 +657,21 @@ hr {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--app-300);
+    background: var(--modal-300);
     font-weight: 500;
     padding: 15px;
+}
+
+.modal .menu-options{
+    background: var(--modal-300);
+}
+
+.modal .menu-button {
+    background: transparent;
+}
+
+.modal a {
+    color: var(--modal-link);
 }
 
 /* .menu-button:not(:last-child) {
@@ -645,6 +680,10 @@ hr {
 
 .menu-button:active {
     background: var(--app-500);
+}
+
+.modal .menu-button:active {
+    background: var(--modal-500);
 }
 
 .settings {
@@ -673,8 +712,8 @@ hr {
 }
 
 .settings-options-title {
-    height: 3px;
-    margin: 0 36px;
+    height: 8px;
+    margin: 0 25px;
     font-weight: 400;
     opacity: 0.8;
 }
@@ -729,33 +768,47 @@ hr {
     border-radius: 100%;
     position: relative;
     box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset;
+    overflow: hidden;
+}
+
+.edit-profile-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--app-300);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding-bottom: 8px;
 }
 
 .edit-profile-quote {
-    color: var(--app-color);
+    color: var(--modal-text);
     font-family: inherit;
     font-size: inherit;
     font-weight: 400;
     width: 100%;
     display: flex;
     flex-direction: column;
-    background: var(--app-300);
+    background: var(--modal-300);
     padding: 15px;
     border-radius: 20px;
     margin: 0;
     max-height: 85px;
     overflow: auto;
     box-sizing: border-box;
-    border: 3px dashed var(--app-600);
+    border: 3px dashed var(--modal-600);
 }
 
 .edit-profile-quote:focus {
-    border-color: var(--app-blue);
-    background-color: var(--app-200);
+    border-color: var(--modal-accent);
+    background-color: var(--modal-200);
 }
 
 .edit-profile-title {
-    margin: 10px;
+    margin: 5px 0;
     display: block;
     font-weight: 500;
 }

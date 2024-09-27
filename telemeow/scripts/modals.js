@@ -79,7 +79,20 @@ function openProfile(user) {
             recent = `Last Seen: ${timeAgo(data.last_seen)}`;
         }
 
-        openModal({ body: `
+        openModal({ 
+            style: `
+            --modal-200: #00000040;
+            --modal-300: #00000080;
+            --modal-400: ${darkenColour(data.avatar_color, 3)};
+            --modal-500: #000000e0;
+            --modal-600: #000000aa;
+
+            --modal-accent: #${data.avatar_color};
+
+            --modal-text: ${lightenColour(data.avatar_color, 1.2)};
+            --modal-link: ${lightenColour(data.avatar_color, 1.5)};
+            `,
+            body: `
             <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
             <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
             <div class="profile-section">${quote}</div>

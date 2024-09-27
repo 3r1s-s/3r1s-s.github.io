@@ -373,7 +373,7 @@ function settingsProfile() {
         navigation.show();
         content.classList.remove('max');
         content.scrollTo(0,0);
-        content.style = `background: var(--app-400);`;
+        content.style = `background: var(--modal-400);`;
 
         md.disable(['image']);
         const regex = /\[(.*?)\]/;
@@ -394,8 +394,24 @@ function settingsProfile() {
 
         content.innerHTML = `
             <div class="settings">
+            <style>
+                .content {
+                    --modal-200: #00000040;
+                    --modal-300: #00000080;
+                    --modal-400: ${darkenColour(data.avatar_color, 3)};
+                    --modal-500: #000000e0;
+                    --modal-600: #000000aa;
+
+                    --modal-accent: #${data.avatar_color};
+
+                    --modal-text: ${lightenColour(data.avatar_color, 1.2)};
+                    --modal-link: ${lightenColour(data.avatar_color, 1.5)};
+                }
+            </style>
                 <div class="profile-settings">
-                    <div class="edit-profile-icon" style="--image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
+                    <div class="edit-profile-icon" style="--image: url('https://uploads.meower.org/icons/${data.avatar}')">
+                    <div class="edit-profile-overlay">Edit</div>
+                    </div>
                     <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
                     <span class="edit-profile-title">Pronouns</span>
                     <input type="text" class="edit-profile-quote" value="${pronouns}">
