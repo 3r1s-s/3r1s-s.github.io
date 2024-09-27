@@ -10,6 +10,7 @@
 
 :root {
     --app-text: #e8e1f2;
+    --app-link: #5b7cff;
     --app-100: #020102;
     --app-200: #070609;
     --app-300: #0e0d13;
@@ -85,12 +86,12 @@ blockquote {
 
 a {
     text-decoration: none;
-    color: var(--app-blue);
+    color: var(--app-link);
 }
 
 a:hover {
     text-decoration: underline;
-    color: var(--app-blue);
+    color: var(--app-link);
 }
 
 textarea, input[type="text"] {

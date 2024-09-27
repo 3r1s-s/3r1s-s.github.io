@@ -98,6 +98,7 @@ const storage = (() => {
     };
 })();
 
+
 function loginPage() {
     page = 'login';
     titlebar.set('Login');

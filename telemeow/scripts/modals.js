@@ -1,23 +1,36 @@
 function openModal(data) {
     const modalOuter = document.querySelector(".modal-outer");
-    const modalInner = document.querySelector(".modal");
+    const modalInner = document.querySelector(".modal-inner");
+    const modal = document.querySelector(".modal");
 
     if (data) {
         if (data.small) {
-            modalInner.classList.add("small");
+            modal.classList.add("small");
         }
         if (data.title) {
             let titleElement = document.createElement("span");
             titleElement.classList.add("modal-header");
             titleElement.textContent = data.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-            document.querySelector(".modal-inner").append(titleElement);
+            modalInner.append(titleElement);
         }
-        
+
         if (data.body) {
             let bodyElement = document.createElement("div");
             bodyElement.classList.add("modal-body");
             bodyElement.innerHTML = data.body;
-            document.querySelector(".modal-inner").append(bodyElement);
+            modalInner.append(bodyElement);
+        }
+        
+        if (data.style) {
+            modal.style = data.style;
+        } else {
+            modal.style = '';
+        }
+
+        if (data.id) {
+            modal.id = data.id;
+        } else {
+            modal.id = '';
         }
 
         document.querySelector(".modal-options").innerHTML = `
@@ -30,14 +43,15 @@ function openModal(data) {
 
 function closeModal() {
     const modalOuter = document.querySelector(".modal-outer");
-    const modalInner = document.querySelector(".modal");
+    const modalInner = document.querySelector(".modal-inner");
+    const modal = document.querySelector(".modal");
 
     modalOuter.classList.remove("open");
 
     setTimeout(() => {
         modalOuter.style.visibility = "hidden";
-        modalInner.classList.remove("small");
-        document.querySelector(".modal-inner").innerHTML = ``;
+        modal.classList.remove("small");
+        modalInner.innerHTML = ``;
         document.querySelector(".modal-options").innerHTML = ``;
     }, 500);
 }
@@ -47,6 +61,7 @@ function openProfile(user) {
     let pronouns;
     let attention = '';
     let recent;
+    let colors;
 
     getUser(user).then(data => {
         md.disable(['image']);
@@ -63,7 +78,24 @@ function openProfile(user) {
         } else {
             recent = `Last Seen: ${timeAgo(data.last_seen)}`;
         }
+
+        // redo colors entirely this isnt gonna work lmbo
         
+        if (data.avatar_color) {
+            colors = {
+                'css': `
+                    ${palette(data.avatar_color)}
+                `,
+                'id': data.avatar_color
+            };
+
+        } else {
+            colors = {
+                'css': '',
+                'id': ''
+            }
+        }
+
         openModal({ body: `
             <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
             <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
@@ -73,8 +105,10 @@ function openProfile(user) {
             <div class="menu-button"><span>Send DM</span>${icon.arrow}</div>
             ${moderator ? `<div class="menu-button"><span>Moderate</span>${icon.arrow}</div>` : ``}
             </div>
-            </div>
-        ` });
+            </div>`,
+            style: colors.css,
+            id: colors.id,
+    });
     });
 }
 

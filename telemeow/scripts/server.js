@@ -29,6 +29,8 @@ function main() {
                 storage.set("token", data.val.token);
                 storage.set("username", data.val.username);
                 console.log("Logged in as " + data.val.username);
+
+                getUser(data.val.username);
                 
                 data.val.chats.forEach((chat) => {
                     chatCache[chat._id] = chat;
