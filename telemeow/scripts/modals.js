@@ -84,7 +84,7 @@ function openProfile(user) {
             --modal-200: #00000040;
             --modal-300: #00000080;
             --modal-400: ${darkenColour(data.avatar_color, 3)};
-            --modal-500: #000000e0;
+            --modal-500: #00000090;
             --modal-600: #000000aa;
 
             --modal-accent: #${data.avatar_color};
