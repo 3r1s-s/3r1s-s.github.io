@@ -79,23 +79,6 @@ function openProfile(user) {
             recent = `Last Seen: ${timeAgo(data.last_seen)}`;
         }
 
-        // redo colors entirely this isnt gonna work lmbo
-        
-        if (data.avatar_color) {
-            colors = {
-                'css': `
-                    ${palette(data.avatar_color)}
-                `,
-                'id': data.avatar_color
-            };
-
-        } else {
-            colors = {
-                'css': '',
-                'id': ''
-            }
-        }
-
         openModal({ body: `
             <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
             <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
@@ -105,9 +88,7 @@ function openProfile(user) {
             <div class="menu-button"><span>Send DM</span>${icon.arrow}</div>
             ${moderator ? `<div class="menu-button"><span>Moderate</span>${icon.arrow}</div>` : ``}
             </div>
-            </div>`,
-            style: colors.css,
-            id: colors.id,
+            </div>`
     });
     });
 }
