@@ -563,9 +563,12 @@ hr {
     background-position: center;
     background-repeat: no-repeat;
     background-image: var(--image);
+    background-color: var(--modal-400);
     border-radius: 100%;
     position: relative;
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset;
+    /* box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset; */
+    border: 6px solid var(--modal-400);
+    box-sizing: border-box;
 }
 
 .modal-icon.online::after {
@@ -597,6 +600,27 @@ hr {
 .modal-body {
     display: flex;
     flex-direction: column;
+}
+
+.modal-banner {
+    background: #9d82ff;
+    background: var(--banner-color);
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 96px;
+}
+
+.modal::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: calc(50% - 16px);
+    width: 32px;
+    height: 4px;
+    background: #ffffff5c;
+    border-radius: 100px;
 }
 
 .profile-section {
@@ -767,8 +791,11 @@ hr {
     background-image: var(--image);
     border-radius: 100%;
     position: relative;
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset;
+    /* box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset; */
+    border: 6px solid var(--modal-400);
+    box-sizing: border-box;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .edit-profile-overlay {
@@ -780,7 +807,6 @@ hr {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     padding-bottom: 8px;
 }
 

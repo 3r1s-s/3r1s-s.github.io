@@ -178,7 +178,7 @@ function chatsPage() {
     chatList();
 }
 
-function chatList() {
+async function chatList() {
     let chatList = '';
     chatList += `
     <div class="chat favourite" onclick="" id="home">
@@ -198,97 +198,53 @@ function chatList() {
 `;
 
 // put a gc icon next to gc names
-    (async () => {
-        let favouritedChats = favoritedChats.slice().sort((a, b) => {
-            let aLastPost = postCache[a]?.[0]?.timestamp || 0;
-            let bLastPost = postCache[b]?.[0]?.timestamp || 0;
-            return bLastPost - aLastPost;
-        });
+    let sortedChats = [];
+    let favedChats = Object.values(chatCache).filter(chat => favoritedChats.includes(chat._id)).sort((a, b) => {
+        return b.last_active - a.last_active;
+    });
+    let unfavedChats = Object.values(chatCache).filter(chat => !favoritedChats.includes(chat._id)).sort((a, b) => {
+        return b.last_active - a.last_active;
+    });
+    sortedChats = favedChats.concat(unfavedChats);
 
-        for (let chatId of favouritedChats) {
-            let data = chatCache[chatId];
-            let nickname;
-            let icon;
-            let attention = '';
-            let action = '';
+    for (let chatData of sortedChats) {
+        let nickname;
+        let icon;
+        let attention = '';
+        let action = '';
+        let isfave = favoritedChats.includes(chatData._id) ? 'favourite' : '';
 
-            nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
-            nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-            if (data.type === 0) {
-                if (data.icon) {
-                    icon = `https://uploads.meower.org/icons/${data.icon}`;
-                } else {
-                    icon = 'assets/images/chat.jpg';
-                }
+        nickname = chatData.nickname || `${chatData.members.find(v => v !== storage.get("username"))}`;
+        nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        if (chatData.type === 0) {
+            if (chatData.icon) {
+                icon = `https://uploads.meower.org/icons/${chatData.icon}`;
             } else {
-                const user = data.members.find(v => v !== storage.get("username"));
-                userData = await getUser(`${user}`);
-                icon = `https://uploads.meower.org/icons/${userData.avatar}`;
-                if (userList.includes(user)) {
-                    attention = 'online';
-                }
-                action = `openProfile('${user}')`;
+                icon = 'assets/images/chat.jpg';
             }
-
-            chatList += `
-                <div class="chat favourite" onclick="${action}" id="${chatId}">
-                    <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
-                    <div class="chat-text">
-                        <span class="chat-title">${nickname}</span>
-                        <span class="chat-preview">Placeholder</span>
-                    </div>
-                </div>
-            `;
+        } else {
+            const user = chatData.members.find(v => v !== storage.get("username"));
+            userData = await getUser(`${user}`);
+            icon = `https://uploads.meower.org/icons/${userData.avatar}`;
+            if (userList.includes(user)) {
+                attention = 'online';
+            }
+            action = `openProfile('${user}')`;
         }
 
-        let otherChats = Object.keys(chatCache).filter(chatId => !favouritedChats.includes(chatId));
-        otherChats.sort((a, b) => {
-            let aLastPost = postCache[a]?.[0]?.timestamp || 0;
-            let bLastPost = postCache[b]?.[0]?.timestamp || 0;
-            return bLastPost - aLastPost;
-        });
-
-        for (let chatId of otherChats) {
-            let data = chatCache[chatId];
-            let nickname;
-            let icon;
-            let attention = 'offline';
-            let action = '';
-
-            nickname = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
-            nickname = nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-
-            if (data.type === 0) {
-                if (data.icon) {
-                    icon = `https://uploads.meower.org/icons/${data.icon}`;
-                } else {
-                    icon = 'assets/images/chat.jpg';
-                }
-            } else {
-                const user = data.members.find(v => v !== storage.get("username"));
-                userData = await getUser(`${user}`);
-                icon = `https://uploads.meower.org/icons/${userData.avatar}`;
-                if (userList.includes(user)) {
-                    attention = 'online';
-                }
-                action = `openProfile('${user}')`;
-            }
-
-            chatList += `
-                <div class="chat" onclick="${action}" id="${chatId}">
-                    <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
-                    <div class="chat-text">
-                        <span class="chat-title">${nickname}</span>
-                        <span class="chat-preview">Placeholder</span>
-                    </div>
+        chatList += `
+            <div class="chat ${isfave}" onclick="${action}" id="${chatData._id}">
+                <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
+                <div class="chat-text">
+                    <span class="chat-title">${nickname}</span>
+                    <span class="chat-preview">Placeholder</span>
                 </div>
-            `;
-        }
+            </div>
+        `;
+    }
 
-        document.querySelector('.chats').innerHTML = chatList;
-    })();
+    document.querySelector('.chats').innerHTML = chatList;
 }
-
 function settingsPage() {
     page = 'settings';
     document.querySelectorAll('.active').forEach(element => element.classList.remove('active'));
@@ -394,21 +350,8 @@ function settingsProfile() {
 
         content.innerHTML = `
             <div class="settings">
-            <style>
-                .content {
-                    --modal-200: #00000040;
-                    --modal-300: #00000080;
-                    --modal-400: ${darkenColour(data.avatar_color, 3)};
-                    --modal-500: #000000e0;
-                    --modal-600: #000000aa;
-
-                    --modal-accent: #${data.avatar_color};
-
-                    --modal-text: ${lightenColour(data.avatar_color, 1.2)};
-                    --modal-link: ${lightenColour(data.avatar_color, 1.5)};
-                }
-            </style>
                 <div class="profile-settings">
+                    <div class="modal-banner" style="--banner-color: #${data.avatar_color}"></div>
                     <div class="edit-profile-icon" style="--image: url('https://uploads.meower.org/icons/${data.avatar}')">
                     <div class="edit-profile-overlay">Edit</div>
                     </div>
