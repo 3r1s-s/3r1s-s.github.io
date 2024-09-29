@@ -58,80 +58,6 @@
     --modal-900: var(--app-900);
 }
 
-.light {
-    --app-text: #171630;
-    --app-link: #3679f0;
-    --app-100: #f4f7ff;
-    --app-200: #e9f0ff;
-    --app-300: #c8d9ff;
-    --app-400: #e0ebff; /* Original */
-    --app-500: #a5b8e2;
-    --app-600: #c8d9ff;
-    --app-700: #7176a1;
-    --app-800: #6c708d;
-    --app-900: #60637b;
-    
-    
-
-    --titlebar: rgba(224, 235, 255, 0.8);
-
-    --app-blue: #3679f0;
-    --app-red: #ee4d3c;
-    --app-green: #4dca9a;
-    --app-yellow: #fffc5c;
-    --app-pink: #ff5bff;
-    --app-purple: #895bff;
-    --app-orange: #ff9b5b;
-
-    --app-dark-blue: #1e4d9e;
-    --app-dark-red: #c33f33;
-    --app-dark-green: #2c7e4b;
-    --app-dark-yellow: #c7b200;
-    --app-dark-pink: #c95bff;
-    --app-dark-purple: #5f5bff;
-    --app-dark-orange: #c86f33;
-
-    --nav-height: 60px;
-    --titlebar-height: 40px;
-
-    --modal-text: var(--app-text);
-    --modal-link: var(--app-link);
-    --modal-accent: var(--app-blue);
-    --modal-100: var(--app-100);
-    --modal-200: var(--app-200);
-    --modal-300: var(--app-300);
-    --modal-400: var(--app-400);
-    --modal-500: var(--app-500);
-    --modal-600: var(--app-600);
-    --modal-700: var(--app-700);
-    --modal-800: var(--app-800);
-    --modal-900: var(--app-900);
-}
-
-.catppuccin-macchiato {
-    --app-text: #cad3f5;
-    --app-link: #8aadf4;
-    --app-100: #181926;
-    --app-200: #1e2030;
-    --app-300: #24273a;
-    --app-400: #363a4f;
-    --app-500: #494d64;
-    --app-600: #5b6078;
-    --app-700: #6e738d;
-    --app-800: #8087a2;
-    --app-900: #939ab7;
-
-    --titlebar: rgba(24, 25, 38, 0.8);
-
-    --app-blue: #8aadf4;
-    --app-red: #ed8796;
-    --app-green: #a6da95;
-    --app-yellow: #eed49f;
-    --app-pink: #f5bde6;
-    --app-purple: #c6a0f6;
-    --app-orange: #ee99a0;
-}
-
 @media (prefers-color-scheme: dark) {
 
 }
@@ -916,6 +842,10 @@ hr {
 .theme-options {
     display: flex;
     gap: 6px;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 8px 6px;
 }
 
 .theme-option {
@@ -928,10 +858,11 @@ hr {
 
 .theme-colour {
     background: var(--app-500);
-    width: 40px;
-    height: 50px;
+    width: 70px;
+    height: 95px;
     border-radius: 8px;
     box-sizing: border-box;
+    box-shadow: 0 1px 8px #00000094;
 }
 
 .selected .theme-colour {
@@ -940,4 +871,5 @@ hr {
 
 .theme-name {
     font-weight: 600;
+    font-size: 0.8em;
 }

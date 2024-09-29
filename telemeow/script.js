@@ -94,11 +94,28 @@ const storage = (() => {
         delete(key) {
             delete storagedata[key];
             localStorage.setItem('tele-data', JSON.stringify(storagedata));
+        },
+
+        clear() {
+            storagedata = {};
+            localStorage.setItem('tele-data', JSON.stringify(storagedata));
         }
     };
 })();
 
-document.querySelector('html').classList.add('light');
+const theme = (() => {
+    return {
+        get() {
+            return storage.get('theme');
+        },
+        set(theme) {
+            storage.set('theme', theme);
+            setTheme();
+        }
+    };
+})();
+
+setTheme();
 
 function loginPage() {
     page = 'login';
@@ -152,8 +169,7 @@ function login(user, pass) {
 }
 
 function logout() {
-    storage.delete("token");
-    storage.delete("username");
+    storage.clear();
     loginPage();
 }
 
@@ -230,8 +246,8 @@ async function chatList() {
             if (userList.includes(user)) {
                 attention = 'online';
             }
-            action = `openProfile('${user}')`;
         }
+        action = `chatPage('${chatData._id}');`;
 
         chatList += `
             <div class="chat ${isfave}" onclick="${action}" id="${chatData._id}">
@@ -246,6 +262,35 @@ async function chatList() {
 
     document.querySelector('.chats').innerHTML = chatList;
 }
+
+function chatPage(chatId) {
+    page = chatId;
+
+    navigation.hide();
+    content.classList.remove('max');
+    content.scrollTo(0,0);
+
+    getChat(chatId).then(data => {
+        if (data.type === 0) {
+            titlebar.set(`${data.nickname}`);
+        } else {
+            titlebar.set(`${data.members.find(v => v !== storage.get("username"))}`);
+        }
+
+        titlebar.clear(false);
+        titlebar.back(`chatsPage()`);
+
+        md.disable(['image']);
+
+        content.innerHTML = `
+            <div class="chat-page">
+            </div>
+            <div class="postbar">
+            </div>
+        `;
+    });
+}
+
 function settingsPage() {
     page = 'settings';
     document.querySelectorAll('.active').forEach(element => element.classList.remove('active'));
@@ -385,23 +430,46 @@ function settingsAppearance() {
             <div class="theme-preview">
             </div>
             <div class="theme-options">
-                <div class="theme-option selected">
+                <div class="theme-option dark" onclick="theme.set('dark')" style="--app-500: #1a1825;">
                     <div class="theme-colour">
                     </div>
                     <div class="theme-name">
                         <span>Dark</span>
                     </div>
                 </div>
-                <div class="theme-option light">
+                <div class="theme-option light" onclick="theme.set('light')">
                     <div class="theme-colour">
                     </div>
                     <div class="theme-name">
                         <span>Light</span>
                     </div>
                 </div>
+                <div class="theme-option catppuccin-macchiato" onclick="theme.set('catppuccin-macchiato')">
+                    <div class="theme-colour">
+                    </div>
+                    <div class="theme-name">
+                        <span>Twilight</span>
+                    </div>
+                </div>
+                <div class="theme-option oled" onclick="theme.set('oled')">
+                    <div class="theme-colour">
+                    </div>
+                    <div class="theme-name">
+                        <span>OLED</span>
+                    </div>
+                </div>
+                <div class="theme-option watermelon" onclick="theme.set('watermelon')">
+                    <div class="theme-colour">
+                    </div>
+                    <div class="theme-name">
+                        <span>Watermelon</span>
+                    </div>
+                </div>
             </div>
         </div>
     `;
+
+    setTheme();
 }
 
 main();
