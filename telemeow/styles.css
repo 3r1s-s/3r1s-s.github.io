@@ -921,6 +921,10 @@ hr {
     background: transparent;
 }
 
+.message-send {
+    width: 56px;
+}
+
 .message-send:active > svg {
     transition: all 0.05s ease;
 }
