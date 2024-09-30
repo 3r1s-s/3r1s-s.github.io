@@ -14,7 +14,6 @@ let userList = {}; // {user, user}
 let favoritedChats = [];  // [chatId, ...]
 let pendingAttachments = [];
 let unreadInbox = '';
-let messageInput;
 
 let moderator = true;
 
@@ -291,31 +290,13 @@ function chatPage(chatId) {
             <div class="message-input-wrapper">
                 <div class="message-button">${icon.add}</div>
                     <div class="message-input-container">
-                        <textarea class="message-input" onblur="blurHandler()" placeholder="Send a message to ${name}..."></textarea>
+                        <textarea class="message-input" placeholder="Send a message to ${name}..."></textarea>
                     </div>
                 <div class="message-button">${icon.emoji}</div>
                 <div class="message-button message-send">${icon.send}</div>
             </div>
         `;
-
-        messageInput = content.querySelector(".message-input-wrapper");
-
-        window.visualViewport.addEventListener("resize", resizeHandler);
-
-        messageInput.addEventListener("focus", () => {
-            messageInput.style.bottom = "0";
-        });
     });
-}
-
-function resizeHandler() {
-    const viewport = window.visualViewport;
-    messageInput.style.bottom = `${window.innerHeight - viewport.height}px`;
-}
-
-function blurHandler() {
-    const viewport = window.visualViewport;
-    messageInput.style.bottom = "0";
 }
 
 function settingsPage() {
