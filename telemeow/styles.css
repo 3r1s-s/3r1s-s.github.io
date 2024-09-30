@@ -114,6 +114,14 @@ textarea, input[type="text"] {
     outline: none;
 }
 
+::placeholder {
+    color: var(--app-900);
+    opacity: 1;
+    font-style: italic;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+}
+
 hr {
     margin: 8px 0;
     border: 0;
@@ -151,7 +159,7 @@ hr {
     justify-content: space-between;
     align-items: center;
     z-index: 2;
-    padding: env(safe-area-inset-top) 15px 0px 15px;
+    padding: env(safe-area-inset-top) 5px 0px 5px;
     box-sizing: border-box;
     background-color: var(--titlebar);
     border-bottom: 2px solid var(--app-600);
@@ -872,4 +880,51 @@ hr {
 .theme-name {
     font-weight: 600;
     font-size: 0.8em;
+}
+
+.message-input-wrapper {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: calc(40px + env(safe-area-inset-bottom));
+    display: flex;
+    z-index: 3;
+    padding: 0 5px env(safe-area-inset-bottom) 5px;
+    box-sizing: border-box;
+    background-color: var(--titlebar);
+    border-top: 2px solid var(--app-600);
+    backdrop-filter: blur(20px) saturate(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    color: var(--app-900);
+}
+
+.message-button {
+    width: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message-input-container {
+    flex: 1;
+}
+
+.message-input {
+    width: 100%;
+    border: none;
+    height: 100%;
+    padding: 0.5em;
+    box-sizing: border-box;
+    font-size: 1em;
+    font-family: inherit;
+    background: transparent;
+}
+
+.message-send:active > svg {
+    transition: all 0.05s ease;
+}
+
+.message-send:active > svg {
+    transform: translateX(3px);
 }
