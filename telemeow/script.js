@@ -201,14 +201,14 @@ function chatsPage() {
 async function chatList() {
     let chatList = '';
     chatList += `
-    <div class="chat favourite" onclick="" id="home">
+    <div class="chat favourite" onclick="chatPage('home')" id="home">
         <div class="chat-icon" style="--image: url('assets/images/home.jpg')"></div>
         <div class="chat-text">
             <span class="chat-title">Home</span>
             <span class="chat-preview">${userList.length - 1} Users Online</span>
         </div>
     </div>
-    <div class="chat favourite" onclick="" id="inbox">
+    <div class="chat favourite" onclick="chatPage('inbox')" id="inbox">
         <div class="chat-icon ${unreadInbox ? 'attention' : ''}" style="--image: url('assets/images/inbox.jpg')"></div>
         <div class="chat-text">
             <span class="chat-title">Inbox</span>
@@ -269,25 +269,52 @@ async function chatList() {
 function chatPage(chatId) {
     page = chatId;
 
+    titlebar.set('');
+    titlebar.clear(true);
+    titlebar.back(`chatsPage()`);
+
     navigation.hide();
     content.classList.remove('max');
     content.scrollTo(0,0);
+    content.innerHTML = ``;
 
     let name;
 
     getChat(chatId).then(data => {
-        name = data.nickname || `@${data.members.find(v => v !== storage.get("username"))}`;
-        titlebar.set(`${name}`);
-
-        titlebar.clear(false);
-        titlebar.back(`chatsPage()`);
+        if (chatId === 'home') {
+            name = 'Home';
+        } else if (chatId === 'inbox') {
+            name = 'Inbox';
+        } else {
+            name = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
+        }
 
         md.disable(['image']);
 
+        let chatExtra;
+        let chatNext;
+        if (chatId === 'home') {
+            chatExtra = `${userList.length - 1} Users Online`;
+            chatNext = 'chatSettings("home")';
+        } else if (chatId === 'inbox') {
+            chatExtra = 'Placeholder';
+            chatNext = 'settingsNotifications()';
+        } else if (data.type === 0) {
+            chatExtra = `${data.members.length - 1} Members`;
+            chatNext = `chatSettings('${chatId}')`;
+        } else if (data.type === 1) {
+            chatExtra = userList.includes(name) ? 'Online' : 'Offline';
+            chatNext = `openProfile('${name}');`;
+        }
+
         content.innerHTML = `
             <div class="chat-page">
+                <div class="chat-info" onclick="${chatNext}">
+                    <span class="chat-name">${name}</span>
+                    <span class="chat-extra">${chatExtra}</span>
+                </div>
             </div>
-            <div class="message-input-wrapper">
+            <div class="message-input-wrapper" style="display: none;">
                 <div class="message-button">${icon.add}</div>
                     <div class="message-input-container">
                         <textarea class="message-input" placeholder="Send a message to ${name}..."></textarea>

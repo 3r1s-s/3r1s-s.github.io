@@ -96,6 +96,8 @@ function main() {
             userList = data.val.trim().split(";");
             if (page === 'chats') {
                 document.getElementById("home").querySelector(".chat-preview").innerText = `${userList.length - 1} Users Online`;
+            } else if (page === 'home') {
+                document.querySelector(".chat-extra").innerText = `${userList.length - 1} Users Online`;
             }
         }
 }}
@@ -121,12 +123,27 @@ function getChat(chatId) {
     return new Promise((resolve, reject) => {
         if (chatId in chatCache) return resolve(chatCache[chatId]);
 
-        fetch(`https://api.meower.org/chats/${chatId}`)
+        let url;
+        if (chatId === "home") {
+            url = "https://api.meower.org/home";
+        } else if (chatId === "inbox") {
+            url = "https://api.meower.org/inbox";
+        } else {
+            url = `https://api.meower.org/chats/${chatId}`
+        }
+
+        fetch(`${url}`, {
+            headers: {
+                token: storage.get("token")
+            }
+        })
             .then(resp => resp.json())
             .then(data => {
-                chatCache[chatId] = data;
-                postCache[chatId] = [];
-                resolve(data);
+                if (chatId !== 'home' && chatId !== 'inbox') {
+                    chatCache[chatId] = data;
+                    postCache[chatId] = [];
+                }
+                    resolve(data);
             })
             .catch(error => {
                 console.error("Failed to fetch:", error);
@@ -181,4 +198,35 @@ function setTheme() {
         }
         document.querySelector(`.theme-option.${theme.get()}`).classList.add('selected');
     }
+}
+
+function openUserChat(username) {
+    for (const chat of Object.values(chatCache)) {
+        if (chat.type === 1 && chat.members.includes(username)) {
+            chatPage(chat._id);
+            closeModal();
+            return;
+        }
+    }
+
+    fetch(`https://api.meower.org/users/${username}/dm`, {
+        method: 'GET',
+        headers: {
+            'token': storage.get('token')
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        chatCache[data._id] = data;
+        chatPage(chat._id);
+        closeModal();
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
 }
