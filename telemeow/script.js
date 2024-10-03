@@ -55,11 +55,14 @@ const titlebar = (() => {
         clear(val) {
             if (val) {
                 if (val === 'chat') {
+                    titlebar.classList.remove('trans');
                     titlebar.classList.add('chat-trans');
-                } else {   
+                } else {
+                    titlebar.classList.remove('chat-trans');
                     titlebar.classList.add('trans');
                 }
             } else {
+                titlebar.classList.remove('chat-trans');
                 titlebar.classList.remove('trans');
             }
         }
