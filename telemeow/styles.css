@@ -929,20 +929,22 @@ hr {
 }
 
 .message-input-wrapper {
-    position: fixed;
+    position: sticky;
     left: 0px;
-    bottom: 0px;
+    top: calc(env(safe-area-inset-top));
     width: 100%;
-    height: calc(40px + env(safe-area-inset-bottom));
+    height: calc(40px + env(safe-area-inset-top));
     display: flex;
     z-index: 3;
-    padding: 0 5px env(safe-area-inset-bottom) 5px;
+    padding: 0 5px 0 5px;
     box-sizing: border-box;
-    background-color: var(--titlebar);
+    background-color: var(--app-400);
     border-top: 2px solid var(--app-600);
+    border-bottom: 2px solid var(--app-600);
     backdrop-filter: blur(20px) saturate(1.2);
     -webkit-backdrop-filter: blur(20px) saturate(1.2);
     color: var(--app-900);
+    margin: 8px 0;
 }
 
 .message-button {

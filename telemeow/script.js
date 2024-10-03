@@ -313,7 +313,7 @@ function chatPage(chatId) {
                     <span class="chat-name">${name}</span>
                     <span class="chat-extra">${chatExtra}</span>
                 </div>
-                <div class="message-input-wrapper" style="display: none;">
+                <div class="message-input-wrapper">
                     <div class="message-button">${icon.add}</div>
                         <div class="message-input-container">
                             <textarea class="message-input" placeholder="Send a message to ${name}..."></textarea>
@@ -330,6 +330,9 @@ function chatPage(chatId) {
                     )}
                     ${createPost(
                         {"_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","attachments":[],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"> hi","pinned":false,"post_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727944460},"type":1,"u":"Eris"}
+                    )}
+                    ${createPost(
+                        {"_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","attachments":[{"filename":"Screen_Recording_2024-10-03_121632.mp4","height":762,"id":"YmYPhUS6BbEi1NCsYvr93DDj","mime":"video/mp4","size":10224782,"width":1362}],"author":{"_id":"throwawayacc3","avatar":"","avatar_color":"000000","flags":0,"pfp_data":1,"uuid":"951a74f5-464a-4efa-be04-2d936bd40ea0"},"emojis":[],"error":false,"isDeleted":false,"p":"this is silly","pinned":false,"post_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727972287},"type":1,"u":"throwawayacc3"}
                     )}
                     ${createPost(
                         {"_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","attachments":[{"filename":"Screen_Recording_2024-10-03_121632.mp4","height":762,"id":"YmYPhUS6BbEi1NCsYvr93DDj","mime":"video/mp4","size":10224782,"width":1362}],"author":{"_id":"throwawayacc3","avatar":"","avatar_color":"000000","flags":0,"pfp_data":1,"uuid":"951a74f5-464a-4efa-be04-2d936bd40ea0"},"emojis":[],"error":false,"isDeleted":false,"p":"this is silly","pinned":false,"post_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727972287},"type":1,"u":"throwawayacc3"}
