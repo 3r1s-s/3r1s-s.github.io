@@ -168,6 +168,11 @@ hr {
     -webkit-backdrop-filter: blur(20px) saturate(1.2);
 }
 
+.titlebar.chat-trans {
+    background: var(--app-200);
+    border-bottom: none;
+}
+
 .titlebar.trans {
     background: transparent;
     backdrop-filter: none;
@@ -931,9 +936,9 @@ hr {
 .message-input-wrapper {
     position: sticky;
     left: 0px;
-    top: calc(env(safe-area-inset-top));
+    top: 0;
     width: 100%;
-    height: calc(40px + env(safe-area-inset-top));
+    height: 40px;
     display: flex;
     z-index: 3;
     padding: 0 5px 0 5px;

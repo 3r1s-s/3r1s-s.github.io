@@ -54,7 +54,11 @@ const titlebar = (() => {
         },
         clear(val) {
             if (val) {
-                titlebar.classList.add('trans');
+                if (val === 'chat') {
+                    titlebar.classList.add('chat-trans');
+                } else {   
+                    titlebar.classList.add('trans');
+                }
             } else {
                 titlebar.classList.remove('trans');
             }
@@ -270,7 +274,7 @@ function chatPage(chatId) {
     page = chatId;
 
     titlebar.set('');
-    titlebar.clear(true);
+    titlebar.clear('chat');
     titlebar.back(`chatsPage()`);
 
     navigation.hide();
@@ -323,19 +327,19 @@ function chatPage(chatId) {
                 </div>
                 <div class="posts">
                     ${createPost(
+                        {"_id":"c1611c9f-4ea6-4a91-8488-d37c8b364e38","attachments":[],"author":{"_id":"DaGreenBoi","avatar":"HBU0vwoZrwNt7PzU5BagLHw9","avatar_color":"00ff00","flags":0,"pfp_data":29,"uuid":"1c9ac9b5-2d64-40e2-b495-6e4b261f9e9f"},"emojis":[],"error":false,"isDeleted":false,"p":"kennst du me open source version / alternative von Anton? weil ich will es kopierien und par neue sachen hinzuf\u00fcgen wie custom spiele","pinned":false,"post_id":"c1611c9f-4ea6-4a91-8488-d37c8b364e38","post_origin":"home","reactions":[],"reply_to":[{"_id":"073a568b-bb78-4a0f-b251-ead4eb46a879","attachments":[{"filename":"image.png","height":123,"id":"tG5xuMxYwlYG65v40erPfBx6","mime":"image/png","size":9270,"width":237}],"author":{"_id":"mybearworld","avatar":"MG9sbLeUcB0HDxjw2zLBDCKx","avatar_color":"ff7b00","flags":0,"pfp_data":2,"uuid":"9edcacad-791c-4071-bbbe-ae003556e1e4"},"emojis":[],"isDeleted":false,"p":"what a comment","pinned":false,"post_id":"073a568b-bb78-4a0f-b251-ead4eb46a879","post_origin":"home","reactions":[],"reply_to":[null],"stickers":[],"t":{"e":1727986769},"type":1,"u":"mybearworld"}],"stickers":[],"t":{"e":1727986904},"type":1,"u":"DaGreenBoi"}
+                    )}
+                    ${createPost(
                         {"_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","attachments":[],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"hi","pinned":false,"post_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727944460},"type":1,"u":"Eris"}
                     )}
                     ${createPost(
-                        {"_id":"946fe15d-7c72-4285-9842-436f2caf06f2","attachments":[{"filename":"meo.svg","height":512,"id":"a6zIbyILhSXRfhWIlmH6N6KW","mime":"image/svg+xml","size":25623,"width":512}],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"","pinned":false,"post_id":"946fe15d-7c72-4285-9842-436f2caf06f2","post_origin":"home","reactions":[],"reply_to":[{"_id":"dbb76a3e-d81e-48e8-b24c-1572b7810941","attachments":[],"author":{"_id":"Blahaj","avatar":"CnPzASDPJBGDfI8hCbqxVGC8","avatar_color":"ff80c0","flags":0,"pfp_data":32,"uuid":"c5077399-938a-4223-830a-28fd8e21e9bf"},"emojis":[],"isDeleted":false,"p":"i need an svg meo file for the website","pinned":false,"post_id":"dbb76a3e-d81e-48e8-b24c-1572b7810941","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727971161},"type":1,"u":"Blahaj"}],"stickers":[],"t":{"e":1727971172},"type":1,"u":"Eris"}
+                        {"_id":"f6c23f1e-38ad-4bb7-be9a-5f09e5794873","attachments":[{"filename":"image.png","height":143,"id":"xPH2LRqt7QE4NKd26buPhYox","mime":"image/png","size":11022,"width":707}],"author":{"_id":"noodles","avatar":"smFnDSoPoX2db0UtqRg30Ptc","avatar_color":"efff14","flags":0,"pfp_data":1,"uuid":"f898ca97-2e92-460f-bd0d-2858e4a1fe42"},"emojis":[],"error":false,"isDeleted":false,"p":"...why","pinned":false,"post_id":"f6c23f1e-38ad-4bb7-be9a-5f09e5794873","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727986813},"type":1,"u":"noodles"}
                     )}
                     ${createPost(
-                        {"_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","attachments":[],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"> hi","pinned":false,"post_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727944460},"type":1,"u":"Eris"}
+                        {"_id":"6d9c187d-5cbb-424b-ab67-4891670bcb21","attachments":[{"filename":"image.png","height":272,"id":"UNX0TtNYuJWWzGZYnZF2GZ1x","mime":"image/png","size":19053,"width":744}],"author":{"_id":"mybearworld","avatar":"MG9sbLeUcB0HDxjw2zLBDCKx","avatar_color":"ff7b00","flags":0,"pfp_data":2,"uuid":"9edcacad-791c-4071-bbbe-ae003556e1e4"},"emojis":[],"error":false,"isDeleted":false,"p":"hmmmmmmmmmmmm","pinned":false,"post_id":"6d9c187d-5cbb-424b-ab67-4891670bcb21","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727987090},"type":1,"u":"mybearworld"}
                     )}
                     ${createPost(
-                        {"_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","attachments":[{"filename":"Screen_Recording_2024-10-03_121632.mp4","height":762,"id":"YmYPhUS6BbEi1NCsYvr93DDj","mime":"video/mp4","size":10224782,"width":1362}],"author":{"_id":"throwawayacc3","avatar":"","avatar_color":"000000","flags":0,"pfp_data":1,"uuid":"951a74f5-464a-4efa-be04-2d936bd40ea0"},"emojis":[],"error":false,"isDeleted":false,"p":"this is silly","pinned":false,"post_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727972287},"type":1,"u":"throwawayacc3"}
-                    )}
-                    ${createPost(
-                        {"_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","attachments":[{"filename":"Screen_Recording_2024-10-03_121632.mp4","height":762,"id":"YmYPhUS6BbEi1NCsYvr93DDj","mime":"video/mp4","size":10224782,"width":1362}],"author":{"_id":"throwawayacc3","avatar":"","avatar_color":"000000","flags":0,"pfp_data":1,"uuid":"951a74f5-464a-4efa-be04-2d936bd40ea0"},"emojis":[],"error":false,"isDeleted":false,"p":"this is silly","pinned":false,"post_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727972287},"type":1,"u":"throwawayacc3"}
+                        {"_id":"ee2c2f11-f598-47ef-8385-d879a35e5106","attachments":[],"author":{"_id":"Blahaj","avatar":"CnPzASDPJBGDfI8hCbqxVGC8","avatar_color":"ff80c0","flags":0,"pfp_data":32,"uuid":"c5077399-938a-4223-830a-28fd8e21e9bf"},"emojis":[],"error":false,"isDeleted":false,"p":"meow","pinned":false,"post_id":"ee2c2f11-f598-47ef-8385-d879a35e5106","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727986748},"type":1,"u":"Blahaj"}
                     )}
                 </div>
             </div>
