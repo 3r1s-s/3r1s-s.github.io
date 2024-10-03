@@ -56,9 +56,25 @@ function closeModal() {
     }, 500);
 }
 
+function closeAlert() {
+    const modalOuter = document.querySelector(".alert-outer");
+    const modalInner = document.querySelector(".alert-inner");
+    const modal = document.querySelector(".alert");
+
+    modalOuter.classList.remove("open");
+
+    setTimeout(() => {
+        modalOuter.style.visibility = "hidden";
+        modal.classList.remove("small");
+        modalInner.innerHTML = ``;
+        document.querySelector(".alert-options").innerHTML = ``;
+    }, 500);
+}
+
 function openProfile(user) {
     let quote;
     let pronouns;
+    let lastfmuser;
     let attention = '';
     let recent;
     let colors;
@@ -66,11 +82,13 @@ function openProfile(user) {
     getUser(user).then(data => {
         md.disable(['image']);
         const regex = /\[(.*?)\]$/;
+        const lastfm = data.quote.match(/\|lastfm:([^|]+)\|/);
         let match = data.quote.match(regex);
         pronouns = match ? match[1] : "";
         
         quote = data.quote.replace(regex, '');
-        quote = md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">');  
+        lastfmuser = lastfm ? lastfm[1] : undefined;
+        quote = md.render(quote.replace(/\|lastfm:[^|]+\|/, '').trim()).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
         
         if (userList.includes(user)) {
             attention = 'online';
@@ -88,15 +106,78 @@ function openProfile(user) {
             <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
             <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
             <div class="profile-section">${quote}</div>
+            ${lastfmuser ? `
+            <div class="profile-section">
+                <a class="spotify" target="_blank" href="">
+                    <div class="spotify-art" style="background-image: none"></div>
+                    <div class="spotify-info">
+                        <div class="sp-in-list">
+                            <span style="font-weight: 800;" class="spotify-name">
+                            ---
+                            </span>
+                            <span style="font-weight: 400;" class="spotify-artist">
+                                by ---
+                            </span>
+                            <span style="font-weight: 400;" class="spotify-album">
+                                on ---
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+                ` : ``}
             <div class="profile-section info"><span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span><span class="divider"></span><span>${recent}</span></div>
             <div class="menu-options">
             <div class="menu-button" onclick="openUserChat('${data._id}')"><span>Send DM</span>${icon.arrow}</div>
             ${moderator ? `<div class="menu-button"><span>Moderate</span>${icon.arrow}</div>` : ``}
             </div>
             </div>`
-    });
+        });
+
+        if (lastfmuser) {
+            let url = 'https://lastfm-last-played.biancarosa.com.br/' + lastfmuser + '/latest-song';
+            fetch(url).then(response => response.text()).then(data => {
+                data = JSON.parse(data);
+
+                if (data.track["@attr"].nowplaying) {
+                    document.querySelector('.spotify-name').innerHTML = `${data.track.name}`;
+                    document.querySelector('.spotify-artist').innerHTML = `by ${data.track.artist['#text']}`;
+                    document.querySelector('.spotify-album').innerHTML = `on ${data.track.album['#text']}`;
+                    document.querySelector('.spotify-art').style.backgroundImage = `url('${data.track.image[2]['#text']}')`;
+                    document.querySelector('.spotify').href = data.track.url;
+                } else {
+                    document.querySelector('.spotify').style.display = 'none';
+                }
+            })   
+        }
     });
 }
 
+function openAlert(data) {
+    const modalOuter = document.querySelector(".alert-outer");
+    const modalInner = document.querySelector(".alert-inner");
+    const modal = document.querySelector(".alert");
+
+    if (data) {
+        if (data.title) {
+            let titleElement = document.createElement("span");
+            titleElement.classList.add("alert-header");
+            titleElement.textContent = data.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+            modalInner.append(titleElement);
+        }
+
+        if (data.id) {
+            modal.id = data.id;
+        } else {
+            modal.id = '';
+        }
+
+        document.querySelector(".alert-options").innerHTML = `
+        <button class="modal-button" onclick="closeAlert()">Close</button>
+        `;
+    }
+    modalOuter.style.visibility = "visible";
+    modalOuter.classList.add("open");
+}
 
 // openModal( { small: false, icon: 'assets/images/placeholder.jpg', title: 'TeleMeow', body: 'placeholder' })

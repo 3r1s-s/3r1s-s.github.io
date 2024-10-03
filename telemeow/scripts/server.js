@@ -223,7 +223,7 @@ function openUserChat(username) {
     })
     .then(data => {
         chatCache[data._id] = data;
-        chatPage(chat._id);
+        chatPage(data._id);
         closeModal();
     })
     .catch(error => {
