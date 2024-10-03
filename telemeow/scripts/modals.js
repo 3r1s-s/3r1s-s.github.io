@@ -180,4 +180,35 @@ function openAlert(data) {
     modalOuter.classList.add("open");
 }
 
+function openImage(url) {
+    const modalOuter = document.querySelector(".view-image-outer");
+    const modalInner = document.querySelector(".view-image-inner");
+    const modal = document.querySelector(".view-image");
+
+    modalInner.innerHTML = `
+    <img class="image-view" src="${url}" />
+    `;
+
+    document.querySelector(".view-image-options").innerHTML = `
+    <span onclick="closeImage()">Close</button>
+    `;
+    modalOuter.style.visibility = "visible";
+    modalOuter.classList.add("open");
+}
+
+
+function closeImage() {
+    const modalOuter = document.querySelector(".view-image-outer");
+    const modalInner = document.querySelector(".view-image-inner");
+    const modal = document.querySelector(".view-image");
+
+    modalOuter.classList.remove("open");
+
+    setTimeout(() => {
+        modalOuter.style.visibility = "hidden";
+        modalInner.innerHTML = ``;
+        document.querySelector(".view-image-options").innerHTML = ``;
+    }, 350);
+}
+
 // openModal( { small: false, icon: 'assets/images/placeholder.jpg', title: 'TeleMeow', body: 'placeholder' })

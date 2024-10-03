@@ -1071,6 +1071,60 @@ hr {
     font-weight: 600;
 }
 
+.view-image-outer {
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    transition: background 0.2s cubic-bezier(.2,0,0,1);
+}
+
+.view-image-outer.open {
+    background-color: rgba(0, 0, 0, 0.8);
+    visibility: visible;
+}
+
+.view-image {
+    background: transparent;
+    color: var(--modal-text);
+    width: 100%;
+    align-self: center;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform cubic-bezier(0.68, 0.1, 0.27, 1) 0.3s, opacity cubic-bezier(0.68, 0.1, 0.27, 1) 0.3s;
+}
+
+.view-image-outer.open .view-image {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.view-image-options {
+    display: flex;
+    align-self: end;
+    gap: 8px;
+    padding: 20px;
+}
+
+.view-image-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+
+    scrollbar-width: none;
+}
+
 .post {
     display: flex;
     gap: 10px;
