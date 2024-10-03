@@ -336,6 +336,9 @@ function chatPage(chatId) {
                         {"_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","attachments":[],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"hi","pinned":false,"post_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727944460},"type":1,"u":"Eris"}
                     )}
                     ${createPost(
+                        {"_id":"530b3b9b-4567-4b55-a8a3-2c19a3e678b5","attachments":[{"filename":"IMG_5493.png","height":2706,"id":"5lZ4LI7p4WmeF0m1bwcaz105","mime":"image/png","size":12105047,"width":2712}],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"","pinned":false,"post_id":"530b3b9b-4567-4b55-a8a3-2c19a3e678b5","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727997047},"type":1,"u":"Eris"}
+                    )}
+                    ${createPost(
                         {"_id":"f6c23f1e-38ad-4bb7-be9a-5f09e5794873","attachments":[{"filename":"image.png","height":143,"id":"xPH2LRqt7QE4NKd26buPhYox","mime":"image/png","size":11022,"width":707}],"author":{"_id":"noodles","avatar":"smFnDSoPoX2db0UtqRg30Ptc","avatar_color":"efff14","flags":0,"pfp_data":1,"uuid":"f898ca97-2e92-460f-bd0d-2858e4a1fe42"},"emojis":[],"error":false,"isDeleted":false,"p":"...why","pinned":false,"post_id":"f6c23f1e-38ad-4bb7-be9a-5f09e5794873","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727986813},"type":1,"u":"noodles"}
                     )}
                     ${createPost(
