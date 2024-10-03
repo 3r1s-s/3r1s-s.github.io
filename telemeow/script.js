@@ -313,19 +313,62 @@ function chatPage(chatId) {
                     <span class="chat-name">${name}</span>
                     <span class="chat-extra">${chatExtra}</span>
                 </div>
-            </div>
-            <div class="message-input-wrapper" style="display: none;">
-                <div class="message-button">${icon.add}</div>
-                    <div class="message-input-container">
-                        <textarea class="message-input" placeholder="Send a message to ${name}..."></textarea>
-                    </div>
-                <div class="message-button">${icon.emoji}</div>
-                <div class="message-button message-send">${icon.send}</div>
+                <div class="message-input-wrapper" style="display: none;">
+                    <div class="message-button">${icon.add}</div>
+                        <div class="message-input-container">
+                            <textarea class="message-input" placeholder="Send a message to ${name}..."></textarea>
+                        </div>
+                    <div class="message-button">${icon.emoji}</div>
+                    <div class="message-button message-send">${icon.send}</div>
+                </div>
+                <div class="posts">
+                    ${createPost(
+                        {"_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","attachments":[],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"hi","pinned":false,"post_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727944460},"type":1,"u":"Eris"}
+                    )}
+                    ${createPost(
+                        {"_id":"946fe15d-7c72-4285-9842-436f2caf06f2","attachments":[{"filename":"meo.svg","height":512,"id":"a6zIbyILhSXRfhWIlmH6N6KW","mime":"image/svg+xml","size":25623,"width":512}],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"","pinned":false,"post_id":"946fe15d-7c72-4285-9842-436f2caf06f2","post_origin":"home","reactions":[],"reply_to":[{"_id":"dbb76a3e-d81e-48e8-b24c-1572b7810941","attachments":[],"author":{"_id":"Blahaj","avatar":"CnPzASDPJBGDfI8hCbqxVGC8","avatar_color":"ff80c0","flags":0,"pfp_data":32,"uuid":"c5077399-938a-4223-830a-28fd8e21e9bf"},"emojis":[],"isDeleted":false,"p":"i need an svg meo file for the website","pinned":false,"post_id":"dbb76a3e-d81e-48e8-b24c-1572b7810941","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727971161},"type":1,"u":"Blahaj"}],"stickers":[],"t":{"e":1727971172},"type":1,"u":"Eris"}
+                    )}
+                    ${createPost(
+                        {"_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","attachments":[],"author":{"_id":"Eris","avatar":"Gi1WvwNobL0X6RpZB7pnAMNw","avatar_color":"8f75cc","flags":4,"pfp_data":23,"uuid":"d4006f3b-d054-4fd3-a4b1-82b29257cd91"},"emojis":[],"error":false,"isDeleted":false,"p":"> hi","pinned":false,"post_id":"4989f0e6-295b-470a-80ae-4092d3b54b60","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727944460},"type":1,"u":"Eris"}
+                    )}
+                    ${createPost(
+                        {"_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","attachments":[{"filename":"Screen_Recording_2024-10-03_121632.mp4","height":762,"id":"YmYPhUS6BbEi1NCsYvr93DDj","mime":"video/mp4","size":10224782,"width":1362}],"author":{"_id":"throwawayacc3","avatar":"","avatar_color":"000000","flags":0,"pfp_data":1,"uuid":"951a74f5-464a-4efa-be04-2d936bd40ea0"},"emojis":[],"error":false,"isDeleted":false,"p":"this is silly","pinned":false,"post_id":"c2f56c1e-24ec-4933-9c57-eb0087f98a3e","post_origin":"home","reactions":[],"reply_to":[],"stickers":[],"t":{"e":1727972287},"type":1,"u":"throwawayacc3"}
+                    )}
+                </div>
             </div>
         `;
     });
 }
 
+function createPost(data) {
+    
+    let attachments = document.createElement('div');
+    attachments.classList.add('post-attachments');
+    if (data.attachments) {        
+        data.attachments.forEach(attachment => {
+            const g = attach(attachment);
+            attachments.appendChild(g);
+        });
+    }
+
+    let post = `
+        <div class="post" id="${data._id}">
+            <div class="avatar-outer">
+                <div class="avatar" style="--image: url('https://uploads.meower.org/icons/${data.author.avatar}'); --color: ${data.author.avatar_color}" onclick="openProfile('${data.author._id}')"></div>
+            </div>
+            <div class="post-wrapper">
+                <div class="post-info">
+                    <span class="post-author" onclick="openProfile('${data.author._id}')">${data.author._id}</span><span class="post-date">${timeAgo(data.t.e)}</span>
+                </div>
+                <div class="post-content">${md.render(data.p)}</div>
+                ${attachments.outerHTML}
+                <div class="post-reactions"></div>
+            </div>
+        </div>
+        `;
+
+    return post;
+}
 function settingsPage() {
     page = 'settings';
     document.querySelectorAll('.active').forEach(element => element.classList.remove('active'));

@@ -851,7 +851,8 @@ hr {
     display: flex;
     align-items: center;
     width: 100%;
-    gap: 8px;
+    height: 100%;
+    gap: 10px;
     color: var(--modal-text) !important;
     text-decoration: none;
 }
@@ -1061,4 +1062,100 @@ hr {
 .alert-header {
     font-size: 1.6em;
     font-weight: 600;
+}
+
+.post {
+    display: flex;
+    gap: 10px;
+    padding: 5px 15px;
+}
+
+.post-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-info {
+    display: flex;
+    gap: 4px;
+    align-items: baseline;
+}
+
+.post-author {
+    font-weight: 600;
+    font-size: 1.05em;
+}
+
+.post-date {
+    font-weight: 300;
+    font-size: 0.75em;
+    font-style: italic;
+}
+
+.avatar {
+    background-image: var(--image);
+    background-size: cover;
+    background-position: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 100px;
+}
+
+.avatar:active {
+    opacity: 0.8;
+}
+
+.post-content p {
+    margin: 0;
+    font-size: inherit;
+}
+
+.post-content h1 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.post-content h2 {
+    margin: 0;
+    font-size: 1.3em;
+    font-weight: 600;
+}
+
+.post-content h3 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.post-content h4 {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.post-content h5 {
+    margin: 0;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.post-content h6 {
+    margin: 0;
+    font-size: 0.9em;
+    font-weight: 600;
+}
+
+.post-content blockquote {
+    margin: 0;
+    padding: 0 4px;
+    border-left: 3px solid var(--app-800);
+    font-size: 0.9em;
+    font-style: italic;
+    font-weight: 400;
+}
+
+.embed {
+    width: 100%;
+    border-radius: 10px;
 }

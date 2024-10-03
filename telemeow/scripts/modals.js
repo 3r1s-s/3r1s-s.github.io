@@ -107,19 +107,19 @@ function openProfile(user) {
             <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
             <div class="profile-section">${quote}</div>
             ${lastfmuser ? `
-            <div class="profile-section">
+            <div class="profile-section music" style="display: none">
                 <a class="spotify" target="_blank" href="">
                     <div class="spotify-art" style="background-image: none"></div>
                     <div class="spotify-info">
                         <div class="sp-in-list">
                             <span style="font-weight: 800;" class="spotify-name">
-                            ---
+                            
                             </span>
                             <span style="font-weight: 400;" class="spotify-artist">
-                                by ---
+                                by 
                             </span>
                             <span style="font-weight: 400;" class="spotify-album">
-                                on ---
+                                on 
                             </span>
                         </div>
                     </div>
@@ -138,15 +138,15 @@ function openProfile(user) {
             let url = 'https://lastfm-last-played.biancarosa.com.br/' + lastfmuser + '/latest-song';
             fetch(url).then(response => response.text()).then(data => {
                 data = JSON.parse(data);
-
-                if (data.track["@attr"].nowplaying) {
+                if (data.track["@attr"] && data.track["@attr"].nowplaying) {
                     document.querySelector('.spotify-name').innerHTML = `${data.track.name}`;
                     document.querySelector('.spotify-artist').innerHTML = `by ${data.track.artist['#text']}`;
                     document.querySelector('.spotify-album').innerHTML = `on ${data.track.album['#text']}`;
                     document.querySelector('.spotify-art').style.backgroundImage = `url('${data.track.image[2]['#text']}')`;
                     document.querySelector('.spotify').href = data.track.url;
+                    document.querySelector('.profile-section.music').style.display = 'block';
                 } else {
-                    document.querySelector('.spotify').style.display = 'none';
+                    document.querySelector('.profile-section.music').style.display = 'none';
                 }
             })   
         }
