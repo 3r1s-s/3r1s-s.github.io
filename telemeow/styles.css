@@ -965,6 +965,11 @@ hr {
     align-items: center;
 }
 
+.message-button svg {
+    width: 16px;
+    height: 16px;
+}
+
 .message-input-container {
     flex: 1;
 }
@@ -1172,6 +1177,7 @@ hr {
 }
 
 .post-button {
+    width: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
