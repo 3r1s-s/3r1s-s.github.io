@@ -625,6 +625,10 @@ hr {
     height: 96px;
 }
 
+.profile-settings.modal-banner {
+    padding-top: env(safe-area-inset-top);
+}
+
 .modal::after {
     content: '';
     position: absolute;
@@ -1205,6 +1209,10 @@ hr {
     opacity: 0.8;
 }
 
+.post-content {
+    margin-bottom: 0.25em;
+}
+
 .post-content p {
     margin: 0;
     font-size: inherit;
@@ -1272,6 +1280,11 @@ hr {
     align-items: center;
     justify-content: space-between;
     font-weight: 500;
+    transition: background 0.2s cubic-bezier(.2,0,0,1);
+}
+
+.post-modal-button:active {
+    background-color: var(--modal-500);
 }
 
 .post-modal-button:first-child {

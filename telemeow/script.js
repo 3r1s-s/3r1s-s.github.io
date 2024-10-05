@@ -401,7 +401,6 @@ function createPost(data) {
                 ${reactions.outerHTML}
             </div>
             <div class="post-buttons">
-                <div class="post-button">${icon.reply}</div>
                 <div class="post-button" onclick="postModal('${data._id}')">${icon.more}</div>
             </div> 
         </div>
