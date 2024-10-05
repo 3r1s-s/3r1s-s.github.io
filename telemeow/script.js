@@ -337,6 +337,9 @@ function chatPage(chatId) {
                 </div>
                 <div class="posts">
                     ${createPost(
+                        {"_id":"1641b3d8-0693-4ed4-92b4-5eaced6626a3","attachments":[],"author":{"_id":"throwawayacc3","avatar":"","avatar_color":"000000","flags":0,"pfp_data":1,"uuid":"951a74f5-464a-4efa-be04-2d936bd40ea0"},"edited_at":1728072004,"emojis":[],"error":false,"isDeleted":false,"p":"man this must be the 4th time ive thought of making an http rpc server on localhost","pinned":false,"post_id":"1641b3d8-0693-4ed4-92b4-5eaced6626a3","post_origin":"home","reactions":[{"count":2,"emoji":"\ud83e\udd76","user_reacted":false}],"reply_to":[],"stickers":[],"t":{"e":1728071996},"type":1,"u":"throwawayacc3"}
+                    )}
+                    ${createPost(
                         {"_id":"c1611c9f-4ea6-4a91-8488-d37c8b364e38","attachments":[],"author":{"_id":"DaGreenBoi","avatar":"HBU0vwoZrwNt7PzU5BagLHw9","avatar_color":"00ff00","flags":0,"pfp_data":29,"uuid":"1c9ac9b5-2d64-40e2-b495-6e4b261f9e9f"},"emojis":[],"error":false,"isDeleted":false,"p":"kennst du me open source version / alternative von Anton? weil ich will es kopierien und par neue sachen hinzuf\u00fcgen wie custom spiele","pinned":false,"post_id":"c1611c9f-4ea6-4a91-8488-d37c8b364e38","post_origin":"home","reactions":[],"reply_to":[{"_id":"073a568b-bb78-4a0f-b251-ead4eb46a879","attachments":[{"filename":"image.png","height":123,"id":"tG5xuMxYwlYG65v40erPfBx6","mime":"image/png","size":9270,"width":237}],"author":{"_id":"mybearworld","avatar":"MG9sbLeUcB0HDxjw2zLBDCKx","avatar_color":"ff7b00","flags":0,"pfp_data":2,"uuid":"9edcacad-791c-4071-bbbe-ae003556e1e4"},"emojis":[],"isDeleted":false,"p":"what a comment","pinned":false,"post_id":"073a568b-bb78-4a0f-b251-ead4eb46a879","post_origin":"home","reactions":[],"reply_to":[null],"stickers":[],"t":{"e":1727986769},"type":1,"u":"mybearworld"}],"stickers":[],"t":{"e":1727986904},"type":1,"u":"DaGreenBoi"}
                     )}
                     ${createPost(
@@ -371,6 +374,19 @@ function createPost(data) {
         });
     }
 
+    let reactions = document.createElement('div');
+    reactions.classList.add('post-reactions');
+    if (data.reactions) {        
+        data.reactions.forEach(reaction => {
+            reactions.innerHTML += `
+                <div class="reaction ${reaction.user_reacted ? 'reacted' : ''}">
+                    <span class="reaction-count">${reaction.count}</span>
+                    <span class="reaction-type">${reaction.emoji}</span>
+                </div>
+            `;
+        });
+    }
+
     let post = `
         <div class="post" id="${data._id}">
             <div class="avatar-outer">
@@ -382,12 +398,12 @@ function createPost(data) {
                 </div>
                 <div class="post-content">${md.render(data.p)}</div>
                 ${attachments.outerHTML}
-                <div class="post-reactions"></div>
+                ${reactions.outerHTML}
             </div>
             <div class="post-buttons">
                 <div class="post-button">${icon.reply}</div>
                 <div class="post-button" onclick="postModal('${data._id}')">${icon.more}</div>
-            </div>
+            </div> 
         </div>
         `;
 
