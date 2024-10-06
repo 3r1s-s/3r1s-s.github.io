@@ -328,7 +328,7 @@ hr {
 
 .chat-icon {
     aspect-ratio: 1 / 1;
-    width: auto;
+    width: 65px;
     margin: 5px;
     background-size: cover;
     background-position: center;
@@ -375,9 +375,9 @@ hr {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url('assets/images/placeholder.jpg');
-    border-radius: 100%;
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset;
+    background-image: url('assets/images/cta.svg');
+    /* box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset;
+    border-radius: 30px; */
 }
 
 .login {
@@ -493,6 +493,7 @@ hr {
     color: var(--modal-text);
 
     width: 100%;
+    max-width: 500px;
     height: 85%;
     align-self: end;
     border-radius: 0;
@@ -1138,6 +1139,15 @@ hr {
     position: relative;
 
     scrollbar-width: none;
+
+    scrollbar-width: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-view {
+    max-width: 100vw;
+    max-height: 100vh;
 }
 
 .post {
