@@ -626,7 +626,7 @@ hr {
     height: 96px;
 }
 
-.profile-settings.modal-banner {
+.profile-settings .modal-banner {
     padding-top: env(safe-area-inset-top);
 }
 
