@@ -1,6 +1,8 @@
 const server = 'wss://server.meower.org?v=1';
 const home = 'https://eris.pages.dev/telemeow';
+
 let page = '';
+let back = '';
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
 
@@ -49,12 +51,12 @@ const titlebar = (() => {
         set(title) {
             titlebar.querySelector('.titlebar .title').textContent = title;
         },
-        back(back) {
-            if (back) {
+        back(backAction) {
+            if (backAction) {
                 titlebar.querySelector('.titlebar .titlebar-back').style.display = 'flex';
-                titlebar.querySelector('.titlebar .titlebar-back').setAttribute('onclick', `${back}`)
+                titlebar.querySelector('.titlebar .titlebar-back').setAttribute('onclick', `${backAction}`)
                 titlebar.querySelector('.titlebar .titlebar-back').innerHTML = `${icon.back}`
-
+                back = `${backAction}`;
             } else {
                 titlebar.querySelector('.titlebar .titlebar-back').style.display = 'none';
             }

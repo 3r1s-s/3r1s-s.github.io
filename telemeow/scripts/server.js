@@ -301,3 +301,29 @@ function attach(attachment) {
         return embeddedElement;
     }
 }
+
+let touchStartX = 0;
+let touchEndX = 0;
+const SWIPE_THRESHOLD = 100;
+
+window.addEventListener('touchstart', function(event) {
+  touchStartX = event.touches[0].clientX;
+}, false);
+
+window.addEventListener('touchend', function(event) {
+  touchEndX = event.changedTouches[0].clientX;
+  handleGesture();
+}, false);
+
+
+window.addEventListener('touchmove', function(event) {
+    const touch = event.touches[0]; 
+    content.style.transform = `translateX(${touch.clientX - 50}px)`;
+});
+
+function handleGesture() {
+  if (touchStartX < 50 && touchEndX - touchStartX > SWIPE_THRESHOLD) {
+    eval(back)
+    content.style.transform = `translateX(0px)`;
+  }
+}
