@@ -502,12 +502,15 @@ function settingsProfile() {
 
         md.disable(['image']);
         const regex = /\[(.*?)\]/;
-        const newlineregex = /\n\n\[(.*?)\]/;
+        const newlineregex = /\n/g;
+        const lastfmregex = /\|lastfm:([^|]+)\|/;
         const match = data.quote.match(regex);
         
         pronouns = match ? match[1] : "";
+        let lastfmuser = data.quote.match(lastfmregex);
+        lastfmuser = lastfmuser ? lastfmuser[1] : "";
         quote = data.quote.replace(regex, '');
-        editquote = data.quote.replace(newlineregex, '');
+        editquote = data.quote.replace(regex, '').replace(lastfmregex, '').replace(newlineregex, '');
         quote = md.render(quote).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
 
         if (userList.includes(storage.get('username'))) {
@@ -529,6 +532,8 @@ function settingsProfile() {
                     <input type="text" class="edit-profile-quote" value="${pronouns}">
                     <span class="edit-profile-title">Quote</span>
                     <textarea class="edit-profile-quote">${editquote}</textarea>
+                    <span class="edit-profile-title">Last.fm Username</span>
+                    <input type="text" class="edit-profile-quote" value="${lastfmuser}">
                     <div class="profile-section info"><span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span><span class="divider"></span><span>${recent}</span></div>
                 </div>
             </div>
