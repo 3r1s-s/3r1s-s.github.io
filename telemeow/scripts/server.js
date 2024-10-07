@@ -303,21 +303,38 @@ function attach(attachment) {
 }
 
 let touchStartX = 0;
+let touchStartY = 0;
 let touchEndX = 0;
-const SWIPE_THRESHOLD = 100;
+const SWIPE_THRESHOLD = 100; // Minimum swipe distance to trigger action
+const arrow = document.querySelector('.arrow-indicator'); // Create arrow element
 
+// Listen for touchstart event
 window.addEventListener('touchstart', function(event) {
-  touchStartX = event.touches[0].clientX;
-}, false);
+  touchStartX = event.touches[0].clientX; // Get X position where the touch started
 
-window.addEventListener('touchend', function(event) {
-  touchEndX = event.changedTouches[0].clientX;
-  handleGesture();
-}, false);
-
-function handleGesture() {
-  if (touchStartX < 50 && touchEndX - touchStartX > SWIPE_THRESHOLD) {
-    eval(back)
-    content.style.transform = `translateX(0px)`;
+  if (touchStartX < 50) { // Only trigger when starting near the left edge
+    arrow.style.transform = 'translateX(-50px)'; // Make the arrow visible by sliding it out
   }
-}
+}, false);
+
+// Listen for touchmove event to update arrow position
+window.addEventListener('touchmove', function(event) {
+  touchEndX = event.touches[0].clientX; // Track finger movement
+  let deltaX = touchEndX - touchStartX; // Calculate how far the user has dragged
+  if (deltaX > 0 && touchStartX < 50) { // Ensure swipe is rightward from left edge
+    arrow.style.transform = `translateX(${Math.min(deltaX, 50) - 50}px)`; // Move arrow outward with swipe
+  }
+}, false);
+
+// Listen for touchend event
+window.addEventListener('touchend', function(event) {
+  touchEndX = event.changedTouches[0].clientX; // Get X position where the touch ended
+
+  // Check if swipe started close to the left edge and moved to the right
+  if (touchStartX < 50 && touchEndX - touchStartX > SWIPE_THRESHOLD) {
+    eval(back); // Use eval to execute the string as a function
+  }
+
+  // Hide the arrow indicator when the swipe ends
+  arrow.style.transform = 'translateX(-100%)';
+}, false);

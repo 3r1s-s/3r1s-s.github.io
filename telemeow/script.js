@@ -59,6 +59,7 @@ const titlebar = (() => {
                 back = `${backAction}`;
             } else {
                 titlebar.querySelector('.titlebar .titlebar-back').style.display = 'none';
+                back = '';
             }
         },
         clear(val) {
