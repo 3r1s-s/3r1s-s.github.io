@@ -315,12 +315,6 @@ window.addEventListener('touchend', function(event) {
   handleGesture();
 }, false);
 
-
-window.addEventListener('touchmove', function(event) {
-    const touch = event.touches[0]; 
-    content.style.transform = `translateX(${touch.clientX - 50}px)`;
-});
-
 function handleGesture() {
   if (touchStartX < 50 && touchEndX - touchStartX > SWIPE_THRESHOLD) {
     eval(back)
