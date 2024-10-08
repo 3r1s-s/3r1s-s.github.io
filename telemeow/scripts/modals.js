@@ -208,8 +208,11 @@ function openImage(url) {
     const modalInner = document.querySelector(".view-image-inner");
     const modal = document.querySelector(".view-image");
 
+    const baseURL = url.split('?')[0];
+    const fileName = baseURL.split('/').pop();
+
     modalInner.innerHTML = `
-    <img class="image-view" src="${url}" />
+    <img class="image-view" src="${url}" alt="${fileName}"/>
     `;
 
     document.querySelector(".view-image-options").innerHTML = `
