@@ -221,6 +221,17 @@ function chatsPage() {
 
 async function chatList() {
     let chatList = '';
+    if (storage.get("username") !== "eri") {
+        chatList += `
+        <div class="warning">
+            <div class="warning-text">
+                <span>This is INCOMPLETE!</span>
+                <small>Also you shouldn't be seeing this you little rascal.</small>
+            </div>
+        </div>
+        `;
+    }
+
     chatList += `
     <div class="chat favourite" onclick="chatPage('home')" id="home">
         <div class="chat-icon" style="--image: url('assets/images/home.jpg')"></div>

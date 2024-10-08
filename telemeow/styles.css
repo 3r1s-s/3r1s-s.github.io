@@ -1392,3 +1392,15 @@ hr {
     transform: translateX(-50px);
     transition: transform 0.1s ease;
 }
+
+.warning-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--app-dark-red);
+    font-weight: 600;
+    border-bottom: 1px solid var(--app-red);
+    border-top: 1px solid var(--app-red);
+    gap: 5px;
+    padding: 10px;
+}
