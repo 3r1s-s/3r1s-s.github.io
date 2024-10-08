@@ -903,6 +903,12 @@ hr {
     overflow: hidden;
 }
 
+.badges {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
 .theme-options {
     display: flex;
     gap: 6px;
@@ -1160,6 +1166,7 @@ hr {
 .post-wrapper {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .post-info {
@@ -1264,6 +1271,13 @@ hr {
     font-weight: 600;
 }
 
+.post-content small {
+    margin: 0;
+    font-size: 0.75em;
+    font-weight: 600;
+    opacity: 0.5;
+}
+
 .post-content blockquote {
     margin: 0;
     padding: 0 4px;
@@ -1271,6 +1285,10 @@ hr {
     font-size: 0.9em;
     font-style: italic;
     font-weight: 400;
+}
+
+.post-attachments {
+    width: 100%;
 }
 
 .embed {
@@ -1308,6 +1326,16 @@ hr {
     justify-content: center;
     width: 24px;
     height: 24px;
+}
+
+.download {
+    display: flex;
+    flex-direction: column;
+    background: var(--app-500);
+    padding: 10px 15px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 15px;
 }
 
 .reaction {

@@ -77,6 +77,7 @@ function openProfile(user) {
     let lastfmuser;
     let attention = '';
     let recent;
+    let badges = '';
     let colors;
 
     getUser(user).then(data => {
@@ -97,6 +98,14 @@ function openProfile(user) {
             recent = `Last Seen: ${timeAgo(data.last_seen)}`;
         }
 
+        if (data.permissions === 1) {
+            badges += icon.crown;
+        }
+
+        if (data._id === `Eris`) {
+            badges += icon.heart;
+        }
+
         openModal({ 
             style: `
                 --banner-color: #${data.avatar_color};
@@ -104,7 +113,7 @@ function openProfile(user) {
             body: `
             <div class="modal-banner"></div>
             <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
-            <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
+            <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span><div class="badges">${badges}</div></div>
             <div class="profile-section">${quote}</div>
             ${lastfmuser ? `
             <div class="profile-section music" style="display: none">

@@ -141,7 +141,6 @@ function getChat(chatId) {
             .then(data => {
                 if (chatId !== 'home' && chatId !== 'inbox') {
                     chatCache[chatId] = data;
-                    postCache[chatId] = [];
                 }
                     resolve(data);
             })
@@ -149,6 +148,52 @@ function getChat(chatId) {
                 console.error("Failed to fetch:", error);
                 reject(error);
             });
+    });
+}
+
+async function loadPosts(pageNo) {
+    const posts = document.querySelector(".posts");
+
+    const chatId = page.valueOf();
+    if (!(chatId in postCache)) postCache[chatId] = [];
+
+    const cacheSkip = (pageNo-1) * 25;
+    const cachedPosts = postCache[chatId].slice(cacheSkip, (cacheSkip+25)+1);
+    for (const post of cachedPosts) {
+        posts.innerHTML += createPost(post);
+    }
+    if (cachedPosts.length >= 25 || chatId === "livechat") {
+        if (chatId === "livechat") document.querySelector(".skeleton-posts").style.display = "none";
+        return;
+    }
+
+    var path;
+    if (chatId === "home") path = "/home"
+    else if (chatId === "inbox") path = "/inbox"
+    else path = `/posts/${chatId}`;
+
+    const response = await fetch(`https://api.meower.org${path}?page=${pageNo}`, {
+        headers: {
+            token: storage.get("token")
+        }
+    });
+    const postsData = await response.json();
+
+    if (postsData["page#"] === postsData.pages && postsData.autoget.length < 25) {
+        document.querySelector(".skeleton-posts").style.display = "none";
+        document.querySelector(".posts").setAttribute("data-loading-more", "");
+    }
+
+    const postsarray = postsData.autoget || [];
+    postsarray.forEach(post => {
+        if (page !== chatId) {
+            return;
+        }
+        if (postCache[chatId].findIndex(_post => _post._id === post._id) !== -1) {
+            return
+        }
+        postCache[chatId].push(post);
+        posts.innerHTML += createPost(post);
     });
 }
 
@@ -241,12 +286,9 @@ function attach(attachment) {
         } else {
             const element = document.createElement("div");
             element.classList.add("download");
-            if (settingsstuff().underlinelinks) {
-                element.classList.add("underline");
-            }
             element.innerHTML = `
             <a href="${link}?download" target="_blank">${attachment.filename}</a>
-            <span class="subsubheader">${formatSize(attachment.size)}</span>
+            <small>${formatSize(attachment.size)}</small>
             `;
             embeddedElement = element;
         }
