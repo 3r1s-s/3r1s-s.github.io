@@ -2,7 +2,11 @@ function main() {
     serverWebSocket = new WebSocket(server);
 
     serverWebSocket.addEventListener('error', function(event) {
-        // Error message
+        openAlert({
+            title: 'Connection Error',
+            message: `Error: ${event.message}`,
+            type: 'error',
+        })
     });
 
     serverWebSocket.onopen = () => {
