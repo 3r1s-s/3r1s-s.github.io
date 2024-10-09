@@ -102,9 +102,9 @@ function autoResize() {
     messageInput.style.height = lines * lineHeight + 1 + 'px';
 }
 
-document.addEventListener("keydown", function(event) {
-    if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        sendPost();
-     }
-});
+// document.addEventListener("keydown", function(event) {
+//     if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
+//         event.preventDefault();
+//         sendPost();
+//      }
+// });
