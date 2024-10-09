@@ -237,4 +237,7 @@ function closeImage() {
     }, 350);
 }
 
+function homeModal() {
+    openModal({title: 'Home', body: `<div class="menu-options">${userList.slice(0, -1).map((user) => `<div class="menu-button"><span>${user}</span>${icon.arrow}</div>`).join('')}</div>`})
+}
 // openModal( { small: false, icon: 'assets/images/placeholder.jpg', title: 'TeleMeow', body: 'placeholder' })

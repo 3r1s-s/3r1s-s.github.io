@@ -318,7 +318,7 @@ function chatPage(chatId) {
         } else if (chatId === 'inbox') {
             name = 'Inbox';
         } else {
-            name = data.nickname || `${data.members.find(v => v !== storage.get("username"))}`;
+            name = data.nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;') || `${data.members.find(v => v !== storage.get("username"))}`;
         }
 
         md.disable(['image']);
@@ -327,7 +327,7 @@ function chatPage(chatId) {
         let chatNext;
         if (chatId === 'home') {
             chatExtra = `${userList.length - 1} Users Online`;
-            chatNext = 'chatSettings("home")';
+            chatNext = `homeModal();`;
         } else if (chatId === 'inbox') {
             chatExtra = 'Placeholder';
             chatNext = 'settingsNotifications()';
@@ -349,10 +349,10 @@ function chatPage(chatId) {
                     <div class="message-input-wrapper">
                         <div class="message-button">${icon.add}</div>
                         <div class="message-input-container">
-                            <textarea class="message-input" placeholder="Send a message to ${name}..."></textarea>
+                            <textarea class="message-input" oninput="autoResize()" placeholder="Send a message to ${name}..."></textarea>
                         </div>
                         <div class="message-button">${icon.emoji}</div>
-                        <div class="message-button message-send">${icon.send}</div>
+                        <div class="message-button message-send" onclick="sendPost();">${icon.send}</div>
                     </div>
                 </div>
                 <div class="posts">
@@ -392,6 +392,22 @@ function createPost(data) {
         });
     }
 
+    if (data.author._id === 'Server') {
+        let post = `
+        <div class="post" id="${data._id}">
+            <div class="avatar-outer">
+            </div>
+            <div class="post-wrapper">
+                <div class="post-content" style="opacity: 0.5">${md.render(data.p)}</div>
+                ${attachments.outerHTML}
+                ${reactions.outerHTML}
+            </div>
+        </div>
+        `;
+
+    return post;
+    }
+
     let post = `
         <div class="post" id="${data._id}">
             <div class="avatar-outer">
@@ -399,7 +415,7 @@ function createPost(data) {
             </div>
             <div class="post-wrapper">
                 <div class="post-info">
-                    <span class="post-author" onclick="openProfile('${data.author._id}')">${data.author._id}</span><span class="post-date">${timeAgo(data.t.e)}</span>
+                    <span class="post-author" onclick="openProfile('${data.author._id}')">${data.author._id}</span><span class="post-date">${new Date(Math.trunc(data.t.e * 1000)).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' })}</span>
                 </div>
                 <div class="post-content">${md.render(data.p)}</div>
                 ${attachments.outerHTML}

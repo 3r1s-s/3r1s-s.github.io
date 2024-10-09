@@ -42,8 +42,22 @@ function main() {
                 chatsPage();
             }
         } else if (data.cmd === "post" || data.cmd === "inbox_message") {
-            if (!postCache[data.val.post_origin]) postCache[data.val.post_origin] = [];
-            postCache[data.val.post_origin].unshift(data.val);
+            let post = data.val;
+            let postOrigin = post.post_origin;
+
+            if (usersTyping[postOrigin] && post.author._id in usersTyping[postOrigin]) {
+                clearTimeout(usersTyping[postOrigin][post.author._id]);
+                delete usersTyping[postOrigin][post.author._id];
+            }
+
+            if (!(postOrigin in postCache)) postCache[postOrigin] = [];
+            postCache[postOrigin].unshift(post);
+            if (page === postOrigin) {
+                document.querySelector(".posts").insertAdjacentHTML('afterbegin', createPost(post));
+                
+            } else {
+                if (postCache[postOrigin].length > 25) postCache[postOrigin].length = 25;
+            }
         } else if (data.cmd === "typing") {
             const chatId = data.val.chat_id;
             const username = data.val.username;
@@ -295,3 +309,38 @@ function attach(attachment) {
         return embeddedElement;
     }
 }
+
+
+async function sendPost() {
+    const messageInput = document.querySelector('.message-input');
+    if (messageInput.disabled) return;
+    if (messageInput.value.trim() === "") return;
+    const message = messageInput.value;
+    messageInput.value = "";
+    autoResize();
+
+    const nonce = Math.random().toString();
+    const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            token: storage.get("token"),
+        },
+        body: JSON.stringify({
+            reply_to: [],
+            content: message,
+            attachments: [],
+            nonce,
+        })
+    });
+
+    autoResize();
+}
+
+function autoResize() {
+    const messageInput = document.querySelector('.message-input');
+    const lineHeight = 20;
+  
+    const lines = messageInput.value.split('\n').length;
+    messageInput.style.height = lines * lineHeight + 1 + 'px';
+  }

@@ -957,12 +957,12 @@ hr {
 
 .message-input-wrapper {
     width: 100%;
-    height: 40px;
+    height: auto;
     display: flex;
     z-index: 3;
     padding: 0 5px;
     box-sizing: border-box;
-    border-radius: 100px;
+    border-radius: 25px;
     background-color: var(--app-400);
     color: var(--app-900);
     backdrop-filter: blur(20px) saturate(1.2);
@@ -987,13 +987,16 @@ hr {
 
 .message-input {
     width: 100%;
+    height: 21px;
     border: none;
-    height: 100%;
     padding: 0.5em;
-    box-sizing: border-box;
     font-size: 1em;
+    font-weight: 400;
+    color: var(--app-text);
+    line-height: 20px;
     font-family: inherit;
     background: transparent;
+    margin: 0;
 }
 
 .message-send {
@@ -1022,6 +1025,9 @@ hr {
 .chat-name {
     font-size: 1.8em;
     font-weight: 600;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .chat-extra {
@@ -1156,6 +1162,14 @@ hr {
     max-height: 100vh;
 }
 
+.image-view, .embed {
+    font-family: 'Reddit Mono', monospace;
+    font-size: 0.9em;
+    white-space: pre-wrap;
+    font-weight: 700;
+    color: #ffffff80;
+}
+
 .post {
     display: flex;
     gap: 10px;
@@ -1195,7 +1209,6 @@ hr {
     height: 1lh;
     gap: 4px;
     padding: 0 8px;
-    background: var(--app-200);
 }
 
 .post-button {
@@ -1220,6 +1233,7 @@ hr {
     background-position: center;
     width: 40px;
     height: 40px;
+    box-shadow: inset 0 0 0 1px #ffffff25;
     border-radius: 100px;
 }
 
@@ -1290,6 +1304,7 @@ hr {
 }
 
 .post-content pre {
+    font-family: 'Reddit Mono', monospace;
     background: #000;
     padding: 5px;
     border-radius: 5px;
