@@ -140,7 +140,7 @@ const theme = (() => {
 })();
 
 String.prototype.sanitize = function() {
-    return this.sanitize()
+    return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 };
 
 setTheme();
@@ -271,7 +271,7 @@ async function chatList() {
         let isfave = favoritedChats.includes(chatData._id) ? 'favourite' : '';
 
         nickname = chatData.nickname || `${chatData.members.find(v => v !== storage.get("username"))}`;
-        nickname = nickname.sanitize()
+        nickname = nickname.sanitize();
         if (chatData.type === 0) {
             if (chatData.icon) {
                 icon = `https://uploads.meower.org/icons/${chatData.icon}`;
@@ -323,7 +323,7 @@ function chatPage(chatId) {
             name = 'Inbox';
         } else {
             if (data.nickname) {
-                name = data.nickname.sanitize()
+                name = data.nickname.sanitize();
             } else {
                 name = `${data.members.find(v => v !== storage.get("username"))}`;
             }
