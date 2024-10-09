@@ -318,7 +318,11 @@ function chatPage(chatId) {
         } else if (chatId === 'inbox') {
             name = 'Inbox';
         } else {
-            name = data.nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;') || `${data.members.find(v => v !== storage.get("username"))}`;
+            if (data.nickname) {
+                name = data.nickname.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+            } else {
+                name = `${data.members.find(v => v !== storage.get("username"))}`;
+            }
         }
 
         md.disable(['image']);
