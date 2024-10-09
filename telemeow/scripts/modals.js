@@ -185,8 +185,15 @@ function openAlert(data) {
         if (data.title) {
             let titleElement = document.createElement("span");
             titleElement.classList.add("alert-header");
-            titleElement.textContent = data.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+            titleElement.textContent = data.title.sanitize();
             modalInner.append(titleElement);
+        }
+
+        if (data.message) {
+            let messageElement = document.createElement("span");
+            messageElement.classList.add("alert-message");
+            messageElement.textContent = data.message.sanitize();
+            modalInner.append(messageElement);
         }
 
         if (data.id) {

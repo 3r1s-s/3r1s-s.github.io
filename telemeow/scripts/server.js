@@ -21,6 +21,13 @@ function main() {
         };
     };
 
+    serverWebSocket.onclose = () => {
+        console.info("Connection closed attempting to reconnect...");
+        setTimeout(() => {
+            main();
+        }, 5000);
+    };
+
     serverWebSocket.onmessage = (event) => {
         console.log(event.data);
         let data = JSON.parse(event.data);
