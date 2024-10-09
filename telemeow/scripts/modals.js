@@ -10,7 +10,7 @@ function openModal(data) {
         if (data.title) {
             let titleElement = document.createElement("span");
             titleElement.classList.add("modal-header");
-            titleElement.textContent = data.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+            titleElement.textContent = data.title.sanitize()
             modalInner.append(titleElement);
         }
 
