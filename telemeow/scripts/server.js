@@ -7,6 +7,7 @@ function main() {
             message: `Error: ${event}`,
             type: 'error',
         })
+        console.error(event);
     });
 
     serverWebSocket.onopen = () => {

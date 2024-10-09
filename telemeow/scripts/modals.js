@@ -181,6 +181,8 @@ function openAlert(data) {
     const modalInner = document.querySelector(".alert-inner");
     const modal = document.querySelector(".alert");
 
+    modalInner.innerHTML = ``;
+
     if (data) {
         if (data.title) {
             let titleElement = document.createElement("span");
