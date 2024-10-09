@@ -86,3 +86,25 @@ function formatSize(bytes) {
     const size = (bytes / Math.pow(1024, i)).toFixed(2);
     return `${size} ${sizes[i]}`;
 }
+
+function meowerEmojis(content, emojis) {
+    for (const emoji of emojis) {
+        content = content.replaceAll(`&lt;:${emoji._id}&gt;`, `<img src="https://uploads.meower.org/emojis/${emoji._id}" alt=":${emoji.name}:" title=":${emoji.name}:" class="emoji" onclick="emojiInfoModal(${JSON.stringify(emoji).replace(/\"/g, '&quot;')})">`);
+    }
+    return content;
+}
+
+function autoResize() {
+    const messageInput = document.querySelector('.message-input');
+    const lineHeight = 20;
+  
+    const lines = messageInput.value.split('\n').length;
+    messageInput.style.height = lines * lineHeight + 1 + 'px';
+}
+
+document.addEventListener("keydown", function(event) {
+    if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendPost();
+     }
+});

@@ -421,7 +421,7 @@ function createPost(data) {
                 <div class="post-info">
                     <span class="post-author" onclick="openProfile('${data.author._id}')">${data.author._id}</span><span class="post-date">${new Date(Math.trunc(data.t.e * 1000)).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' })}</span>
                 </div>
-                <div class="post-content">${md.render(data.p)}</div>
+                <div class="post-content">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis) : md.render(data.p)}</div>
                 ${attachments.outerHTML}
                 ${reactions.outerHTML}
             </div>

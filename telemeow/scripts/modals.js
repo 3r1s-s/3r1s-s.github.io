@@ -238,6 +238,18 @@ function closeImage() {
 }
 
 function homeModal() {
-    openModal({title: 'Home', body: `<div class="menu-options">${userList.slice(0, -1).map((user) => `<div class="menu-button"><span>${user}</span>${icon.arrow}</div>`).join('')}</div>`})
+    openModal({title: 'Home', body: `<div class="menu-options">${userList.slice(0, -1).map((user) => `<div class="menu-button"><span>${user}</span>${icon.arrow}</div>`).join('')}</div>`});
+}
+
+function emojiInfoModal(data) {
+    openModal({style: `height: auto; min-height: 20%;` , body: `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px;padding-bottom:0;box-sizing:border-box;">
+            <img src="https://uploads.meower.org/emojis/${data._id}" alt=":${data.name}:" title=":${data.name}:" class="emoji-icon">
+            <div style="display:flex;flex-direction:column;gap:2px;">
+                <span style="font-size: 1.25em;font-weight: 600;">:${data.name}:</span>
+                <span style="font-size: 1em;font-weight: 400;">You can use this emoji anywhere.</span>
+            </div>
+        </div>
+    `});
 }
 // openModal( { small: false, icon: 'assets/images/placeholder.jpg', title: 'TeleMeow', body: 'placeholder' })

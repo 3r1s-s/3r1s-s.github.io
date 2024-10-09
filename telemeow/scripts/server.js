@@ -7,7 +7,7 @@ function main() {
 
     serverWebSocket.onopen = () => {
         if (storage.get("token") != undefined && storage.get("username") != undefined) {
-            console.log("Logging in...");
+            console.info("Logging in...");
             serverWebSocket.send(JSON.stringify({
                 cmd: "authpswd",
                 val: {
@@ -28,7 +28,7 @@ function main() {
             if (data.cmd === "auth") {
                 storage.set("token", data.val.token);
                 storage.set("username", data.val.username);
-                console.log("Logged in as " + data.val.username);
+                console.info("Logged in as " + data.val.username);
 
                 getUser(data.val.username);
                 
@@ -310,7 +310,6 @@ function attach(attachment) {
     }
 }
 
-
 async function sendPost() {
     const messageInput = document.querySelector('.message-input');
     if (messageInput.disabled) return;
@@ -336,18 +335,3 @@ async function sendPost() {
 
     autoResize();
 }
-
-function autoResize() {
-    const messageInput = document.querySelector('.message-input');
-    const lineHeight = 20;
-  
-    const lines = messageInput.value.split('\n').length;
-    messageInput.style.height = lines * lineHeight + 1 + 'px';
-}
-
-document.addEventListener("keydown", function(event) {
-    if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        sendPost();
-     }
-});
