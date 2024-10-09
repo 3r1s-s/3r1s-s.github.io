@@ -49,8 +49,9 @@ function main() {
 
                 favoritedChats = data.val.account.favorited_chats;
                 unreadInbox = data.val.account.unread_inbox;
-
-                chatsPage();
+                if (!page) {
+                    chatsPage();
+                }
             }
         } else if (data.cmd === "post" || data.cmd === "inbox_message") {
             let post = data.val;
