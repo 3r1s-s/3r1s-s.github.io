@@ -355,7 +355,10 @@ function chatPage(chatId) {
             <div class="chat-page">
                 <div class="chat-info" onclick="${chatNext}">
                     <span class="chat-name">${name}</span>
-                    <span class="chat-extra">${chatExtra}</span>
+                    <span class="chat-extra">
+                        <span class="userlist">${chatExtra}</span>
+                        <span class="typing-indicator"></span>
+                    </span>
                 </div>
                 <div class="message-container">
                     <div class="message-input-wrapper">

@@ -77,8 +77,11 @@ function main() {
                 if (username in usersTyping[chatId]) {
                     clearTimeout(usersTyping[chatId][username]);
                     delete usersTyping[chatId][username];
+
+                    renderTyping();
                 }
             }, 4000);
+            renderTyping();
         } else if (data.cmd === "update_post") {
             let postOrigin = data.val.post_origin;
             if (postCache[postOrigin]) {
@@ -119,7 +122,10 @@ function main() {
             if (page === 'chats') {
                 document.getElementById("home").querySelector(".chat-preview").innerText = `${userList.length - 1} Users Online`;
             } else if (page === 'home') {
-                document.querySelector(".chat-extra").innerText = `${userList.length - 1} Users Online`;
+                document.querySelector(".chat-extra").innerHTML = `
+                <span class="userlist">${userList.length - 1} Users Online</span>
+                <span class="typing-indicator"></span>
+                `;
             }
         }
 }}
@@ -342,4 +348,39 @@ async function sendPost() {
     });
 
     autoResize();
+}
+
+function renderTyping() {
+    if (!(page in usersTyping)) return;
+    const typing = Object.keys(usersTyping[page]);
+    const typingElem = document.querySelector(".chat-extra").querySelector(".typing-indicator");
+    const translations = {
+        "one": "{user} is typing...",
+        "two": "{user1} and {user2} are typing...",
+        "multiple": "{user1}, {user2}, and {user3} are typing...",
+        "many": "{count} people are typing..."
+    };
+
+    switch (typing.length) {
+        case 0:
+            typingElem.innerText = "";
+            break;
+        case 1:
+            typingElem.innerText = translations.one.replace("{user}", typing[0]);
+            break;
+        case 2:
+            typingElem.innerText = translations.two
+                .replace("{user1}", typing[0])
+                .replace("{user2}", typing[1]);
+            break;
+        case 3:
+            typingElem.innerText = translations.multiple
+                .replace("{user1}", typing[0])
+                .replace("{user2}", typing[1])
+                .replace("{user3}", typing[2]);
+            break;
+        default:
+            typingElem.innerText = translations.many.replace("{count}", typing.length);
+            break;
+    }
 }

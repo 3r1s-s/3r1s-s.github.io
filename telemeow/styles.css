@@ -1051,6 +1051,9 @@ hr {
 .chat-extra {
     font-size: 0.8em;
     font-weight: 500;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
 }
 
 .alert-outer {
