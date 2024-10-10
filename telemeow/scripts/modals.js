@@ -157,9 +157,17 @@ function openProfile(user) {
                 } else {
                     document.querySelector('.profile-section.music').style.display = 'none';
                 }
-            })   
+            }).catch(() => {
+                document.querySelector('.profile-section.music').style.display = 'none';
+            });
         }
+    }).catch(() => {
+        openAlert({
+            title: 'Error',
+            message: 'User not found'
+        })
     });
+
 }
 
 function postModal(id) {

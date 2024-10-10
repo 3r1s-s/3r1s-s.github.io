@@ -22,6 +22,8 @@
     --app-700: #2b2738;
     --app-800: #343043;
     --app-900: #3e3b50;
+    
+    --app-accent: #8a7dd5;
 
     --titlebar: rgba(14, 13, 19, 0.8);
 
@@ -179,6 +181,20 @@ hr {
     -webkit-backdrop-filter: none;
     border-bottom: none;
 }
+
+/* .titlebar.trans::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--titlebar-height);
+    background: #14121b90;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: none;
+    mask-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+} */
 
 .titlebar .title {
     position: absolute;
@@ -539,14 +555,12 @@ hr {
     font-size: 2em;
     font-weight: 600;
     text-wrap: nowrap;
-    overflow: hidden;
+    overflow-x: hidden;
     text-overflow: ellipsis;
     background: transparent;
     border-bottom: 3px solid var(--modal-600);
-    position: sticky;
-    top: 0;
-    left: 0;
     width: 100%;
+    min-height: 1lh;
     gap: 8px;
     display: flex;
     align-items: baseline;
@@ -1346,6 +1360,15 @@ hr {
 .embed {
     width: 100%;
     border-radius: 10px;
+}
+
+.highlight {
+    color: var(--app-accent);
+    font-weight: 500;
+}
+
+.highlight:active {
+    opacity: 0.8;
 }
 
 .post-modal-button {

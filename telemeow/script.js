@@ -143,6 +143,10 @@ String.prototype.sanitize = function() {
     return this.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 };
 
+String.prototype.highlight = function() {
+    return this.replace(/(?:^|(?<=\s|<p>))@([\w-]+)(?![^<]*?<\/code>)/g, '<span id="username" class="highlight" onclick="openProfile(\'$1\')">@$1</span>')
+};
+
 setTheme();
 
 function loginPage() {
@@ -406,7 +410,7 @@ function createPost(data) {
             <div class="avatar-outer">
             </div>
             <div class="post-wrapper">
-                <div class="post-content" style="opacity: 0.5">${md.render(data.p)}</div>
+                <div class="post-content" style="opacity: 0.5">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis).highlight() : md.render(data.p).highlight()}</div>
                 ${attachments.outerHTML}
                 ${reactions.outerHTML}
             </div>
@@ -425,7 +429,7 @@ function createPost(data) {
                 <div class="post-info">
                     <span class="post-author" onclick="openProfile('${data.author._id}')">${data.author._id}</span><span class="post-date">${new Date(Math.trunc(data.t.e * 1000)).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' })}</span>
                 </div>
-                <div class="post-content">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis) : md.render(data.p)}</div>
+                <div class="post-content">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis).highlight() : md.render(data.p).highlight()}</div>
                 ${attachments.outerHTML}
                 ${reactions.outerHTML}
             </div>
@@ -546,7 +550,7 @@ function settingsProfile() {
 
         content.innerHTML = `
             <div class="settings">
-                <div class="profile-settings">
+                <div class="profile-settings" style="--modal-accent: #${data.avatar_color};">
                     <div class="modal-banner" style="--banner-color: #${data.avatar_color}"></div>
                     <div class="edit-profile-icon" style="--image: url('https://uploads.meower.org/icons/${data.avatar}')">
                     <div class="edit-profile-overlay">Edit</div>
