@@ -1388,6 +1388,7 @@ hr {
     overflow: hidden;
     display: flex;
     gap: 5px;
+    flex-grow: 1;
 }
 
 .reply-content {
@@ -1408,6 +1409,13 @@ hr {
 
 .reply-user {
     font-weight: 600;
+}
+
+.reply svg {
+    width: 16px;
+    height: 16px;
+    aspect-ratio: 1 / 1;
+    flex-shrink: 0;
 }
 
 .post-modal-button {
