@@ -25,6 +25,11 @@ function main() {
         console.info("Connection closed attempting to reconnect...");
         setTimeout(() => {
             main();
+            if (page === "chats" ) {
+                chatsPage();
+            } else if (chatCache[page]) {
+                chatPage(page);
+            }
         }, 5000);
     };
 

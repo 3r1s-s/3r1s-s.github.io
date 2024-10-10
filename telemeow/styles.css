@@ -1374,6 +1374,37 @@ hr {
     opacity: 0.8;
 }
 
+.reply {
+    opacity: 0.6;
+    font-size: 0.9em;
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.reply-inner {
+    display: flex;
+    gap: 5px;
+}
+
+.reply-content {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.reply-avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    background-image: var(--image);
+    background-size: cover;
+    background-position: center;
+}
+
+.reply-user {
+    font-weight: 600;
+}
+
 .post-modal-button {
     background-color: var(--modal-600);
     width: 100%;
