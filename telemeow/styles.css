@@ -1383,11 +1383,15 @@ hr {
 }
 
 .reply-inner {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     display: flex;
     gap: 5px;
 }
 
 .reply-content {
+    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
