@@ -4,7 +4,7 @@ function main() {
     serverWebSocket.addEventListener('error', function(event) {
         openAlert({
             title: 'Connection Error',
-            message: `Error: ${event}`,
+            message: `Error: ${event.reason}`,
             type: 'error',
         })
         console.error(event);
