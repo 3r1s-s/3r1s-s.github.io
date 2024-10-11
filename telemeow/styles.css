@@ -330,16 +330,23 @@ hr {
     flex-direction: column;
     gap: 4px;
     justify-content: center;
+    overflow: hidden;
 }
 
 .chat-title {
     font-weight: 600;
     font-size: 1.1em;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chat-preview {
     font-weight: 300;
     font-size: 0.9em;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .chat-icon {
@@ -678,6 +685,8 @@ hr {
     font-weight: 300;
     font-size: 0.4em;
     opacity: 0.8;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .divider {

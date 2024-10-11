@@ -40,7 +40,9 @@ const icon = {
     "heart": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 8.53881C22 5.47978 19.5298 3 16.4831 3C14.6335 3 13.0014 3.91659 12 5.31757C10.9986 3.91659 9.36651 3 7.51747 3C4.47023 3 2 5.47922 2 8.53881C2 8.97212 2.05479 9.39197 2.14873 9.79666C2.91473 14.5749 8.20688 19.6159 12 21C15.7926 19.6159 21.0853 14.5749 21.8502 9.79722C21.9452 9.39253 22 8.97268 22 8.53881Z" fill="currentColor"/></svg>`,
     "star": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.785 3.10866L15.9287 7.45093L20.7219 8.14933C22.3552 8.38578 23.0066 10.3917 21.8259 11.5442L18.3559 14.925L19.1748 19.6995C19.4536 21.3249 17.7467 22.5651 16.2873 21.7978L11.9998 19.5429L7.71237 21.7978C6.25138 22.5651 4.5461 21.3249 4.82327 19.6995L5.6438 14.925L2.17531 11.5442C0.993053 10.3917 1.64447 8.38578 3.27771 8.14933L8.07253 7.45093L10.2147 3.10866C10.946 1.63045 13.0537 1.63045 13.785 3.10866Z" fill="currentColor"/></svg>`,
     "verified": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.92893 4.9289C4.18766 5.67017 4.03197 6.76834 3.99926 8.68599C2.66642 10.0651 2 10.9517 2 12C2 13.0483 2.66642 13.9349 3.99927 15.314C4.03197 17.2316 4.18767 18.3298 4.92893 19.071C5.6702 19.8123 6.76834 19.968 8.68595 20.0007C10.0651 21.3336 10.9517 22 12 22C13.0483 22 13.9349 21.3336 15.3141 20.0007C17.2317 19.968 18.3298 19.8123 19.0711 19.071C19.8123 18.3298 19.968 17.2316 20.0007 15.314C21.3336 13.9349 22 13.0483 22 12C22 10.9517 21.3336 10.0651 20.0007 8.68599C19.968 6.76834 19.8123 5.67017 19.0711 4.9289C18.3298 4.18762 17.2316 4.03193 15.314 3.99923C13.9349 2.66641 13.0483 2 12 2C10.9517 2 10.0651 2.66641 8.68602 3.99923C6.76837 4.03193 5.67021 4.18762 4.92893 4.9289ZM15.3254 8.37541C15.6001 7.99371 16.1639 7.88526 16.5849 8.13281C17.0067 8.38036 17.1269 8.89062 16.8534 9.27266C16.8534 9.27266 12.4214 15.4577 12.3005 15.6246C12.0947 15.907 11.7811 16 11.536 16C11.3152 16 11.0931 15.9275 10.9182 15.7808L8.2925 13.5835C7.92317 13.2747 7.90059 12.7532 8.24187 12.4189C8.58316 12.085 9.15937 12.0643 9.52869 12.3734L11.3604 13.9062L15.3254 8.37541Z" fill="currentColor"/></svg>`,
-    "replyIn": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7 7.3a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4L18.58 9H13a7 7 0 0 0-7 7v4a1 1 0 1 1-2 0v-4a9 9 0 0 1 9-9h5.59l-3.3-3.3a1 1 0 0 1 1.42-1.4l5 5Z"></path></svg>`,
+    "replyIn": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><path fill="currentColor" d="M21.7 7.3a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4L18.58 9H13a7 7 0 0 0-7 7v4a1 1 0 1 1-2 0v-4a9 9 0 0 1 9-9h5.59l-3.3-3.3a1 1 0 0 1 1.42-1.4l5 5Z"></path></svg>`,
+    "group": `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6.2692 5.18955C5.81 5.7993 5.08003 6.19339 4.25802 6.19339C2.8684 6.19339 1.74189 5.06688 1.74189 3.67726C1.74189 2.28764 2.8684 1.16113 4.25802 1.16113C5.36535 1.16113 6.30568 1.87635 6.64193 2.87018C6.72765 3.12346 6.77415 3.39507 6.77415 3.67726C6.77415 4.24316 6.58646 4.76654 6.27119 5.1869C6.27053 5.18766 6.26986 5.18879 6.2692 5.18955Z" fill="currentColor"/><path d="M8.46448 9.78859C8.67372 10.3275 8.21584 10.8386 7.63623 10.8386H0.879806C0.300201 10.8386 -0.157681 10.3275 0.0515553 9.78859C0.691645 8.14022 2.3335 6.96758 4.25802 6.96758C5.16386 6.96758 6.00837 7.22804 6.71395 7.67506C6.75789 7.70284 6.80014 7.73063 6.84295 7.75992C7.57395 8.2591 8.14449 8.96431 8.46448 9.78859Z" fill="currentColor"/><path d="M9.21307 10.525C9.16449 10.6686 9.26098 10.8386 9.41266 10.8386H11.2001C11.727 10.8386 12.1433 10.3785 11.9531 9.89368C11.3712 8.41013 9.87858 7.35468 8.12899 7.35468L8.08958 7.35487C7.91833 7.35638 7.8519 7.56883 7.97485 7.68791C8.50096 8.19805 8.91755 8.81669 9.18623 9.50847C9.32307 9.86098 9.31806 10.2139 9.21307 10.525Z" fill="currentColor"/><path d="M6.73068 5.84807C7.23969 5.26874 7.54834 4.5091 7.54834 3.67726C7.54834 3.19604 7.44505 2.73882 7.25934 2.32677C7.2136 2.22527 7.25452 2.1026 7.35971 2.06574C7.47075 2.02681 7.58567 1.996 7.7038 1.97426C7.84169 1.94875 7.98383 1.93533 8.12899 1.93533C9.41172 1.93533 10.4516 2.97527 10.4516 4.25791C10.4516 5.54054 9.41172 6.58049 8.12899 6.58049C7.61261 6.58049 7.13563 6.41208 6.75005 6.12705C6.66046 6.06089 6.65724 5.9318 6.73068 5.84807Z" fill="currentColor"/></svg>`,
+    "profile": `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8.51589 3.67726C8.51589 5.06688 7.38938 6.19339 5.99976 6.19339C4.61014 6.19339 3.48363 5.06688 3.48363 3.67726C3.48363 2.28764 4.61014 1.16113 5.99976 1.16113C7.38938 1.16113 8.51589 2.28764 8.51589 3.67726Z" fill="currentColor"/><path d="M10.2063 9.78865C10.4155 10.3275 9.95762 10.8386 9.37802 10.8386H2.62151C2.04191 10.8386 1.58402 10.3275 1.79325 9.78865C2.43336 8.1403 4.07526 6.96758 5.99976 6.96758C7.92427 6.96758 9.56617 8.1403 10.2063 9.78865Z" fill="currentColor"/></svg>`,
 }
 
 const titlebar = (() => {
@@ -253,7 +255,7 @@ async function chatList() {
         <div class="chat-icon ${unreadInbox ? 'attention' : ''}" style="--image: url('assets/images/inbox.jpg')"></div>
         <div class="chat-text">
             <span class="chat-title">Inbox</span>
-            <span class="chat-preview">Placeholder</span>
+            <span class="chat-preview"></span>
         </div>
     </div>
 `;
@@ -270,35 +272,52 @@ async function chatList() {
 
     for (let chatData of sortedChats) {
         let nickname;
-        let icon;
+        let chatIcon;
         let attention = '';
         let action = '';
         let isfave = favoritedChats.includes(chatData._id) ? 'favourite' : '';
+        let recent ='';
 
         nickname = chatData.nickname || `${chatData.members.find(v => v !== storage.get("username"))}`;
         nickname = nickname.sanitize();
         if (chatData.type === 0) {
-            if (chatData.icon) {
-                icon = `https://uploads.meower.org/icons/${chatData.icon}`;
+            if (chatData.chatIcon) {
+                chatIcon = `https://uploads.meower.org/icons/${chatData.icon}`;
             } else {
-                icon = 'assets/images/chat.jpg';
+                chatIcon = 'assets/images/chat.jpg';
             }
         } else {
             const user = chatData.members.find(v => v !== storage.get("username"));
             userData = await getUser(`${user}`);
-            icon = `https://uploads.meower.org/icons/${userData.avatar}`;
+            chatIcon = `https://uploads.meower.org/icons/${userData.avatar}`;
             if (userList.includes(user)) {
                 attention = 'online';
             }
         }
+
+        if (postCache[chatData._id]) {
+            let postCont;
+            if (postCache[chatData._id][0].p) {
+                postCont = postCache[chatData._id][0].p;
+            } else if (postCache[chatData._id][0].attachments) {
+                postCont = postCache[chatData._id][0].attachments.length + ' Attachments';
+            }
+            
+            if (postCache[chatData._id][0].author._id === storage.get("username")) {
+                recent = 'You: ' + postCont.sanitize();
+            } else {
+                recent = `${postCache[chatData._id][0].author._id}: ` + postCont.sanitize();
+            }
+        }
+
         action = `chatPage('${chatData._id}');`;
 
         chatList += `
             <div class="chat ${isfave}" onclick="${action}" id="${chatData._id}">
-                <div class="chat-icon ${attention}" style="--image: url('${icon}')"></div>
+                <div class="chat-icon ${attention}" style="--image: url('${chatIcon}')"></div>
                 <div class="chat-text">
                     <span class="chat-title">${nickname}</span>
-                    <span class="chat-preview">Placeholder</span>
+                    <span class="chat-preview">${recent}</span>
                 </div>
             </div>
         `;
@@ -387,7 +406,6 @@ function chatPage(chatId) {
 }
 
 function createPost(data) {
-    
     let attachments = document.createElement('div');
     attachments.classList.add('post-attachments');
     if (data.attachments) {        
@@ -434,7 +452,7 @@ function createPost(data) {
             </div>
             <div class="post-wrapper">
                 ${replies.outerHTML}
-                <div class="post-content" style="opacity: 0.5">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis).highlight() : md.render(data.p).highlight()}</div>
+                <div class="post-content" style="color: #ffffff70;">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis).highlight() : md.render(data.p).highlight()}</div>
                 ${attachments.outerHTML}
                 ${reactions.outerHTML}
             </div>
