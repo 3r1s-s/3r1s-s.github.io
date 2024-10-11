@@ -125,7 +125,9 @@ function main() {
         } else if (data.cmd == 'ulist') {
             userList = data.val.trim().split(";");
             if (page === 'chats') {
-                document.getElementById("home").querySelector(".chat-preview").innerText = `${userList.length - 1} Users Online`;
+                if (document.getElementById("home")) {
+                    document.getElementById("home").querySelector(".chat-preview").innerText = `${userList.length - 1} Users Online`;
+                }
             } else if (page === 'home') {
                 document.querySelector(".chat-extra").innerHTML = `
                 <span class="userlist">${userList.length - 1} Users Online</span>
