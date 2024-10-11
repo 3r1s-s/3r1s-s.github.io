@@ -223,6 +223,7 @@ function openAlert(data) {
 function openImage(url) {
     const modalOuter = document.querySelector(".view-image-outer");
     const modalInner = document.querySelector(".view-image-inner");
+    const modal = document.querySelector(".view-image");
 
     const baseURL = url.split('?')[0];
     const fileName = baseURL.split('/').pop();
@@ -234,48 +235,58 @@ function openImage(url) {
     document.querySelector(".view-image-options").innerHTML = `
     <div class="close-image" onclick="closeImage()">${icon.cross}</div>
     `;
+
     modalOuter.style.visibility = "visible";
     modalOuter.classList.add("open");
 
-    let isDragging = false;
+
+    const image = document.querySelector(".image-view");
+    image.setAttribute("style", "");
+
     let startY = 0;
     let currentY = 0;
+    let isDragging = false;
+    const maxDragDistance = window.innerHeight / 2;
 
-    const imageView = document.querySelector('.image-view');
+    function startDrag(e) {
+        startY = e.touches ? e.touches[0].clientY : e.clientY;
+        isDragging = true;
+        image.style.transition = 'none';
+    }
 
-    function onTouchStart(event) {
-        if (event.touches.length === 1) {
-            isDragging = true;
-            startY = event.touches[0].pageY - currentY;
+    function onDrag(e) {
+        if (!isDragging) return;
+
+        currentY = e.touches ? e.touches[0].clientY : e.clientY;
+        let dragDistance = currentY - startY;
+
+        if (dragDistance > 0 && dragDistance <= maxDragDistance) {
+            image.style.transform = `translateY(${dragDistance}px) scale(${1 - dragDistance / maxDragDistance / 2})`;
         }
     }
 
-    function onTouchMove(event) {
-        if (isDragging && event.touches.length === 1) {
-            currentY = event.touches[0].pageY - startY;
-            imageView.style.transform = `translateY(${currentY}px)`;
-
-            if (currentY > 150) {
-                closeImage();
-            }
-        }
-    }
-
-    function onTouchEnd() {
+    function endDrag() {
         isDragging = false;
-        imageView.style.transform = `translateY(0px)`;
+
+        if (currentY - startY > maxDragDistance / 2) {
+            closeImage();
+        } else {
+            image.style.transition = 'transform 0.3s ease';
+            image.style.transform = 'translateY(0)';
+        }
     }
 
-    imageView.addEventListener('touchstart', onTouchStart);
-    imageView.addEventListener('touchmove', onTouchMove);
-    imageView.addEventListener('touchend', onTouchEnd);
+    image.addEventListener('touchstart', startDrag);
+    image.addEventListener('touchmove', onDrag);
+    image.addEventListener('touchend', endDrag);
 }
+
 
 function closeImage() {
     const modalOuter = document.querySelector(".view-image-outer");
     const modalInner = document.querySelector(".view-image-inner");
     const modal = document.querySelector(".view-image");
-
+    const image = document.querySelector(".image-view");
     modalOuter.classList.remove("open");
 
     setTimeout(() => {
