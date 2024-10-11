@@ -481,7 +481,7 @@ function createPost(data) {
                         <div class="reply-avatar" style="--image: url(https://uploads.meower.org/icons/${reply.author.avatar})"></div>
                         <span class="reply-user">${reply.author._id}</span>
                         <span class="reply-content">${replyCont}</span>
-                        ${reply.attachments ? icon.attachment : ''}
+                        
                     </div>
                 </div>
             `;

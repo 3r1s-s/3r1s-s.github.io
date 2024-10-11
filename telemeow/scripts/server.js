@@ -29,6 +29,8 @@ function main() {
                 chatsPage();
             } else if (chatCache[page]) {
                 chatPage(page);
+            } else if (page === 'home') {
+                chatPage('home');
             }
         }, 5000);
     };
@@ -124,6 +126,20 @@ function main() {
             if (postCache[data.val.chat_id]) {
                 delete postCache[data.val.chat_id];
             }
+        } else if (data.cmd == "update_profile") {
+            return new Promise((resolve, reject) => {      
+                const username = data.val._id;  
+                fetch(`https://api.meower.org/users/${username}`)
+                    .then(resp => resp.json())
+                    .then(data => {
+                        usersCache[username] = data;
+                        resolve(data);
+                    })
+                    .catch(error => {
+                        console.error("Failed to fetch:", error);
+                        reject(error);
+                    });
+            });
         } else if (data.cmd == 'ulist') {
             userList = data.val.trim().split(";");
             if (page === 'chats') {
