@@ -480,10 +480,10 @@ function createPost(data) {
                 <div class="avatar" style="--image: url('https://uploads.meower.org/icons/${data.author.avatar}'); --color: ${data.author.avatar_color}" onclick="openProfile('${data.author._id}')"></div>
             </div>
             <div class="post-wrapper">
-                ${replies.outerHTML}
                 <div class="post-info">
                     <span class="post-author" onclick="openProfile('${data.author._id}')">${data.author._id}</span><span class="post-date">${new Date(Math.trunc(data.t.e * 1000)).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' })}</span>
                 </div>
+                ${replies.outerHTML}
                 <div class="post-content">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis).highlight() : md.render(data.p).highlight()}</div>
                 ${attachments.outerHTML}
                 ${reactions.outerHTML}

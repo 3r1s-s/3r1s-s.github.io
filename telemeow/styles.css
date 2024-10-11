@@ -303,7 +303,7 @@ hr {
     display: flex;
     flex-direction: column;
 }
-
+/* 
 .chats::before {
     position: fixed;
     top: calc(var(--titlebar-height) + env(safe-area-inset-top));
@@ -318,7 +318,7 @@ hr {
     background-size: contain;
     z-index: 0;
     pointer-events: none;
-}
+} */
 
 .chat {
     display: flex;
