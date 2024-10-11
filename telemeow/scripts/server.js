@@ -388,7 +388,7 @@ function renderTyping() {
 }
 
 function ping() {
-    meowerConnection.send(JSON.stringify({
+    serverWebSocket.send(JSON.stringify({
         cmd: "ping",
         val: ""
     }));
