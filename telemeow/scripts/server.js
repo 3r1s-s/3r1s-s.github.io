@@ -153,35 +153,32 @@ function getUser(username) {
 }
 
 function getChat(chatId) {
-    return new Promise((resolve, reject) => {
-        if (chatId in chatCache) return resolve(chatCache[chatId]);
-
-        let url;
-        if (chatId === "home") {
-            url = "https://api.meower.org/home";
-        } else if (chatId === "inbox") {
-            url = "https://api.meower.org/inbox";
-        } else {
-            url = `https://api.meower.org/chats/${chatId}`
-        }
-
-        fetch(`${url}`, {
-            headers: {
-                token: storage.get("token")
-            }
+    if (!["home", "inbox", "livechat"].includes(chatId) && !chatCache[chatId]) {
+        return fetch(`https://api.meower.org/chats/${chatId}`, {
+            headers: {token: localStorage.getItem("token")}
         })
-            .then(resp => resp.json())
-            .then(data => {
-                if (chatId !== 'home' && chatId !== 'inbox') {
-                    chatCache[chatId] = data;
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error("Chat not found");
+                } else {
+                    throw new Error('Network response was not ok');
                 }
-                    resolve(data);
-            })
-            .catch(error => {
-                console.error("Failed to fetch:", error);
-                reject(error);
+            }
+            return response.json();
+        })
+        .then(data => {
+            chatCache[chatId] = data;
+            return data;
+        })
+        .catch(e => {
+            openAlert({
+                title: "Error",
+                message: `Unable to open chat: ${e}`
             });
-    });
+        });
+    }
+    return Promise.resolve(chatCache[chatId]);
 }
 
 async function loadPosts(pageNo) {

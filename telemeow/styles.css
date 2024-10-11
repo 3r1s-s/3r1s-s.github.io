@@ -959,8 +959,9 @@ hr {
 }
 
 .message-container {
-    margin: 8px 5px;
+    margin: 8px 0;
     display: flex;
+    align-items: center;
     flex-direction: column;
     position: sticky;
     left: 0px;
@@ -970,7 +971,7 @@ hr {
 }
 
 .message-input-wrapper {
-    width: 100%;
+    width: calc(100% - 10px);
     height: auto;
     display: flex;
     z-index: 3;
@@ -993,6 +994,7 @@ hr {
 .message-button svg {
     width: 16px;
     height: 16px;
+    transition: all cubic-bezier(.2,-.25,0,1.6) 0.2s;
 }
 
 .message-input-container {
@@ -1022,11 +1024,7 @@ hr {
 }
 
 .message-send:active > svg {
-    transition: all 0.05s ease;
-}
-
-.message-send:active > svg {
-    transform: translateX(3px);
+    transform: translateX(5px);
 }
 
 .chat-info {

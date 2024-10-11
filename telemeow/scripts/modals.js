@@ -164,7 +164,7 @@ function openProfile(user) {
     }).catch(() => {
         openAlert({
             title: 'Error',
-            message: 'User not found'
+            message: `User @${user} not found`
         })
     });
 

@@ -40,7 +40,7 @@ const icon = {
     "heart": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M22 8.53881C22 5.47978 19.5298 3 16.4831 3C14.6335 3 13.0014 3.91659 12 5.31757C10.9986 3.91659 9.36651 3 7.51747 3C4.47023 3 2 5.47922 2 8.53881C2 8.97212 2.05479 9.39197 2.14873 9.79666C2.91473 14.5749 8.20688 19.6159 12 21C15.7926 19.6159 21.0853 14.5749 21.8502 9.79722C21.9452 9.39253 22 8.97268 22 8.53881Z" fill="currentColor"/></svg>`,
     "star": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.785 3.10866L15.9287 7.45093L20.7219 8.14933C22.3552 8.38578 23.0066 10.3917 21.8259 11.5442L18.3559 14.925L19.1748 19.6995C19.4536 21.3249 17.7467 22.5651 16.2873 21.7978L11.9998 19.5429L7.71237 21.7978C6.25138 22.5651 4.5461 21.3249 4.82327 19.6995L5.6438 14.925L2.17531 11.5442C0.993053 10.3917 1.64447 8.38578 3.27771 8.14933L8.07253 7.45093L10.2147 3.10866C10.946 1.63045 13.0537 1.63045 13.785 3.10866Z" fill="currentColor"/></svg>`,
     "verified": `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.92893 4.9289C4.18766 5.67017 4.03197 6.76834 3.99926 8.68599C2.66642 10.0651 2 10.9517 2 12C2 13.0483 2.66642 13.9349 3.99927 15.314C4.03197 17.2316 4.18767 18.3298 4.92893 19.071C5.6702 19.8123 6.76834 19.968 8.68595 20.0007C10.0651 21.3336 10.9517 22 12 22C13.0483 22 13.9349 21.3336 15.3141 20.0007C17.2317 19.968 18.3298 19.8123 19.0711 19.071C19.8123 18.3298 19.968 17.2316 20.0007 15.314C21.3336 13.9349 22 13.0483 22 12C22 10.9517 21.3336 10.0651 20.0007 8.68599C19.968 6.76834 19.8123 5.67017 19.0711 4.9289C18.3298 4.18762 17.2316 4.03193 15.314 3.99923C13.9349 2.66641 13.0483 2 12 2C10.9517 2 10.0651 2.66641 8.68602 3.99923C6.76837 4.03193 5.67021 4.18762 4.92893 4.9289ZM15.3254 8.37541C15.6001 7.99371 16.1639 7.88526 16.5849 8.13281C17.0067 8.38036 17.1269 8.89062 16.8534 9.27266C16.8534 9.27266 12.4214 15.4577 12.3005 15.6246C12.0947 15.907 11.7811 16 11.536 16C11.3152 16 11.0931 15.9275 10.9182 15.7808L8.2925 13.5835C7.92317 13.2747 7.90059 12.7532 8.24187 12.4189C8.58316 12.085 9.15937 12.0643 9.52869 12.3734L11.3604 13.9062L15.3254 8.37541Z" fill="currentColor"/></svg>`,
-    "reply": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7 7.3a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4L18.58 9H13a7 7 0 0 0-7 7v4a1 1 0 1 1-2 0v-4a9 9 0 0 1 9-9h5.59l-3.3-3.3a1 1 0 0 1 1.42-1.4l5 5Z"></path></svg>`,
+    "replyIn": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M21.7 7.3a1 1 0 0 1 0 1.4l-5 5a1 1 0 0 1-1.4-1.4L18.58 9H13a7 7 0 0 0-7 7v4a1 1 0 1 1-2 0v-4a9 9 0 0 1 9-9h5.59l-3.3-3.3a1 1 0 0 1 1.42-1.4l5 5Z"></path></svg>`,
 }
 
 const titlebar = (() => {
@@ -322,65 +322,67 @@ function chatPage(chatId) {
     let name;
 
     getChat(chatId).then(data => {
-        if (chatId === 'home') {
-            name = 'Home';
-        } else if (chatId === 'inbox') {
-            name = 'Inbox';
-        } else {
-            if (data.nickname) {
-                name = data.nickname.sanitize();
+        if (page === chatId) {
+            if (chatId === 'home') {
+                name = 'Home';
+            } else if (chatId === 'inbox') {
+                name = 'Inbox';
             } else {
-                name = `${data.members.find(v => v !== storage.get("username"))}`;
+                if (data.nickname) {
+                    name = data.nickname.sanitize();
+                } else {
+                    name = `${data.members.find(v => v !== storage.get("username"))}`;
+                }
             }
-        }
 
-        md.disable(['image']);
+            md.disable(['image']);
 
-        let chatExtra;
-        let chatNext;
-        if (chatId === 'home') {
-            chatExtra = `${userList.length - 1} Users Online`;
-            chatNext = `homeModal();`;
-        } else if (chatId === 'inbox') {
-            chatExtra = 'Placeholder';
-            chatNext = 'settingsNotifications()';
-        } else if (data.type === 0) {
-            chatExtra = `${data.members.length - 1} Members`;
-            chatNext = `chatSettings('${chatId}')`;
-        } else if (data.type === 1) {
-            chatExtra = userList.includes(name) ? 'Online' : 'Offline';
-            chatNext = `openProfile('${name}');`;
-        }
+            let chatExtra;
+            let chatNext;
+            if (chatId === 'home') {
+                chatExtra = `${userList.length - 1} Users Online`;
+                chatNext = `homeModal();`;
+            } else if (chatId === 'inbox') {
+                chatExtra = 'Placeholder';
+                chatNext = 'settingsNotifications()';
+            } else if (data.type === 0) {
+                chatExtra = `${data.members.length - 1} Members`;
+                chatNext = `chatSettings('${chatId}')`;
+            } else if (data.type === 1) {
+                chatExtra = userList.includes(name) ? 'Online' : 'Offline';
+                chatNext = `openProfile('${name}');`;
+            }
 
-        content.innerHTML = `
-            <div class="chat-page">
-                <div class="chat-info" onclick="${chatNext}">
-                    <span class="chat-name">${name}</span>
-                    <span class="chat-extra">
-                        <span class="userlist">${chatExtra}</span>
-                        <span class="typing-indicator"></span>
-                    </span>
-                </div>
-                <div class="message-container">
-                    <div class="message-input-wrapper">
-                        <div class="message-button">${icon.add}</div>
-                        <div class="message-input-container">
-                            <textarea class="message-input" oninput="autoResize()" placeholder="Send a message to ${name}..."></textarea>
+            content.innerHTML = `
+                <div class="chat-page">
+                    <div class="chat-info" onclick="${chatNext}">
+                        <span class="chat-name">${name}</span>
+                        <span class="chat-extra">
+                            <span class="userlist">${chatExtra}</span>
+                            <span class="typing-indicator"></span>
+                        </span>
+                    </div>
+                    <div class="message-container">
+                        <div class="message-input-wrapper">
+                            <div class="message-button">${icon.add}</div>
+                            <div class="message-input-container">
+                                <textarea class="message-input" oninput="autoResize()" placeholder="Send a message to ${name}..."></textarea>
+                            </div>
+                            <div class="message-button">${icon.emoji}</div>
+                            <div class="message-button message-send" onclick="sendPost();">${icon.send}</div>
                         </div>
-                        <div class="message-button">${icon.emoji}</div>
-                        <div class="message-button message-send" onclick="sendPost();">${icon.send}</div>
+                    </div>
+                    <div class="posts">
+
+                    </div>
+                    <div class="skeleton-posts">
+
                     </div>
                 </div>
-                <div class="posts">
+            `;
 
-                </div>
-                <div class="skeleton-posts">
-
-                </div>
-            </div>
-        `;
-
-        loadPosts(1);
+            loadPosts(1);
+        }
     });
 }
 
@@ -414,7 +416,7 @@ function createPost(data) {
         data.reply_to.forEach(reply => {
             replies.innerHTML += `
                 <div class="reply">
-                    ${icon.reply}
+                    ${icon.replyIn}
                     <div class="reply-inner">
                         <div class="reply-avatar" style="--image: url(https://uploads.meower.org/icons/${reply.author.avatar})"></div>
                         <span class="reply-user">${reply.author._id}</span>
