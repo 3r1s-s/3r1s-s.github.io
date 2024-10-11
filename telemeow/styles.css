@@ -306,7 +306,7 @@ hr {
 
 .chats::before {
     position: fixed;
-    top: var(--titlebar-height);
+    top: calc(var(--titlebar-height) + env(safe-area-inset-top));
     content: '';
     width: 80px;
     height: 80px;
