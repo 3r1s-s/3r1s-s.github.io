@@ -386,3 +386,10 @@ function renderTyping() {
             break;
     }
 }
+
+function ping() {
+    meowerConnection.send(JSON.stringify({
+        cmd: "ping",
+        val: ""
+    }));
+}
