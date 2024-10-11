@@ -313,6 +313,11 @@ hr {
     left: 50%;
     transform: translateX(-50%);
     background-image: url(assets/images/cta.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: 10;
+    pointer-events: none;
 }
 
 .chat {
