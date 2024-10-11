@@ -801,6 +801,15 @@ hr {
     opacity: 0.8;
 }
 
+.settings-options-sub {
+    height: 0px;
+    margin: 0 25px;
+    font-weight: 400;
+    opacity: 0.6;
+    font-size: 0.75em;
+    transform: translateY(-1.25em);
+}
+
 .toggle {
     width: 20px;
     height: 20px;

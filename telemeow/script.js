@@ -127,9 +127,39 @@ const storage = (() => {
         clear() {
             storagedata = {};
             localStorage.setItem('tele-data', JSON.stringify(storagedata));
+        },
+
+        settings: {
+            get(key) {
+                return storagedata.settings?.[key];
+            },
+
+            set(key, value) {
+                if (!storagedata.settings) {
+                    storagedata.settings = {};
+                }
+                storagedata.settings[key] = value;
+                localStorage.setItem('tele-data', JSON.stringify(storagedata));
+            },
+
+            delete(key) {
+                if (storagedata.settings) {
+                    delete storagedata.settings[key];
+                    localStorage.setItem('tele-data', JSON.stringify(storagedata));
+                }
+            },
+
+            clear() {
+                if (storagedata.settings) {
+                    storagedata.settings = {};
+                    localStorage.setItem('tele-data', JSON.stringify(storagedata));
+                }
+            }
         }
     };
 })();
+
+const settings = storage.settings;
 
 const theme = (() => {
     return {
@@ -551,19 +581,41 @@ function settingsGeneral() {
         <div class="settings">
             <span class="settings-options-title">Chat</span>
             <div class="settings-options">
-                <div class="menu-button checked"><span>Invisible Typing</span><div class="toggle">${icon.check}</div></div>
-                <div class="menu-button"><span>Special Embeds</span><div class="toggle">${icon.check}</div></div>
-                <div class="menu-button"><span>Don't Send On Enter</span><div class="toggle">${icon.check}</div></div>
-                <div class="menu-button"><span>Hide Blocked User Messages</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button" id="invisibleTyping" onclick="toggleSetting('invisibleTyping')"><span>Invisible Typing</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button" id="sendOnReturn" onclick="toggleSetting('sendOnReturn')"><span>Send on Return</span><div class="toggle">${icon.check}</div></div>
             </div>
             <span class="settings-options-title">Accessibility</span>
             <div class="settings-options">
-                <div class="menu-button"><span>Reduce Motion</span><div class="toggle">${icon.check}</div></div>
-                <div class="menu-button"><span>Always Underline Links</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button" id="reduceMotion" onclick="toggleSetting('reduceMotion')"><span>Reduce Motion</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button" id="underlineLinks" onclick="toggleSetting('underlineLinks')"><span>Always Underline Links</span><div class="toggle">${icon.check}</div></div>
+            </div>
+            <span class="settings-options-sub">These require you to restart the client.</span>
+            <span class="settings-options-title">Developer</span>
+            <div class="settings-options">
+                <div class="menu-button" id="disableLogs" onclick="toggleSetting('disableLogs')"><span>Disable websocket logs</span><div class="toggle">${icon.check}</div></div>
             </div>
         </div>
     `;
+
+    const options = document.querySelectorAll('.menu-button');
+    options.forEach(option => {
+        if (settings.get(option.id) === 'true') {
+            option.classList.add('checked');
+        }
+    });
 }
+
+function toggleSetting(id) {
+    const element = document.getElementById(id);
+    if (settings.get(id) === 'true') {
+        element.classList.remove('checked');
+        settings.set(id, 'false');
+    } else {
+        element.classList.add('checked');
+        settings.set(id, 'true');
+    }
+}
+
 
 function settingsProfile() {
     page = `settings.profile`;

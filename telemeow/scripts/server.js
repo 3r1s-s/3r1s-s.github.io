@@ -34,7 +34,9 @@ function main() {
     };
 
     serverWebSocket.onmessage = (event) => {
-        console.log(event.data);
+        if (!settings.get('disableLogs')) {
+            console.log(event.data);
+        }
         let data = JSON.parse(event.data);
         if (data.listener === "auth") {
             if (data.cmd === "auth") {
