@@ -223,7 +223,6 @@ function openAlert(data) {
 function openImage(url) {
     const modalOuter = document.querySelector(".view-image-outer");
     const modalInner = document.querySelector(".view-image-inner");
-    const modal = document.querySelector(".view-image");
 
     const baseURL = url.split('?')[0];
     const fileName = baseURL.split('/').pop();
@@ -238,42 +237,23 @@ function openImage(url) {
     modalOuter.style.visibility = "visible";
     modalOuter.classList.add("open");
 
-    let scale = 1;
     let isDragging = false;
-    let startX = 0, startY = 0;
-    let currentX = 0, currentY = 0;
-    let initialDistance = 0;
-    let isZooming = false;
+    let startY = 0;
+    let currentY = 0;
 
     const imageView = document.querySelector('.image-view');
 
-    function getDistance(touches) {
-        const dx = touches[0].pageX - touches[1].pageX;
-        const dy = touches[0].pageY - touches[1].pageY;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
     function onTouchStart(event) {
-        if (event.touches.length === 2) {
-            isZooming = true;
-            initialDistance = getDistance(event.touches);
-        } else if (event.touches.length === 1) {
+        if (event.touches.length === 1) {
             isDragging = true;
-            startX = event.touches[0].pageX - currentX;
             startY = event.touches[0].pageY - currentY;
         }
     }
 
     function onTouchMove(event) {
-        if (isZooming && event.touches.length === 2) {
-            const distance = getDistance(event.touches);
-            const zoom = distance / initialDistance;
-            scale = Math.max(0.5, Math.min(scale * zoom, 3));
-            imageView.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
-        } else if (isDragging && event.touches.length === 1) {
-            currentX = event.touches[0].pageX - startX;
+        if (isDragging && event.touches.length === 1) {
             currentY = event.touches[0].pageY - startY;
-            imageView.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+            imageView.style.transform = `translateY(${currentY}px)`;
 
             if (currentY > 150) {
                 closeImage();
@@ -281,16 +261,15 @@ function openImage(url) {
         }
     }
 
-    function onTouchEnd(event) {
+    function onTouchEnd() {
         isDragging = false;
-        isZooming = false;
+        imageView.style.transform = `translateY(0px)`;
     }
 
     imageView.addEventListener('touchstart', onTouchStart);
     imageView.addEventListener('touchmove', onTouchMove);
     imageView.addEventListener('touchend', onTouchEnd);
 }
-
 
 function closeImage() {
     const modalOuter = document.querySelector(".view-image-outer");
