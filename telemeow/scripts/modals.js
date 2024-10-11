@@ -233,10 +233,62 @@ function openImage(url) {
     `;
 
     document.querySelector(".view-image-options").innerHTML = `
-    <span onclick="closeImage()">Close</button>
+    <div class="close-image" onclick="closeImage()">${icon.cross}</div>
     `;
     modalOuter.style.visibility = "visible";
     modalOuter.classList.add("open");
+
+    let scale = 1;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let currentX = 0, currentY = 0;
+    let initialDistance = 0;
+    let isZooming = false;
+
+    const imageView = document.querySelector('.image-view');
+
+    function getDistance(touches) {
+        const dx = touches[0].pageX - touches[1].pageX;
+        const dy = touches[0].pageY - touches[1].pageY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function onTouchStart(event) {
+        if (event.touches.length === 2) {
+            isZooming = true;
+            initialDistance = getDistance(event.touches);
+        } else if (event.touches.length === 1) {
+            isDragging = true;
+            startX = event.touches[0].pageX - currentX;
+            startY = event.touches[0].pageY - currentY;
+        }
+    }
+
+    function onTouchMove(event) {
+        if (isZooming && event.touches.length === 2) {
+            const distance = getDistance(event.touches);
+            const zoom = distance / initialDistance;
+            scale = Math.max(0.5, Math.min(scale * zoom, 3));
+            imageView.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+        } else if (isDragging && event.touches.length === 1) {
+            currentX = event.touches[0].pageX - startX;
+            currentY = event.touches[0].pageY - startY;
+            imageView.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+
+            if (currentY > 150) {
+                closeImage();
+            }
+        }
+    }
+
+    function onTouchEnd(event) {
+        isDragging = false;
+        isZooming = false;
+    }
+
+    imageView.addEventListener('touchstart', onTouchStart);
+    imageView.addEventListener('touchmove', onTouchMove);
+    imageView.addEventListener('touchend', onTouchEnd);
 }
 
 
