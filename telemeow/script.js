@@ -281,7 +281,7 @@ async function chatList() {
         nickname = chatData.nickname || `${chatData.members.find(v => v !== storage.get("username"))}`;
         nickname = nickname.sanitize();
         if (chatData.type === 0) {
-            if (chatData.chatIcon) {
+            if (chatData.icon) {
                 chatIcon = `https://uploads.meower.org/icons/${chatData.icon}`;
             } else {
                 chatIcon = 'assets/images/chat.jpg';
