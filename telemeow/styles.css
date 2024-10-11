@@ -1067,6 +1067,7 @@ hr {
 }
 
 .chat-info {
+    background-color: var(--app-200);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
