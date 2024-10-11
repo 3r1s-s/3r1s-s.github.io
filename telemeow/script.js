@@ -444,7 +444,7 @@ function createPost(data) {
                 replyCont = `<i>${reply.attachments.length} attachment${reply.attachments.length === 1 ? '' : 's'}</i>`;
             }
             replies.innerHTML += `
-                <div class="reply">
+                <div class="reply" onclick="jumpToPost('${reply._id}')">
                     ${icon.replyIn}
                     <div class="reply-inner">
                         <div class="reply-avatar" style="--image: url(https://uploads.meower.org/icons/${reply.author.avatar})"></div>

@@ -50,7 +50,7 @@ function main() {
 
                 favoritedChats = data.val.account.favorited_chats;
                 unreadInbox = data.val.account.unread_inbox;
-                if (!page) {
+                if (page === 'login' || !page) {
                     chatsPage();
                 }
             }

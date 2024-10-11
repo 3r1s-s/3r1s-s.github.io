@@ -96,10 +96,19 @@ function meowerEmojis(content, emojis) {
 
 function autoResize() {
     const messageInput = document.querySelector('.message-input');
-    const lineHeight = 20;
-  
-    const lines = messageInput.value.split('\n').length;
-    messageInput.style.height = lines * lineHeight + 1 + 'px';
+    messageInput.style.height = '21px';
+    messageInput.style.height = `${messageInput.scrollHeight + 1}px`;
+}
+
+function jumpToPost(id) {
+    const post = document.getElementById(id);
+    if (post) {
+        post.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    post.classList.add('active');
+    setTimeout(() => {
+        post.classList.remove('active');
+    }, 1000);
 }
 
 // document.addEventListener("keydown", function(event) {
