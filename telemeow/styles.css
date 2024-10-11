@@ -304,6 +304,17 @@ hr {
     flex-direction: column;
 }
 
+.chats::before {
+    position: fixed;
+    top: var(--titlebar-height);
+    content: '';
+    width: 80px;
+    height: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-image: url(assets/images/cta.png);
+}
+
 .chat {
     display: flex;
     height: 75px;
