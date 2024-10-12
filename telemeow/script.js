@@ -448,7 +448,6 @@ function chatPage(chatId) {
                     posts.setAttribute("data-loading-more", "");
                     await loadPosts(Math.floor(posts.childElementCount / 25) + 1);
                     posts.removeAttribute("data-loading-more");
-                    content.scrollTo(0, posts.scrollHeight - content.clientHeight);
                 }
             });
         }
@@ -554,7 +553,7 @@ function createPost(data) {
 }
 
 function skeletonPosts() {
-    return [...Array(20).keys()].map(i => `
+    return [...Array(8).keys()].map(i => `
         <div class="post" data-loading-more>
             <div class="avatar-outer">
                 <span class="skeleton-avatar"></span>
