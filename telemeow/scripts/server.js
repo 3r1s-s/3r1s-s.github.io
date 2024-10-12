@@ -399,12 +399,12 @@ function renderTyping() {
                 .replace("{user1}", typing[0])
                 .replace("{user2}", typing[1]);
             break;
-        case 3:
-            typingElem.innerText = translations.multiple
-                .replace("{user1}", typing[0])
-                .replace("{user2}", typing[1])
-                .replace("{user3}", typing[2]);
-            break;
+        // case 3:
+        //     typingElem.innerText = translations.multiple
+        //         .replace("{user1}", typing[0])
+        //         .replace("{user2}", typing[1])
+        //         .replace("{user3}", typing[2]);
+        //     break;
         default:
             typingElem.innerText = translations.many.replace("{count}", typing.length);
             break;

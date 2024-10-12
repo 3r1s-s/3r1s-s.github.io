@@ -178,7 +178,6 @@ function postModal(id) {
         <div class="post-modal-button" onclick="mention('${id}')"><div>Mention</div><div class="post-modal-icon">${icon.mention}</div></div>
         <div class="post-modal-button" ><div>React</div><div class="post-modal-icon">${icon.emoji}</div></div>
         <div class="post-modal-button" ><div>Report</div><div class="post-modal-icon">${icon.report}</div></div>
-        <div class="post-modal-button" ><div>Share</div><div class="post-modal-icon">${icon.share}</div></div>
         `,
         style: `height: auto; min-height: 60%;`,
      });
