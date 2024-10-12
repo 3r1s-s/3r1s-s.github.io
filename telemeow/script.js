@@ -418,6 +418,7 @@ function chatPage(chatId) {
                         </span>
                     </div>
                     <div class="message-container">
+                        <div class="replies-wrapper"></div>
                         <div class="message-input-wrapper">
                             <div class="message-button">${icon.add}</div>
                             <div class="message-input-container">
@@ -468,23 +469,34 @@ function createPost(data) {
     replies.classList.add('post-replies');
     if (data.reply_to) {        
         data.reply_to.forEach(reply => {
-            let replyCont;
-            if (reply.p) {
-                replyCont = reply.p.sanitize();
-            } else if (reply.attachments) {
-                replyCont = `<i>${reply.attachments.length} attachment${reply.attachments.length === 1 ? '' : 's'}</i>`;
-            }
-            replies.innerHTML += `
-                <div class="reply" onclick="jumpToPost('${reply._id}')">
+            if (reply) {
+                let replyCont;
+                if (reply.p) {
+                    replyCont = reply.p.sanitize();
+                } else if (reply.attachments) {
+                    replyCont = `<i>${reply.attachments.length} attachment${reply.attachments.length === 1 ? '' : 's'}</i>`;
+                }
+                replies.innerHTML += `
+                    <div class="reply" onclick="jumpToPost('${reply._id}')">
+                        ${icon.replyIn}
+                        <div class="reply-inner">
+                            <div class="reply-avatar" style="--image: url(https://uploads.meower.org/icons/${reply.author.avatar})"></div>
+                            <span class="reply-user">${reply.author._id}</span>
+                            <span class="reply-content">${replyCont}</span>
+                            
+                        </div>
+                    </div>
+                `;
+            } else {
+                replies.innerHTML += `
+                <div class="reply">
                     ${icon.replyIn}
                     <div class="reply-inner">
-                        <div class="reply-avatar" style="--image: url(https://uploads.meower.org/icons/${reply.author.avatar})"></div>
-                        <span class="reply-user">${reply.author._id}</span>
-                        <span class="reply-content">${replyCont}</span>
-                        
+                        <span class="reply-content"><i>Deleted post</i></span>
                     </div>
                 </div>
             `;
+            }
         });
     }
 

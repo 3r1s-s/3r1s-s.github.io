@@ -111,6 +111,45 @@ function jumpToPost(id) {
     }, 1000);
 }
 
+function reply(postId) {
+    closeModal();
+    const post = postCache[page].find(p => p._id === postId);
+    if (post && document.querySelector(".replies-wrapper").childNodes.length < 10) {
+        const box = document.createElement("div");
+        box.classList.add('reply-send');
+        box.dataset.replyId = postId;
+
+        const reply = document.createElement("div");
+        reply.classList.add("reply-pre");
+        reply.innerHTML = `
+            <div class="reply" onclick="jumpToPost('${post._id}')">
+                ${icon.replyIn}
+                <div class="reply-inner">
+                    <div class="reply-avatar" style="--image: url(https://uploads.meower.org/icons/${post.author.avatar})"></div>
+                    <span class="reply-user">${post.author._id}</span>
+                    <span class="reply-content">${post.p ? post.p.sanitize() : `<i>${post.attachments.length} attachment${post.attachments.length === 1 ? '' : 's'}</i>`}</span>
+                </div>
+            </div>
+        `;
+
+        const removeButton = document.createElement("div");
+        removeButton.classList.add('remove-reply');
+        removeButton.onclick = () => removeReply(box);
+        removeButton.innerHTML = `${icon.cross}`;
+        box.appendChild(reply);
+        box.appendChild(removeButton);
+
+        document.querySelector(".replies-wrapper").appendChild(box);
+        document.querySelector('.message-input').focus();
+    }
+}
+
+function removeReply(element) {
+    if (element && element.parentNode) {
+        element.parentNode.removeChild(element);
+    }
+}
+
 // document.addEventListener("keydown", function(event) {
 //     if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
 //         event.preventDefault();

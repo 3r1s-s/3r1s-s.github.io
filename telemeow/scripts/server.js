@@ -354,6 +354,10 @@ async function sendPost() {
     messageInput.value = "";
     autoResize();
 
+    const replies = document.querySelector(".replies-wrapper");
+    const replyToIds = Array.from(replies.childNodes).map(replyContainer => replyContainer.getAttribute("data-reply-id"));
+    replies.innerHTML = "";
+
     const nonce = Math.random().toString();
     const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
         method: "POST",
@@ -362,7 +366,7 @@ async function sendPost() {
             token: storage.get("token"),
         },
         body: JSON.stringify({
-            reply_to: [],
+            reply_to: replyToIds,
             content: message,
             attachments: [],
             nonce,
