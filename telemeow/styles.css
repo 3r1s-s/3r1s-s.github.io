@@ -1412,6 +1412,11 @@ hr {
     font-weight: 400;
 }
 
+.post-content code {
+    font-family: 'Reddit Mono', monospace;
+    background: #000;
+}
+
 .post-content pre {
     font-family: 'Reddit Mono', monospace;
     background: #000;
@@ -1620,4 +1625,31 @@ img.embed:active {
     border-top: 1px solid var(--app-red);
     gap: 5px;
     padding: 10px;
+}
+
+.skeleton-posts {
+    min-height: 500px;
+}
+
+.skeleton-avatar {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+    background: var(--app-400);
+}
+
+.skeleton-text {
+    display: block;
+    height: 1lh;
+    margin: 5px 0;
+    border-radius: 100px;
+    background: var(--app-400);
+}
+
+.skeleton-attachment {
+    width: 100%;
+    display: block;
+    background: var(--app-400);
+    border-radius: 10px;
 }

@@ -432,12 +432,25 @@ function chatPage(chatId) {
 
                     </div>
                     <div class="skeleton-posts">
-
+                        ${skeletonPosts()}
                     </div>
                 </div>
             `;
 
             loadPosts(1);
+
+            content.addEventListener("scroll", async (event) => {
+                if (!(page in postCache)) return;
+                const skeletonHeight = document.querySelector(".skeleton-posts").scrollHeight;
+                if (content.scrollHeight - content.scrollTop - skeletonHeight - content.clientHeight < 1) {
+                    const posts = document.querySelector(".posts");
+                    if (posts.hasAttribute("data-loading-more")) return;
+                    posts.setAttribute("data-loading-more", "");
+                    await loadPosts(Math.floor(posts.childElementCount / 25) + 1);
+                    posts.removeAttribute("data-loading-more");
+                    content.scrollTo(0, posts.scrollHeight - content.clientHeight);
+                }
+            });
         }
     });
 }
@@ -538,6 +551,26 @@ function createPost(data) {
         `;
 
     return post;
+}
+
+function skeletonPosts() {
+    return [...Array(20).keys()].map(i => `
+        <div class="post" data-loading-more>
+            <div class="avatar-outer">
+                <span class="skeleton-avatar"></span>
+            </div>
+            <div class="post-wrapper">
+                <span class="skeleton-text" style="width: ${Math.floor(Math.random() * (30 - 15 + 1)) + 15}%"></span>
+                <div class="post-content">
+                <span class="skeleton-text" style="width: ${Math.floor(Math.random() * (100 - 80 + 1)) + 80}%"></span>
+                <span class="skeleton-text" style="width: ${Math.floor(Math.random() * (60 - 15 + 1)) + 15}%"></span>
+                </div>
+                <div class="post-attachments">
+                    ${Math.floor(Math.random() * 3) ? '' : `<span class="skeleton-attachment" style="height: ${Math.floor(Math.random() * (600 - 200 + 1)) + 200}px"></span>`}
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
 function settingsPage() {
