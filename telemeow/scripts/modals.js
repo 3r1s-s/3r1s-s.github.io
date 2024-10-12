@@ -175,7 +175,7 @@ function postModal(id) {
         id: id,
         body: `
         <div class="post-modal-button" onclick="reply('${id}')"><div>Reply</div><div class="post-modal-icon">${icon.reply}</div></div>
-        <div class="post-modal-button" ><div>Mention</div><div class="post-modal-icon">${icon.mention}</div></div>
+        <div class="post-modal-button" onclick="mention('${id}')"><div>Mention</div><div class="post-modal-icon">${icon.mention}</div></div>
         <div class="post-modal-button" ><div>React</div><div class="post-modal-icon">${icon.emoji}</div></div>
         <div class="post-modal-button" ><div>Report</div><div class="post-modal-icon">${icon.report}</div></div>
         <div class="post-modal-button" ><div>Share</div><div class="post-modal-icon">${icon.share}</div></div>

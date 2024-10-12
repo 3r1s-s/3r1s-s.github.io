@@ -150,6 +150,15 @@ function removeReply(element) {
     }
 }
 
+function mention(postId) {
+    closeModal();
+    const post = postCache[page].find(p => p._id === postId);
+    const messageInput = document.querySelector('.message-input');
+    messageInput.value += `@${post.author._id} `;
+    messageInput.focus();
+    autoResize();
+}
+
 // document.addEventListener("keydown", function(event) {
 //     if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
 //         event.preventDefault();
