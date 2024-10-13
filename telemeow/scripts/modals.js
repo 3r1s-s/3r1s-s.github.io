@@ -137,7 +137,7 @@ function openProfile(user) {
                 ` : ``}
             <div class="profile-section info"><span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span><span class="divider"></span><span>${recent}</span></div>
             <div class="menu-options">
-            <div class="menu-button" onclick="openUserChat('${data._id}')"><span>Send DM</span>${icon.arrow}</div>
+            ${data._id !== storage.get('username') ? `<div class="menu-button" onclick="openUserChat('${data._id}')"><span>Send DM</span>${icon.arrow}</div>` : ``}
             ${moderator ? `<div class="menu-button"><span>Moderate</span>${icon.arrow}</div>` : ``}
             </div>
             </div>`
