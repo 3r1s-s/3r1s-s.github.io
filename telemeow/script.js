@@ -321,7 +321,7 @@ async function chatList() {
         } else {
             const user = chatData.members.find(v => v !== storage.get("username"));
             userData = await getUser(`${user}`);
-            chatIcon = `https://uploads.meower.org/icons/${userData.avatar}`;
+            chatIcon = avatar(userData).url;
             if (userList.includes(user)) {
                 attention = 'online';
             }
@@ -492,7 +492,7 @@ function createPost(data) {
                     <div class="reply" onclick="jumpToPost('${reply._id}')">
                         ${icon.replyIn}
                         <div class="reply-inner">
-                            <div class="reply-avatar" style="--image: url(https://uploads.meower.org/icons/${reply.author.avatar})"></div>
+                            <div class="reply-avatar" style="--image: ${avatar(reply.author).css}"></div>
                             <span class="reply-user">${reply.author._id}</span>
                             <span class="reply-content">${replyCont}</span>
                             
@@ -532,7 +532,7 @@ function createPost(data) {
     let post = `
         <div class="post" id="${data._id}">
             <div class="avatar-outer">
-                <div class="avatar" style="--image: url('https://uploads.meower.org/icons/${data.author.avatar}'); --color: ${data.author.avatar_color}" onclick="openProfile('${data.author._id}')"></div>
+                <div class="avatar" style="--image: ${avatar(data.author).css}; --color: ${data.author.avatar_color}" onclick="openProfile('${data.author._id}')"></div>
             </div>
             <div class="post-wrapper">
                 <div class="post-info">
@@ -704,7 +704,7 @@ function settingsProfile() {
             <div class="settings">
                 <div class="profile-settings" style="--modal-accent: #${data.avatar_color};">
                     <div class="modal-banner" style="--banner-color: #${data.avatar_color}"></div>
-                    <div class="edit-profile-icon" style="--image: url('https://uploads.meower.org/icons/${data.avatar}')">
+                    <div class="edit-profile-icon" style="--image: ${avatar(data).css}">
                     <div class="edit-profile-overlay">Edit</div>
                     </div>
                     <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>

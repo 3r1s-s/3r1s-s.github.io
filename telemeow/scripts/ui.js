@@ -159,6 +159,26 @@ function mention(postId) {
     autoResize();
 }
 
+function copy(text) {
+    const t = document.createElement('input');
+    t.value = text;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    document.body.removeChild(t);
+}
+
+function avatar(data) {
+    const avatarUrl = data.avatar 
+        ? `https://uploads.meower.org/icons/${data.avatar}` 
+        : `assets/images/default.png`;
+
+    return {
+        url: avatarUrl,
+        css: `url(${avatarUrl})`
+    };
+}
+
 // document.addEventListener("keydown", function(event) {
 //     if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
 //         event.preventDefault();

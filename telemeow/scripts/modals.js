@@ -112,8 +112,8 @@ function openProfile(user) {
             `,
             body: `
             <div class="modal-banner"></div>
-            <div class="modal-icon ${attention}" style="background-image: url('https://uploads.meower.org/icons/${data.avatar}')"></div>
-            <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span><div class="badges">${badges}</div></div>
+            <div class="modal-icon ${attention}" style="background-image: ${avatar(data).css}"></div>
+            <div class="modal-header"><span onclick="copy('<:${data._id}>');closeModal();openAlert({title: 'Copied!', message: 'Copied username to clipboard.'})">${data._id}</span><span class="pronouns">${pronouns}</span><div class="badges">${badges}</div></div>
             <div class="profile-section">${quote}</div>
             ${lastfmuser ? `
             <div class="profile-section music" style="display: none">
@@ -304,7 +304,7 @@ function emojiInfoModal(data) {
         <div style="display:flex;align-items:center;gap:10px;padding:10px;padding-bottom:0;box-sizing:border-box;">
             <img src="https://uploads.meower.org/emojis/${data._id}" alt=":${data.name}:" title=":${data.name}:" class="emoji-icon">
             <div style="display:flex;flex-direction:column;gap:2px;">
-                <span style="font-size: 1.25em;font-weight: 600;">:${data.name}:</span>
+                <span style="font-size: 1.25em;font-weight: 600;" onclick="copy('<:${data._id}>');closeModal();openAlert({title: 'Copied!', message: 'Copied emoji to clipboard.'})">:${data.name}:</span>
                 <span style="font-size: 1em;font-weight: 400;">You can use this emoji anywhere.</span>
             </div>
         </div>
