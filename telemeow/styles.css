@@ -380,7 +380,7 @@ hr {
     flex-shrink: 0;
 }
 
-.chat-icon.online::after {
+.chat-icon.online::after, .chat-icon-svg.online::after {
     content: '';
     position: absolute;
     bottom: 0px;
@@ -393,7 +393,7 @@ hr {
     pointer-events: none;
 }
 
-.chat-icon.attention::after {
+.chat-icon.attention::after, .chat-icon-svg.attention::after {
     content: '';
     position: absolute;
     bottom: 0px;
@@ -406,8 +406,27 @@ hr {
     pointer-events: none;
 }
 
-.favourite > .chat-icon.online::after, .favourite > .chat-icon.attention::after {
+.favourite > .chat-icon.online::after, .favourite > .chat-icon.attention::after, .favourite > .chat-icon-svg.online::after, .favourite > .chat-icon-svg.attention::after {
     border: 4px solid var(--app-400);
+}
+
+.chat-icon-svg {
+    aspect-ratio: 1 / 1;
+    width: 65px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    position: relative;
+    flex-shrink: 0;
+    background: var(--app-700);
+}
+
+.chat-icon-svg > svg {
+    width: 50%;
+    height: 50%;
+    color: var(--app-text);
 }
 
 .logo-hero {
@@ -1447,6 +1466,10 @@ img.embed:active {
 }
 
 .highlight:active {
+    opacity: 0.8;
+}
+
+.interact:active {
     opacity: 0.8;
 }
 

@@ -65,6 +65,7 @@ function main() {
             if (usersTyping[postOrigin] && post.author._id in usersTyping[postOrigin]) {
                 clearTimeout(usersTyping[postOrigin][post.author._id]);
                 delete usersTyping[postOrigin][post.author._id];
+                renderTyping();
             }
 
             if (!(postOrigin in postCache)) postCache[postOrigin] = [];
