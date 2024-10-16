@@ -1446,6 +1446,16 @@ hr {
     width: 100%;
 }
 
+.post-content th {
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-content td {
+    font-size: 0.85em;
+}
+
 .post-attachments {
     width: 100%;
 }

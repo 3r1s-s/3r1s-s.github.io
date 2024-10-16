@@ -22,6 +22,8 @@ let moderator = true;
 const content = document.querySelector('.app').querySelector('.content');
 const app = document.querySelector('.app');
 
+const messageInput = () => document.querySelector('.message-input') || null;
+
 const titlebar = (() => {
     const titlebar = document.querySelector('.titlebar');
 
@@ -399,7 +401,7 @@ function chatPage(chatId) {
                             <div class="message-input-container">
                                 <textarea class="message-input" oninput="autoResize()" placeholder="Send a message to ${name}..."></textarea>
                             </div>
-                            <div class="message-button">${icon.emoji}</div>
+                            <div class="message-button" onclick="emojiModal();">${icon.emoji}</div>
                             <div class="message-button message-send" onclick="sendPost();">${icon.send}</div>
                         </div>
                     </div>

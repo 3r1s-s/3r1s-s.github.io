@@ -348,11 +348,10 @@ function attach(attachment) {
 }
 
 async function sendPost() {
-    const messageInput = document.querySelector('.message-input');
-    if (messageInput.disabled) return;
-    if (messageInput.value.trim() === "") return;
-    const message = messageInput.value;
-    messageInput.value = "";
+    if (messageInput().disabled) return;
+    if (messageInput().value.trim() === "") return;
+    const message = messageInput().value;
+    messageInput().value = "";
     autoResize();
 
     const replies = document.querySelector(".replies-wrapper");

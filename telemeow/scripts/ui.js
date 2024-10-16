@@ -95,9 +95,8 @@ function meowerEmojis(content, emojis) {
 }
 
 function autoResize() {
-    const messageInput = document.querySelector('.message-input');
-    messageInput.style.height = '21px';
-    messageInput.style.height = `${messageInput.scrollHeight + 1}px`;
+    messageInput().style.height = '21px';
+    messageInput().style.height = `${messageInput().scrollHeight + 1}px`;
 }
 
 function jumpToPost(id) {
@@ -140,7 +139,7 @@ function reply(postId) {
         box.appendChild(removeButton);
 
         document.querySelector(".replies-wrapper").appendChild(box);
-        document.querySelector('.message-input').focus();
+        messageInput().focus();
     }
 }
 
@@ -153,9 +152,8 @@ function removeReply(element) {
 function mention(postId) {
     closeModal();
     const post = postCache[page].find(p => p._id === postId);
-    const messageInput = document.querySelector('.message-input');
-    messageInput.value += `@${post.author._id} `;
-    messageInput.focus();
+    messageInput().value += `@${post.author._id} `;
+    messageInput().focus();
     autoResize();
 }
 
