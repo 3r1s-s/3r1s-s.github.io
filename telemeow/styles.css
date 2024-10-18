@@ -740,10 +740,11 @@ hr {
 
 .profile-section.info {
     flex-direction: row;
-    font-size: 12px;
+    font-size: 0.75em;
     font-weight: 500;
     align-items: center;
     gap: 5px;
+    min-height: 1lh;
 }
 
 .menu-options {
@@ -1120,6 +1121,13 @@ hr {
     display: flex;
     align-items: baseline;
     gap: 5px;
+}
+
+.typing-indicator {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 1lh;
 }
 
 .alert-outer {
@@ -1685,4 +1693,73 @@ img.embed:active {
     display: block;
     background: var(--app-400);
     border-radius: 10px;
+}
+
+.emojis-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    justify-content: stretch;
+}
+
+.emoji-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    aspect-ratio: 1/1;
+    margin: 5px;
+}
+
+.chat-emoji-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    width: 1lh;
+    height: 1lh;
+    border-radius: 100px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    aspect-ratio: 1/1;
+    flex: 0 0 auto;
+}
+
+.chat-emoji-button:active, .emoji-button:active {
+    opacity: 0.8;
+}
+
+.chats-row {
+    display: flex;
+    gap: 5px;
+    margin-top: auto;
+    text-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.emojis-outer::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.emojis-outer::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.emojis-outer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 5px;
+}
+
+.chat-emojis {
+    overflow: scroll;
+    border-radius: 15px;
+    flex: 1;
 }

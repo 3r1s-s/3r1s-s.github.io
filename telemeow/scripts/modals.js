@@ -18,6 +18,11 @@ function openModal(data) {
             let bodyElement = document.createElement("div");
             bodyElement.classList.add("modal-body");
             bodyElement.innerHTML = data.body;
+            if (data.bodyStyle) {
+                if (bodyElement) {    
+                    bodyElement.style = data.bodyStyle;
+                }
+            }
             modalInner.append(bodyElement);
         }
         

@@ -638,7 +638,6 @@ function toggleSetting(id) {
     }
 }
 
-
 function settingsProfile() {
     page = `settings.profile`;
 

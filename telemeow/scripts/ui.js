@@ -53,29 +53,37 @@ function timeAgo(tstamp) {
 
 function setTheme() {
     document.querySelector('html').classList = '';
-    if (theme.get() === 'light') {
-        document.querySelector('html').classList.add('light');
-    } else if (theme.get() === 'system') {
-        if (window.matchMedia) {
+    if (theme.get()) {
+        if (theme.get() === 'light') {
+            document.querySelector('html').classList.add('light');
+        } else if (theme.get() === 'system') {
+            if (window.matchMedia) {
             const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
             if (systemDark.matches) {
             } else {
                 document.querySelector('html').classList.add('light');
             }
         }
-    } else if (theme.get() === 'catppuccin-macchiato') {
-        document.querySelector('html').classList.add('catppuccin-macchiato');
-    } else if (theme.get() === 'oled') {
-        document.querySelector('html').classList.add('oled');
-    } else if (theme.get() === 'watermelon') {
-        document.querySelector('html').classList.add('watermelon');
+        } else if (theme.get() === 'catppuccin-macchiato') {
+            document.querySelector('html').classList.add('catppuccin-macchiato');
+        } else if (theme.get() === 'oled') {
+            document.querySelector('html').classList.add('oled');
+        } else if (theme.get() === 'watermelon') {
+            document.querySelector('html').classList.add('watermelon');
+        }
+    } else {
+        document.querySelector('html').classList.add('dark');
     }
 
     if (page === 'settings.appearance') {
         if (document.querySelector(`.theme-option.selected`)) {            
             document.querySelector('.theme-option.selected').classList.remove('selected');
         }
-        document.querySelector(`.theme-option.${theme.get()}`).classList.add('selected');
+        if (theme.get()) {
+            document.querySelector(`.theme-option.${theme.get()}`).classList.add('selected');
+        } else {
+            document.querySelector(`.theme-option.dark`).classList.add('selected');
+        }
     }
 }
 
