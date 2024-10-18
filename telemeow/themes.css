@@ -1,17 +1,44 @@
 .light {
     --app-text: #171630;
     --app-link: #3679f0;
-    --app-100: #f4f7ff;
-    --app-200: #e9f0ff;
-    --app-300: #c8d9ff;
-    --app-400: #e0ebff;
-    --app-500: #a5b8e2;
-    --app-600: #c8d9ff;
-    --app-700: #7176a1;
-    --app-800: #6c708d;
-    --app-900: #60637b;
+
+    --app-100: #ececff;
+    --app-200: #e2e2f7;
+    --app-300: #d9d9f2;
+    --app-400: #ccccf7;
+    --app-500: #cecef5;
+    --app-600: #d5d5e6;
+    --app-700: #afafbb;
+    --app-800: #b3b3c2;
+    --app-900: #8f8f9e;
     
-    --titlebar: rgba(224, 235, 255, 0.8);
+    --titlebar: #fefefe90;
+
+    --app-blue: rgb(0, 122, 255);
+    --app-red: rgb(255, 59, 48);
+    --app-green: rgb(52, 199, 89);
+    --app-yellow: rgb(255, 204, 0);
+    --app-pink: rgb(255, 45, 85);
+    --app-purple: rgb(175, 82, 222);
+    --app-orange: rgb(255, 149, 0);
+
+    --app-dark-blue: #1e4d9e;
+    --app-dark-red: #c33f33;
+    --app-dark-green: #2c7e4b;
+    --app-dark-yellow: #c7b200;
+    --app-dark-pink: #c95bff;
+    --app-dark-purple: #5f5bff;
+    --app-dark-orange: #c86f33;
+
+    --modal-100: var(--app-100);
+    --modal-200: var(--app-200);
+    --modal-300: var(--app-300);
+    --modal-400: var(--app-100);
+    --modal-500: var(--app-400);
+    --modal-600: var(--app-600);
+    --modal-700: var(--app-700);
+    --modal-800: var(--app-800);
+    --modal-900: var(--app-900);
 
     .chat {
         background: var(--app-100);
@@ -22,11 +49,23 @@
     }
 
     .chat.favourite {
-        background: var(--app-400);
+        background: var(--app-200);
     }
 
     .chat.chat.favourite:active {
         background: var(--app-500);
+    }
+
+    .content {
+        background: var(--app-100);
+    }
+
+    .titlebar.chat-trans {
+        background: var(--app-100);
+    }
+
+    .chat-info {
+        background-color: var(--app-100);
     }
 }
 
