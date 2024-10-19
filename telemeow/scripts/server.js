@@ -1,3 +1,5 @@
+let reconnecting;
+
 function main() {
     serverWebSocket = new WebSocket(server);
 
@@ -23,6 +25,8 @@ function main() {
 
     serverWebSocket.onclose = () => {
         console.info("Connection closed attempting to reconnect...");
+        tooltip({'title':"Disconnected!",'icon':icon.alert});
+        reconnecting = true;
         setTimeout(() => {
             main();
             if (page === "chats" ) {
@@ -45,6 +49,11 @@ function main() {
                 storage.set("token", data.val.token);
                 storage.set("username", data.val.username);
                 console.info("Logged in as " + data.val.username);
+
+                if (reconnecting) {
+                    reconnecting = false;
+                    tooltip({'title':"Reconnected!"});
+                }
 
                 getUser(data.val.username);
                 
@@ -174,33 +183,36 @@ function getUser(username) {
 }
 
 function getChat(chatId) {
-    if (!["home", "inbox", "livechat"].includes(chatId) && !chatCache[chatId]) {
-        return fetch(`https://api.meower.org/chats/${chatId}`, {
-            headers: {token: localStorage.getItem("token")}
-        })
-        .then(response => {
-            if (!response.ok) {
-                if (response.status === 404) {
-                    throw new Error("Chat not found");
-                } else {
-                    throw new Error('Network response was not ok');
+    if (!["home", "inbox", "livechat"].includes(chatId)) {
+        if (!chatCache[chatId]) {
+            fetch(`https://api.meower.org/chats/${chatId}`, {
+                headers: {token: localStorage.getItem("token")}
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error("Chat not found");
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
                 }
-            }
-            return response.json();
-        })
-        .then(data => {
-            chatCache[chatId] = data;
-            return data;
-        })
-        .catch(e => {
-            openAlert({
-                title: "Error",
-                message: `Unable to open chat: ${e}`
+                return response.json();
+            })
+            .then(data => {
+                chatCache[chatId] = data;
+            })
+            .catch(e => {
+                openAlert({
+                    title: "Error",
+                    message: `Unable to open chat: ${e}`
+                });
             });
-        });
+        }
+        return Promise.resolve(chatCache[chatId]);
     }
     return Promise.resolve(chatCache[chatId]);
 }
+
 
 async function loadPosts(pageNo) {
     const posts = document.querySelector(".posts");

@@ -97,7 +97,7 @@ function formatSize(bytes) {
 
 function meowerEmojis(content, emojis) {
     for (const emoji of emojis) {
-        content = content.replaceAll(`&lt;:${emoji._id}&gt;`, `<img src="https://uploads.meower.org/emojis/${emoji._id}" alt=":${emoji.name}:" title=":${emoji.name}:" class="emoji" onclick="emojiInfoModal(${JSON.stringify(emoji).replace(/\"/g, '&quot;')})">`);
+        content = content.replaceAll(`&lt;:${emoji._id}&gt;`, `<img src="https://uploads.meower.org/emojis/${emoji._id}" alt=":${emoji.name.sanitize()}:" title=":${emoji.name.sanitize()}:" class="emoji" onclick="emojiInfoModal(${JSON.stringify(emoji).replace(/\"/g, '&quot;')})">`);
     }
     return content;
 }

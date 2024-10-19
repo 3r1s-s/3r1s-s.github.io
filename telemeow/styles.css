@@ -1697,7 +1697,7 @@ img.embed:active {
 
 .emojis-inner {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
     justify-content: stretch;
 }
 
@@ -1762,4 +1762,44 @@ img.embed:active {
     overflow: scroll;
     border-radius: 15px;
     flex: 1;
+}
+
+.tooltip {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 5px 8px;
+    min-width: 100px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    visibility: hidden;
+    background: var(--app-300);
+    border: 2px solid var(--app-500);
+    border-radius: 100px;
+    z-index: 1000;
+    box-shadow: 0 2px 8px #00000094;
+    transition: transform cubic-bezier(0.68, 0.1, 0.27, 1) 0.4s;
+}
+
+.tooltip.visible {
+    transform: translateX(-50%) translateY(calc(20px + env(safe-area-inset-top)));
+}
+
+.tooltip div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+}
+
+.tooltip div svg {
+    width: 100%;
+    height: 100%;
 }

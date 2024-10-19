@@ -122,7 +122,7 @@ function openProfile(user) {
             body: `
             <div class="modal-banner"></div>
             <div class="modal-icon ${attention}" style="background-image: ${avatar(data).css}"></div>
-            <div class="modal-header"><span onclick="copy('<:${data._id}>');closeModal();openAlert({title: 'Copied!', message: 'Copied username to clipboard.'})" class="interact">${data._id}</span><span class="pronouns">${pronouns}</span><div class="badges">${badges}</div></div>
+            <div class="modal-header"><span onclick="copy('<:${data._id}>');tooltip({'title':'Copied!','icon':icon.copy});" class="interact">${data._id}</span><span class="pronouns">${pronouns}</span><div class="badges">${badges}</div></div>
             <div class="profile-section">${quote}</div>
             ${lastfmuser ? `
             <div class="profile-section music" style="display: none">
@@ -158,10 +158,10 @@ function openProfile(user) {
                 data = JSON.parse(data);
                 if (data.track["@attr"] && data.track["@attr"].nowplaying) {
                     document.querySelector('.spotify-name').innerHTML = `${data.track.name}`;
-                    document.querySelector('.spotify-artist').innerHTML = `by ${data.track.artist['#text']}`;
-                    document.querySelector('.spotify-album').innerHTML = `on ${data.track.album['#text']}`;
-                    document.querySelector('.spotify-art').style.backgroundImage = `url('${data.track.image[2]['#text']}')`;
-                    document.querySelector('.spotify').href = data.track.url;
+                    document.querySelector('.spotify-artist').innerHTML = `by ${data.track.artist['#text'].sanitize()}`;
+                    document.querySelector('.spotify-album').innerHTML = `on ${data.track.album['#text'].sanitize()}`;
+                    document.querySelector('.spotify-art').style.backgroundImage = `url('${data.track.image[2]['#text'].sanitize()}')`;
+                    document.querySelector('.spotify').href = data.track.url.sanitize();
                     document.querySelector('.profile-section.music').style.display = 'block';
                 } else {
                     document.querySelector('.profile-section.music').style.display = 'none';
@@ -311,12 +311,30 @@ function homeModal() {
 function emojiInfoModal(data) {
     openModal({style: `height: auto; min-height: 20%;` , body: `
         <div style="display:flex;align-items:center;gap:10px;padding:10px;padding-bottom:0;box-sizing:border-box;">
-            <img src="https://uploads.meower.org/emojis/${data._id}" alt=":${data.name}:" title=":${data.name}:" class="emoji-icon">
+            <img src="https://uploads.meower.org/emojis/${data._id}" alt=":${data.name.sanitize()}:" title=":${data.name.sanitize()}:" class="emoji-icon">
             <div style="display:flex;flex-direction:column;gap:2px;">
-                <span style="font-size: 1.25em;font-weight: 600;" class="interact" onclick="copy('<:${data._id}>');closeModal();openAlert({title: 'Copied!', message: 'Copied emoji to clipboard.'})">:${data.name}:</span>
+                <span style="font-size: 1.25em;font-weight: 600;" class="interact" onclick="copy('<:${data._id}>');closeModal();openAlert({title: 'Copied!', message: 'Copied emoji to clipboard.'})">:${data.name.sanitize()}:</span>
                 <span style="font-size: 1em;font-weight: 400;">You can use this emoji anywhere.</span>
             </div>
         </div>
     `});
 }
-// openModal( { small: false, icon: 'assets/images/placeholder.jpg', title: 'TeleMeow', body: 'placeholder' })
+
+function tooltip(data) {
+    const tooltip = document.querySelector(".tooltip");
+
+    tooltip.innerHTML = `
+        ${data.icon ? `<div>${data.icon}</div>` : ``}
+        ${data.title ? `<span>${data.title.sanitize()}</span>` : ``}
+    `;
+    tooltip.style = `visibility: visible;`;
+    tooltip.classList.add('visible');
+    setTimeout(() => {
+        tooltip.classList.remove('visible');
+        setTimeout(() => {
+            tooltip.style = `visibility: hidden;`;
+        }, 1000);
+    }, 3000);
+}
+
+// tooltip({'title':"Copied!",'icon':icon.copy})
