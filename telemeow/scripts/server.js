@@ -1,5 +1,18 @@
 let reconnecting;
 
+function setCaches() {
+    usersCache = {};
+    postCache = { livechat: [] };
+    chatCache = {};
+    blockedUsers = {};
+    usersTyping = {};
+
+    userList = {};
+    favoritedChats = [];
+    pendingAttachments = [];
+    unreadInbox = '';
+}
+
 function main() {
     serverWebSocket = new WebSocket(server);
 
@@ -29,12 +42,15 @@ function main() {
         reconnecting = true;
         setTimeout(() => {
             main();
+            setCaches();
             if (page === "chats" ) {
                 chatsPage();
             } else if (chatCache[page]) {
                 chatPage(page);
             } else if (page === 'home') {
                 chatPage('home');
+            } else {
+                chatsPage();
             }
         }, 5000);
     };

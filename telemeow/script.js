@@ -6,11 +6,11 @@ let back = '';
 
 let bridges = ['Discord', 'SplashBridge', 'gc'];
 
-const usersCache = {};
-const postCache = { livechat: [] };  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
-const chatCache = {}; // {chatId: chat}
-const blockedUsers = {}; // {user, user}
-const usersTyping = {}; // {chatId: {username1: timeoutId, username2: timeoutId}}
+let usersCache = {};
+let postCache = { livechat: [] };  // {chatId: [post, post, ...]} (up to 25 posts for inactive chats)
+let chatCache = {}; // {chatId: chat}
+let blockedUsers = {}; // {user, user}
+let usersTyping = {}; // {chatId: {username1: timeoutId, username2: timeoutId}}
 
 let userList = {}; // {user, user}
 let favoritedChats = [];  // [chatId, ...]
@@ -495,7 +495,7 @@ function createPost(data) {
             <div class="avatar-outer">
             </div>
             <div class="post-wrapper">
-                <div class="post-content" style="color: #ffffff70;">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis).highlight() : md.render(data.p).highlight()}</div>
+                <div class="post-content server-post">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis).highlight() : md.render(data.p).highlight()}</div>
                 ${replies.outerHTML}
                 ${attachments.outerHTML}
                 ${reactions.outerHTML}
@@ -530,7 +530,7 @@ function createPost(data) {
 }
 
 function skeletonPosts() {
-    return [...Array(8).keys()].map(i => `
+    return [...Array(5).keys()].map(i => `
         <div class="post" data-loading-more>
             <div class="avatar-outer">
                 <span class="skeleton-avatar"></span>
@@ -573,6 +573,9 @@ function settingsPage() {
                 <div class="menu-button"><span>Notifications</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Language</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Plugins</span>${icon.arrow}</div>
+            </div>
+            <div class="settings-options">
+                <div class="menu-button" onclick="setCaches();tooltip({title:'Cleared!'})"><span>Clear Caches</span>${icon.arrow}</div>
             </div>
             <div class="settings-options">
                 <div class="menu-button" onclick="logout()"><span>Log Out</span>${icon.arrow}</div>

@@ -313,7 +313,7 @@ function emojiInfoModal(data) {
         <div style="display:flex;align-items:center;gap:10px;padding:10px;padding-bottom:0;box-sizing:border-box;">
             <img src="https://uploads.meower.org/emojis/${data._id}" alt=":${data.name.sanitize()}:" title=":${data.name.sanitize()}:" class="emoji-icon">
             <div style="display:flex;flex-direction:column;gap:2px;">
-                <span style="font-size: 1.25em;font-weight: 600;" class="interact" onclick="copy('<:${data._id}>');closeModal();openAlert({title: 'Copied!', message: 'Copied emoji to clipboard.'})">:${data.name.sanitize()}:</span>
+                <span style="font-size: 1.25em;font-weight: 600;" class="interact" onclick="copy('<:${data._id}>');tooltip({title:'Copied!',icon:icon.copy})">:${data.name.sanitize()}:</span>
                 <span style="font-size: 1em;font-weight: 400;">You can use this emoji anywhere.</span>
             </div>
         </div>

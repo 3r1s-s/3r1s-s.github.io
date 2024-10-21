@@ -97,7 +97,9 @@ function formatSize(bytes) {
 
 function meowerEmojis(content, emojis) {
     for (const emoji of emojis) {
-        content = content.replaceAll(`&lt;:${emoji._id}&gt;`, `<img src="https://uploads.meower.org/emojis/${emoji._id}" alt=":${emoji.name.sanitize()}:" title=":${emoji.name.sanitize()}:" class="emoji" onclick="emojiInfoModal(${JSON.stringify(emoji).replace(/\"/g, '&quot;')})">`);
+        const tag = `&lt;:${emoji._id}&gt;`;
+        const replacement = `<img src="https://uploads.meower.org/emojis/${emoji._id}" alt=":${emoji.name.sanitize()}:" title=":${emoji.name.sanitize()}:" class="emoji${content.trim() === `<p>${tag}</p>` ? ' big' : ''}" onclick="emojiInfoModal(${JSON.stringify(emoji).replace(/\"/g, '&quot;')})">`;
+        content = content.replaceAll(tag, replacement);
     }
     return content;
 }
@@ -132,7 +134,7 @@ function reply(postId) {
             <div class="reply" onclick="jumpToPost('${post._id}')">
                 ${icon.replyIn}
                 <div class="reply-inner">
-                    <div class="reply-avatar" style="--image: url(https://uploads.meower.org/icons/${post.author.avatar})"></div>
+                    <div class="reply-avatar" style="--image: ${avatar(post.author).css}"></div>
                     <span class="reply-user">${post.author._id}</span>
                     <span class="reply-content">${post.p ? post.p.sanitize() : `<i>${post.attachments.length} attachment${post.attachments.length === 1 ? '' : 's'}</i>`}</span>
                 </div>
