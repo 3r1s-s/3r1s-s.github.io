@@ -187,9 +187,11 @@ function avatar(data) {
     };
 }
 
-// document.addEventListener("keydown", function(event) {
-//     if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
-//         event.preventDefault();
-//         sendPost();
-//      }
-// });
+document.addEventListener("keydown", function(event) {
+    if (settings.get('sendOnReturn') === 'true') {
+        if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendPost();
+        }
+    }
+});

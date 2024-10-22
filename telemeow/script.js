@@ -723,6 +723,7 @@ function settingsAppearance() {
     content.innerHTML = `
         <div class="settings">
             <div class="theme-preview">
+            
             </div>
             <div class="theme-options">
                 <div class="theme-option dark" onclick="theme.set('dark')" style="--app-500: #1a1825;">

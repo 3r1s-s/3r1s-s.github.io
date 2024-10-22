@@ -1613,6 +1613,12 @@ img.embed:active {
     border-radius: 15px;
 }
 
+.download a {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .reaction {
     background: var(--app-600);
     border: 2px solid var(--app-800);

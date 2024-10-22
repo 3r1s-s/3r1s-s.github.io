@@ -122,7 +122,7 @@ function openProfile(user) {
             body: `
             <div class="modal-banner"></div>
             <div class="modal-icon ${attention}" style="background-image: ${avatar(data).css}"></div>
-            <div class="modal-header"><span onclick="copy('<:${data._id}>');tooltip({'title':'Copied!','icon':icon.copy});" class="interact">${data._id}</span><span class="pronouns">${pronouns}</span><div class="badges">${badges}</div></div>
+            <div class="modal-header"><span onclick="copy('${data._id}');tooltip({'title':'Copied!','icon':icon.copy});" class="interact">${data._id}</span><span class="pronouns">${pronouns}</span><div class="badges">${badges}</div></div>
             <div class="profile-section">${quote}</div>
             ${lastfmuser ? `
             <div class="profile-section music" style="display: none">

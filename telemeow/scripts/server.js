@@ -145,10 +145,11 @@ function main() {
                     }
                 } else {
                     if (data.cmd === "post_reaction_add") {
+                        const reacted = data.val.username === storage.get("username") || post.reactions[reactionIndex].user_reacted;
                         post.reactions[reactionIndex] = {
                             count: post.reactions[reactionIndex].count += 1,
                             emoji: data.val.emoji,
-                            user_reacted: data.val.username === storage.get("username")
+                            user_reacted: reacted
                         };
                     } else if (data.cmd === "post_reaction_remove") {
                         post.reactions[reactionIndex] = {
