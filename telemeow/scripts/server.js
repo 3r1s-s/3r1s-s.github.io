@@ -104,6 +104,7 @@ function main() {
         } else if (data.cmd === "typing") {
             const chatId = data.val.chat_id;
             const username = data.val.username;
+            if (username === storage.get("username")) return;
             if (!usersTyping[chatId]) usersTyping[chatId] = {};
             if (username in usersTyping[chatId]) {
                 clearTimeout(usersTyping[chatId][username]);

@@ -12,7 +12,6 @@ window.addEventListener('touchstart', function(event) {
     }
 }, false);
 
-// Listen for touchmove event to update arrow position
 window.addEventListener('touchmove', function(event) {
     touchEndX = event.touches[0].clientX;
     let deltaX = touchEndX - touchStartX;
@@ -30,6 +29,8 @@ window.addEventListener('touchend', function(event) {
 
     arrow.style.transform = 'translateX(-100%)';
 }, false);
+
+let lastTyped = 0;
 
 function timeAgo(tstamp) {
     const currentTime = Date.now();
@@ -193,5 +194,13 @@ document.addEventListener("keydown", function(event) {
             event.preventDefault();
             sendPost();
         }
+    }
+    
+    if (event.keyCode >= 48 && event.keyCode <= 90 && document.querySelector('.message-input') === document.activeElement && settings.get('invisibleTyping') === 'false' && lastTyped+3000 < Date.now()) {
+        lastTyped = Date.now();
+        fetch(`https://api.meower.org/${page === "home" ? "" : "chats/"}${page}/typing`, {
+            method: "POST",
+            headers: { token: storage.get("token") }
+        });
     }
 });
