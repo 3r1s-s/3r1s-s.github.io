@@ -118,7 +118,6 @@ function main() {
             }, 4000);
             renderTyping();
         } else if (data.cmd === "update_post") {
-            console.log(data);
             let postOrigin = data.val.post_origin;
             if (postCache[postOrigin]) {
                 index = postCache[postOrigin].findIndex(post => post._id === data.val._id);

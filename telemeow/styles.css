@@ -1128,10 +1128,12 @@ hr {
     text-wrap: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    flex-shrink: 1 !important;
 }
 
 .chat-extra span {
     height: 100%;
+    flex-shrink: 0;
 }
 
 .alert-outer {
@@ -1631,6 +1633,7 @@ img.embed:active {
 }
 
 .reaction-count {
+    color: #ffffffcb;
     font-style: inherit;
     font-family: inherit;
     font-size: 100%;
@@ -1740,8 +1743,8 @@ img.embed:active {
     align-items: center;
     justify-content: center;
     padding: 5px;
-    width: 1lh;
-    height: 1lh;
+    width: 1.25lh;
+    height: 1.25lh;
     border-radius: 100px;
     background-position: center;
     background-size: cover;
