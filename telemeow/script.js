@@ -177,16 +177,20 @@ function loginPage() {
         <div class="logo-hero"></div>
         <div class="login-title">TeleMeow</div>
             <div class="login-form">
-                <div class="login-input-container">
+                <div class="login-input-container" id="login-username-container">
                     <input class="login-input" id="login-username" type="text">
                     <label for="login-username">Username</label>
                 </div>
-                <div class="login-input-container">
+                <div class="login-input-container" id="login-pass-container">
                     <input class="login-input" id="login-pass" type="password">
                     <label for="login-pass">Password</label>
                 </div>
+                <div class="login-input-container" style="display: none;" id="login-2fa-container">
+                    <input class="login-input" id="login-2fa" type="text">
+                    <label for="login-2fa">Authentication Code</label>
+                </div>
             </div>
-            <button class="login-button" onclick="login(document.getElementById('login-username').value, document.getElementById('login-pass').value)">Login</button>
+            <button class="login-button" onclick="authenticate(document.getElementById('login-username').value, document.getElementById('login-pass').value, document.getElementById('login-2fa').value)">Login</button>
         </div>
     `;
 
@@ -210,6 +214,34 @@ function login(user, pass) {
         },
         listener: "auth",
     }));
+}
+
+function authenticate(user, pass, otp) {
+    let totp, recovery;
+    if (otp.length === 6) {
+        totp = otp;
+    } else if (otp.length === 10) {
+        recovery = otp;
+    }
+
+    fetch("https://api.meower.org/auth/login", {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            username: user,
+            password: pass,
+            totp_code: totp,
+            mfa_recovery_code: recovery,
+        }),
+    }).then(resp => resp.json()).then(data => {
+        if (data.type === "mfaRequired") {
+            document.getElementById("login-pass-container").style.display = "none";
+            document.getElementById("login-username-container").style.display = "none";
+            document.getElementById("login-2fa-container").style.display = "block";
+        } else {
+            login(data.account._id, data.token);
+        }
+    });
 }
 
 function logout() {
@@ -241,7 +273,7 @@ function chatsPage() {
 
 async function chatList() {
     let chatList = '';
-    if (storage.get("username") !== "eri") {
+    if (storage.get("username") !== "eri" && storage.get("username") !== "Eris") {
         chatList += `
         <div class="warning">
             <div class="warning-text">

@@ -49,8 +49,6 @@ function main() {
                 chatPage(page);
             } else if (page === 'home') {
                 chatPage('home');
-            } else {
-                chatsPage();
             }
         }, 5000);
     };
@@ -68,7 +66,7 @@ function main() {
 
                 if (reconnecting) {
                     reconnecting = false;
-                    tooltip({'title':"Reconnected!"});
+                    tooltip({'title':"Reconnected!", 'icon':icon.check});
                 }
 
                 getUser(data.val.username);
@@ -79,7 +77,7 @@ function main() {
 
                 favoritedChats = data.val.account.favorited_chats;
                 unreadInbox = data.val.account.unread_inbox;
-                if (page === 'login' || !page) {
+                if (page === 'login' || page === 'chats' || !page) {
                     chatsPage();
                 }
             }
@@ -274,7 +272,6 @@ function getChat(chatId) {
     }
     return Promise.resolve(chatCache[chatId]);
 }
-
 
 async function loadPosts(pageNo) {
     const posts = document.querySelector(".posts");
