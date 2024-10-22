@@ -284,22 +284,29 @@ async function chatList() {
         `;
     }
 
-    chatList += `
-    <div class="chat favourite" onclick="chatPage('home')" id="home">
-        <div class="chat-icon-svg">${icon.home}</div>
-        <div class="chat-text">
-            <span class="chat-title">Home</span>
-            <span class="chat-preview">${userList.length - 1} Users Online</span>
+    if (settings.get("hideHome") !== 'true') {
+        chatList += `
+        <div class="chat favourite" onclick="chatPage('home')" id="home">
+            <div class="chat-icon-svg">${icon.home}</div>
+            <div class="chat-text">
+                <span class="chat-title">Home</span>
+                <span class="chat-preview">${userList.length - 1} Users Online</span>
+            </div>
         </div>
-    </div>
-    <div class="chat favourite" onclick="chatPage('inbox')" id="inbox">
-        <div class="chat-icon-svg ${unreadInbox ? 'attention' : ''}">${icon.notifications}</div>
-        <div class="chat-text">
-            <span class="chat-title">Inbox</span>
-            <span class="chat-preview"></span>
+        `;
+    }
+
+    if (settings.get("hideInbox") !== 'true') {
+        chatList += `
+        <div class="chat favourite" onclick="chatPage('inbox')" id="inbox">
+            <div class="chat-icon-svg ${unreadInbox ? 'attention' : ''}">${icon.notifications}</div>
+            <div class="chat-text">
+                <span class="chat-title">Inbox</span>
+                <span class="chat-preview"></span>
+            </div>
         </div>
-    </div>
-`;
+        `;
+    }
 
 // put a gc icon next to gc names
     let sortedChats = [];
@@ -643,6 +650,11 @@ function settingsGeneral() {
 
     content.innerHTML = `
         <div class="settings">
+            <span class="settings-options-title">Chats Visibility</span>
+            <div class="settings-options">
+                <div class="menu-button" id="hideHome" onclick="toggleSetting('hideHome')"><span>Hide Home</span><div class="toggle">${icon.check}</div></div>
+                <div class="menu-button" id="hideInbox" onclick="toggleSetting('hideInbox')"><span>Hide Inbox</span><div class="toggle">${icon.check}</div></div>
+            </div>
             <span class="settings-options-title">Chat</span>
             <div class="settings-options">
                 <div class="menu-button" id="invisibleTyping" onclick="toggleSetting('invisibleTyping')"><span>Invisible Typing</span><div class="toggle">${icon.check}</div></div>
