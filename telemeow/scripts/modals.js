@@ -180,12 +180,14 @@ function openProfile(user) {
 }
 
 function postModal(id) {
+    let author = postCache[page].find(p => p._id === id).author._id;
     openModal({ 
-        id: id,
+        id: `post-${id}`,
         body: `
         <div class="post-modal-button" onclick="reply('${id}')"><div>Reply</div><div class="post-modal-icon">${icon.reply}</div></div>
         <div class="post-modal-button" onclick="mention('${id}')"><div>Mention</div><div class="post-modal-icon">${icon.mention}</div></div>
-        <div class="post-modal-button" ><div>React</div><div class="post-modal-icon">${icon.emoji}</div></div>
+        ${author === storage.get('username') ? `<div class="post-modal-button" onclick="deletePost('${id}')"><div>Delete</div><div class="post-modal-icon">${icon.delete}</div></div>` : ``}        
+        <div class="post-modal-button" onclick="emojiModal('${id}')"><div>React</div><div class="post-modal-icon">${icon.emoji}</div></div>
         <div class="post-modal-button" ><div>Report</div><div class="post-modal-icon">${icon.report}</div></div>
         `,
         style: `height: auto; min-height: 60%;`,
@@ -288,7 +290,6 @@ function openImage(url) {
     image.addEventListener('touchmove', onDrag);
     image.addEventListener('touchend', endDrag);
 }
-
 
 function closeImage() {
     const modalOuter = document.querySelector(".view-image-outer");

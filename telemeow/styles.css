@@ -1619,11 +1619,16 @@ img.embed:active {
     min-width: 50px;
     display: flex;
     gap: 4px;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-evenly;
     font-weight: 600;
     border-radius: 8px;
-  }
+}
+
+.reaction.reacted {
+    background: var(--app-dark-blue);
+    border: 2px solid var(--app-blue);
+}
 
 .reaction-count {
     font-style: inherit;
@@ -1644,6 +1649,7 @@ img.embed:active {
 .post-reactions {
     display: flex;
     gap: 4px;
+    flex-wrap: wrap;
 }
 
 .server-post {
@@ -1816,4 +1822,47 @@ img.embed:active {
 .tooltip div svg {
     width: 100%;
     height: 100%;
+}
+
+.emoji-row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: scroll;
+    border-radius: 100px;
+    scrollbar-width: none;
+}
+
+.emoji-row::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.emoji-row .emoji-button {
+    width: 36px;
+    height: 36px;
+    font-size: 1.75em;
+    padding: 6px;
+    box-sizing: content-box;
+    border-radius: 100px;
+    background: var(--modal-600);
+}
+
+.save-profile-button {
+    background-color: var(--app-green);
+    color: var(--app-100);
+    font-size: 0.9em;
+    font-weight: 600;
+    min-height: 1lh;
+    padding: 10px;
+    border-radius: 18px;
+    margin-top: 10px;
+    width: 120px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.save-profile-button:active {
+    background-color: var(--app-dark-green);
 }

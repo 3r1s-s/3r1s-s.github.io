@@ -445,10 +445,17 @@ function createPost(data) {
     reactions.classList.add('post-reactions');
     if (data.reactions) {        
         data.reactions.forEach(reaction => {
+            let emoji;
+            if (!reaction.emoji.match(/[\u1000-\uFFFF]/)) {
+                emoji = `<img class="emoji" src="https://uploads.meower.org/emojis/${reaction.emoji.sanitize()}">`;
+            } else {
+                emoji = reaction.emoji;
+            }
+
             reactions.innerHTML += `
-                <div class="reaction ${reaction.user_reacted ? 'reacted' : ''}">
+                <div class="reaction ${reaction.user_reacted ? 'reacted' : ''}" onclick="reactPost('${data._id}', '${reaction.emoji}', ${reaction.user_reacted})">
                     <span class="reaction-count">${reaction.count}</span>
-                    <span class="reaction-type">${reaction.emoji}</span>
+                    <span class="reaction-type">${emoji}</span>
                 </div>
             `;
         });
@@ -694,6 +701,7 @@ function settingsProfile() {
                     <span class="edit-profile-title">Last.fm Username</span>
                     <input type="text" class="edit-profile-quote" value="${lastfmuser}">
                     <div class="profile-section info"><span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span><span class="divider"></span><span>${recent}</span></div>
+                    <div class="save-profile-button">Save Profile</div>
                 </div>
             </div>
         `;

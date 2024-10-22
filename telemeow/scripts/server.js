@@ -118,6 +118,7 @@ function main() {
             }, 4000);
             renderTyping();
         } else if (data.cmd === "update_post") {
+            console.log(data);
             let postOrigin = data.val.post_origin;
             if (postCache[postOrigin]) {
                 index = postCache[postOrigin].findIndex(post => post._id === data.val._id);
@@ -127,12 +128,56 @@ function main() {
                         data.val
                     );
                 }
+                if (page === postOrigin) {
+                    if (document.getElementById(data.val._id)) {
+                        document.getElementById(data.val._id).outerHTML = createPost(data.val);
+                    } 
+                }
+            }
+        } else if (data.cmd === "post_reaction_add" || data.cmd === "post_reaction_remove") {
+            if (postCache[data.val.chat_id]) {
+                const index = postCache[data.val.chat_id].findIndex(post => post._id === data.val.post_id);
+                if (index !== -1) {
+                const post = postCache[data.val.chat_id][index];
+                const reactionIndex = post.reactions.findIndex(r => r.emoji === data.val.emoji);
+                if (reactionIndex === -1) {
+                    if (data.cmd === "post_reaction_add") {
+                        post.reactions.push({ count: 1, emoji: data.val.emoji, user_reacted: data.val.username === storage.get("username") });
+                    }
+                } else {
+                    if (data.cmd === "post_reaction_add") {
+                        post.reactions[reactionIndex] = {
+                            count: post.reactions[reactionIndex].count += 1,
+                            emoji: data.val.emoji,
+                            user_reacted: data.val.username === storage.get("username")
+                        };
+                    } else if (data.cmd === "post_reaction_remove") {
+                        post.reactions[reactionIndex] = {
+                            count: post.reactions[reactionIndex].count - 1,
+                            emoji: data.val.emoji,
+                            user_reacted: data.val.username !== storage.get("username")
+                        };
+                        if (post.reactions[reactionIndex].count <= 0) {
+                            post.reactions.splice(reactionIndex, 1);
+                        }
+                    }
+                }
+                postCache[data.val.chat_id][index] = post;
+                }
+                if (page === data.val.chat_id) {
+                    document.getElementById(data.val.post_id).outerHTML = createPost(postCache[data.val.chat_id][index]);
+                }
             }
         } else if (data.cmd === "delete_post") {
             if (data.val.chat_id in postCache) {
                 const index = postCache[data.val.chat_id].findIndex(post => post._id === data.val.post_id);
                 if (index !== -1) {
                     postCache[data.val.chat_id].splice(index, 1);
+                }
+                if (page === data.val.chat_id) {
+                    if (document.getElementById(data.val.post_id)) {
+                        document.getElementById(data.val.post_id).outerHTML = '';
+                    }
                 }
             }
         } else if (data.cmd === "create_chat") {
@@ -436,6 +481,26 @@ function renderTyping() {
         default:
             typingElem.innerText = translations.many.replace("{count}", typing.length);
             break;
+    }
+}
+
+async function deletePost(postid) {
+    try {
+        const response = await fetch(`https://api.meower.org/posts?id=${postid}`, {
+            method: "DELETE",
+            headers: {
+                "token": storage.get("token")
+            }
+        });
+
+        if (response.ok) {
+            closeModal();
+            tooltip({'title':"Post Deleted!",'icon':icon.check});
+        } else {
+            console.error(`Error deleting post with ID ${postid}: ${response.status} - ${response.statusText}`);
+        }
+    } catch (error) {
+        console.error("Error deleting post:", error);
     }
 }
 

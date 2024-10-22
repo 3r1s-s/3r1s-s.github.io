@@ -1,10 +1,16 @@
-function emojiModal() {
+function emojiModal(id) {
+
+    closeModal();
+    setTimeout(() => {
 
     let chatEmojis = document.createElement('div');
     chatEmojis.classList.add('chat-emojis');
 
     let chatsRow = document.createElement('div');
     chatsRow.classList.add('chats-row');
+
+    let emojiRow = document.createElement('div');
+    emojiRow.classList.add('emoji-row');
 
     for (const chat of Object.values(chatCache)) {
         const customEmojis = chat.emojis;
@@ -21,10 +27,26 @@ function emojiModal() {
         chatsRow.appendChild(chatButton);
     }
 
+    const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😭","😉","😗","😙","😚","😘","😍","👍","👎", "👋"];
+    emojis.forEach(emoji => {
+        const emojiButton = document.createElement("div");
+        emojiButton.classList.add("emoji-button");
+        emojiButton.innerText = emoji;
+        if (id) {
+            emojiButton.setAttribute("onclick", `reactPost('${id}', '${emoji}')`);
+        } else {
+            emojiButton.setAttribute("onclick", `addEmoji('${emoji}')`);
+        }
+
+        emojiButton.innerText = emoji;
+        emojiRow.appendChild(emojiButton);
+    });
+
     openModal({
     bodyStyle: `overflow: hidden;height: 100%;`,
     body: `
     <div class="emojis-outer">
+        ${emojiRow.outerHTML}
         ${chatEmojis.outerHTML}
         ${chatsRow.outerHTML}
     </div>
@@ -32,16 +54,17 @@ function emojiModal() {
 
     document.querySelectorAll('.chat-emoji-button').forEach(button => {
         button.onclick = function() {
-            emojiPage(chatCache[button.id].emojis);
+            emojiPage(chatCache[button.id].emojis, id);
         };
     });
 
     if (Object.values(chatCache).find(chat => chat.emojis.length > 0)) {
-        emojiPage(Object.values(chatCache).find(chat => chat.emojis.length > 0).emojis);
+        emojiPage(Object.values(chatCache).find(chat => chat.emojis.length > 0).emojis, id);
     }
+    }, 1000);
 }
 
-function emojiPage(customEmojis) {
+function emojiPage(customEmojis, id) {
     const emojis = document.querySelector('.chat-emojis');
     emojis.innerHTML = '';
 
@@ -53,7 +76,11 @@ function emojiPage(customEmojis) {
         emojiDiv.classList.add('emoji-button');
         emojiDiv.style.backgroundImage = `url('https://uploads.meower.org/emojis/${emoji._id}')`;
         emojiDiv.onclick = function() {
-            addEmoji('<:' + emoji._id + '>');
+            if (id) {
+                reactPost(id, emoji._id);
+            } else {
+                addEmoji('<:' + emoji._id + '>');
+            }
         };
         emojisInner.appendChild(emojiDiv);
     }
@@ -71,4 +98,23 @@ function addEmoji(emoji) {
         }
     }
     closeModal();
+}
+
+function reactPost(id, emoji, remove) {
+    if (remove) {
+        fetch(`https://api.meower.org/posts/${id}/reactions/${encodeURIComponent(emoji)}/@me`, {
+            method: "DELETE",
+            headers: {
+                token: storage.get("token")
+            }
+        });
+    } else {
+        fetch(`https://api.meower.org/posts/${id}/reactions/${encodeURIComponent(emoji)}`, {
+            method: "POST",
+            headers: {
+                token: storage.get("token")
+            }
+        });
+    }
+        closeModal();
 }
