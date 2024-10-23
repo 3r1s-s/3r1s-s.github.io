@@ -745,7 +745,7 @@ function settingsProfile() {
                     <input type="text" class="edit-profile-quote" value="${lastfmuser}" id="edit-lastfmuser">
                     <span class="edit-profile-title">Avatar</span>
                     <div class="edit-profile-buttons">
-                        <div class="avatar-outer">
+                        <div class="settings-avatar-outer">
                             <input type="file" class="avatar-input" accept="image/png,image/jpeg,image/webp,image/gif">
                         </div> 
                         <div class="color-outer">
