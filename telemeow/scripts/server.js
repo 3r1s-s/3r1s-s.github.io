@@ -515,3 +515,64 @@ function ping() {
         val: ""
     }));
 }
+
+function saveProfile() {
+    let quote = document.getElementById("edit-quote").value;
+    const pronouns = document.getElementById("edit-pronouns").value;
+    const lastfmuser = document.getElementById("edit-lastfmuser").value;
+
+    if (pronouns.trim() !== "") {
+        quote = `${quote}\n\n[${pronouns}]\n\n|lastfm:${lastfmuser}|`;
+    }
+
+    const profilecolor = document.querySelector(".avatar-color").value.substring(1);
+    const fileInput = document.querySelector(".avatar-input");
+    const file = fileInput.files[0];
+
+    const xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                tooltip({'title':"Profile Updated!",'icon':icon.check});
+                settingsProfile();
+            } else {
+                openAlert({
+                    "title": "Error",
+                    "message": "An error occurred while updating your profile."
+                });
+            }
+        }
+    };
+
+    xhttp.open("PATCH", "https://api.meower.org/me/config");
+
+    xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhttp.setRequestHeader("token", storage.get("token"));
+
+    const data = {
+        quote: quote,
+        avatar_color: profilecolor
+    };
+
+    if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+            fetch("https://uploads.meower.org/icons", {
+                method: "POST",
+                headers: {
+                    "Authorization": storage.get("token")
+                },
+                body: formData
+            })
+            .then(uploadResponse => uploadResponse.json())
+            .then(uploadData => {
+                const avatarId = uploadData.id;
+                data.avatar = avatarId;
+                xhttp.send(JSON.stringify(data));
+            })
+            .catch(error => console.error('Error uploading file:', error));
+    } else {
+        xhttp.send(JSON.stringify(data));
+    }
+}

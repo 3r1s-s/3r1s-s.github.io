@@ -712,7 +712,7 @@ function settingsProfile() {
 
         md.disable(['image']);
         const regex = /\[(.*?)\]/;
-        const newlineregex = /\n/g;
+        const newlineregex = /\n\n/g;
         const lastfmregex = /\|lastfm:([^|]+)\|/;
         const match = data.quote.match(regex);
         
@@ -735,17 +735,28 @@ function settingsProfile() {
                 <div class="profile-settings" style="--modal-accent: #${data.avatar_color};">
                     <div class="modal-banner" style="--banner-color: #${data.avatar_color}"></div>
                     <div class="edit-profile-icon" style="--image: ${avatar(data).css}">
-                    <div class="edit-profile-overlay">Edit</div>
                     </div>
                     <div class="modal-header"><span>${data._id}</span><span class="pronouns">${pronouns}</span></div>
                     <span class="edit-profile-title">Pronouns</span>
-                    <input type="text" class="edit-profile-quote" value="${pronouns}">
+                    <input type="text" class="edit-profile-quote" value="${pronouns}" id="edit-pronouns">
                     <span class="edit-profile-title">Quote</span>
-                    <textarea class="edit-profile-quote">${editquote}</textarea>
+                    <textarea class="edit-profile-quote" id="edit-quote">${editquote}</textarea>
                     <span class="edit-profile-title">Last.fm Username</span>
-                    <input type="text" class="edit-profile-quote" value="${lastfmuser}">
+                    <input type="text" class="edit-profile-quote" value="${lastfmuser}" id="edit-lastfmuser">
+                    <span class="edit-profile-title">Avatar</span>
+                    <div class="edit-profile-buttons">
+                        <div class="avatar-outer">
+                            <input type="file" class="avatar-input" accept="image/png,image/jpeg,image/webp,image/gif">
+                        </div> 
+                        <div class="color-outer">
+                            <div class="color-icon">
+                                ${icon.swatch}
+                            </div>
+                            <input class="avatar-color" type="color" value="#${data.avatar_color}">
+                        </div>
+                    </div>
                     <div class="profile-section info"><span>Joined: ${new Date(data.created * 1000).toLocaleDateString()}</span><span class="divider"></span><span>${recent}</span></div>
-                    <div class="save-profile-button">Save Profile</div>
+                    <div class="save-profile-button" onclick="saveProfile()">Save Profile</div>
                 </div>
             </div>
         `;
@@ -767,7 +778,20 @@ function settingsAppearance() {
     content.innerHTML = `
         <div class="settings">
             <div class="theme-preview">
-            
+                <div class="post" id="b68ab58a-998e-4f4e-8814-5cd1fe2223bb">
+                    <div class="avatar-outer">
+                        <div class="avatar" style="--image: url(https://uploads.meower.org/icons/6jYao4k1dannG9oN32dBVLbK);"></div>
+                    </div>
+                    <div class="post-wrapper">
+                        <div class="post-info">
+                            <span class="post-author">eri</span><span class="post-date">22/10/24, 2:15 pm</span>
+                        </div>
+                        <div class="post-replies"></div>
+                        <div class="post-content"><p>Regardez-moi je suis un beau papillon</p><p>Battant des ailes au clair de lune 🌝</p></div>
+                        <div class="post-attachments"></div>
+                        <div class="post-reactions"></div>
+                    </div>
+                </div>
             </div>
             <div class="theme-options">
                 <div class="theme-option dark" onclick="theme.set('dark')" style="--app-500: #1a1825;">
@@ -796,13 +820,6 @@ function settingsAppearance() {
                     </div>
                     <div class="theme-name">
                         <span>OLED</span>
-                    </div>
-                </div>
-                <div class="theme-option watermelon" onclick="theme.set('watermelon')">
-                    <div class="theme-colour">
-                    </div>
-                    <div class="theme-name">
-                        <span>Watermelon</span>
                     </div>
                 </div>
             </div>
