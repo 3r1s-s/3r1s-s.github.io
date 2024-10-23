@@ -420,7 +420,7 @@ function attach(attachment) {
 
 async function sendPost() {
     if (messageInput().disabled) return;
-    if (messageInput().value.trim() === "") return;
+    if (messageInput().value.trim() === "" && pendingAttachments.length === 0) return;
     const message = messageInput().value;
     messageInput().value = "";
     autoResize();
@@ -428,6 +428,15 @@ async function sendPost() {
     const replies = document.querySelector(".replies-wrapper");
     const replyToIds = Array.from(replies.childNodes).map(replyContainer => replyContainer.getAttribute("data-reply-id"));
     replies.innerHTML = "";
+
+    const attachmentIds = [];
+    for (const attachment of pendingAttachments) {
+        autoResize();
+        attachmentResp = await attachment.req;
+        attachmentIds.push(attachmentResp.id);
+    }
+    pendingAttachments.length = 0;
+    document.querySelector('.attachments-wrapper').innerHTML = '';
 
     const nonce = Math.random().toString();
     const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
@@ -439,7 +448,7 @@ async function sendPost() {
         body: JSON.stringify({
             reply_to: replyToIds,
             content: message,
-            attachments: [],
+            attachments: attachmentIds.reverse(),
             nonce,
         })
     });
@@ -481,7 +490,6 @@ function renderTyping() {
             break;
     }
 }
-
 async function deletePost(postid) {
     try {
         const response = await fetch(`https://api.meower.org/posts?id=${postid}`, {
@@ -501,7 +509,6 @@ async function deletePost(postid) {
         console.error("Error deleting post:", error);
     }
 }
-
 function ping() {
     serverWebSocket.send(JSON.stringify({
         cmd: "ping",

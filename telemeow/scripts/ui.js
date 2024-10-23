@@ -204,3 +204,13 @@ document.addEventListener("keydown", function(event) {
         });
     }
 });
+
+function setAccessibility() {
+    if (settings.get('reduceMotion') === 'true') {
+        document.querySelector('html').classList.add('reduce-motion');
+    }
+
+    if (settings.get('underlineLinks') === 'true') {
+        document.querySelector('html').classList.add('underline-links');
+    }
+}

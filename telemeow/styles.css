@@ -1769,14 +1769,15 @@ img.embed:active {
     margin-top: auto;
     text-wrap: nowrap;
     overflow-x: auto;
+    scrollbar-width: none;
 }
 
-.emojis-outer::-webkit-scrollbar {
+.emojis-outer::-webkit-scrollbar, .chats-row::-webkit-scrollbar {
     width: 0px;
     background: transparent;
 }
 
-.emojis-outer::-webkit-scrollbar-thumb {
+.emojis-outer::-webkit-scrollbar-thumb, .chats-row::-webkit-scrollbar-thumb {
     background-color: transparent;
 }
 
@@ -1874,4 +1875,114 @@ img.embed:active {
 
 .save-profile-button:active {
     background-color: var(--app-dark-green);
+}
+
+.reduce-motion .modal,
+.reduce-motion .view-image,
+.reduce-motion .alert {
+    transition: 0.1s ease-in-out opacity;
+    transform: none;
+}
+
+.reduce-motion .modal-outer .modal {
+    opacity: 0;
+    position: relative;
+}
+
+.reduce-motion .modal-outer.open .modal {
+    opacity: 1;
+}
+
+.underline-links a {
+    text-decoration: underline !important;
+}
+
+.attachments-wrapper {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.attachment-media {
+    display: flex;
+    justify-content: center;
+    background: var(--app-200);
+    border-radius: 15px;
+    position: relative;
+    min-height: 0;
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.attach-pre-outer {
+    --g: 120px;
+    min-width: var(--g);
+    max-width: var(--g);
+    min-height: var(--g);
+    max-height: var(--g);
+    background: var(--accent-color);
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    display: inline-flex;
+    flex-direction: column;
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.image-pre {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.attachment-progress::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--pre);
+    border-bottom: 2px solid var(--app-accent);
+}
+
+.attachment-progress {
+    position: absolute;
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    bottom: 0;
+}
+
+.attachment-wrapper {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    height: 100%;
+}
+
+.delete-attach {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 100px;
+    color: var(--app-900);
+    background: var(--app-400);
+    padding: 4px;
+    width: 25px;
+    height: 25px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-attach svg {
+    width: 100%;
+    height: 100%;
 }

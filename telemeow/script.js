@@ -161,6 +161,8 @@ String.prototype.highlight = function() {
 
 setTheme();
 
+setAccessibility();
+
 function loginPage() {
     page = 'login';
     titlebar.set('Login');
@@ -436,13 +438,14 @@ function chatPage(chatId) {
                     <div class="message-container">
                         <div class="replies-wrapper"></div>
                         <div class="message-input-wrapper">
-                            <div class="message-button">${icon.add}</div>
+                            <div class="message-button" onclick="selectFiles()">${icon.add}</div>
                             <div class="message-input-container">
                                 <textarea class="message-input" oninput="autoResize()" placeholder="Send a message to ${name}..."></textarea>
                             </div>
                             <div class="message-button" onclick="emojiModal();">${icon.emoji}</div>
                             <div class="message-button message-send" onclick="sendPost();">${icon.send}</div>
                         </div>
+                        <div class="attachments-wrapper"></div>
                     </div>
                     <div class="posts">
 
@@ -619,9 +622,6 @@ function settingsPage() {
                 <div class="menu-button"><span>Notifications</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Language</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Plugins</span>${icon.arrow}</div>
-            </div>
-            <div class="settings-options">
-                <div class="menu-button" onclick="setCaches();tooltip({title:'Cleared!'})"><span>Clear Caches</span>${icon.arrow}</div>
             </div>
             <div class="settings-options">
                 <div class="menu-button" onclick="logout()"><span>Log Out</span>${icon.arrow}</div>
