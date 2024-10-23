@@ -685,8 +685,8 @@ hr {
 }
 
 .profile-settings .modal-banner {
-    top: calc(-1 * var(--titlebar-height) - 20px);
-    padding-top: env(safe-area-inset-top);
+    top: calc(-1 * var(--titlebar-height) - 20px - env(safe-area-inset-top));
+    padding-bottom: env(safe-area-inset-top);
 }
 
 .modal::after {
