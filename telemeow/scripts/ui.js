@@ -188,21 +188,71 @@ function avatar(data) {
     };
 }
 
+function postEmbeds(links) {
+    if (links) {
+        let embeddedElements = [];
+        
+        links.forEach(link => {
+            const baseURL = link.split('?')[0];
+            const fileExtension = baseURL.split('.').pop().toLowerCase();
+            const fileName = baseURL.split('/').pop();
+            
+            let embeddedElement;
+            
+            if (link.includes('tenor.com')) {
+                const tenorRegex = /\d+$/;
+                const tenorMatch = link.match(tenorRegex);
+                const tenorId = tenorMatch ? tenorMatch[0] : null;
+                
+                if (tenorId) {
+                    embeddedElement = document.createElement('div');
+                    embeddedElement.className = 'tenor-gif-embed';
+                    embeddedElement.setAttribute('data-postid', tenorId);
+                    embeddedElement.setAttribute('data-share-method', 'host');
+                    embeddedElement.setAttribute('data-style', 'width: 100%; height: 100%; border-radius: 5px; max-width: 400px; aspect-ratio: 1 / 1; max-height: 400px;');
+                    
+                    embeddedElement.classList.add("media");
+                    
+                    let scriptTag = document.createElement('script');
+                    scriptTag.setAttribute('type', 'text/javascript');
+                    scriptTag.setAttribute('src', 'scripts/tenor.js');
+                    embeddedElement.appendChild(scriptTag);
+                }
+                
+                if (embeddedElement) {
+                    embeddedElements.push(embeddedElement);
+                }
+            }
+        });
+
+        return embeddedElements;
+    }
+}
+
 document.addEventListener("keydown", function(event) {
     if (settings.get('sendOnReturn') === 'true') {
-        if (document.querySelector('.message-input') === document.activeElement && event.key === "Enter" && !event.shiftKey) {
+        if (messageInput() !== 'null' === document.activeElement && event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
             sendPost();
         }
     }
     
-    if (event.keyCode >= 48 && event.keyCode <= 90 && document.querySelector('.message-input') === document.activeElement && settings.get('invisibleTyping') === 'false' && lastTyped+3000 < Date.now()) {
+    if (event.keyCode >= 48 && event.keyCode <= 90 && messageInput() !== 'null' === document.activeElement && settings.get('invisibleTyping') === 'false' && lastTyped+3000 < Date.now()) {
         lastTyped = Date.now();
         fetch(`https://api.meower.org/${page === "home" ? "" : "chats/"}${page}/typing`, {
             method: "POST",
             headers: { token: storage.get("token") }
         });
     }
+});
+
+addEventListener("DOMContentLoaded", () => {
+    document.onpaste = (event) => {
+        if (messageInput() === 'null' || page === "livechat") return;
+        for (const file of event.clipboardData.files) {
+            addAttachment(file);
+        }
+    };
 });
 
 function setAccessibility() {

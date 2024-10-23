@@ -1044,6 +1044,7 @@ hr {
     width: calc(100% - 10px);
     height: auto;
     display: flex;
+    align-items: center;
     z-index: 3;
     padding: 0 5px;
     box-sizing: border-box;
@@ -1526,6 +1527,12 @@ img.embed:active {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+.reply-content i {
+    display: flex;
+    align-items: center;
+    gap: 2px;
 }
 
 .reply-avatar {

@@ -96,7 +96,7 @@ function openProfile(user) {
         lastfmuser = lastfm ? lastfm[1] : undefined;
         quote = md.render(quote.replace(/\|lastfm:[^|]+\|/, '').trim()).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
         
-        if (userList.includes(user)) {
+        if (userList.map(u => u.toLowerCase()).includes(user.toLowerCase())) {
             attention = 'online';
             recent = 'Online';
         } else {
@@ -157,7 +157,7 @@ function openProfile(user) {
             fetch(url).then(response => response.text()).then(data => {
                 data = JSON.parse(data);
                 if (data.track["@attr"] && data.track["@attr"].nowplaying) {
-                    document.querySelector('.spotify-name').innerHTML = `${data.track.name}`;
+                    document.querySelector('.spotify-name').innerHTML = `${data.track.name.sanitize()}`;
                     document.querySelector('.spotify-artist').innerHTML = `by ${data.track.artist['#text'].sanitize()}`;
                     document.querySelector('.spotify-album').innerHTML = `on ${data.track.album['#text'].sanitize()}`;
                     document.querySelector('.spotify-art').style.backgroundImage = `url('${data.track.image[2]['#text'].sanitize()}')`;

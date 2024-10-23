@@ -482,6 +482,11 @@ function createPost(data) {
             attachments.appendChild(g);
         });
     }
+    
+    const embeddedElements = postEmbeds(data.p.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g) || []);
+    embeddedElements.forEach(element => {
+        attachments.appendChild(element);
+    });
 
     let reactions = document.createElement('div');
     reactions.classList.add('post-reactions');
@@ -512,7 +517,7 @@ function createPost(data) {
                 if (reply.p) {
                     replyCont = reply.p.sanitize();
                 } else if (reply.attachments) {
-                    replyCont = `<i>${reply.attachments.length} attachment${reply.attachments.length === 1 ? '' : 's'}</i>`;
+                    replyCont = `<i>${reply.attachments.length} attachment${reply.attachments.length === 1 ? '' : 's'} ${icon.attachment}</i>`;
                 }
                 replies.innerHTML += `
                     <div class="reply" onclick="jumpToPost('${reply._id}')">
