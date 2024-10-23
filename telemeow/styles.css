@@ -130,6 +130,11 @@ hr {
     border-top: 3px solid var(--app-800);
 }
 
+iframe {
+    background: transparent;
+    color-scheme: light;
+}
+
 .app {
     width: 100%;
     height: 100%;
@@ -2058,4 +2063,24 @@ img.embed:active {
     overflow: hidden;
     padding: 10px;
     margin: 0 12px;
+}
+
+.jump {
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    padding: 10px;
+    background: var(--app-400);
+    border: 2px solid var(--app-500);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    box-shadow: 0px 1px 5px #00000050;
+}
+
+.jump.visible {
+    display: flex;
 }

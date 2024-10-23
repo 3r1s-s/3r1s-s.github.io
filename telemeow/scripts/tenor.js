@@ -30,7 +30,6 @@ if (!false) {
           iframe.setAttribute('allowtransparency','true');
           iframe.setAttribute('allowfullscreen','true');
           iframe.setAttribute('scrolling','no');
-          iframe.setAttribute('title','Tenor GIF');
           var root;
             iframe.setAttribute('style',e.getAttribute('data-style'));
             root = iframe;
@@ -46,6 +45,14 @@ if (!false) {
           iframe.setAttribute('src',url);
           e.innerHTML = '';
           e.appendChild(root);
+        }
+
+        var scripts = document.getElementsByTagName('script');
+        for (var i = 0; i < scripts.length; ++i) {
+          if (scripts[i].src.indexOf('tenor.js') > -1) {
+            scripts[i].parentNode.removeChild(scripts[i]);
+            break;
+          }
         }
       }
     }
@@ -68,3 +75,4 @@ if (!false) {
     }
   })();
 }
+

@@ -453,12 +453,20 @@ function chatPage(chatId) {
                     <div class="skeleton-posts">
                         ${skeletonPosts()}
                     </div>
+                    <div class="jump" onclick="jumpTop();">${icon.up}</div>
                 </div>
             `;
 
             loadPosts(1);
 
             content.addEventListener("scroll", async (event) => {
+                if (document.querySelector('.jump')) {
+                    if (content.scrollTop > 0) {
+                        document.querySelector('.jump').classList.add('visible');
+                    } else {
+                        document.querySelector('.jump').classList.remove('visible');
+                    }
+                }
                 if (!(page in postCache)) return;
                 const skeletonHeight = document.querySelector(".skeleton-posts").scrollHeight;
                 if (content.scrollHeight - content.scrollTop - skeletonHeight - content.clientHeight < 1) {
@@ -482,7 +490,7 @@ function createPost(data) {
             attachments.appendChild(g);
         });
     }
-    
+
     const embeddedElements = postEmbeds(data.p.match(/(?:https?|ftp):\/\/[^\s(){}[\]]+/g) || []);
     embeddedElements.forEach(element => {
         attachments.appendChild(element);

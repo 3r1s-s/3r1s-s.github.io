@@ -212,20 +212,28 @@ function postEmbeds(links) {
                     embeddedElement.setAttribute('data-style', 'width: 100%; height: 100%; border-radius: 5px; max-width: 400px; aspect-ratio: 1 / 1; max-height: 400px;');
                     
                     embeddedElement.classList.add("media");
-                    
+
+                    // Append the element
+                    embeddedElements.push(embeddedElement);
+
+                    // Create and append the script tag directly to the body
                     let scriptTag = document.createElement('script');
                     scriptTag.setAttribute('type', 'text/javascript');
                     scriptTag.setAttribute('src', 'scripts/tenor.js');
-                    embeddedElement.appendChild(scriptTag);
-                }
-                
-                if (embeddedElement) {
-                    embeddedElements.push(embeddedElement);
+                    document.body.appendChild(scriptTag); // Move it outside of the div, append to the body
                 }
             }
         });
 
         return embeddedElements;
+    }
+}
+
+function jumpTop() {
+    if (settings.get('reduceMotion') === 'true') {
+        content.scrollTo({ top: 0 });
+    } else {
+        content.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 
