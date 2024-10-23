@@ -87,12 +87,12 @@ function openProfile(user) {
 
     getUser(user).then(data => {
         md.disable(['image']);
-        const regex = /\[(.*?)\]$/;
-        const lastfm = data.quote.match(/\|lastfm:([^|]+)\|/);
+        const regex = /\[(.*?)\]/;
         let match = data.quote.match(regex);
         pronouns = match ? match[1] : "";
         
         quote = data.quote.replace(regex, '');
+        const lastfm = data.quote.match(/\|lastfm:([^|]+)\|/);
         lastfmuser = lastfm ? lastfm[1] : undefined;
         quote = md.render(quote.replace(/\|lastfm:[^|]+\|/, '').trim()).replace(/<a(.*?)>/g, '<a$1 target="_blank">');
         
