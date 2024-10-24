@@ -462,7 +462,7 @@ async function sendPost() {
             "emojis": [],
             "error": false,
             "isDeleted": false,
-            "p": `${message}`,
+            "p": `${message.sanitize()}`,
             "pinned": false,
             "post_id": "placeholder",
             "post_origin": "home",
