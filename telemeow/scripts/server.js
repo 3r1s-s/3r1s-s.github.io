@@ -307,6 +307,15 @@ async function loadPosts(pageNo) {
     }
 
     const postsarray = postsData.autoget || [];
+    if (postsarray.length === 0) {
+        document.querySelector(".skeleton-posts").style.display = "none";
+
+        document.querySelector(".greeting").style.display = "flex";
+        document.querySelector(".greeting").innerHTML = `
+                <span class="chat-title">No messages here yet...</span><span class="chat-preview">Send them a greeting!</span>
+        `;
+    }
+
     postsarray.forEach(post => {
         if (page !== chatId) {
             return;

@@ -453,6 +453,7 @@ function chatPage(chatId) {
                     <div class="skeleton-posts">
                         ${skeletonPosts()}
                     </div>
+                    <div class="greeting" style="display: none;"></div>
                     <div class="jump" onclick="jumpTop();">${icon.up}</div>
                 </div>
             `;

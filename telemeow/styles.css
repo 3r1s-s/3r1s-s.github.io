@@ -1347,12 +1347,18 @@ iframe {
 .post-author {
     font-weight: 600;
     font-size: 1.05em;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .post-date {
     font-weight: 300;
     font-size: 0.75em;
     font-style: italic;
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .post-buttons {
