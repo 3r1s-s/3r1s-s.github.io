@@ -312,7 +312,7 @@ async function loadPosts(pageNo) {
 
         document.querySelector(".greeting").style.display = "flex";
         document.querySelector(".greeting").innerHTML = `
-                <span class="chat-title">No messages here yet...</span><span class="chat-preview">Send them a greeting!</span>
+                <div class="greeting-inner"><span class="chat-title">No messages here yet...</span><span class="chat-preview">Send them a greeting!</span></div>
         `;
     }
 

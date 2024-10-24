@@ -2116,3 +2116,19 @@ img.embed:active {
     height: 100%;
     pointer-events: visible;
 }
+
+.greeting {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.greeting-inner {
+    background: var(--app-400);
+    padding: 15px;
+    border-radius: 15px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
