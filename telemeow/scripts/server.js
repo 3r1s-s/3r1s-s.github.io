@@ -311,11 +311,17 @@ async function loadPosts(pageNo) {
         if (page !== chatId) {
             return;
         }
-        if (postCache[chatId].findIndex(_post => _post._id === post._id) !== -1) {
-            return
+        const existingPost = postCache[chatId].findIndex(_post => _post._id === post._id);
+        if (existingPost !== -1) {
+            postCache[chatId][existingPost] = post;
+            const postElement = document.getElementById(post._id);
+            if (postElement) {
+                postElement.outerHTML = createPost(post);
+            }
+        } else {
+            postCache[chatId].push(post);
+            posts.innerHTML += createPost(post);
         }
-        postCache[chatId].push(post);
-        posts.innerHTML += createPost(post);
     });
 }
 
@@ -422,6 +428,7 @@ async function sendPost() {
     if (messageInput().disabled) return;
     if (messageInput().value.trim() === "" && pendingAttachments.length === 0) return;
     const message = messageInput().value;
+    const posts = document.querySelector(".posts");
     messageInput().value = "";
     autoResize();
 
@@ -439,6 +446,35 @@ async function sendPost() {
     document.querySelector('.attachments-wrapper').innerHTML = '';
 
     const nonce = Math.random().toString();
+
+    getUser(storage.get("username")).then(data => {
+        posts.insertAdjacentHTML('afterbegin', createPost({
+            "_id": `placeholder-${nonce}`,
+            "attachments": [],
+            "author": {
+                "_id": `${storage.get("username")}`,
+                "avatar": data.avatar,
+                "avatar_color": data.avatar_color,
+                "flags": data.flags,
+                "pfp_data": data.pfp_data,
+                "uuid": data.uuid
+            },
+            "emojis": [],
+            "error": false,
+            "isDeleted": false,
+            "p": `${message}`,
+            "pinned": false,
+            "post_id": "placeholder",
+            "post_origin": "home",
+            "reactions": [],
+            "reply_to": [],
+            "stickers": [],
+            "t": 'sending...',
+            "type": 1,
+            "u": `${storage.get("username")}`
+        }));
+    });
+
     const response = await fetch(`https://api.meower.org/${page === "home" ? "home" : `posts/${page}`}`, {
         method: "POST",
         headers: {

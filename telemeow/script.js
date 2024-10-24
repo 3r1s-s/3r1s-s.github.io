@@ -551,6 +551,13 @@ function createPost(data) {
         });
     }
 
+    let date;
+    if (data.t === 'sending...') {
+        date = 'sending...';
+    } else {
+        date = new Date(Math.trunc(data.t.e * 1000)).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' });
+    }
+
     if (data.author._id === 'Server') {
         let post = `
         <div class="post" id="${data._id}">
@@ -575,7 +582,7 @@ function createPost(data) {
             </div>
             <div class="post-wrapper">
                 <div class="post-info">
-                    <span class="post-author" onclick="openProfile('${data.author._id}')">${data.author._id}</span><span class="post-date">${new Date(Math.trunc(data.t.e * 1000)).toLocaleString([], { month: '2-digit', day: '2-digit', year: '2-digit', hour: 'numeric', minute: 'numeric' })}</span>
+                    <span class="post-author" onclick="openProfile('${data.author._id}')">${data.author._id}</span><span class="post-date">${date}</span>
                 </div>
                 ${replies.outerHTML}
                 <div class="post-content">${data.emojis ? meowerEmojis(md.render(data.p), data.emojis).highlight() : md.render(data.p).highlight()}</div>
@@ -587,6 +594,9 @@ function createPost(data) {
             </div> 
         </div>
         `;
+    
+    const placeholder = document.getElementById(`placeholder-${data.nonce}`);
+    if (placeholder) placeholder.remove();
 
     return post;
 }

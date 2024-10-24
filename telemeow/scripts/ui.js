@@ -213,14 +213,12 @@ function postEmbeds(links) {
                     
                     embeddedElement.classList.add("media");
 
-                    // Append the element
                     embeddedElements.push(embeddedElement);
 
-                    // Create and append the script tag directly to the body
                     let scriptTag = document.createElement('script');
                     scriptTag.setAttribute('type', 'text/javascript');
                     scriptTag.setAttribute('src', 'scripts/tenor.js');
-                    document.body.appendChild(scriptTag); // Move it outside of the div, append to the body
+                    document.body.appendChild(scriptTag);
                 }
             }
         });
@@ -239,13 +237,13 @@ function jumpTop() {
 
 document.addEventListener("keydown", function(event) {
     if (settings.get('sendOnReturn') === 'true') {
-        if (messageInput() !== 'null' === document.activeElement && event.key === "Enter" && !event.shiftKey) {
+        if (messageInput() !== 'null' && messageInput() === document.activeElement && event.key === "Enter" && !event.shiftKey) {
             event.preventDefault();
             sendPost();
         }
     }
     
-    if (event.keyCode >= 48 && event.keyCode <= 90 && messageInput() !== 'null' === document.activeElement && settings.get('invisibleTyping') === 'false' && lastTyped+3000 < Date.now()) {
+    if (event.keyCode >= 48 && event.keyCode <= 90 && messageInput() !== 'null' && messageInput() === document.activeElement && settings.get('invisibleTyping') === 'false' && lastTyped+3000 < Date.now()) {
         lastTyped = Date.now();
         fetch(`https://api.meower.org/${page === "home" ? "" : "chats/"}${page}/typing`, {
             method: "POST",

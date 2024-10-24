@@ -1625,6 +1625,7 @@ img.embed:active {
     width: 100%;
     box-sizing: border-box;
     border-radius: 15px;
+    margin-bottom: 2px;
 }
 
 .download a {
@@ -2036,6 +2037,13 @@ img.embed:active {
     height: 100%;
 }
 
+.attachment-other {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
 .delete-attach {
     position: absolute;
     top: 0;
@@ -2083,4 +2091,19 @@ img.embed:active {
 
 .jump.visible {
     display: flex;
+}
+
+.tenor-gif-embed {
+    pointer-events: none;
+    position: relative;
+}
+
+.tenor-gif-embed::after {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: visible;
 }
