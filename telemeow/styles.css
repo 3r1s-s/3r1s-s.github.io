@@ -1519,6 +1519,7 @@ img.embed:active {
     display: flex;
     gap: 2px;
     align-items: center;
+    margin-bottom: 1px;
 }
 
 .reply-inner {
