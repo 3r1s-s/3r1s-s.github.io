@@ -640,7 +640,7 @@ function settingsPage() {
             <div class="settings-options">
                 <div class="menu-button" onclick="settingsGeneral()"><span>General</span>${icon.arrow}</div>
                 <div class="menu-button" onclick="settingsProfile()"><span>Profile</span>${icon.arrow}</div>
-                <div class="menu-button"><span>Account</span>${icon.arrow}</div>
+                <div class="menu-button" onclick="settingsAccount()"><span>Account</span>${icon.arrow}</div>
                 <div class="menu-button" onclick="settingsAppearance()"><span>Appearance</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Notifications</span>${icon.arrow}</div>
                 <div class="menu-button"><span>Language</span>${icon.arrow}</div>
@@ -850,4 +850,23 @@ function settingsAppearance() {
     `;
 
     setTheme();
+}
+
+function settingsAccount() {
+    page = `settings.account`;
+
+    titlebar.set(`Account`);
+    titlebar.clear(false);
+    titlebar.back(`settingsPage()`);
+
+    navigation.show();
+    content.classList.remove('max');
+    content.scrollTo(0,0);
+    content.style = ``;
+
+    content.innerHTML = `
+        <div class="settings">
+            
+        </div>
+    `;
 }
