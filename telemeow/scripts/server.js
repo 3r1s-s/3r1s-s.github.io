@@ -307,7 +307,7 @@ async function loadPosts(pageNo) {
     }
 
     const postsarray = postsData.autoget || [];
-    if (postsarray.length === 0) {
+    if (postsarray.length === 0 && pageNo === 1) {
         document.querySelector(".skeleton-posts").style.display = "none";
 
         document.querySelector(".greeting").style.display = "flex";

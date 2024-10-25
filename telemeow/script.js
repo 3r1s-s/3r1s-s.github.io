@@ -651,11 +651,9 @@ function settingsPage() {
                 <div class="menu-button" onclick="logout()"><span>Log Out</span>${icon.arrow}</div>
             </div>
             <div class="settings-about">
+            <img src="assets/images/telemeow-icon.png" width="24px">
             <span style="font-weight: 600;">TeleMeow</span>
-            <span>0.0.0</span>
-            </div>
-            <div class="settings-about">
-            <span style="font-weight: 600;">ErisUI 1</span>
+            <span style="font-size: 0.75em;opacity:0.6;">0.0.0</span>
             </div>
         </div>
     `;
