@@ -17,3 +17,7 @@
 [submodule "markpad"]
 	path = markpad
 	url = https://github.com/3r1s-s/markpad.git
+
+[submodule "telemeow"]
+	path = telemeow
+	url = https://github.com/3r1s-s/telemeow.git
