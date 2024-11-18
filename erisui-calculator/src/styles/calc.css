@@ -1,0 +1,52 @@
+.calc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.calc-display {
+    font-size: 4em;
+    font-weight: 600;
+    padding: 10px;
+    text-align: right;
+    min-height: 2lh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: right;
+}
+
+.calc-keypad {
+    display: flex;
+    gap: 5px;
+    flex-grow: 1;
+}
+
+.calc-keypad-column {
+    display: grid;
+    height: 100%;
+    gap: 5px;
+    flex-grow: 1;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: 1fr;
+}
+
+.calc-keypad button {
+    width: 100%;
+    height: 100%;
+    font-size: 1.8em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calc-keypad button.equals {
+    grid-row: span 2;
+}
+
+.calc-keypad button svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--app-text);
+}
