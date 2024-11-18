@@ -63,6 +63,9 @@ function computeResult() {
         case '/':
             result = previous / current;
             break;
+        case '*':
+            result = previous * current;
+            break;
     }
     display.dataset.value = result.toString();
     display.textContent = display.dataset.value;

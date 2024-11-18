@@ -37,7 +37,7 @@ function mainPage() {
                 </div>
                 <div class="calc-keypad-column">
                     <button class="calc-keypad-button" onclick="chooseOperation('/')">${icon.divide}</button>
-                    <button class="calc-keypad-button" onclick="chooseOperation('/')">${icon.multiply}</button>
+                    <button class="calc-keypad-button" onclick="chooseOperation('*')">${icon.multiply}</button>
                     <button class="calc-keypad-button" onclick="chooseOperation('-')">${icon.subtract}</button>
                     <button class="calc-keypad-button" onclick="chooseOperation('+')">${icon.add}</button>
                     <button class="calc-keypad-button equals accent" onclick="computeResult()">${icon.equals}</button>
