@@ -42,7 +42,7 @@
 }
 
 .calc-keypad button.equals {
-    grid-row: span 2;
+    /* grid-row: span 2; */
 }
 
 .calc-keypad button svg {
