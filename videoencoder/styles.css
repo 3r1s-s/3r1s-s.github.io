@@ -2,20 +2,25 @@ body {
     background-color: #120f2a;
     color: #fefefe;
     font-family: segoe-ui-var;
+    margin: 0;
 }
 .main {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-left: 100px;
-  margin-right: 100px;
+  margin: auto 0;
+  width: 100%;
+  max-width: 900px;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .info {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .id {
@@ -25,6 +30,7 @@ body {
 
 .slider {
     text-align: left;
+    width: 100%;
 }
 
 .output {
@@ -55,6 +61,32 @@ body {
     background-color: #9f9;
     height: 5px;
     border-radius: 10px;
+}
+
+::file-selector-button {
+    background-color: #120f2a;
+    border: 1px solid #36334a;
+    border-radius: 5px;
+    padding: 5px;
+    color: #fefefe;
+    font-family: segoe-ui-var;
+    resize: b;
+    box-sizing: border-box;
+    height: 30px;
+    width: 100px;
+    transition: all 0.1s ease-in;
+}
+
+.video {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.output {
+    width: 100%;
 }
 
 p {
@@ -99,9 +131,25 @@ button:hover {
 
 [type="file"] {
     font-family: segoe-ui-var;
+    width: 100px;
 }
 
 @font-face {
     font-family: segoe-ui-var;
     src: url(fonts/SegoeUIVar/SegUIVar.ttf);
+}
+
+@media screen and (max-width: 700px) {
+    .credits {
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: left;
+        gap: 10px;
+    }
+
+    span.credit {
+        display: none;
+    }
 }

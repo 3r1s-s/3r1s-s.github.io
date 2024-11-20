@@ -3,6 +3,7 @@ body {
     color: #fefefe;
     text-align: center;
     font-family: segoe-ui-var;
+    margin: 0;
 }
 
 .main {
@@ -10,18 +11,23 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin: auto 0;
+    width: 100%;
+    max-width: 900px;
+    padding: 10px;
+    box-sizing: border-box;
   }
 
 #compressionslider {
     height: 8px;
+    width: 100%;
 }
 
 .imgs {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .imgcont {
@@ -35,6 +41,7 @@ body {
 
 .sec {
     margin: 15px;
+    width: 100%;
 }
 
 .disimage {
@@ -74,9 +81,40 @@ body {
     text-decoration: none;
 }
 
+[type="file"] {
+    width: 100px;
+}
 
+::file-selector-button {
+    background-color: #120f2a;
+    border: 1px solid #36334a;
+    border-radius: 5px;
+    padding: 5px;
+    color: #fefefe;
+    font-family: segoe-ui-var;
+    resize: b;
+    box-sizing: border-box;
+    height: 30px;
+    width: 100px;
+    transition: all 0.1s ease-in;
+}
 
 @font-face {
     font-family: segoe-ui-var;
     src: url(fonts/SegoeUIVar/SegUIVar.ttf);
+}
+
+@media screen and (max-width: 700px) {
+    .credits {
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: left;
+        gap: 10px;
+    }
+
+    span.credit {
+        display: none;
+    }
 }
