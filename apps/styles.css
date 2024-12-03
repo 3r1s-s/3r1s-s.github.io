@@ -9,6 +9,14 @@ body {
     align-items: center;
 }
 
+* {
+    scrollbar-width: 0;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 .body-inner {
     background-color: #221e2e;
     padding: 8px;
