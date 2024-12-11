@@ -498,4 +498,13 @@ lite-youtube.lyt-activated > .lyt-playbtn {
         padding: 0 10px;
         box-sizing: border-box;
     }
+
+    .footer-inner {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .socials-footer {
+        flex-wrap: wrap;
+    }
 }
