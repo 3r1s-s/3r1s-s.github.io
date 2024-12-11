@@ -208,7 +208,6 @@ p {
     border-radius: 15px;
 
     scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
 
     scrollbar-width: none;
@@ -241,6 +240,8 @@ p {
 .rel {
     display: block !important;
     position: relative;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .section-b {
