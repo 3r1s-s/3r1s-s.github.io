@@ -1,0 +1,501 @@
+body {
+    font-family: 'Sans Serif';
+    min-height: 100vh;
+    margin: 0;
+
+    background: #1d1d1d;
+    color: white;
+}
+
+h1 {
+    font-size: 3rem;
+    font-family: 'Marker';
+    text-shadow: 4px 4px 0 #000;
+}
+
+p {
+    font-size: 1.25rem;
+    text-shadow: 2px 2px 0px #000;
+}
+
+* {
+    font-weight: inherit;
+}
+
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: #00000050;
+    z-index: 100;
+
+    backdrop-filter: blur(10px) saturate(1.5);
+    -webkit-backdrop-filter: blur(10px) saturate(1.5);
+}
+
+.nav-inner {
+    max-width: 600px;
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-inner a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-family: 'Marker';
+    min-width: 125px;
+    display: flex;
+    justify-content: center;
+
+    text-shadow: 0 2px 0px #00000025;
+
+    padding: 8px 12px 12px 12px;
+    border-radius: 8px;
+}
+
+.nav-inner a:hover {
+    background: #00000050;
+}
+
+.nav img {
+    height: 50px;
+}
+
+.nav-inner-mobile {
+    display: none;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    height: 100vh;
+    background: linear-gradient(to bottom, #00000065, #000000a2);
+}
+
+.hero img {
+    width: 50%;
+    max-width: 720px;
+}
+
+.hero-image {
+    background-image: url(src/images/hero.jpg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
+
+}
+
+.socials {
+    position: absolute;
+    bottom: 0;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    filter: drop-shadow(0 0 10px #00000050);
+}
+
+.social {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.bg-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.button {
+    background: linear-gradient(to bottom, #2783f4, #2783f4);
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 8px 30px 12px 30px;
+    border-radius: 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    gap: 5px;
+    font-family: 'Marker';
+    text-decoration: none;
+    transition: all cubic-bezier(.2,-.25,0,1.6) 0.2s;
+    transform: translate(0, 1px);
+}
+
+.button.disabled {
+    filter: grayscale(100%);
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+}
+
+.button:hover {
+    transform: translate(0, -2px);
+    background: linear-gradient(to bottom, #2783f4, #165fb9);
+    box-shadow: 0 5px 5px #00000050;
+}
+
+.section {
+    min-height: 50vh;
+
+    display: flex;
+    flex-direction: column;
+    
+    box-sizing: border-box;
+    border-top: 5px solid #20e0a0;
+}
+
+.section.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+}
+
+.section-inner {
+    padding: 15px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.section-inner.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 1em;
+
+}
+
+.carousel-outer {
+    padding: 15px;
+
+    background-color: #121212;
+
+
+}
+
+.carousel {
+    overflow-x: scroll;
+    display: flex;
+
+    border-radius: 15px;
+
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+
+    scrollbar-width: none;
+
+    height: 360px;
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel .image {
+    scroll-snap-align: start;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.carousel img {
+    border: 1px solid #ffffff25;
+    border-radius: 12px;
+    height: 100%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.rel {
+    display: block !important;
+    position: relative;
+}
+
+.section-b {
+    max-width: 720px;
+    margin: 25px auto 25px auto;
+    padding: 25px;
+}
+
+.center h1, .center p {
+    margin: 0;
+}
+
+.header-outer {
+    font-family: 'Marker';
+    position: relative;
+    font-size: 46px;
+    text-align: center;
+    margin: 0 15px;
+    line-height: 1.4;
+
+}
+
+.big-header {
+    user-select: none;
+    -webkit-user-select: none;
+    font-size: inherit;
+    position: relative;
+    z-index: 1;
+
+    text-shadow: 4px 4px 0px #000;
+}
+
+.big-header-shadow {
+    user-select: none;
+    -webkit-user-select: none;
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.scratch {
+    font-family: 'Scratch';
+    font-size: 1.5em;
+    text-shadow: none;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: #fff;
+}
+
+.big-header-shadow .scratch {
+    -webkit-text-stroke-width: 16px;
+    -webkit-text-stroke-color: #f8aa36;
+
+}
+
+.section-inner.center img {
+    width: 100%;
+    max-width: 720px;
+    box-shadow: 0 0 0 1px #ffffff25, 0 5px 12px #00000050;
+    border-radius: 6px;
+}
+
+details summary {
+    cursor: pointer;
+    font-size: 1.5em;
+    font-family: 'Marker';
+    text-shadow: 2px 2px 0px #000;
+    margin: 25px 0 15px 0;
+}
+
+.footer {
+    min-height: 400px;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-inner {
+    padding: 25px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1000px;
+
+    display: flex;
+}
+
+.footer-inner > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-inner h1 {
+    font-size: 2.5rem;
+    font-family: 'Marker';
+    text-shadow: 4px 4px 0px #000;
+    margin: 0 0 25px 0;
+}
+
+.footer-inner a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    font-family: 'Marker';
+    text-shadow: 0 2px 0px #00000025;
+    margin: 0 0 10px 0;
+}
+
+.socials-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* YouTube Embed */
+
+lite-youtube {
+    margin: 0 auto;
+    border-radius: 8px;
+
+    background-color: #000;
+    position: relative;
+    display: block;
+    contain: content;
+    background-position: center center;
+    background-size: cover;
+    cursor: pointer;
+    max-width: 720px;
+}
+
+/* gradient */
+lite-youtube::before {
+    content: attr(data-title);
+    display: block;
+    position: absolute;
+    top: 0;
+    /* Pixel-perfect port of YT's gradient PNG, using https://github.com/bluesmoon/pngtocss plus optimizations */
+    background-image: linear-gradient(180deg, rgb(0 0 0 / 67%) 0%, rgb(0 0 0 / 54%) 14%, rgb(0 0 0 / 15%) 54%, rgb(0 0 0 / 5%) 72%, rgb(0 0 0 / 0%) 94%);
+    height: 99px;
+    width: 100%;
+    font-family: "YouTube Noto",Roboto,Arial,Helvetica,sans-serif;
+    color: hsl(0deg 0% 93.33%);
+    text-shadow: 0 0 2px rgba(0,0,0,.5);
+    font-size: 18px;
+    padding: 25px 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+lite-youtube:hover::before {
+    color: white;
+}
+
+/* responsive iframe with a 16:9 aspect ratio
+    thanks https://css-tricks.com/responsive-iframes/
+*/
+lite-youtube::after {
+    content: "";
+    display: block;
+    padding-bottom: calc(100% / (16 / 9));
+}
+lite-youtube > iframe {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+}
+
+/* play button */
+lite-youtube > .lyt-playbtn {
+    display: block;
+    /* Make the button element cover the whole area for a large hover/click target… */
+    width: 100%;
+    height: 100%;
+    /* …but visually it's still the same size */
+    background: no-repeat center/68px 48px;
+    /* YT's actual play button svg */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 48"><path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/><path d="M45 24 27 14v20" fill="white"/></svg>');
+    position: absolute;
+    cursor: pointer;
+    z-index: 1;
+    filter: grayscale(100%);
+    transition: filter .1s cubic-bezier(0, 0, 0.2, 1);
+    border: 0;
+}
+
+lite-youtube:hover > .lyt-playbtn,
+lite-youtube .lyt-playbtn:focus {
+    filter: none;
+}
+
+/* Post-click styles */
+lite-youtube.lyt-activated {
+    cursor: unset;
+}
+lite-youtube.lyt-activated::before,
+lite-youtube.lyt-activated > .lyt-playbtn {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lyt-visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+/* Mobile */
+
+@media screen and (max-width: 600px) {
+    h1 {
+        text-align: center;
+    }
+
+    .nav-inner-mobile {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-inner-mobile a {
+        text-decoration: none;
+        color: white;
+        font-size: 1.2rem;
+        font-family: 'Marker';
+        display: flex;
+        justify-content: center;
+    
+        text-shadow: 0 2px 0px #00000025;
+    }
+
+    .nav-inner {
+        display: none;
+    }
+
+    .carousel {
+        height: 160px;
+    }
+
+    .hero {
+        height: calc(100vh - env(safe-area-inset-bottom));
+    }
+
+    .hero img {
+        width: 100%;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+}

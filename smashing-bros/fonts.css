@@ -1,0 +1,25 @@
+@font-face {
+    font-family: 'Marker';
+    src: url(src/fonts/marker.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Pixel';
+    src: url(src/fonts/pixel.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Sans Serif';
+    src: url(src/fonts/sans\ serif.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Scratch';
+    src: url(src/fonts/scratch.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Serif';
+    src: url(src/fonts/serif.woff2) format('woff2');
+}
+
