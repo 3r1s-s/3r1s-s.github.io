@@ -298,8 +298,9 @@ p {
 }
 
 .big-header-shadow .scratch {
-    -webkit-text-stroke-width: 16px;
+    -webkit-text-stroke-width: 18px;
     -webkit-text-stroke-color: #f8aa36;
+    filter: drop-shadow(5px 5px 0 #000);
 
 }
 
