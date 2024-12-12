@@ -204,15 +204,13 @@ p {
 .carousel {
     overflow-x: scroll;
     display: flex;
-
-    border-radius: 15px;
-
-    scroll-snap-type: x proximity;
+    border-radius: 5px;
+    scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-
     scrollbar-width: none;
-
     height: 360px;
+    gap: 15px;
+    scroll-padding: 0 50px;
 }
 
 .carousel::-webkit-scrollbar {
@@ -221,11 +219,13 @@ p {
 
 .carousel .image {
     scroll-snap-align: start;
-    padding: 15px;
     box-sizing: border-box;
+    height: 100%;
 }
 
 .carousel img {
+    display: block;
+    box-sizing: border-box;
     border: 1px solid #ffffff25;
     border-radius: 12px;
     height: 100%;
