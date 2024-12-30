@@ -12,6 +12,20 @@ body {
     font-family: Rubik Variable, sans-serif;
 }
 
+.light {
+    --color: #121212;
+    --color2: #1d1d1d;
+    --dark1: #dedede;
+    --dark2: #e5e5e5;
+    --dark3: #f2f2f2;
+    --dark4: #e5e5e5;
+    --primary: #f9a535;
+    --secondary: #d68b00;
+    --accent: #f29e2e;
+    --tangerine: #ef702b;
+    font-family: Rubik Variable, sans-serif;
+}
+
 body {
     background-color: var(--dark1);
     color: var(--color);
@@ -230,6 +244,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    min-height: 50vh;
 }
 
 .span-header {
