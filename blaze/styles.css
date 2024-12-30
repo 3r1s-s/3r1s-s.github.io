@@ -205,6 +205,10 @@ h1 {
     margin: 5px 0;
 }
 
+.section-title:not(:first-child) {
+    margin-top: 2rem;
+}
+
 .cool-banner {
     width: 100%;
     height: auto;
