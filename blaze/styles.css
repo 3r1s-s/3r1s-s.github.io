@@ -155,6 +155,8 @@ h1 {
     height: 100%;
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 1;
 }
 
 .sections-inner {
@@ -239,16 +241,18 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    flex-shrink: 1;
+    flex-grow: 0;
 }
 
 .products-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
 }
 
 .product-card {
     position: relative;
-    height: 100%;
     width: 256px;
     display: flex;
     flex-direction: column;
