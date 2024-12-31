@@ -561,3 +561,10 @@ h1 {
     max-width: 300px;
     border-radius: 0.5rem;
 }
+
+/* Alternative style */
+
+.post, .post-bar {
+    border: 0.25rem solid #20202c;
+    background-color: #15151c;
+}
