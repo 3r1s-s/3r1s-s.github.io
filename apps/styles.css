@@ -54,6 +54,7 @@ body {
     cursor: pointer;
     background-color: #221e2e;
     border-radius: 15px;
+    z-index: 100;
 }
 
 .tile-inner {
