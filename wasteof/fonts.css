@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'Segoe UI Display';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-display.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Display';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-display-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Display';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-display-light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Display';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-display-semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Display';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-display-semilight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Small';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-small.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Small';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-small-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Small';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-small-light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Small';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-small-semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Small';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-small-semilight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Text';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-text.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Text';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-text-bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Text';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-text-light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Text';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-text-semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Segoe UI Text';
+    src: url('src/assets/fonts/SegUIVar/SegUIVar-text-semilight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
